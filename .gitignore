@@ -1,0 +1,46 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+.eggs/
+dist/
+build/
+
+# Virtual environments
+venv/
+.venv/
+env/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Vault storage data (sensitive)
+vault_storage/data/
+vault_storage/keys/*.psnx
+vault_storage/keys/*.blend_data
+vault_storage/keys/*.enc
+vault_storage/avatars/*.png
+*.salt
+*.key
+
+# Keep directory structure
+!vault_storage/.gitkeep
+!vault_storage/keys/.gitkeep
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
