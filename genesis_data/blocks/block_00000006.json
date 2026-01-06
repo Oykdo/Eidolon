@@ -1,0 +1,132 @@
+{
+  "block_id": "genesis_00000006_e12315519056ecf2",
+  "vault_number": 6,
+  "vault_name": "zgo",
+  "vault_fingerprint": "cc147844",
+  "genesis_type": "founder",
+  "created_at": "2026-01-06T21:39:51.465513",
+  "parent_hash": "3d13b90463a29d14805a38f028cb713ffedae3fdfc984626b87b35396103dde1",
+  "parent_number": 5,
+  "ancestry_depth": 5,
+  "ancestor_hashes": [
+    "357896c767ce8948eb7f99bcaa06f9229c526397e3e7ce66c0d15936c1b218d4",
+    "6192c23ce2316f521a4b8915c8c65ccf429d25f6f9c5250c1db4aa9a820e90c2",
+    "c0dd9001e567a27c5ceea382d724afffbf6159ddaa59dfd29ff31c9f2ffb8d19",
+    "36cb729857a5241b4d397206ea5a5ffe4fe11795aac684469ee5ce9252220e16",
+    "3d13b90463a29d14805a38f028cb713ffedae3fdfc984626b87b35396103dde1"
+  ],
+  "inherited_strength": 471814047.232,
+  "own_entropy": 8138,
+  "total_strength": 4718221852.32,
+  "tier": "quantum_pioneer",
+  "tier_config": {
+    "name": "Quantum Pioneer",
+    "rarity": "Mythic",
+    "min_number": 1,
+    "max_number": 100,
+    "rune_reward": 1000000000,
+    "strength_multiplier": 10.0,
+    "color": "#FFD700",
+    "special_abilities": [
+      "quantum_resonance",
+      "primordial_link",
+      "infinite_inheritance",
+      "rune_mastery"
+    ]
+  },
+  "is_founder": true,
+  "runic_inscription": {
+    "inscription_id": "rune_00000006_33549704",
+    "tier": "quantum_pioneer",
+    "rune_symbols": "ᚠᛊᛞᛟ",
+    "runes": [
+      "FEHU",
+      "SOWILO",
+      "DAGAZ",
+      "OTHALA"
+    ],
+    "content": "Genesis Block #6 - zgo",
+    "status": "pending"
+  },
+  "rune_balance": 1000000000,
+  "block_hash": "5fd6bbf9923d52b044512006b31aa6afd2cbf4495c099ea9e91dbfff081577b8",
+  "signature": "",
+  "signer_public_key": "",
+  "signed_at": null,
+  "spinor_seed": "8fb28eecab5a3ed9d2c8d708bfbbf649554315c473144072a2f3574080aea32f",
+  "bell_proof": "2ddabaf9ed9cabf92318c59319d74f51fc3bb06975caad7cfdcdc0a1e09650dd5c982446ea544d8681ff70cb56784d44b285385cc12d899f5a6bdeef87204b6e",
+  "merkle_root": "4fcf0dbddbd56a02aeee5cd5df3eaed8bce6d3ed18718c656174116626404307",
+  "artifact": {
+    "artifact_id": "4df5f73ace58c02e",
+    "name": "Celestial Key of the Ancients",
+    "artifact_type": "quantum_key",
+    "rarity": "legendary",
+    "created_at": "2026-01-06T21:39:52.813137",
+    "genesis_block_id": "genesis_00000006_e12315519056ecf2",
+    "vault_number": 6,
+    "element": "spatial",
+    "stats": {
+      "base_power": 2528.15,
+      "spinor_resonance": 41.67,
+      "entropy_coefficient": 1.518,
+      "dimensional_affinity": 3.8,
+      "stability": 93,
+      "purity": 57,
+      "coherence": 61,
+      "effective_power": 38058.40149573,
+      "total_multiplier": 9.9169
+    },
+    "signature": {
+      "seed_7d": [
+        -0.40548940207121226,
+        0.429912970232787,
+        0.3656075384804348,
+        -0.5400627509557518,
+        -0.04035853925122495,
+        0.02260708379450213,
+        -0.4725215801862939
+      ],
+      "dirac_components": [
+        -0.3166839970694026,
+        0.33575860949724146,
+        0.2855365788927717,
+        -0.4217847119243047,
+        -0.03151969807515636,
+        0.0176559525885427,
+        -0.36903559489001375,
+        0.0
+      ],
+      "bell_violation": 2.0758638511904284,
+      "entanglement_degree": 0.2811070341406026,
+      "quantum_state": "1e5f329dcde2e256"
+    },
+    "abilities": [
+      {
+        "id": "entropy_boost",
+        "name": "Entropy Boost",
+        "description": "Augmente l'entropie generee de 38%",
+        "value": 38
+      },
+      {
+        "id": "quantum_entanglement",
+        "name": "Quantum Entanglement",
+        "description": "Lie 2 vaults pour partager la force",
+        "value": 2
+      },
+      {
+        "id": "temporal_echo",
+        "name": "Temporal Echo",
+        "description": "Duplique les gains d'entropie 4 fois",
+        "value": 4
+      }
+    ],
+    "description": "LEGENDARY Quantum Key",
+    "lore": "Les 4 dimensions convergent en cet artefact de Spatial."
+  },
+  "evm_address": "0xf7435d8cfCa38bdc8050e79C6deCaaDb9C564F1D",
+  "bitcoin_addresses": {
+    "p2pkh": "1BnAHBFZGPB5973NprjUjViXTgF5QNu2T",
+    "p2wpkh": "bc1qqgyaka3fvvt9jhz4704c8zczufkax7v3gf8ev0",
+    "p2tr": "bc1pug4myjdemhyj4pdrcvrdkuaswkrr4jh8ukzrrh2vkqay9u22f9vqmvttqz"
+  }
+}

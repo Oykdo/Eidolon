@@ -1,0 +1,80 @@
+{
+  "artifact_id": "4df5f73ace58c02e",
+  "artifact_data": {
+    "artifact_id": "4df5f73ace58c02e",
+    "name": "Celestial Key of the Ancients",
+    "artifact_type": "quantum_key",
+    "rarity": "legendary",
+    "created_at": "2026-01-06T21:39:52.813137",
+    "genesis_block_id": "genesis_00000006_e12315519056ecf2",
+    "vault_number": 6,
+    "element": "spatial",
+    "stats": {
+      "base_power": 2528.15,
+      "spinor_resonance": 41.67,
+      "entropy_coefficient": 1.518,
+      "dimensional_affinity": 3.8,
+      "stability": 93,
+      "purity": 57,
+      "coherence": 61,
+      "effective_power": 38058.40149573,
+      "total_multiplier": 9.9169
+    },
+    "signature": {
+      "seed_7d": [
+        -0.40548940207121226,
+        0.429912970232787,
+        0.3656075384804348,
+        -0.5400627509557518,
+        -0.04035853925122495,
+        0.02260708379450213,
+        -0.4725215801862939
+      ],
+      "dirac_components": [
+        -0.3166839970694026,
+        0.33575860949724146,
+        0.2855365788927717,
+        -0.4217847119243047,
+        -0.03151969807515636,
+        0.0176559525885427,
+        -0.36903559489001375,
+        0.0
+      ],
+      "bell_violation": 2.0758638511904284,
+      "entanglement_degree": 0.2811070341406026,
+      "quantum_state": "1e5f329dcde2e256"
+    },
+    "abilities": [
+      {
+        "id": "entropy_boost",
+        "name": "Entropy Boost",
+        "description": "Augmente l'entropie generee de 38%",
+        "value": 38
+      },
+      {
+        "id": "quantum_entanglement",
+        "name": "Quantum Entanglement",
+        "description": "Lie 2 vaults pour partager la force",
+        "value": 2
+      },
+      {
+        "id": "temporal_echo",
+        "name": "Temporal Echo",
+        "description": "Duplique les gains d'entropie 4 fois",
+        "value": 4
+      }
+    ],
+    "description": "LEGENDARY Quantum Key",
+    "lore": "Les 4 dimensions convergent en cet artefact de Spatial."
+  },
+  "origin_block_id": "genesis_00000006_e12315519056ecf2",
+  "origin_vault_number": 6,
+  "origin_tier": "quantum_pioneer",
+  "created_at": "2026-01-06T21:39:52.817663",
+  "current_owner_vault": 6,
+  "status": "attached",
+  "transfer_history": [],
+  "detached_at": null,
+  "is_founder_artifact": true,
+  "founder_bonus_applied": true
+}
