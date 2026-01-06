@@ -1319,6 +1319,101 @@ class VaultMonitorGUI:
                     fg=CypherpunkTheme.TEXT_PRIMARY
                 ).pack(anchor='w')
         
+        # Artefact Spinoriel (Easter Egg)
+        if asset.artifact:
+            artifact_frame = tk.Frame(content, bg=CypherpunkTheme.BG_PANEL, padx=20, pady=15)
+            artifact_frame.pack(fill=tk.X, pady=10)
+            
+            art = asset.artifact
+            art_rarity = art.get('rarity', 'common').upper()
+            art_name = art.get('name', 'Unknown Artifact')
+            art_element = art.get('element', 'void').upper()
+            
+            # Couleurs par rarete
+            rarity_colors = {
+                'COMMON': '#9d9d9d',
+                'UNCOMMON': '#1eff00',
+                'RARE': '#0070dd',
+                'EPIC': '#a335ee',
+                'LEGENDARY': '#ff8000',
+                'MYTHIC': '#e6cc80',
+                'TRANSCENDENT': '#00ffff',
+                'PRIMORDIAL': '#ff00ff',
+            }
+            art_color = rarity_colors.get(art_rarity, '#ffffff')
+            
+            tk.Label(
+                artifact_frame,
+                text="⬡ SPINOR ARTIFACT",
+                bg=CypherpunkTheme.BG_PANEL,
+                fg=CypherpunkTheme.NEON_PURPLE,
+                font=CypherpunkTheme.FONT_TITLE
+            ).pack(anchor='w', pady=(0, 10))
+            
+            # Nom et rarete
+            tk.Label(
+                artifact_frame,
+                text=f"{art_name}",
+                bg=CypherpunkTheme.BG_PANEL,
+                fg=art_color,
+                font=("Consolas", 14, "bold")
+            ).pack(anchor='w')
+            
+            tk.Label(
+                artifact_frame,
+                text=f"[{art_rarity}] | Element: {art_element}",
+                bg=CypherpunkTheme.BG_PANEL,
+                fg=art_color
+            ).pack(anchor='w')
+            
+            # Stats
+            stats = art.get('stats', {})
+            if stats:
+                power = stats.get('effective_power', 0)
+                resonance = stats.get('spinor_resonance', 0)
+                entropy = stats.get('entropy_coefficient', 1)
+                
+                stats_text = f"Power: {power:,.0f} | Resonance: {resonance:.1f}% | Entropy: {entropy:.2f}x"
+                tk.Label(
+                    artifact_frame,
+                    text=stats_text,
+                    bg=CypherpunkTheme.BG_PANEL,
+                    fg=CypherpunkTheme.NEON_GREEN
+                ).pack(anchor='w', pady=(5, 0))
+            
+            # Capacites de l'artefact
+            art_abilities = art.get('abilities', [])
+            if art_abilities:
+                tk.Label(
+                    artifact_frame,
+                    text="Artifact Abilities:",
+                    bg=CypherpunkTheme.BG_PANEL,
+                    fg=CypherpunkTheme.TEXT_SECONDARY
+                ).pack(anchor='w', pady=(10, 5))
+                
+                for ab in art_abilities[:4]:  # Max 4 affichees
+                    tk.Label(
+                        artifact_frame,
+                        text=f"  ◆ {ab.get('name', '')}: {ab.get('description', '')}",
+                        bg=CypherpunkTheme.BG_PANEL,
+                        fg=art_color,
+                        wraplength=500,
+                        justify='left'
+                    ).pack(anchor='w')
+            
+            # Lore
+            lore = art.get('lore', '')
+            if lore:
+                tk.Label(
+                    artifact_frame,
+                    text=f"\"{lore}\"",
+                    bg=CypherpunkTheme.BG_PANEL,
+                    fg=CypherpunkTheme.TEXT_SECONDARY,
+                    font=("Segoe UI", 9, "italic"),
+                    wraplength=500,
+                    justify='left'
+                ).pack(anchor='w', pady=(10, 0))
+        
         # Signature
         if asset.signature:
             sig_frame = tk.Frame(content, bg=CypherpunkTheme.BG_TERTIARY, padx=15, pady=10)

@@ -57,6 +57,8 @@ class RuneAsset:
     merkle_root: str
     strength: float
     ancestry_depth: int
+    # Artefact spinoriel
+    artifact: Optional[Dict[str, Any]] = None
 
 
 @dataclass
@@ -196,7 +198,8 @@ class RunesMonitor:
                 block_hash=block_data.get("block_hash", ""),
                 merkle_root=block_data.get("merkle_root", ""),
                 strength=block_data.get("total_strength", 0),
-                ancestry_depth=block_data.get("ancestry_depth", 0)
+                ancestry_depth=block_data.get("ancestry_depth", 0),
+                artifact=block_data.get("artifact")
             )
         except Exception as e:
             print(f"[WARN] Erreur parsing bloc: {e}")

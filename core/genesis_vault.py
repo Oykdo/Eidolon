@@ -32,6 +32,17 @@ from enum import Enum
 from pathlib import Path
 import struct
 
+# Import du systeme d'artefacts
+try:
+    from core.artifact_system import SpinorArtifactGenerator, ArtifactRarity, RARITY_MULTIPLIERS
+    ARTIFACTS_AVAILABLE = True
+except ImportError:
+    try:
+        from artifact_system import SpinorArtifactGenerator, ArtifactRarity, RARITY_MULTIPLIERS
+        ARTIFACTS_AVAILABLE = True
+    except ImportError:
+        ARTIFACTS_AVAILABLE = False
+
 
 # ============================================================================
 # CONSTANTES RUNIQUES
@@ -308,6 +319,9 @@ class GenesisBlock:
     bell_proof: str = ""                     # Preuve de Bell
     merkle_root: str = ""                    # Racine Merkle
     
+    # Artefact spinoriel (Easter Egg)
+    artifact: Optional[Dict] = None          # Artefact genere par RNG poly-spinor
+    
     def __post_init__(self):
         if not self.block_hash:
             self.block_hash = self._compute_hash()
@@ -562,6 +576,50 @@ class EvolutiveGenesisManager:
         if tier:
             block.runic_inscription = self.generate_runic_inscription(vault_number, tier)
             block.rune_balance = TIER_CONFIGS[tier].rune_reward
+        
+        # Generer l'artefact spinoriel (Easter Egg RNG)
+        if ARTIFACTS_AVAILABLE:
+            artifact_seed = bytes.fromhex(spinor_seed) if spinor_seed else secrets.token_bytes(32)
+            artifact_generator = SpinorArtifactGenerator(artifact_seed)
+            
+            # Bonus de rarete selon le tier fondateur
+            force_rarity = None
+            if tier == FounderTier.QUANTUM_PIONEER:
+                # Quantum Pioneer: garantit au minimum LEGENDARY
+                roll = secrets.randbelow(100)
+                if roll < 10:
+                    force_rarity = ArtifactRarity.PRIMORDIAL
+                elif roll < 30:
+                    force_rarity = ArtifactRarity.TRANSCENDENT
+                elif roll < 60:
+                    force_rarity = ArtifactRarity.MYTHIC
+                else:
+                    force_rarity = ArtifactRarity.LEGENDARY
+            elif tier == FounderTier.SPINOR_VISIONARY:
+                # Spinor Visionary: garantit au minimum EPIC
+                roll = secrets.randbelow(100)
+                if roll < 5:
+                    force_rarity = ArtifactRarity.MYTHIC
+                elif roll < 25:
+                    force_rarity = ArtifactRarity.LEGENDARY
+                else:
+                    force_rarity = ArtifactRarity.EPIC
+            elif tier == FounderTier.BELL_VERIFIER:
+                # Bell Verifier: garantit au minimum RARE
+                roll = secrets.randbelow(100)
+                if roll < 15:
+                    force_rarity = ArtifactRarity.LEGENDARY
+                elif roll < 45:
+                    force_rarity = ArtifactRarity.EPIC
+                else:
+                    force_rarity = ArtifactRarity.RARE
+            
+            artifact = artifact_generator.generate(
+                genesis_block_id=block.block_id,
+                vault_number=vault_number,
+                force_rarity=force_rarity
+            )
+            block.artifact = artifact.to_dict()
         
         # Calculer le hash final
         block.block_hash = block._compute_hash()
