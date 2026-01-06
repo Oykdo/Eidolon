@@ -17,5 +17,34 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.868365",
   "current_vault": 4,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_lightning_damage",
+      "tier": "standard",
+      "rolled_value": 87,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 54.18181818181819,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_void_damage",
+      "tier": "prime",
+      "rolled_value": 90,
+      "min_possible": 52.5,
+      "max_possible": 720.0,
+      "roll_percent": 5.617977528089887,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_duration_increase",
+      "tier": "standard",
+      "rolled_value": 34.8,
+      "min_possible": 6.25,
+      "max_possible": 75.0,
+      "roll_percent": 41.527272727272724,
+      "penalty_value": 0.0
+    }
+  ]
 }

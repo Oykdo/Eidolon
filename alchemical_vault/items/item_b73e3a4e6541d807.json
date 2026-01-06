@@ -17,5 +17,25 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.757599",
   "current_vault": 3,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_lightning_damage",
+      "tier": "standard",
+      "rolled_value": 135,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 89.0909090909091,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_entropy_absorption",
+      "tier": "prime",
+      "rolled_value": 16.1,
+      "min_possible": 3.5,
+      "max_possible": 48.0,
+      "roll_percent": 28.31460674157304,
+      "penalty_value": 0.0
+    }
+  ]
 }

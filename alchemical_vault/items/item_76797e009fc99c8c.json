@@ -17,5 +17,70 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.694096",
   "current_vault": 3,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_critical_damage",
+      "tier": "standard",
+      "rolled_value": 81.0,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 49.81818181818182,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_lightning_damage",
+      "tier": "standard",
+      "rolled_value": 25,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 9.090909090909092,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_cast_speed",
+      "tier": "greater",
+      "rolled_value": 37.7,
+      "min_possible": 5.25,
+      "max_possible": 75.0,
+      "roll_percent": 46.52329749103943,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_mana_regen",
+      "tier": "greater",
+      "rolled_value": 28,
+      "min_possible": 1.75,
+      "max_possible": 37.5,
+      "roll_percent": 73.42657342657343,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_luck_bonus",
+      "tier": "minor",
+      "rolled_value": 15.6,
+      "min_possible": 2.0,
+      "max_possible": 25.0,
+      "roll_percent": 59.130434782608695,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_corrupted_power",
+      "tier": "minor",
+      "rolled_value": 54.4,
+      "min_possible": 15.0,
+      "max_possible": 80.0,
+      "roll_percent": 60.61538461538461,
+      "penalty_value": 27.2
+    },
+    {
+      "mod_id": "mod_cooldown_reduction",
+      "tier": "superior",
+      "rolled_value": 67.5,
+      "min_possible": 7.5,
+      "max_possible": 100.0,
+      "roll_percent": 64.86486486486487,
+      "penalty_value": 0.0
+    }
+  ]
 }

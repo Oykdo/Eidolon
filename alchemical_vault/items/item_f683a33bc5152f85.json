@@ -17,5 +17,34 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:52.093117",
   "current_vault": 6,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_mana_regen",
+      "tier": "standard",
+      "rolled_value": 14,
+      "min_possible": 1.25,
+      "max_possible": 22.5,
+      "roll_percent": 60.0,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_dimensional_shift",
+      "tier": "standard",
+      "rolled_value": 1.3,
+      "min_possible": 1.25,
+      "max_possible": 15.0,
+      "roll_percent": 0.3636363636363639,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_defense_flat",
+      "tier": "minor",
+      "rolled_value": 15,
+      "min_possible": 10.0,
+      "max_possible": 100.0,
+      "roll_percent": 5.555555555555555,
+      "penalty_value": 0.0
+    }
+  ]
 }

@@ -17,5 +17,34 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.957252",
   "current_vault": 5,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_health_flat",
+      "tier": "greater",
+      "rolled_value": 55,
+      "min_possible": 43.75,
+      "max_possible": 625.0,
+      "roll_percent": 1.935483870967742,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_void_touched",
+      "tier": "standard",
+      "rolled_value": 50.1,
+      "min_possible": 31.25,
+      "max_possible": 180.0,
+      "roll_percent": 12.672268907563025,
+      "penalty_value": 20.0
+    },
+    {
+      "mod_id": "mod_damage_over_time",
+      "tier": "superior",
+      "rolled_value": 87,
+      "min_possible": 12.5,
+      "max_possible": 300.0,
+      "roll_percent": 25.91304347826087,
+      "penalty_value": 0.0
+    }
+  ]
 }

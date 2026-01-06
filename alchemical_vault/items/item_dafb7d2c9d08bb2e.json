@@ -17,5 +17,25 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.528775",
   "current_vault": 2,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_cast_speed",
+      "tier": "greater",
+      "rolled_value": 18.1,
+      "min_possible": 5.25,
+      "max_possible": 75.0,
+      "roll_percent": 18.422939068100362,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_duration_increase",
+      "tier": "standard",
+      "rolled_value": 17.9,
+      "min_possible": 6.25,
+      "max_possible": 75.0,
+      "roll_percent": 16.945454545454545,
+      "penalty_value": 0.0
+    }
+  ]
 }

@@ -17,5 +17,34 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.869969",
   "current_vault": 4,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_cast_speed",
+      "tier": "prime",
+      "rolled_value": 130.1,
+      "min_possible": 10.5,
+      "max_possible": 180.0,
+      "roll_percent": 70.56047197640117,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_quantum_flux",
+      "tier": "standard",
+      "rolled_value": 10.9,
+      "min_possible": 3.75,
+      "max_possible": 37.5,
+      "roll_percent": 21.185185185185187,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_unstable_essence",
+      "tier": "standard",
+      "rolled_value": 18.2,
+      "min_possible": 12.5,
+      "max_possible": 75.0,
+      "roll_percent": 9.12,
+      "penalty_value": 5.5
+    }
+  ]
 }

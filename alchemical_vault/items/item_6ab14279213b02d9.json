@@ -17,5 +17,25 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.492553",
   "current_vault": 1,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_defense_percent",
+      "tier": "prime",
+      "rolled_value": 79.3,
+      "min_possible": 10.5,
+      "max_possible": 120.0,
+      "roll_percent": 62.8310502283105,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_luck_bonus",
+      "tier": "standard",
+      "rolled_value": 21.5,
+      "min_possible": 2.5,
+      "max_possible": 37.5,
+      "roll_percent": 54.285714285714285,
+      "penalty_value": 0.0
+    }
+  ]
 }

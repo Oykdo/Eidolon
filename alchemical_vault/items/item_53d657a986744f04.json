@@ -17,5 +17,43 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.902849",
   "current_vault": 4,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_penetration",
+      "tier": "greater",
+      "rolled_value": 46.6,
+      "min_possible": 3.5,
+      "max_possible": 50.0,
+      "roll_percent": 92.68817204301075,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_cooldown_reduction",
+      "tier": "minor",
+      "rolled_value": 23.7,
+      "min_possible": 3.0,
+      "max_possible": 25.0,
+      "roll_percent": 94.0909090909091,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_dimensional_shift",
+      "tier": "prime",
+      "rolled_value": 4.0,
+      "min_possible": 3.5,
+      "max_possible": 60.0,
+      "roll_percent": 0.8849557522123894,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_duration_increase",
+      "tier": "minor",
+      "rolled_value": 29.7,
+      "min_possible": 5.0,
+      "max_possible": 50.0,
+      "roll_percent": 54.888888888888886,
+      "penalty_value": 0.0
+    }
+  ]
 }

@@ -17,5 +17,70 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:52.006238",
   "current_vault": 5,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_defense_flat",
+      "tier": "standard",
+      "rolled_value": 95,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 60.0,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_damage_over_time",
+      "tier": "greater",
+      "rolled_value": 85,
+      "min_possible": 8.75,
+      "max_possible": 187.5,
+      "roll_percent": 42.65734265734265,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_luck_bonus",
+      "tier": "superior",
+      "rolled_value": 48.1,
+      "min_possible": 5.0,
+      "max_possible": 100.0,
+      "roll_percent": 45.36842105263158,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_experience_bonus",
+      "tier": "greater",
+      "rolled_value": 84.8,
+      "min_possible": 8.75,
+      "max_possible": 125.0,
+      "roll_percent": 65.41935483870968,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_mana_regen",
+      "tier": "standard",
+      "rolled_value": 14,
+      "min_possible": 1.25,
+      "max_possible": 22.5,
+      "roll_percent": 60.0,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_defense_percent",
+      "tier": "prime",
+      "rolled_value": 98.9,
+      "min_possible": 10.5,
+      "max_possible": 120.0,
+      "roll_percent": 80.73059360730595,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_damage_reduction",
+      "tier": "standard",
+      "rolled_value": 8.7,
+      "min_possible": 1.25,
+      "max_possible": 15.0,
+      "roll_percent": 54.18181818181817,
+      "penalty_value": 0.0
+    }
+  ]
 }

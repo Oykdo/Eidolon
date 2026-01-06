@@ -17,5 +17,25 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.701061",
   "current_vault": 3,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_critical_damage",
+      "tier": "greater",
+      "rolled_value": 24.1,
+      "min_possible": 17.5,
+      "max_possible": 250.0,
+      "roll_percent": 2.8387096774193554,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_nexus_connection",
+      "tier": "prime",
+      "rolled_value": 207.7,
+      "min_possible": 17.5,
+      "max_possible": 300.0,
+      "roll_percent": 67.32743362831857,
+      "penalty_value": 0.0
+    }
+  ]
 }

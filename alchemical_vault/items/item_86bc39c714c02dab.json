@@ -17,5 +17,34 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.793080",
   "current_vault": 3,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_power_percent",
+      "tier": "standard",
+      "rolled_value": 29.1,
+      "min_possible": 3.75,
+      "max_possible": 37.5,
+      "roll_percent": 75.11111111111111,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_fire_resistance",
+      "tier": "standard",
+      "rolled_value": 43.2,
+      "min_possible": 6.25,
+      "max_possible": 60.0,
+      "roll_percent": 68.74418604651163,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_celestial_blessing",
+      "tier": "superior",
+      "rolled_value": 4.1,
+      "min_possible": 2.5,
+      "max_possible": 20.0,
+      "roll_percent": 9.142857142857142,
+      "penalty_value": 0.0
+    }
+  ]
 }

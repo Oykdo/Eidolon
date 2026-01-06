@@ -17,5 +17,52 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.861408",
   "current_vault": 4,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_spell_power",
+      "tier": "superior",
+      "rolled_value": 46.3,
+      "min_possible": 12.5,
+      "max_possible": 160.0,
+      "roll_percent": 22.91525423728813,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_charges_extra",
+      "tier": "standard",
+      "rolled_value": 2,
+      "min_possible": 1,
+      "max_possible": 3,
+      "roll_percent": 50.0,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_experience_bonus",
+      "tier": "standard",
+      "rolled_value": 33.4,
+      "min_possible": 6.25,
+      "max_possible": 75.0,
+      "roll_percent": 39.490909090909085,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_fire_resistance",
+      "tier": "superior",
+      "rolled_value": 119.8,
+      "min_possible": 12.5,
+      "max_possible": 160.0,
+      "roll_percent": 72.7457627118644,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_damage_over_time",
+      "tier": "greater",
+      "rolled_value": 94,
+      "min_possible": 8.75,
+      "max_possible": 187.5,
+      "roll_percent": 47.69230769230769,
+      "penalty_value": 0.0
+    }
+  ]
 }

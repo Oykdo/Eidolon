@@ -17,5 +17,52 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.929712",
   "current_vault": 4,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_experience_bonus",
+      "tier": "standard",
+      "rolled_value": 64.3,
+      "min_possible": 6.25,
+      "max_possible": 75.0,
+      "roll_percent": 84.43636363636364,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_corrupted_power",
+      "tier": "standard",
+      "rolled_value": 95.1,
+      "min_possible": 18.75,
+      "max_possible": 120.0,
+      "roll_percent": 75.4074074074074,
+      "penalty_value": 47.5
+    },
+    {
+      "mod_id": "mod_damage_over_time",
+      "tier": "greater",
+      "rolled_value": 30,
+      "min_possible": 8.75,
+      "max_possible": 187.5,
+      "roll_percent": 11.888111888111888,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_block_chance",
+      "tier": "standard",
+      "rolled_value": 18.2,
+      "min_possible": 2.5,
+      "max_possible": 22.5,
+      "roll_percent": 78.49999999999999,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_void_damage",
+      "tier": "standard",
+      "rolled_value": 89,
+      "min_possible": 18.75,
+      "max_possible": 180.0,
+      "roll_percent": 43.565891472868216,
+      "penalty_value": 0.0
+    }
+  ]
 }

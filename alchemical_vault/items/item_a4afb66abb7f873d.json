@@ -17,5 +17,70 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.553807",
   "current_vault": 2,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_luck_bonus",
+      "tier": "standard",
+      "rolled_value": 36.0,
+      "min_possible": 2.5,
+      "max_possible": 37.5,
+      "roll_percent": 95.71428571428572,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_charges_extra",
+      "tier": "standard",
+      "rolled_value": 2,
+      "min_possible": 1,
+      "max_possible": 3,
+      "roll_percent": 50.0,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_corrupted_power",
+      "tier": "minor",
+      "rolled_value": 59.9,
+      "min_possible": 15.0,
+      "max_possible": 80.0,
+      "roll_percent": 69.07692307692308,
+      "penalty_value": 29.9
+    },
+    {
+      "mod_id": "mod_critical_damage",
+      "tier": "standard",
+      "rolled_value": 21.8,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 6.763636363636365,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_celestial_blessing",
+      "tier": "greater",
+      "rolled_value": 12.1,
+      "min_possible": 1.75,
+      "max_possible": 12.5,
+      "roll_percent": 96.27906976744185,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_critical_chance",
+      "tier": "greater",
+      "rolled_value": 33.5,
+      "min_possible": 1.75,
+      "max_possible": 37.5,
+      "roll_percent": 88.81118881118881,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_damage_reduction",
+      "tier": "greater",
+      "rolled_value": 8.4,
+      "min_possible": 1.75,
+      "max_possible": 25.0,
+      "roll_percent": 28.602150537634408,
+      "penalty_value": 0.0
+    }
+  ]
 }

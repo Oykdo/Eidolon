@@ -17,5 +17,25 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.847266",
   "current_vault": 4,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_spell_power",
+      "tier": "minor",
+      "rolled_value": 29.1,
+      "min_possible": 5.0,
+      "max_possible": 40.0,
+      "roll_percent": 68.85714285714286,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_ice_damage",
+      "tier": "standard",
+      "rolled_value": 98,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 62.18181818181818,
+      "penalty_value": 0.0
+    }
+  ]
 }

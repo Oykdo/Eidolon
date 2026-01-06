@@ -17,5 +17,16 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:52.129371",
   "current_vault": 6,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_temporal_acceleration",
+      "tier": "greater",
+      "rolled_value": 47.6,
+      "min_possible": 3.5,
+      "max_possible": 50.0,
+      "roll_percent": 94.83870967741936,
+      "penalty_value": 0.0
+    }
+  ]
 }

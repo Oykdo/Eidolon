@@ -17,5 +17,43 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.874441",
   "current_vault": 4,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_fire_damage",
+      "tier": "standard",
+      "rolled_value": 77,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 46.909090909090914,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_celestial_blessing",
+      "tier": "standard",
+      "rolled_value": 2.9,
+      "min_possible": 1.25,
+      "max_possible": 7.5,
+      "roll_percent": 26.400000000000002,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_arcane_resonance",
+      "tier": "standard",
+      "rolled_value": 19.9,
+      "min_possible": 6.25,
+      "max_possible": 52.5,
+      "roll_percent": 29.513513513513512,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_charges_extra",
+      "tier": "minor",
+      "rolled_value": 1,
+      "min_possible": 1,
+      "max_possible": 2,
+      "roll_percent": 0.0,
+      "penalty_value": 0.0
+    }
+  ]
 }

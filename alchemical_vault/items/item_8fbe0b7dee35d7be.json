@@ -17,5 +17,6 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.379931",
   "current_vault": 1,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": []
 }

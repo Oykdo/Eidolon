@@ -17,5 +17,16 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.809504",
   "current_vault": 4,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_arcane_resonance",
+      "tier": "greater",
+      "rolled_value": 36.9,
+      "min_possible": 8.75,
+      "max_possible": 87.5,
+      "roll_percent": 35.74603174603174,
+      "penalty_value": 0.0
+    }
+  ]
 }

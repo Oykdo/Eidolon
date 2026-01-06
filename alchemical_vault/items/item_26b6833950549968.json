@@ -17,5 +17,34 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.954206",
   "current_vault": 5,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_critical_chance",
+      "tier": "standard",
+      "rolled_value": 9.3,
+      "min_possible": 1.25,
+      "max_possible": 22.5,
+      "roll_percent": 37.88235294117647,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_unstable_essence",
+      "tier": "greater",
+      "rolled_value": 40.3,
+      "min_possible": 17.5,
+      "max_possible": 125.0,
+      "roll_percent": 21.20930232558139,
+      "penalty_value": 12.1
+    },
+    {
+      "mod_id": "mod_block_chance",
+      "tier": "minor",
+      "rolled_value": 11.6,
+      "min_possible": 2.0,
+      "max_possible": 15.0,
+      "roll_percent": 73.84615384615384,
+      "penalty_value": 0.0
+    }
+  ]
 }

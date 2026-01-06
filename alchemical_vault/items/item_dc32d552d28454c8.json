@@ -17,5 +17,43 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:52.097549",
   "current_vault": 6,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_fire_resistance",
+      "tier": "standard",
+      "rolled_value": 55.5,
+      "min_possible": 6.25,
+      "max_possible": 60.0,
+      "roll_percent": 91.62790697674419,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_temporal_acceleration",
+      "tier": "standard",
+      "rolled_value": 22.3,
+      "min_possible": 2.5,
+      "max_possible": 30.0,
+      "roll_percent": 72.0,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_luck_bonus",
+      "tier": "minor",
+      "rolled_value": 2.4,
+      "min_possible": 2.0,
+      "max_possible": 25.0,
+      "roll_percent": 1.7391304347826084,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_charges_extra",
+      "tier": "superior",
+      "rolled_value": 1,
+      "min_possible": 1,
+      "max_possible": 5,
+      "roll_percent": 0.0,
+      "penalty_value": 0.0
+    }
+  ]
 }

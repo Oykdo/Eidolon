@@ -17,5 +17,16 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.447552",
   "current_vault": 1,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_area_of_effect",
+      "tier": "standard",
+      "rolled_value": 35.4,
+      "min_possible": 6.25,
+      "max_possible": 60.0,
+      "roll_percent": 54.23255813953488,
+      "penalty_value": 0.0
+    }
+  ]
 }

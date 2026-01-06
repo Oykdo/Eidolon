@@ -17,5 +17,25 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.941864",
   "current_vault": 5,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_critical_chance",
+      "tier": "standard",
+      "rolled_value": 14.1,
+      "min_possible": 1.25,
+      "max_possible": 22.5,
+      "roll_percent": 60.47058823529412,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_penetration",
+      "tier": "minor",
+      "rolled_value": 14.8,
+      "min_possible": 2.0,
+      "max_possible": 20.0,
+      "roll_percent": 71.11111111111111,
+      "penalty_value": 0.0
+    }
+  ]
 }

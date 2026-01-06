@@ -17,5 +17,52 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.588666",
   "current_vault": 2,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_luck_bonus",
+      "tier": "standard",
+      "rolled_value": 35.7,
+      "min_possible": 2.5,
+      "max_possible": 37.5,
+      "roll_percent": 94.85714285714286,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_fire_resistance",
+      "tier": "standard",
+      "rolled_value": 19.5,
+      "min_possible": 6.25,
+      "max_possible": 60.0,
+      "roll_percent": 24.651162790697676,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_power_flat",
+      "tier": "standard",
+      "rolled_value": 29,
+      "min_possible": 6.25,
+      "max_possible": 75.0,
+      "roll_percent": 33.09090909090909,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_health_regen",
+      "tier": "divine",
+      "rolled_value": 129,
+      "min_possible": 5.5,
+      "max_possible": 200.0,
+      "roll_percent": 63.49614395886889,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_entropy_absorption",
+      "tier": "greater",
+      "rolled_value": 2.5,
+      "min_possible": 1.75,
+      "max_possible": 20.0,
+      "roll_percent": 4.10958904109589,
+      "penalty_value": 0.0
+    }
+  ]
 }

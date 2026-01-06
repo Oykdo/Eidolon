@@ -17,5 +17,34 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.960874",
   "current_vault": 5,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_health_regen",
+      "tier": "minor",
+      "rolled_value": 6,
+      "min_possible": 1.0,
+      "max_possible": 20.0,
+      "roll_percent": 26.31578947368421,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_nexus_connection",
+      "tier": "greater",
+      "rolled_value": 46.6,
+      "min_possible": 8.75,
+      "max_possible": 125.0,
+      "roll_percent": 32.55913978494624,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_fire_damage",
+      "tier": "greater",
+      "rolled_value": 131,
+      "min_possible": 17.5,
+      "max_possible": 250.0,
+      "roll_percent": 48.817204301075265,
+      "penalty_value": 0.0
+    }
+  ]
 }

@@ -17,5 +17,43 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.496408",
   "current_vault": 1,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_area_of_effect",
+      "tier": "standard",
+      "rolled_value": 8.2,
+      "min_possible": 6.25,
+      "max_possible": 60.0,
+      "roll_percent": 3.627906976744185,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_health_regen",
+      "tier": "prime",
+      "rolled_value": 40,
+      "min_possible": 3.5,
+      "max_possible": 120.0,
+      "roll_percent": 31.330472103004293,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_damage_reduction",
+      "tier": "standard",
+      "rolled_value": 7.1,
+      "min_possible": 1.25,
+      "max_possible": 15.0,
+      "roll_percent": 42.54545454545454,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_nexus_connection",
+      "tier": "minor",
+      "rolled_value": 30.9,
+      "min_possible": 5.0,
+      "max_possible": 50.0,
+      "roll_percent": 57.55555555555555,
+      "penalty_value": 0.0
+    }
+  ]
 }

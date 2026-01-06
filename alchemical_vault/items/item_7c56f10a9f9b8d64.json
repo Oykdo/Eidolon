@@ -17,5 +17,52 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.689446",
   "current_vault": 3,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_health_regen",
+      "tier": "standard",
+      "rolled_value": 11,
+      "min_possible": 1.25,
+      "max_possible": 30.0,
+      "roll_percent": 33.91304347826087,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_luck_bonus",
+      "tier": "superior",
+      "rolled_value": 40.1,
+      "min_possible": 5.0,
+      "max_possible": 100.0,
+      "roll_percent": 36.94736842105264,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_mana_regen",
+      "tier": "divine",
+      "rolled_value": 105,
+      "min_possible": 5.5,
+      "max_possible": 150.0,
+      "roll_percent": 68.85813148788927,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_void_touched",
+      "tier": "standard",
+      "rolled_value": 56.0,
+      "min_possible": 31.25,
+      "max_possible": 180.0,
+      "roll_percent": 16.63865546218487,
+      "penalty_value": 22.4
+    },
+    {
+      "mod_id": "mod_elemental_resistance",
+      "tier": "standard",
+      "rolled_value": 9.7,
+      "min_possible": 2.5,
+      "max_possible": 22.5,
+      "roll_percent": 36.0,
+      "penalty_value": 0.0
+    }
+  ]
 }

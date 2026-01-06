@@ -17,5 +17,34 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.799209",
   "current_vault": 3,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_arcane_resonance",
+      "tier": "standard",
+      "rolled_value": 6.7,
+      "min_possible": 6.25,
+      "max_possible": 52.5,
+      "roll_percent": 0.9729729729729735,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_area_of_effect",
+      "tier": "greater",
+      "rolled_value": 64.9,
+      "min_possible": 8.75,
+      "max_possible": 100.0,
+      "roll_percent": 61.53424657534248,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_cooldown_reduction",
+      "tier": "minor",
+      "rolled_value": 11.6,
+      "min_possible": 3.0,
+      "max_possible": 25.0,
+      "roll_percent": 39.090909090909086,
+      "penalty_value": 0.0
+    }
+  ]
 }

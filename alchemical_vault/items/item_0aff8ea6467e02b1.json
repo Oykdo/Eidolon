@@ -17,5 +17,52 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.994802",
   "current_vault": 5,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_lightning_damage",
+      "tier": "minor",
+      "rolled_value": 48,
+      "min_possible": 10.0,
+      "max_possible": 100.0,
+      "roll_percent": 42.22222222222222,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_health_regen",
+      "tier": "greater",
+      "rolled_value": 11,
+      "min_possible": 1.75,
+      "max_possible": 50.0,
+      "roll_percent": 19.170984455958546,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_damage_over_time",
+      "tier": "standard",
+      "rolled_value": 108,
+      "min_possible": 6.25,
+      "max_possible": 112.5,
+      "roll_percent": 95.76470588235294,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_nexus_connection",
+      "tier": "standard",
+      "rolled_value": 42.4,
+      "min_possible": 6.25,
+      "max_possible": 75.0,
+      "roll_percent": 52.581818181818186,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_defense_percent",
+      "tier": "minor",
+      "rolled_value": 18.2,
+      "min_possible": 3.0,
+      "max_possible": 20.0,
+      "roll_percent": 89.41176470588235,
+      "penalty_value": 0.0
+    }
+  ]
 }

@@ -17,5 +17,25 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:52.064041",
   "current_vault": 6,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_defense_flat",
+      "tier": "standard",
+      "rolled_value": 86,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 53.45454545454545,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_unstable_essence",
+      "tier": "greater",
+      "rolled_value": 28.9,
+      "min_possible": 17.5,
+      "max_possible": 125.0,
+      "roll_percent": 10.604651162790695,
+      "penalty_value": 8.7
+    }
+  ]
 }

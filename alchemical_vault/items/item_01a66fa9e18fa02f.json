@@ -17,5 +17,52 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:52.072071",
   "current_vault": 6,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_power_flat",
+      "tier": "standard",
+      "rolled_value": 29,
+      "min_possible": 6.25,
+      "max_possible": 75.0,
+      "roll_percent": 33.09090909090909,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_damage_over_time",
+      "tier": "greater",
+      "rolled_value": 69,
+      "min_possible": 8.75,
+      "max_possible": 187.5,
+      "roll_percent": 33.70629370629371,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_unstable_essence",
+      "tier": "standard",
+      "rolled_value": 16.6,
+      "min_possible": 12.5,
+      "max_possible": 75.0,
+      "roll_percent": 6.560000000000002,
+      "penalty_value": 5.0
+    },
+    {
+      "mod_id": "mod_damage_reduction",
+      "tier": "standard",
+      "rolled_value": 11.6,
+      "min_possible": 1.25,
+      "max_possible": 15.0,
+      "roll_percent": 75.27272727272727,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_mana_flat",
+      "tier": "standard",
+      "rolled_value": 29,
+      "min_possible": 18.75,
+      "max_possible": 225.0,
+      "roll_percent": 4.96969696969697,
+      "penalty_value": 0.0
+    }
+  ]
 }

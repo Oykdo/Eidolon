@@ -17,5 +17,61 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.789311",
   "current_vault": 3,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_fire_damage",
+      "tier": "superior",
+      "rolled_value": 220,
+      "min_possible": 25.0,
+      "max_possible": 400.0,
+      "roll_percent": 52.0,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_elemental_resistance",
+      "tier": "standard",
+      "rolled_value": 6.2,
+      "min_possible": 2.5,
+      "max_possible": 22.5,
+      "roll_percent": 18.5,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_damage_reduction",
+      "tier": "standard",
+      "rolled_value": 13.8,
+      "min_possible": 1.25,
+      "max_possible": 15.0,
+      "roll_percent": 91.27272727272728,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_duration_increase",
+      "tier": "minor",
+      "rolled_value": 41.6,
+      "min_possible": 5.0,
+      "max_possible": 50.0,
+      "roll_percent": 81.33333333333333,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_experience_bonus",
+      "tier": "greater",
+      "rolled_value": 97.0,
+      "min_possible": 8.75,
+      "max_possible": 125.0,
+      "roll_percent": 75.91397849462366,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_critical_chance",
+      "tier": "superior",
+      "rolled_value": 58.8,
+      "min_possible": 2.5,
+      "max_possible": 60.0,
+      "roll_percent": 97.91304347826086,
+      "penalty_value": 0.0
+    }
+  ]
 }

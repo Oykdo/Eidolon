@@ -17,5 +17,34 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.768565",
   "current_vault": 3,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_temporal_acceleration",
+      "tier": "greater",
+      "rolled_value": 9.1,
+      "min_possible": 3.5,
+      "max_possible": 50.0,
+      "roll_percent": 12.043010752688172,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_void_touched",
+      "tier": "superior",
+      "rolled_value": 395.0,
+      "min_possible": 62.5,
+      "max_possible": 480.0,
+      "roll_percent": 79.64071856287424,
+      "penalty_value": 158.0
+    },
+    {
+      "mod_id": "mod_charges_extra",
+      "tier": "superior",
+      "rolled_value": 4,
+      "min_possible": 1,
+      "max_possible": 5,
+      "roll_percent": 75.0,
+      "penalty_value": 0.0
+    }
+  ]
 }

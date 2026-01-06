@@ -17,5 +17,34 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.486622",
   "current_vault": 1,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_cast_speed",
+      "tier": "minor",
+      "rolled_value": 15.1,
+      "min_possible": 3.0,
+      "max_possible": 30.0,
+      "roll_percent": 44.81481481481481,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_cooldown_reduction",
+      "tier": "greater",
+      "rolled_value": 51.3,
+      "min_possible": 5.25,
+      "max_possible": 62.5,
+      "roll_percent": 80.43668122270742,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_defense_percent",
+      "tier": "prime",
+      "rolled_value": 106.9,
+      "min_possible": 10.5,
+      "max_possible": 120.0,
+      "roll_percent": 88.0365296803653,
+      "penalty_value": 0.0
+    }
+  ]
 }

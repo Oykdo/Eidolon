@@ -17,5 +17,43 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.537830",
   "current_vault": 2,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_void_damage",
+      "tier": "minor",
+      "rolled_value": 84,
+      "min_possible": 15.0,
+      "max_possible": 120.0,
+      "roll_percent": 65.71428571428571,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_critical_chance",
+      "tier": "standard",
+      "rolled_value": 13.7,
+      "min_possible": 1.25,
+      "max_possible": 22.5,
+      "roll_percent": 58.58823529411764,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_spell_power",
+      "tier": "standard",
+      "rolled_value": 21.8,
+      "min_possible": 6.25,
+      "max_possible": 60.0,
+      "roll_percent": 28.930232558139537,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_ice_damage",
+      "tier": "standard",
+      "rolled_value": 91,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 57.09090909090909,
+      "penalty_value": 0.0
+    }
+  ]
 }

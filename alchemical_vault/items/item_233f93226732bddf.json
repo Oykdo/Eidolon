@@ -17,5 +17,25 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.471224",
   "current_vault": 1,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_experience_bonus",
+      "tier": "minor",
+      "rolled_value": 13.3,
+      "min_possible": 5.0,
+      "max_possible": 50.0,
+      "roll_percent": 18.444444444444446,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_entropy_absorption",
+      "tier": "superior",
+      "rolled_value": 17.9,
+      "min_possible": 2.5,
+      "max_possible": 32.0,
+      "roll_percent": 52.20338983050847,
+      "penalty_value": 0.0
+    }
+  ]
 }

@@ -17,5 +17,43 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.602724",
   "current_vault": 2,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_cooldown_reduction",
+      "tier": "standard",
+      "rolled_value": 35.9,
+      "min_possible": 3.75,
+      "max_possible": 37.5,
+      "roll_percent": 95.25925925925925,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_health_flat",
+      "tier": "greater",
+      "rolled_value": 541,
+      "min_possible": 43.75,
+      "max_possible": 625.0,
+      "roll_percent": 85.54838709677419,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_mana_regen",
+      "tier": "greater",
+      "rolled_value": 17,
+      "min_possible": 1.75,
+      "max_possible": 37.5,
+      "roll_percent": 42.65734265734265,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_void_damage",
+      "tier": "standard",
+      "rolled_value": 137,
+      "min_possible": 18.75,
+      "max_possible": 180.0,
+      "roll_percent": 73.33333333333333,
+      "penalty_value": 0.0
+    }
+  ]
 }

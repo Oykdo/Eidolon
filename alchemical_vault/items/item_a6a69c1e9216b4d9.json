@@ -17,5 +17,34 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.570842",
   "current_vault": 2,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_health_flat",
+      "tier": "minor",
+      "rolled_value": 37,
+      "min_possible": 25.0,
+      "max_possible": 250.0,
+      "roll_percent": 5.333333333333334,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_power_flat",
+      "tier": "minor",
+      "rolled_value": 23,
+      "min_possible": 5.0,
+      "max_possible": 50.0,
+      "roll_percent": 40.0,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_fire_resistance",
+      "tier": "standard",
+      "rolled_value": 30.2,
+      "min_possible": 6.25,
+      "max_possible": 60.0,
+      "roll_percent": 44.558139534883715,
+      "penalty_value": 0.0
+    }
+  ]
 }

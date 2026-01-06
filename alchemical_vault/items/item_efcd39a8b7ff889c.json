@@ -17,5 +17,25 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.461460",
   "current_vault": 1,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_corrupted_power",
+      "tier": "minor",
+      "rolled_value": 18.6,
+      "min_possible": 15.0,
+      "max_possible": 80.0,
+      "roll_percent": 5.538461538461541,
+      "penalty_value": 9.3
+    },
+    {
+      "mod_id": "mod_dimensional_shift",
+      "tier": "standard",
+      "rolled_value": 13.3,
+      "min_possible": 1.25,
+      "max_possible": 15.0,
+      "roll_percent": 87.63636363636364,
+      "penalty_value": 0.0
+    }
+  ]
 }

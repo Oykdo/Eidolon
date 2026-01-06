@@ -17,5 +17,25 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.916859",
   "current_vault": 4,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_critical_chance",
+      "tier": "standard",
+      "rolled_value": 17.8,
+      "min_possible": 1.25,
+      "max_possible": 22.5,
+      "roll_percent": 77.88235294117646,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_temporal_acceleration",
+      "tier": "standard",
+      "rolled_value": 26.9,
+      "min_possible": 2.5,
+      "max_possible": 30.0,
+      "roll_percent": 88.72727272727272,
+      "penalty_value": 0.0
+    }
+  ]
 }

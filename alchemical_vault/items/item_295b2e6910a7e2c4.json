@@ -17,5 +17,25 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:52.119039",
   "current_vault": 6,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_cooldown_reduction",
+      "tier": "superior",
+      "rolled_value": 57.8,
+      "min_possible": 7.5,
+      "max_possible": 100.0,
+      "roll_percent": 54.37837837837838,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_entropy_absorption",
+      "tier": "standard",
+      "rolled_value": 5.4,
+      "min_possible": 1.25,
+      "max_possible": 12.0,
+      "roll_percent": 38.604651162790695,
+      "penalty_value": 0.0
+    }
+  ]
 }

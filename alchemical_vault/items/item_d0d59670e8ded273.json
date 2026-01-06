@@ -17,5 +17,52 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.510997",
   "current_vault": 2,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_arcane_resonance",
+      "tier": "greater",
+      "rolled_value": 16.0,
+      "min_possible": 8.75,
+      "max_possible": 87.5,
+      "roll_percent": 9.206349206349207,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_blood_price",
+      "tier": "standard",
+      "rolled_value": 65.2,
+      "min_possible": 25.0,
+      "max_possible": 150.0,
+      "roll_percent": 32.16,
+      "penalty_value": 13.0
+    },
+    {
+      "mod_id": "mod_experience_bonus",
+      "tier": "standard",
+      "rolled_value": 23.4,
+      "min_possible": 6.25,
+      "max_possible": 75.0,
+      "roll_percent": 24.94545454545454,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_lightning_damage",
+      "tier": "greater",
+      "rolled_value": 243,
+      "min_possible": 17.5,
+      "max_possible": 250.0,
+      "roll_percent": 96.98924731182795,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_cooldown_reduction",
+      "tier": "superior",
+      "rolled_value": 99.3,
+      "min_possible": 7.5,
+      "max_possible": 100.0,
+      "roll_percent": 99.24324324324324,
+      "penalty_value": 0.0
+    }
+  ]
 }

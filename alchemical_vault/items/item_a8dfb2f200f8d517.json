@@ -17,5 +17,34 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.532469",
   "current_vault": 2,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_elemental_resistance",
+      "tier": "minor",
+      "rolled_value": 5.7,
+      "min_possible": 2.0,
+      "max_possible": 15.0,
+      "roll_percent": 28.46153846153846,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_critical_chance",
+      "tier": "minor",
+      "rolled_value": 13.2,
+      "min_possible": 1.0,
+      "max_possible": 15.0,
+      "roll_percent": 87.14285714285714,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_penetration",
+      "tier": "standard",
+      "rolled_value": 14.8,
+      "min_possible": 2.5,
+      "max_possible": 30.0,
+      "roll_percent": 44.727272727272734,
+      "penalty_value": 0.0
+    }
+  ]
 }

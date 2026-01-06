@@ -98,6 +98,508 @@ RARITY_WEIGHTS = {
 
 
 # ============================================================================
+# SYSTEME DE MODS - MODIFICATEURS ALEATOIRES
+# ============================================================================
+
+class ModTier(Enum):
+    """Tier des mods (affecte la puissance des rolls)"""
+    MINOR = ("minor", "Mineur", 1.0, "#888888")
+    STANDARD = ("standard", "Standard", 1.5, "#ffffff")
+    GREATER = ("greater", "Majeur", 2.5, "#00ff00")
+    SUPERIOR = ("superior", "Superieur", 4.0, "#0088ff")
+    PRIME = ("prime", "Prime", 6.0, "#aa55ff")
+    DIVINE = ("divine", "Divin", 10.0, "#ffd700")
+    
+    def __init__(self, tier_id: str, name: str, multiplier: float, color: str):
+        self.tier_id = tier_id
+        self.display_name = name
+        self.multiplier = multiplier
+        self.color = color
+
+
+# Probabilites des tiers de mods
+MOD_TIER_WEIGHTS = {
+    ModTier.MINOR: 3000,
+    ModTier.STANDARD: 4000,
+    ModTier.GREATER: 2000,
+    ModTier.SUPERIOR: 700,
+    ModTier.PRIME: 250,
+    ModTier.DIVINE: 50,
+}
+
+
+# Categories de mods disponibles
+class ModCategory(Enum):
+    """Categories de modificateurs"""
+    OFFENSIVE = ("offensive", "⚔️", "Offensif")
+    DEFENSIVE = ("defensive", "🛡️", "Defensif")
+    UTILITY = ("utility", "⚙️", "Utilitaire")
+    ELEMENTAL = ("elemental", "🔥", "Elementaire")
+    ARCANE = ("arcane", "✨", "Arcanique")
+    COSMIC = ("cosmic", "🌟", "Cosmique")
+    CORRUPTION = ("corruption", "☠️", "Corruption")  # Mods negatifs avec bonus
+    
+    def __init__(self, cat_id: str, symbol: str, name: str):
+        self.cat_id = cat_id
+        self.symbol = symbol
+        self.display_name = name
+
+
+# Tous les mods disponibles avec leurs rolls
+ITEM_MODS = {
+    # === MODS OFFENSIFS ===
+    "mod_power_flat": {
+        "category": "offensive", "name": "Puissance",
+        "description": "+{value} Puissance",
+        "roll_range": (5, 50), "tier_scaling": True,
+        "stat": "power_flat", "is_percent": False
+    },
+    "mod_power_percent": {
+        "category": "offensive", "name": "Puissance Accrue",
+        "description": "+{value}% Puissance",
+        "roll_range": (3, 25), "tier_scaling": True,
+        "stat": "power_percent", "is_percent": True
+    },
+    "mod_critical_chance": {
+        "category": "offensive", "name": "Chance Critique",
+        "description": "+{value}% Chance Critique",
+        "roll_range": (1, 15), "tier_scaling": True,
+        "stat": "crit_chance", "is_percent": True
+    },
+    "mod_critical_damage": {
+        "category": "offensive", "name": "Degats Critiques",
+        "description": "+{value}% Degats Critiques",
+        "roll_range": (10, 100), "tier_scaling": True,
+        "stat": "crit_damage", "is_percent": True
+    },
+    "mod_penetration": {
+        "category": "offensive", "name": "Penetration",
+        "description": "+{value}% Penetration de Defense",
+        "roll_range": (2, 20), "tier_scaling": True,
+        "stat": "penetration", "is_percent": True
+    },
+    "mod_damage_over_time": {
+        "category": "offensive", "name": "Degats sur la Duree",
+        "description": "+{value} Degats/sec pendant 5s",
+        "roll_range": (5, 75), "tier_scaling": True,
+        "stat": "dot_damage", "is_percent": False
+    },
+    
+    # === MODS DEFENSIFS ===
+    "mod_defense_flat": {
+        "category": "defensive", "name": "Defense",
+        "description": "+{value} Defense",
+        "roll_range": (10, 100), "tier_scaling": True,
+        "stat": "defense_flat", "is_percent": False
+    },
+    "mod_defense_percent": {
+        "category": "defensive", "name": "Defense Accrue",
+        "description": "+{value}% Defense",
+        "roll_range": (3, 20), "tier_scaling": True,
+        "stat": "defense_percent", "is_percent": True
+    },
+    "mod_health_flat": {
+        "category": "defensive", "name": "Vitalite",
+        "description": "+{value} Points de Vie",
+        "roll_range": (25, 250), "tier_scaling": True,
+        "stat": "health_flat", "is_percent": False
+    },
+    "mod_health_regen": {
+        "category": "defensive", "name": "Regeneration",
+        "description": "+{value} Vie/sec",
+        "roll_range": (1, 20), "tier_scaling": True,
+        "stat": "health_regen", "is_percent": False
+    },
+    "mod_damage_reduction": {
+        "category": "defensive", "name": "Reduction de Degats",
+        "description": "-{value}% Degats Recus",
+        "roll_range": (1, 10), "tier_scaling": True,
+        "stat": "damage_reduction", "is_percent": True
+    },
+    "mod_block_chance": {
+        "category": "defensive", "name": "Chance de Blocage",
+        "description": "+{value}% Chance de Bloquer",
+        "roll_range": (2, 15), "tier_scaling": True,
+        "stat": "block_chance", "is_percent": True
+    },
+    
+    # === MODS UTILITAIRES ===
+    "mod_cooldown_reduction": {
+        "category": "utility", "name": "Reduction de Temps",
+        "description": "-{value}% Temps de Recharge",
+        "roll_range": (3, 25), "tier_scaling": True,
+        "stat": "cooldown_reduction", "is_percent": True
+    },
+    "mod_duration_increase": {
+        "category": "utility", "name": "Duree Prolongee",
+        "description": "+{value}% Duree des Effets",
+        "roll_range": (5, 50), "tier_scaling": True,
+        "stat": "duration_increase", "is_percent": True
+    },
+    "mod_area_of_effect": {
+        "category": "utility", "name": "Zone d'Effet",
+        "description": "+{value}% Zone d'Effet",
+        "roll_range": (5, 40), "tier_scaling": True,
+        "stat": "aoe_increase", "is_percent": True
+    },
+    "mod_charges_extra": {
+        "category": "utility", "name": "Charges Bonus",
+        "description": "+{value} Charges Maximum",
+        "roll_range": (1, 5), "tier_scaling": False,
+        "stat": "extra_charges", "is_percent": False
+    },
+    "mod_experience_bonus": {
+        "category": "utility", "name": "Experience Bonus",
+        "description": "+{value}% Experience Gagnee",
+        "roll_range": (5, 50), "tier_scaling": True,
+        "stat": "exp_bonus", "is_percent": True
+    },
+    "mod_luck_bonus": {
+        "category": "utility", "name": "Chance",
+        "description": "+{value}% Chance de Drop",
+        "roll_range": (2, 25), "tier_scaling": True,
+        "stat": "luck_bonus", "is_percent": True
+    },
+    
+    # === MODS ELEMENTAIRES ===
+    "mod_fire_damage": {
+        "category": "elemental", "name": "Degats de Feu",
+        "description": "+{value} Degats de Feu",
+        "roll_range": (10, 100), "tier_scaling": True,
+        "stat": "fire_damage", "is_percent": False, "element": "fire"
+    },
+    "mod_ice_damage": {
+        "category": "elemental", "name": "Degats de Glace",
+        "description": "+{value} Degats de Glace",
+        "roll_range": (10, 100), "tier_scaling": True,
+        "stat": "ice_damage", "is_percent": False, "element": "ice"
+    },
+    "mod_lightning_damage": {
+        "category": "elemental", "name": "Degats de Foudre",
+        "description": "+{value} Degats de Foudre",
+        "roll_range": (10, 100), "tier_scaling": True,
+        "stat": "lightning_damage", "is_percent": False, "element": "lightning"
+    },
+    "mod_void_damage": {
+        "category": "elemental", "name": "Degats du Vide",
+        "description": "+{value} Degats du Vide",
+        "roll_range": (15, 120), "tier_scaling": True,
+        "stat": "void_damage", "is_percent": False, "element": "void"
+    },
+    "mod_elemental_resistance": {
+        "category": "elemental", "name": "Resistance Elementaire",
+        "description": "+{value}% Resistance a tous les Elements",
+        "roll_range": (2, 15), "tier_scaling": True,
+        "stat": "all_elemental_res", "is_percent": True
+    },
+    "mod_fire_resistance": {
+        "category": "elemental", "name": "Resistance au Feu",
+        "description": "+{value}% Resistance au Feu",
+        "roll_range": (5, 40), "tier_scaling": True,
+        "stat": "fire_res", "is_percent": True, "element": "fire"
+    },
+    
+    # === MODS ARCANIQUES ===
+    "mod_mana_flat": {
+        "category": "arcane", "name": "Mana",
+        "description": "+{value} Mana Maximum",
+        "roll_range": (15, 150), "tier_scaling": True,
+        "stat": "mana_flat", "is_percent": False
+    },
+    "mod_mana_regen": {
+        "category": "arcane", "name": "Regeneration de Mana",
+        "description": "+{value} Mana/sec",
+        "roll_range": (1, 15), "tier_scaling": True,
+        "stat": "mana_regen", "is_percent": False
+    },
+    "mod_spell_power": {
+        "category": "arcane", "name": "Puissance Magique",
+        "description": "+{value}% Puissance des Sorts",
+        "roll_range": (5, 40), "tier_scaling": True,
+        "stat": "spell_power", "is_percent": True
+    },
+    "mod_cast_speed": {
+        "category": "arcane", "name": "Vitesse d'Incantation",
+        "description": "+{value}% Vitesse d'Incantation",
+        "roll_range": (3, 30), "tier_scaling": True,
+        "stat": "cast_speed", "is_percent": True
+    },
+    "mod_arcane_resonance": {
+        "category": "arcane", "name": "Resonance Arcanique",
+        "description": "+{value}% Resonance avec les Glyphes",
+        "roll_range": (5, 35), "tier_scaling": True,
+        "stat": "arcane_resonance", "is_percent": True
+    },
+    
+    # === MODS COSMIQUES ===
+    "mod_dimensional_shift": {
+        "category": "cosmic", "name": "Decalage Dimensionnel",
+        "description": "+{value}% Chance d'Evitement Dimensionnel",
+        "roll_range": (1, 10), "tier_scaling": True,
+        "stat": "dimensional_dodge", "is_percent": True
+    },
+    "mod_quantum_flux": {
+        "category": "cosmic", "name": "Flux Quantique",
+        "description": "+{value}% Variance Quantique",
+        "roll_range": (3, 25), "tier_scaling": True,
+        "stat": "quantum_flux", "is_percent": True
+    },
+    "mod_temporal_acceleration": {
+        "category": "cosmic", "name": "Acceleration Temporelle",
+        "description": "+{value}% Vitesse d'Action",
+        "roll_range": (2, 20), "tier_scaling": True,
+        "stat": "action_speed", "is_percent": True
+    },
+    "mod_entropy_absorption": {
+        "category": "cosmic", "name": "Absorption d'Entropie",
+        "description": "Absorbe {value}% des Degats en Energie",
+        "roll_range": (1, 8), "tier_scaling": True,
+        "stat": "entropy_absorb", "is_percent": True
+    },
+    "mod_celestial_blessing": {
+        "category": "cosmic", "name": "Benediction Celeste",
+        "description": "+{value}% a toutes les Stats",
+        "roll_range": (1, 5), "tier_scaling": True,
+        "stat": "all_stats", "is_percent": True
+    },
+    "mod_nexus_connection": {
+        "category": "cosmic", "name": "Connexion au Nexus",
+        "description": "+{value}% Resonance avec le Nexus",
+        "roll_range": (5, 50), "tier_scaling": True,
+        "stat": "nexus_resonance", "is_percent": True
+    },
+    
+    # === MODS DE CORRUPTION (negatifs avec bonus) ===
+    "mod_corrupted_power": {
+        "category": "corruption", "name": "Puissance Corrompue",
+        "description": "+{value}% Puissance, -{penalty}% Defense",
+        "roll_range": (15, 80), "tier_scaling": True,
+        "stat": "corrupted_power", "is_percent": True,
+        "penalty_stat": "defense_percent", "penalty_ratio": 0.5
+    },
+    "mod_blood_price": {
+        "category": "corruption", "name": "Prix du Sang",
+        "description": "+{value}% Degats, -{penalty} Vie/sec",
+        "roll_range": (20, 100), "tier_scaling": True,
+        "stat": "blood_damage", "is_percent": True,
+        "penalty_stat": "health_drain", "penalty_ratio": 0.2
+    },
+    "mod_unstable_essence": {
+        "category": "corruption", "name": "Essence Instable",
+        "description": "+{value}% Critique, {penalty}% Chance d'Echec",
+        "roll_range": (10, 50), "tier_scaling": True,
+        "stat": "unstable_crit", "is_percent": True,
+        "penalty_stat": "fail_chance", "penalty_ratio": 0.3
+    },
+    "mod_void_touched": {
+        "category": "corruption", "name": "Touche par le Vide",
+        "description": "+{value}% Degats Void, -{penalty}% Resist Void",
+        "roll_range": (25, 120), "tier_scaling": True,
+        "stat": "void_power", "is_percent": True,
+        "penalty_stat": "void_res", "penalty_ratio": 0.4
+    },
+}
+
+
+# Nombre de mods par rarete d'objet
+MODS_BY_RARITY = {
+    ItemRarity.CRUDE: (0, 1),      # 0-1 mod
+    ItemRarity.COMMON: (1, 2),     # 1-2 mods
+    ItemRarity.REFINED: (1, 2),    # 1-2 mods
+    ItemRarity.SUPERIOR: (2, 3),   # 2-3 mods
+    ItemRarity.EXQUISITE: (2, 4),  # 2-4 mods
+    ItemRarity.MASTERWORK: (3, 4), # 3-4 mods
+    ItemRarity.LEGENDARY: (3, 5),  # 3-5 mods
+    ItemRarity.MYTHICAL: (4, 6),   # 4-6 mods
+    ItemRarity.PRIMORDIAL: (5, 7), # 5-7 mods (max)
+}
+
+
+@dataclass
+class ItemMod:
+    """Un modificateur sur un objet"""
+    mod_id: str           # Cle dans ITEM_MODS
+    tier: str             # ModTier
+    
+    # Roll
+    rolled_value: float   # Valeur roulee
+    min_possible: float   # Min possible pour ce tier
+    max_possible: float   # Max possible pour ce tier
+    roll_percent: float   # Qualite du roll (0-100%)
+    
+    # Penalty (pour mods corruption)
+    penalty_value: float = 0.0
+    
+    def __post_init__(self):
+        if self.max_possible > self.min_possible:
+            self.roll_percent = ((self.rolled_value - self.min_possible) / 
+                                (self.max_possible - self.min_possible)) * 100
+        else:
+            self.roll_percent = 100.0
+    
+    @property
+    def mod_definition(self) -> dict:
+        return ITEM_MODS.get(self.mod_id, {})
+    
+    @property
+    def display_name(self) -> str:
+        return self.mod_definition.get('name', self.mod_id)
+    
+    @property
+    def description(self) -> str:
+        desc = self.mod_definition.get('description', '')
+        if self.penalty_value > 0:
+            return desc.format(value=int(self.rolled_value), penalty=int(self.penalty_value))
+        return desc.format(value=int(self.rolled_value))
+    
+    @property
+    def tier_enum(self) -> ModTier:
+        return next((t for t in ModTier if t.tier_id == self.tier), ModTier.STANDARD)
+    
+    @property
+    def category(self) -> str:
+        return self.mod_definition.get('category', 'utility')
+    
+    @property
+    def roll_quality(self) -> str:
+        """Qualite du roll en texte"""
+        if self.roll_percent >= 95:
+            return "PERFECT"
+        elif self.roll_percent >= 80:
+            return "Excellent"
+        elif self.roll_percent >= 60:
+            return "Good"
+        elif self.roll_percent >= 40:
+            return "Average"
+        elif self.roll_percent >= 20:
+            return "Below Average"
+        else:
+            return "Poor"
+    
+    def to_dict(self) -> dict:
+        return {
+            "mod_id": self.mod_id,
+            "tier": self.tier,
+            "rolled_value": self.rolled_value,
+            "min_possible": self.min_possible,
+            "max_possible": self.max_possible,
+            "roll_percent": self.roll_percent,
+            "penalty_value": self.penalty_value,
+        }
+    
+    @classmethod
+    def from_dict(cls, data: dict) -> "ItemMod":
+        return cls(
+            mod_id=data['mod_id'],
+            tier=data['tier'],
+            rolled_value=data['rolled_value'],
+            min_possible=data['min_possible'],
+            max_possible=data['max_possible'],
+            roll_percent=data.get('roll_percent', 50.0),
+            penalty_value=data.get('penalty_value', 0.0)
+        )
+
+
+def generate_item_mods(rarity: ItemRarity, seed: str = None) -> List[ItemMod]:
+    """Genere des mods aleatoires pour un objet"""
+    import random
+    
+    if seed:
+        rng = random.Random(seed)
+    else:
+        rng = random.Random()
+    
+    # Nombre de mods selon rarete
+    min_mods, max_mods = MODS_BY_RARITY.get(rarity, (1, 2))
+    num_mods = rng.randint(min_mods, max_mods)
+    
+    if num_mods == 0:
+        return []
+    
+    mods = []
+    used_mods = set()
+    available_mods = list(ITEM_MODS.keys())
+    
+    for _ in range(num_mods):
+        # Choisir un mod non utilise
+        remaining = [m for m in available_mods if m not in used_mods]
+        if not remaining:
+            break
+        
+        mod_id = rng.choice(remaining)
+        used_mods.add(mod_id)
+        mod_def = ITEM_MODS[mod_id]
+        
+        # Determiner le tier du mod
+        tier_weights = list(MOD_TIER_WEIGHTS.items())
+        
+        # Bonus pour les raretes elevees
+        rarity_idx = list(ItemRarity).index(rarity)
+        adjusted_weights = []
+        for tier, weight in tier_weights:
+            tier_idx = list(ModTier).index(tier)
+            # Plus la rarete est haute, plus les tiers eleves sont probables
+            boost = 1 + (rarity_idx * tier_idx * 0.05)
+            adjusted_weights.append((tier, weight * boost))
+        
+        total = sum(w for _, w in adjusted_weights)
+        roll = rng.random() * total
+        cumulative = 0
+        mod_tier = ModTier.STANDARD
+        
+        for tier, weight in adjusted_weights:
+            cumulative += weight
+            if roll < cumulative:
+                mod_tier = tier
+                break
+        
+        # Calculer le range pour ce tier
+        base_min, base_max = mod_def['roll_range']
+        
+        if mod_def.get('tier_scaling', True):
+            tier_mult = mod_tier.multiplier
+            scaled_min = base_min * (0.5 + tier_mult * 0.5)
+            scaled_max = base_max * tier_mult
+        else:
+            # Mods sans scaling (ex: charges)
+            scaled_min = base_min
+            scaled_max = min(base_max, base_min + list(ModTier).index(mod_tier) + 1)
+        
+        # Roll la valeur
+        rolled_value = scaled_min + rng.random() * (scaled_max - scaled_min)
+        
+        # Arrondir selon le type
+        if mod_def.get('is_percent', False):
+            rolled_value = round(rolled_value, 1)
+        else:
+            rolled_value = int(rolled_value)
+        
+        # Penalty pour mods corruption
+        penalty_value = 0.0
+        if mod_def.get('penalty_ratio'):
+            penalty_value = rolled_value * mod_def['penalty_ratio']
+            if not mod_def.get('is_percent', False):
+                penalty_value = int(penalty_value)
+            else:
+                penalty_value = round(penalty_value, 1)
+        
+        # Creer le mod
+        item_mod = ItemMod(
+            mod_id=mod_id,
+            tier=mod_tier.tier_id,
+            rolled_value=rolled_value,
+            min_possible=scaled_min,
+            max_possible=scaled_max,
+            roll_percent=0,  # Sera calcule dans __post_init__
+            penalty_value=penalty_value
+        )
+        
+        mods.append(item_mod)
+    
+    return mods
+
+
+# ============================================================================
 # TYPES D'OBJETS SPECIFIQUES (70+ types)
 # ============================================================================
 
@@ -592,6 +1094,9 @@ class AlchemicalItem:
     charges: int = 1
     max_charges: int = 1
     
+    # MODS - Modificateurs aleatoires
+    mods: List[Dict] = field(default_factory=list)  # Liste de mods serialises
+    
     # Etat
     is_used: bool = False
     is_bound: bool = False
@@ -616,6 +1121,9 @@ class AlchemicalItem:
     
     @classmethod
     def from_dict(cls, data: dict) -> "AlchemicalItem":
+        # Gerer les anciens items sans mods
+        if 'mods' not in data:
+            data['mods'] = []
         return cls(**data)
     
     @property
@@ -632,7 +1140,58 @@ class AlchemicalItem:
     @property
     def effective_power(self) -> float:
         rarity_enum = next((r for r in ItemRarity if r.rarity_id == self.rarity), ItemRarity.COMMON)
-        return self.value * rarity_enum.multiplier
+        base_power = self.value * rarity_enum.multiplier
+        
+        # Bonus des mods
+        mod_bonus = 1.0
+        for mod_data in self.mods:
+            mod = ItemMod.from_dict(mod_data)
+            # Chaque mod ajoute un bonus base sur son tier
+            tier_mult = mod.tier_enum.multiplier
+            mod_bonus += (mod.roll_percent / 100) * (tier_mult / 10)
+        
+        return base_power * mod_bonus
+    
+    @property
+    def parsed_mods(self) -> List[ItemMod]:
+        """Retourne les mods parses"""
+        return [ItemMod.from_dict(m) for m in self.mods]
+    
+    @property
+    def mod_count(self) -> int:
+        return len(self.mods)
+    
+    @property
+    def best_mod(self) -> Optional[ItemMod]:
+        """Retourne le meilleur mod (plus haut roll%)"""
+        if not self.mods:
+            return None
+        parsed = self.parsed_mods
+        return max(parsed, key=lambda m: m.roll_percent)
+    
+    @property
+    def has_perfect_mod(self) -> bool:
+        """Verifie si l'item a un mod parfait (95%+)"""
+        return any(m.get('roll_percent', 0) >= 95 for m in self.mods)
+    
+    @property
+    def has_divine_mod(self) -> bool:
+        """Verifie si l'item a un mod divin"""
+        return any(m.get('tier') == 'divine' for m in self.mods)
+    
+    def format_mods_display(self) -> str:
+        """Formate l'affichage des mods"""
+        if not self.mods:
+            return "No mods"
+        
+        lines = []
+        for mod_data in self.mods:
+            mod = ItemMod.from_dict(mod_data)
+            tier_color = mod.tier_enum.color
+            quality = mod.roll_quality
+            lines.append(f"  [{mod.tier_enum.display_name}] {mod.description} ({quality} - {mod.roll_percent:.1f}%)")
+        
+        return "\n".join(lines)
 
 
 # ============================================================================
@@ -808,6 +1367,17 @@ class AlchemicalItemManager:
             f"{chosen_type}{rarity.rarity_id}{datetime.now().isoformat()}{secrets.token_hex(8)}".encode()
         ).hexdigest()[:16]
         
+        # GENERER LES MODS
+        item_mods = generate_item_mods(rarity, seed=item_id)
+        mods_data = [mod.to_dict() for mod in item_mods]
+        
+        # Bonus de charges si mod "extra_charges"
+        extra_charges = 0
+        for mod in item_mods:
+            if mod.mod_id == "mod_charges_extra":
+                extra_charges = int(mod.rolled_value)
+                break
+        
         item = AlchemicalItem(
             item_id=item_id,
             item_type=chosen_type,
@@ -815,8 +1385,9 @@ class AlchemicalItemManager:
             rarity=rarity.rarity_id,
             value=round(value, 2),
             duration=duration,
-            charges=max_charges,
-            max_charges=max_charges,
+            charges=max_charges + extra_charges,
+            max_charges=max_charges + extra_charges,
+            mods=mods_data,
             origin_vault=vault_number,
             current_vault=vault_number,
             created_at=datetime.now().isoformat()

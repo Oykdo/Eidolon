@@ -17,5 +17,61 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.840324",
   "current_vault": 4,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_lightning_damage",
+      "tier": "standard",
+      "rolled_value": 22,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 6.909090909090909,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_elemental_resistance",
+      "tier": "standard",
+      "rolled_value": 16.2,
+      "min_possible": 2.5,
+      "max_possible": 22.5,
+      "roll_percent": 68.5,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_damage_reduction",
+      "tier": "prime",
+      "rolled_value": 36.2,
+      "min_possible": 3.5,
+      "max_possible": 60.0,
+      "roll_percent": 57.876106194690266,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_critical_chance",
+      "tier": "greater",
+      "rolled_value": 36.0,
+      "min_possible": 1.75,
+      "max_possible": 37.5,
+      "roll_percent": 95.8041958041958,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_entropy_absorption",
+      "tier": "greater",
+      "rolled_value": 19.1,
+      "min_possible": 1.75,
+      "max_possible": 20.0,
+      "roll_percent": 95.06849315068494,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_block_chance",
+      "tier": "greater",
+      "rolled_value": 18.8,
+      "min_possible": 3.5,
+      "max_possible": 37.5,
+      "roll_percent": 45.0,
+      "penalty_value": 0.0
+    }
+  ]
 }

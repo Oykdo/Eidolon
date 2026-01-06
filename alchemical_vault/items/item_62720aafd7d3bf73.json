@@ -17,5 +17,25 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.778694",
   "current_vault": 3,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_void_damage",
+      "tier": "standard",
+      "rolled_value": 46,
+      "min_possible": 18.75,
+      "max_possible": 180.0,
+      "roll_percent": 16.899224806201552,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_cooldown_reduction",
+      "tier": "standard",
+      "rolled_value": 36.3,
+      "min_possible": 3.75,
+      "max_possible": 37.5,
+      "roll_percent": 96.44444444444443,
+      "penalty_value": 0.0
+    }
+  ]
 }

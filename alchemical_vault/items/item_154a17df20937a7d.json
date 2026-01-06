@@ -17,5 +17,52 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.636798",
   "current_vault": 2,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_experience_bonus",
+      "tier": "divine",
+      "rolled_value": 188.6,
+      "min_possible": 27.5,
+      "max_possible": 500.0,
+      "roll_percent": 34.095238095238095,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_arcane_resonance",
+      "tier": "standard",
+      "rolled_value": 21.9,
+      "min_possible": 6.25,
+      "max_possible": 52.5,
+      "roll_percent": 33.83783783783784,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_critical_damage",
+      "tier": "minor",
+      "rolled_value": 59.9,
+      "min_possible": 10.0,
+      "max_possible": 100.0,
+      "roll_percent": 55.44444444444444,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_fire_resistance",
+      "tier": "standard",
+      "rolled_value": 34.4,
+      "min_possible": 6.25,
+      "max_possible": 60.0,
+      "roll_percent": 52.372093023255815,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_quantum_flux",
+      "tier": "minor",
+      "rolled_value": 8.6,
+      "min_possible": 3.0,
+      "max_possible": 25.0,
+      "roll_percent": 25.454545454545453,
+      "penalty_value": 0.0
+    }
+  ]
 }

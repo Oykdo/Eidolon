@@ -17,5 +17,43 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:51.494716",
   "current_vault": 1,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_entropy_absorption",
+      "tier": "standard",
+      "rolled_value": 3.3,
+      "min_possible": 1.25,
+      "max_possible": 12.0,
+      "roll_percent": 19.069767441860463,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_mana_flat",
+      "tier": "greater",
+      "rolled_value": 143,
+      "min_possible": 26.25,
+      "max_possible": 375.0,
+      "roll_percent": 33.47670250896057,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_defense_flat",
+      "tier": "greater",
+      "rolled_value": 177,
+      "min_possible": 17.5,
+      "max_possible": 250.0,
+      "roll_percent": 68.60215053763442,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_nexus_connection",
+      "tier": "minor",
+      "rolled_value": 9.4,
+      "min_possible": 5.0,
+      "max_possible": 50.0,
+      "roll_percent": 9.777777777777779,
+      "penalty_value": 0.0
+    }
+  ]
 }

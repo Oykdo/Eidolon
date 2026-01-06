@@ -17,5 +17,25 @@
   "origin_chest": null,
   "created_at": "2026-01-06T23:05:52.048092",
   "current_vault": 5,
-  "status": "inventory"
+  "status": "inventory",
+  "mods": [
+    {
+      "mod_id": "mod_fire_damage",
+      "tier": "superior",
+      "rolled_value": 258,
+      "min_possible": 25.0,
+      "max_possible": 400.0,
+      "roll_percent": 62.133333333333326,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_mana_regen",
+      "tier": "minor",
+      "rolled_value": 14,
+      "min_possible": 1.0,
+      "max_possible": 15.0,
+      "roll_percent": 92.85714285714286,
+      "penalty_value": 0.0
+    }
+  ]
 }
