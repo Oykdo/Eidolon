@@ -629,18 +629,18 @@ class GemVault:
                     rarity = r
                     break
         
-        # Stats de base selon rarete
+        # Stats de base selon rarete (ranges NON-chevauchants, Divine > Transcendent)
         base_ranges = {
             GemRarity.CRACKED: (5, 25),
-            GemRarity.FLAWED: (20, 75),
-            GemRarity.COMMON: (50, 200),
-            GemRarity.POLISHED: (150, 500),
-            GemRarity.REFINED: (400, 1000),
-            GemRarity.PRISTINE: (800, 2000),
-            GemRarity.PERFECT: (1500, 4000),
-            GemRarity.FLAWLESS: (3000, 8000),
-            GemRarity.TRANSCENDENT: (6000, 15000),
-            GemRarity.DIVINE: (12000, 30000),
+            GemRarity.FLAWED: (30, 80),
+            GemRarity.COMMON: (100, 250),
+            GemRarity.POLISHED: (300, 600),
+            GemRarity.REFINED: (700, 1200),
+            GemRarity.PRISTINE: (1500, 2500),
+            GemRarity.PERFECT: (3000, 5000),
+            GemRarity.FLAWLESS: (6000, 10000),
+            GemRarity.TRANSCENDENT: (12000, 20000),
+            GemRarity.DIVINE: (25000, 50000),  # Divine TOUJOURS > Transcendent
         }
         
         min_p, max_p = base_ranges.get(rarity, (50, 200))
