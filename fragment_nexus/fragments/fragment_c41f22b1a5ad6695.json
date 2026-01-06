@@ -1,0 +1,32 @@
+{
+  "fragment_id": "c41f22b1a5ad6695",
+  "fragment_type": "oracle",
+  "essence": "void",
+  "mass": 658,
+  "purity": 55,
+  "stability": 51,
+  "soul": null,
+  "resonance_frequency": 964,
+  "entangled_fragments": [],
+  "voting_power": 0.0,
+  "governance_tier": 0,
+  "votes_cast": [],
+  "prophecy_text": "Le Nexus s'eveille. Les sept essences cherchent leur unite.",
+  "prophecy_fulfilled": false,
+  "prophecy_target_date": null,
+  "constellation_id": null,
+  "constellation_position": null,
+  "birth_cycle": 0,
+  "optimal_cycles": [
+    0,
+    1,
+    2
+  ],
+  "market_value": 361.90000000000003,
+  "price_history": [],
+  "origin_vault": 1,
+  "created_at": "2026-01-06T22:31:43.447036",
+  "current_vault": 1,
+  "status": "active",
+  "transfer_history": []
+}

@@ -1,0 +1,32 @@
+{
+  "fragment_id": "953a8c8f30f89979",
+  "fragment_type": "shard",
+  "essence": "celestial",
+  "mass": 427,
+  "purity": 60,
+  "stability": 63,
+  "soul": null,
+  "resonance_frequency": 6191,
+  "entangled_fragments": [],
+  "voting_power": 0.0,
+  "governance_tier": 0,
+  "votes_cast": [],
+  "prophecy_text": null,
+  "prophecy_fulfilled": false,
+  "prophecy_target_date": null,
+  "constellation_id": null,
+  "constellation_position": null,
+  "birth_cycle": 0,
+  "optimal_cycles": [
+    6,
+    7,
+    0
+  ],
+  "market_value": 256.2,
+  "price_history": [],
+  "origin_vault": 6,
+  "created_at": "2026-01-06T22:31:43.511049",
+  "current_vault": 6,
+  "status": "active",
+  "transfer_history": []
+}

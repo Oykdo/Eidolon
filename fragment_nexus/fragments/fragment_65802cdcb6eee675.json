@@ -1,0 +1,32 @@
+{
+  "fragment_id": "65802cdcb6eee675",
+  "fragment_type": "voice",
+  "essence": "harmonic",
+  "mass": 1254,
+  "purity": 63,
+  "stability": 41,
+  "soul": null,
+  "resonance_frequency": 5502,
+  "entangled_fragments": [],
+  "voting_power": 25,
+  "governance_tier": 1,
+  "votes_cast": [],
+  "prophecy_text": null,
+  "prophecy_fulfilled": false,
+  "prophecy_target_date": null,
+  "constellation_id": null,
+  "constellation_position": null,
+  "birth_cycle": 0,
+  "optimal_cycles": [
+    5,
+    6,
+    7
+  ],
+  "market_value": 790.02,
+  "price_history": [],
+  "origin_vault": 3,
+  "created_at": "2026-01-06T22:31:43.469775",
+  "current_vault": 3,
+  "status": "active",
+  "transfer_history": []
+}

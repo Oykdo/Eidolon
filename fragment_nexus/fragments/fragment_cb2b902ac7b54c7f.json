@@ -1,0 +1,32 @@
+{
+  "fragment_id": "cb2b902ac7b54c7f",
+  "fragment_type": "splinter",
+  "essence": "celestial",
+  "mass": 495,
+  "purity": 40,
+  "stability": 76,
+  "soul": null,
+  "resonance_frequency": 6583,
+  "entangled_fragments": [],
+  "voting_power": 0.0,
+  "governance_tier": 0,
+  "votes_cast": [],
+  "prophecy_text": null,
+  "prophecy_fulfilled": false,
+  "prophecy_target_date": null,
+  "constellation_id": null,
+  "constellation_position": null,
+  "birth_cycle": 0,
+  "optimal_cycles": [
+    6,
+    7,
+    0
+  ],
+  "market_value": 198.0,
+  "price_history": [],
+  "origin_vault": 6,
+  "created_at": "2026-01-06T22:31:43.508918",
+  "current_vault": 6,
+  "status": "active",
+  "transfer_history": []
+}
