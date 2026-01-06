@@ -446,7 +446,21 @@ class VaultMonitorGUI:
         # Configuration de la fenêtre principale
         self.root = tk.Tk()
         self.root.title(f"Poly-Spinor Nexus 7D - Vault Monitor: {vault_name}")
-        self.root.geometry("1400x900")
+        
+        # Adapter la taille a l'ecran
+        screen_w = self.root.winfo_screenwidth()
+        screen_h = self.root.winfo_screenheight()
+        
+        # Taille responsive (80% de l'ecran, min 1024x600)
+        win_w = max(1024, min(1400, int(screen_w * 0.8)))
+        win_h = max(600, min(900, int(screen_h * 0.8)))
+        
+        # Centrer la fenetre
+        pos_x = (screen_w - win_w) // 2
+        pos_y = (screen_h - win_h) // 2
+        
+        self.root.geometry(f"{win_w}x{win_h}+{pos_x}+{pos_y}")
+        self.root.minsize(1024, 600)
         self.root.configure(bg="#0a0a1a")
         
         # Chemins de stockage
@@ -1190,7 +1204,7 @@ class VaultMonitorGUI:
         # Fenetre d'inventaire
         dialog = tk.Toplevel(self.root)
         dialog.title(f"Inventaire Vault #{vault_num}")
-        dialog.geometry("800x600")
+        dialog.geometry("700x500")
         dialog.configure(bg=CypherpunkTheme.BG_DARK)
         
         # Header
@@ -1398,7 +1412,7 @@ class VaultMonitorGUI:
         # Fenetre de details avec scrollbar
         dialog = tk.Toplevel(self.root)
         dialog.title(f"Vault #{vault_num} - Details & Inventory")
-        dialog.geometry("900x750")
+        dialog.geometry("750x550")
         dialog.configure(bg=CypherpunkTheme.BG_DARK)
         
         # Canvas scrollable
