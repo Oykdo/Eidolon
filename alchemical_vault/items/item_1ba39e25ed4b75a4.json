@@ -1,0 +1,59 @@
+{
+  "item_id": "1ba39e25ed4b75a4",
+  "item_type": "seal_contract",
+  "category": "seal",
+  "rarity": "exquisite",
+  "value": 5.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_block_chance",
+      "tier": "standard",
+      "rolled_value": 16.9,
+      "min_possible": 2.5,
+      "max_possible": 22.5,
+      "roll_percent": 72.0,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_power_flat",
+      "tier": "standard",
+      "rolled_value": 19,
+      "min_possible": 6.25,
+      "max_possible": 75.0,
+      "roll_percent": 18.545454545454547,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_arcane_resonance",
+      "tier": "standard",
+      "rolled_value": 34.2,
+      "min_possible": 6.25,
+      "max_possible": 52.5,
+      "roll_percent": 60.432432432432435,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_mana_flat",
+      "tier": "prime",
+      "rolled_value": 369,
+      "min_possible": 52.5,
+      "max_possible": 900.0,
+      "roll_percent": 37.34513274336283,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 1,
+  "origin_chest": "65069663dc1006eb",
+  "created_at": "2026-01-06T23:51:28.796655",
+  "current_vault": 1,
+  "status": "inventory"
+}

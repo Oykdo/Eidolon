@@ -1,0 +1,32 @@
+{
+  "item_id": "6d3b10df59afbd86",
+  "item_type": "potion_protection",
+  "category": "potion",
+  "rarity": "common",
+  "value": 943.0,
+  "duration": 27,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_lightning_damage",
+      "tier": "standard",
+      "rolled_value": 98,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 62.18181818181818,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 6,
+  "origin_chest": "5a34cff091311509",
+  "created_at": "2026-01-06T23:51:29.306695",
+  "current_vault": 6,
+  "status": "inventory"
+}

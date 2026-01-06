@@ -1,0 +1,19 @@
+{
+  "chest_id": "181709e4716fb6ee",
+  "tier": "rare",
+  "items": [
+    "a467eb79594daeec",
+    "bbce3bdff31b1d83",
+    "0d931b1fd5cf2a8e",
+    "5215380c80bbb46f",
+    "f8625c5b53748155"
+  ],
+  "item_count": 5,
+  "is_opened": true,
+  "opened_at": "2026-01-06T23:51:29.167656",
+  "opened_by_vault": 5,
+  "origin_vault": 5,
+  "created_at": "2026-01-06T23:51:29.167656",
+  "bonus_rarity_boost": 0.6,
+  "guaranteed_legendary": false
+}

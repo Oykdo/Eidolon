@@ -1,0 +1,59 @@
+{
+  "item_id": "efc27e6a11d97f88",
+  "item_type": "sigil_trace",
+  "category": "sigil",
+  "rarity": "legendary",
+  "value": 225.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_mana_regen",
+      "tier": "standard",
+      "rolled_value": 17,
+      "min_possible": 1.25,
+      "max_possible": 22.5,
+      "roll_percent": 74.11764705882354,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_void_touched",
+      "tier": "standard",
+      "rolled_value": 135.7,
+      "min_possible": 31.25,
+      "max_possible": 180.0,
+      "roll_percent": 70.21848739495798,
+      "penalty_value": 54.3
+    },
+    {
+      "mod_id": "mod_damage_over_time",
+      "tier": "standard",
+      "rolled_value": 74,
+      "min_possible": 6.25,
+      "max_possible": 112.5,
+      "roll_percent": 63.76470588235294,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_area_of_effect",
+      "tier": "standard",
+      "rolled_value": 49.5,
+      "min_possible": 6.25,
+      "max_possible": 60.0,
+      "roll_percent": 80.46511627906978,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 5,
+  "origin_chest": "694aa86fb490aad1",
+  "created_at": "2026-01-06T23:51:29.163115",
+  "current_vault": 5,
+  "status": "inventory"
+}

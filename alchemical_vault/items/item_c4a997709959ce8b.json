@@ -1,0 +1,32 @@
+{
+  "item_id": "c4a997709959ce8b",
+  "item_type": "orb_energy",
+  "category": "orb",
+  "rarity": "crude",
+  "value": 170.1,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_power_percent",
+      "tier": "standard",
+      "rolled_value": 15.0,
+      "min_possible": 3.75,
+      "max_possible": 37.5,
+      "roll_percent": 33.33333333333333,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 1,
+  "origin_chest": "65069663dc1006eb",
+  "created_at": "2026-01-06T23:51:28.797210",
+  "current_vault": 1,
+  "status": "inventory"
+}

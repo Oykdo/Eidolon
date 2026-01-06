@@ -1,0 +1,50 @@
+{
+  "item_id": "0b3b5d7e39ea9000",
+  "item_type": "potion_resonance",
+  "category": "potion",
+  "rarity": "legendary",
+  "value": 405.0,
+  "duration": 6,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_arcane_resonance",
+      "tier": "standard",
+      "rolled_value": 11.0,
+      "min_possible": 6.25,
+      "max_possible": 52.5,
+      "roll_percent": 10.27027027027027,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_duration_increase",
+      "tier": "greater",
+      "rolled_value": 25.0,
+      "min_possible": 8.75,
+      "max_possible": 125.0,
+      "roll_percent": 13.978494623655912,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_corrupted_power",
+      "tier": "standard",
+      "rolled_value": 41.9,
+      "min_possible": 18.75,
+      "max_possible": 120.0,
+      "roll_percent": 22.864197530864196,
+      "penalty_value": 20.9
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 5,
+  "origin_chest": "70ddc6297507a7cc",
+  "created_at": "2026-01-06T23:51:29.152571",
+  "current_vault": 5,
+  "status": "inventory"
+}

@@ -1,0 +1,68 @@
+{
+  "item_id": "ae56b051a04ed136",
+  "item_type": "seal_authority",
+  "category": "seal",
+  "rarity": "legendary",
+  "value": 30.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_blood_price",
+      "tier": "standard",
+      "rolled_value": 85.8,
+      "min_possible": 25.0,
+      "max_possible": 150.0,
+      "roll_percent": 48.64,
+      "penalty_value": 17.2
+    },
+    {
+      "mod_id": "mod_lightning_damage",
+      "tier": "minor",
+      "rolled_value": 43,
+      "min_possible": 10.0,
+      "max_possible": 100.0,
+      "roll_percent": 36.666666666666664,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_experience_bonus",
+      "tier": "minor",
+      "rolled_value": 23.2,
+      "min_possible": 5.0,
+      "max_possible": 50.0,
+      "roll_percent": 40.44444444444444,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_elemental_resistance",
+      "tier": "standard",
+      "rolled_value": 21.7,
+      "min_possible": 2.5,
+      "max_possible": 22.5,
+      "roll_percent": 96.0,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_celestial_blessing",
+      "tier": "standard",
+      "rolled_value": 2.0,
+      "min_possible": 1.25,
+      "max_possible": 7.5,
+      "roll_percent": 12.0,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 6,
+  "origin_chest": "13815a3164301714",
+  "created_at": "2026-01-06T23:51:29.320231",
+  "current_vault": 6,
+  "status": "inventory"
+}

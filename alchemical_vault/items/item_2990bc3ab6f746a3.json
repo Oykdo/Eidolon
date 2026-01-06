@@ -1,0 +1,32 @@
+{
+  "item_id": "2990bc3ab6f746a3",
+  "item_type": "elixir_strength",
+  "category": "elixir",
+  "rarity": "crude",
+  "value": 8.4,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_arcane_resonance",
+      "tier": "standard",
+      "rolled_value": 11.9,
+      "min_possible": 6.25,
+      "max_possible": 52.5,
+      "roll_percent": 12.216216216216216,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 2,
+  "origin_chest": "840a88a3efb57712",
+  "created_at": "2026-01-06T23:51:28.865396",
+  "current_vault": 2,
+  "status": "inventory"
+}

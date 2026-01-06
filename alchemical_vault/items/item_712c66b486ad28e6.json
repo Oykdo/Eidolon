@@ -1,0 +1,59 @@
+{
+  "item_id": "712c66b486ad28e6",
+  "item_type": "talisman_return",
+  "category": "talisman",
+  "rarity": "exquisite",
+  "value": 305.0,
+  "duration": 0,
+  "charges": 2,
+  "max_charges": 2,
+  "mods": [
+    {
+      "mod_id": "mod_charges_extra",
+      "tier": "greater",
+      "rolled_value": 1,
+      "min_possible": 1,
+      "max_possible": 4,
+      "roll_percent": 0.0,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_nexus_connection",
+      "tier": "greater",
+      "rolled_value": 37.0,
+      "min_possible": 8.75,
+      "max_possible": 125.0,
+      "roll_percent": 24.301075268817204,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_defense_percent",
+      "tier": "greater",
+      "rolled_value": 11.0,
+      "min_possible": 5.25,
+      "max_possible": 50.0,
+      "roll_percent": 12.849162011173185,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_power_percent",
+      "tier": "greater",
+      "rolled_value": 5.5,
+      "min_possible": 5.25,
+      "max_possible": 62.5,
+      "roll_percent": 0.43668122270742354,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 5,
+  "origin_chest": "70ddc6297507a7cc",
+  "created_at": "2026-01-06T23:51:29.157731",
+  "current_vault": 5,
+  "status": "inventory"
+}

@@ -1,0 +1,32 @@
+{
+  "item_id": "276b5299dd23923c",
+  "item_type": "rune_thurisaz",
+  "category": "rune",
+  "rarity": "common",
+  "value": 27.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_blood_price",
+      "tier": "greater",
+      "rolled_value": 134.7,
+      "min_possible": 35.0,
+      "max_possible": 250.0,
+      "roll_percent": 46.37209302325581,
+      "penalty_value": 26.9
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 1,
+  "origin_chest": "65069663dc1006eb",
+  "created_at": "2026-01-06T23:51:28.796655",
+  "current_vault": 1,
+  "status": "inventory"
+}

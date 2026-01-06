@@ -1,0 +1,68 @@
+{
+  "item_id": "7ce0c54cd39719fc",
+  "item_type": "potion_primordial",
+  "category": "potion",
+  "rarity": "mythical",
+  "value": 4550.0,
+  "duration": 7,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_penetration",
+      "tier": "greater",
+      "rolled_value": 15.4,
+      "min_possible": 3.5,
+      "max_possible": 50.0,
+      "roll_percent": 25.591397849462368,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_health_regen",
+      "tier": "superior",
+      "rolled_value": 52,
+      "min_possible": 2.5,
+      "max_possible": 80.0,
+      "roll_percent": 63.87096774193548,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_cooldown_reduction",
+      "tier": "standard",
+      "rolled_value": 4.7,
+      "min_possible": 3.75,
+      "max_possible": 37.5,
+      "roll_percent": 2.8148148148148153,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_celestial_blessing",
+      "tier": "minor",
+      "rolled_value": 4.5,
+      "min_possible": 1.0,
+      "max_possible": 5.0,
+      "roll_percent": 87.5,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_nexus_connection",
+      "tier": "greater",
+      "rolled_value": 87.0,
+      "min_possible": 8.75,
+      "max_possible": 125.0,
+      "roll_percent": 67.31182795698925,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 1,
+  "origin_chest": "007ed7b67ee57cda",
+  "created_at": "2026-01-06T23:51:28.789636",
+  "current_vault": 1,
+  "status": "inventory"
+}

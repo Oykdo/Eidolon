@@ -1,0 +1,77 @@
+{
+  "item_id": "b066d2a6a502e814",
+  "item_type": "scroll_genesis",
+  "category": "scroll",
+  "rarity": "primordial",
+  "value": 50.0,
+  "duration": 0,
+  "charges": 2,
+  "max_charges": 2,
+  "mods": [
+    {
+      "mod_id": "mod_void_damage",
+      "tier": "minor",
+      "rolled_value": 48,
+      "min_possible": 15.0,
+      "max_possible": 120.0,
+      "roll_percent": 31.428571428571427,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_critical_damage",
+      "tier": "minor",
+      "rolled_value": 55.7,
+      "min_possible": 10.0,
+      "max_possible": 100.0,
+      "roll_percent": 50.77777777777778,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_unstable_essence",
+      "tier": "greater",
+      "rolled_value": 18.7,
+      "min_possible": 17.5,
+      "max_possible": 125.0,
+      "roll_percent": 1.1162790697674412,
+      "penalty_value": 5.6
+    },
+    {
+      "mod_id": "mod_critical_chance",
+      "tier": "standard",
+      "rolled_value": 10.9,
+      "min_possible": 1.25,
+      "max_possible": 22.5,
+      "roll_percent": 45.411764705882355,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_charges_extra",
+      "tier": "standard",
+      "rolled_value": 1,
+      "min_possible": 1,
+      "max_possible": 3,
+      "roll_percent": 0.0,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_health_regen",
+      "tier": "minor",
+      "rolled_value": 7,
+      "min_possible": 1.0,
+      "max_possible": 20.0,
+      "roll_percent": 31.57894736842105,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 4,
+  "origin_chest": "b2e34db365577824",
+  "created_at": "2026-01-06T23:51:29.066340",
+  "current_vault": 4,
+  "status": "inventory"
+}

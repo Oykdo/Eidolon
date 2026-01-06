@@ -1,0 +1,50 @@
+{
+  "item_id": "115cd66c4ad7742b",
+  "item_type": "essence_celestial",
+  "category": "essence",
+  "rarity": "superior",
+  "value": 48.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_defense_flat",
+      "tier": "superior",
+      "rolled_value": 330,
+      "min_possible": 25.0,
+      "max_possible": 400.0,
+      "roll_percent": 81.33333333333333,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_fire_damage",
+      "tier": "standard",
+      "rolled_value": 77,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 46.909090909090914,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_ice_damage",
+      "tier": "standard",
+      "rolled_value": 17,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 3.272727272727273,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 5,
+  "origin_chest": "3713a5476aa9694e",
+  "created_at": "2026-01-06T23:51:29.167087",
+  "current_vault": 5,
+  "status": "inventory"
+}

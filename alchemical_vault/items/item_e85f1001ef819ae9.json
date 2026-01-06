@@ -1,0 +1,77 @@
+{
+  "item_id": "e85f1001ef819ae9",
+  "item_type": "crystal_infinity",
+  "category": "crystal",
+  "rarity": "primordial",
+  "value": 350.0,
+  "duration": 0,
+  "charges": 3,
+  "max_charges": 3,
+  "mods": [
+    {
+      "mod_id": "mod_blood_price",
+      "tier": "superior",
+      "rolled_value": 222.2,
+      "min_possible": 50.0,
+      "max_possible": 400.0,
+      "roll_percent": 49.2,
+      "penalty_value": 44.4
+    },
+    {
+      "mod_id": "mod_damage_over_time",
+      "tier": "greater",
+      "rolled_value": 113,
+      "min_possible": 8.75,
+      "max_possible": 187.5,
+      "roll_percent": 58.32167832167832,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_charges_extra",
+      "tier": "superior",
+      "rolled_value": 2,
+      "min_possible": 1,
+      "max_possible": 5,
+      "roll_percent": 25.0,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_unstable_essence",
+      "tier": "standard",
+      "rolled_value": 71.7,
+      "min_possible": 12.5,
+      "max_possible": 75.0,
+      "roll_percent": 94.72,
+      "penalty_value": 21.5
+    },
+    {
+      "mod_id": "mod_block_chance",
+      "tier": "standard",
+      "rolled_value": 4.5,
+      "min_possible": 2.5,
+      "max_possible": 22.5,
+      "roll_percent": 10.0,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_void_touched",
+      "tier": "standard",
+      "rolled_value": 134.0,
+      "min_possible": 31.25,
+      "max_possible": 180.0,
+      "roll_percent": 69.07563025210084,
+      "penalty_value": 53.6
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 6,
+  "origin_chest": "fb9908c7c6c5de9b",
+  "created_at": "2026-01-06T23:51:29.306695",
+  "current_vault": 6,
+  "status": "inventory"
+}

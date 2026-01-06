@@ -1,0 +1,50 @@
+{
+  "item_id": "7446061dbea58358",
+  "item_type": "essence_entropic",
+  "category": "essence",
+  "rarity": "superior",
+  "value": 177.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_void_touched",
+      "tier": "standard",
+      "rolled_value": 87.9,
+      "min_possible": 31.25,
+      "max_possible": 180.0,
+      "roll_percent": 38.084033613445385,
+      "penalty_value": 35.2
+    },
+    {
+      "mod_id": "mod_fire_resistance",
+      "tier": "minor",
+      "rolled_value": 35.5,
+      "min_possible": 5.0,
+      "max_possible": 40.0,
+      "roll_percent": 87.14285714285714,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_health_flat",
+      "tier": "standard",
+      "rolled_value": 143,
+      "min_possible": 31.25,
+      "max_possible": 375.0,
+      "roll_percent": 32.50909090909091,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 4,
+  "origin_chest": "2c30744ae394150a",
+  "created_at": "2026-01-06T23:51:29.077355",
+  "current_vault": 4,
+  "status": "inventory"
+}

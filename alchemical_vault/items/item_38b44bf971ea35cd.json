@@ -1,0 +1,86 @@
+{
+  "item_id": "38b44bf971ea35cd",
+  "item_type": "seal_crown",
+  "category": "seal",
+  "rarity": "primordial",
+  "value": 50.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_block_chance",
+      "tier": "superior",
+      "rolled_value": 32.2,
+      "min_possible": 5.0,
+      "max_possible": 60.0,
+      "roll_percent": 49.45454545454546,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_critical_chance",
+      "tier": "greater",
+      "rolled_value": 19.3,
+      "min_possible": 1.75,
+      "max_possible": 37.5,
+      "roll_percent": 49.09090909090909,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_ice_damage",
+      "tier": "standard",
+      "rolled_value": 22,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 6.909090909090909,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_damage_reduction",
+      "tier": "standard",
+      "rolled_value": 8.5,
+      "min_possible": 1.25,
+      "max_possible": 15.0,
+      "roll_percent": 52.72727272727272,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_cooldown_reduction",
+      "tier": "minor",
+      "rolled_value": 24.8,
+      "min_possible": 3.0,
+      "max_possible": 25.0,
+      "roll_percent": 99.0909090909091,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_dimensional_shift",
+      "tier": "divine",
+      "rolled_value": 36.8,
+      "min_possible": 5.5,
+      "max_possible": 100.0,
+      "roll_percent": 33.12169312169312,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_temporal_acceleration",
+      "tier": "greater",
+      "rolled_value": 11.1,
+      "min_possible": 3.5,
+      "max_possible": 50.0,
+      "roll_percent": 16.344086021505376,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 1,
+  "origin_chest": "a4a81b27476353af",
+  "created_at": "2026-01-06T23:51:28.782342",
+  "current_vault": 1,
+  "status": "inventory"
+}

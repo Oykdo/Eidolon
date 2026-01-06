@@ -1,0 +1,59 @@
+{
+  "item_id": "a917d03b30d7a7ec",
+  "item_type": "rune_thurisaz",
+  "category": "rune",
+  "rarity": "legendary",
+  "value": 570.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_spell_power",
+      "tier": "greater",
+      "rolled_value": 34.1,
+      "min_possible": 8.75,
+      "max_possible": 100.0,
+      "roll_percent": 27.78082191780822,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_mana_regen",
+      "tier": "standard",
+      "rolled_value": 10,
+      "min_possible": 1.25,
+      "max_possible": 22.5,
+      "roll_percent": 41.17647058823529,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_health_regen",
+      "tier": "standard",
+      "rolled_value": 9,
+      "min_possible": 1.25,
+      "max_possible": 30.0,
+      "roll_percent": 26.956521739130434,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_quantum_flux",
+      "tier": "superior",
+      "rolled_value": 29.3,
+      "min_possible": 7.5,
+      "max_possible": 100.0,
+      "roll_percent": 23.56756756756757,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 2,
+  "origin_chest": "9d240d4afc150995",
+  "created_at": "2026-01-06T23:51:28.862258",
+  "current_vault": 2,
+  "status": "inventory"
+}

@@ -1,0 +1,50 @@
+{
+  "item_id": "9e138ad2ae6b23d6",
+  "item_type": "potion_insight",
+  "category": "potion",
+  "rarity": "legendary",
+  "value": 45.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_void_damage",
+      "tier": "greater",
+      "rolled_value": 167,
+      "min_possible": 26.25,
+      "max_possible": 300.0,
+      "roll_percent": 51.415525114155244,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_fire_damage",
+      "tier": "greater",
+      "rolled_value": 46,
+      "min_possible": 17.5,
+      "max_possible": 250.0,
+      "roll_percent": 12.258064516129032,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_lightning_damage",
+      "tier": "standard",
+      "rolled_value": 130,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 85.45454545454545,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 3,
+  "origin_chest": "b4be116cd29a364b",
+  "created_at": "2026-01-06T23:51:28.954579",
+  "current_vault": 3,
+  "status": "inventory"
+}

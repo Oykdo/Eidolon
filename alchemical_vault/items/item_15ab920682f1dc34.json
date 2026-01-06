@@ -1,0 +1,59 @@
+{
+  "item_id": "15ab920682f1dc34",
+  "item_type": "crystal_focus",
+  "category": "crystal",
+  "rarity": "masterwork",
+  "value": 552.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_nexus_connection",
+      "tier": "superior",
+      "rolled_value": 24.1,
+      "min_possible": 12.5,
+      "max_possible": 200.0,
+      "roll_percent": 6.186666666666667,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_cast_speed",
+      "tier": "greater",
+      "rolled_value": 19.9,
+      "min_possible": 5.25,
+      "max_possible": 75.0,
+      "roll_percent": 21.00358422939068,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_dimensional_shift",
+      "tier": "minor",
+      "rolled_value": 9.4,
+      "min_possible": 1.0,
+      "max_possible": 10.0,
+      "roll_percent": 93.33333333333333,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_defense_percent",
+      "tier": "standard",
+      "rolled_value": 28.9,
+      "min_possible": 3.75,
+      "max_possible": 30.0,
+      "roll_percent": 95.8095238095238,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 3,
+  "origin_chest": "b4be116cd29a364b",
+  "created_at": "2026-01-06T23:51:28.952566",
+  "current_vault": 3,
+  "status": "inventory"
+}

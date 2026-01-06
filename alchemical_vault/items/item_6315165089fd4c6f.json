@@ -1,0 +1,59 @@
+{
+  "item_id": "6315165089fd4c6f",
+  "item_type": "essence_celestial",
+  "category": "essence",
+  "rarity": "legendary",
+  "value": 270.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_power_percent",
+      "tier": "standard",
+      "rolled_value": 30.4,
+      "min_possible": 3.75,
+      "max_possible": 37.5,
+      "roll_percent": 78.96296296296296,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_entropy_absorption",
+      "tier": "standard",
+      "rolled_value": 4.8,
+      "min_possible": 1.25,
+      "max_possible": 12.0,
+      "roll_percent": 33.02325581395349,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_mana_regen",
+      "tier": "standard",
+      "rolled_value": 12,
+      "min_possible": 1.25,
+      "max_possible": 22.5,
+      "roll_percent": 50.588235294117645,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_nexus_connection",
+      "tier": "standard",
+      "rolled_value": 69.9,
+      "min_possible": 6.25,
+      "max_possible": 75.0,
+      "roll_percent": 92.58181818181819,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 3,
+  "origin_chest": "3b98365b28c6df4e",
+  "created_at": "2026-01-06T23:51:28.957338",
+  "current_vault": 3,
+  "status": "inventory"
+}

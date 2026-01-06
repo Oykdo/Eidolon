@@ -1,0 +1,41 @@
+{
+  "item_id": "8f12f5e7e916d48a",
+  "item_type": "rune_othala",
+  "category": "rune",
+  "rarity": "superior",
+  "value": 123.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_corrupted_power",
+      "tier": "minor",
+      "rolled_value": 15.2,
+      "min_possible": 15.0,
+      "max_possible": 80.0,
+      "roll_percent": 0.3076923076923066,
+      "penalty_value": 7.6
+    },
+    {
+      "mod_id": "mod_elemental_resistance",
+      "tier": "minor",
+      "rolled_value": 8.0,
+      "min_possible": 2.0,
+      "max_possible": 15.0,
+      "roll_percent": 46.15384615384615,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 5,
+  "origin_chest": "694aa86fb490aad1",
+  "created_at": "2026-01-06T23:51:29.162061",
+  "current_vault": 5,
+  "status": "inventory"
+}

@@ -1,0 +1,59 @@
+{
+  "item_id": "1aa9b487e88123a7",
+  "item_type": "scroll_duplication",
+  "category": "scroll",
+  "rarity": "exquisite",
+  "value": 265.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_void_damage",
+      "tier": "standard",
+      "rolled_value": 173,
+      "min_possible": 18.75,
+      "max_possible": 180.0,
+      "roll_percent": 95.65891472868216,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_mana_regen",
+      "tier": "standard",
+      "rolled_value": 2,
+      "min_possible": 1.25,
+      "max_possible": 22.5,
+      "roll_percent": 3.5294117647058822,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_block_chance",
+      "tier": "standard",
+      "rolled_value": 3.2,
+      "min_possible": 2.5,
+      "max_possible": 22.5,
+      "roll_percent": 3.500000000000001,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_defense_percent",
+      "tier": "greater",
+      "rolled_value": 19.4,
+      "min_possible": 5.25,
+      "max_possible": 50.0,
+      "roll_percent": 31.62011173184357,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 2,
+  "origin_chest": "1dbb433a8e896e3e",
+  "created_at": "2026-01-06T23:51:28.863893",
+  "current_vault": 2,
+  "status": "inventory"
+}

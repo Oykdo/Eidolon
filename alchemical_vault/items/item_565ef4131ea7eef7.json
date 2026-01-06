@@ -1,0 +1,68 @@
+{
+  "item_id": "565ef4131ea7eef7",
+  "item_type": "sigil_beacon",
+  "category": "sigil",
+  "rarity": "legendary",
+  "value": 30.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_health_flat",
+      "tier": "standard",
+      "rolled_value": 310,
+      "min_possible": 31.25,
+      "max_possible": 375.0,
+      "roll_percent": 81.0909090909091,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_dimensional_shift",
+      "tier": "superior",
+      "rolled_value": 36.1,
+      "min_possible": 2.5,
+      "max_possible": 40.0,
+      "roll_percent": 89.60000000000001,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_temporal_acceleration",
+      "tier": "minor",
+      "rolled_value": 8.5,
+      "min_possible": 2.0,
+      "max_possible": 20.0,
+      "roll_percent": 36.11111111111111,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_mana_flat",
+      "tier": "superior",
+      "rolled_value": 551,
+      "min_possible": 37.5,
+      "max_possible": 600.0,
+      "roll_percent": 91.28888888888889,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_cooldown_reduction",
+      "tier": "greater",
+      "rolled_value": 50.3,
+      "min_possible": 5.25,
+      "max_possible": 62.5,
+      "roll_percent": 78.68995633187772,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 6,
+  "origin_chest": "fb9908c7c6c5de9b",
+  "created_at": "2026-01-06T23:51:29.306695",
+  "current_vault": 6,
+  "status": "inventory"
+}

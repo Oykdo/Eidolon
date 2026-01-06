@@ -1,0 +1,32 @@
+{
+  "item_id": "f3b47d1682b8419f",
+  "item_type": "rune_wunjo",
+  "category": "rune",
+  "rarity": "refined",
+  "value": 12.6,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_unstable_essence",
+      "tier": "minor",
+      "rolled_value": 18.2,
+      "min_possible": 10.0,
+      "max_possible": 50.0,
+      "roll_percent": 20.5,
+      "penalty_value": 5.5
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 3,
+  "origin_chest": "c9eb4884f6c4092c",
+  "created_at": "2026-01-06T23:51:28.963744",
+  "current_vault": 3,
+  "status": "inventory"
+}

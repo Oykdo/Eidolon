@@ -1,0 +1,77 @@
+{
+  "item_id": "4e7417e1fe60c1cb",
+  "item_type": "crystal_infinity",
+  "category": "crystal",
+  "rarity": "primordial",
+  "value": 400.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_void_touched",
+      "tier": "minor",
+      "rolled_value": 106.9,
+      "min_possible": 25.0,
+      "max_possible": 120.0,
+      "roll_percent": 86.21052631578948,
+      "penalty_value": 42.8
+    },
+    {
+      "mod_id": "mod_entropy_absorption",
+      "tier": "minor",
+      "rolled_value": 2.9,
+      "min_possible": 1.0,
+      "max_possible": 8.0,
+      "roll_percent": 27.142857142857142,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_fire_damage",
+      "tier": "minor",
+      "rolled_value": 83,
+      "min_possible": 10.0,
+      "max_possible": 100.0,
+      "roll_percent": 81.11111111111111,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_corrupted_power",
+      "tier": "minor",
+      "rolled_value": 42.2,
+      "min_possible": 15.0,
+      "max_possible": 80.0,
+      "roll_percent": 41.84615384615385,
+      "penalty_value": 21.1
+    },
+    {
+      "mod_id": "mod_damage_reduction",
+      "tier": "standard",
+      "rolled_value": 4.9,
+      "min_possible": 1.25,
+      "max_possible": 15.0,
+      "roll_percent": 26.54545454545455,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_damage_over_time",
+      "tier": "standard",
+      "rolled_value": 23,
+      "min_possible": 6.25,
+      "max_possible": 112.5,
+      "roll_percent": 15.764705882352942,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 3,
+  "origin_chest": "c9eb4884f6c4092c",
+  "created_at": "2026-01-06T23:51:28.963229",
+  "current_vault": 3,
+  "status": "inventory"
+}

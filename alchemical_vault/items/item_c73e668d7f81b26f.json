@@ -1,0 +1,41 @@
+{
+  "item_id": "c73e668d7f81b26f",
+  "item_type": "talisman_anchor",
+  "category": "talisman",
+  "rarity": "common",
+  "value": 1.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_ice_damage",
+      "tier": "standard",
+      "rolled_value": 52,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 28.72727272727273,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_arcane_resonance",
+      "tier": "standard",
+      "rolled_value": 32.3,
+      "min_possible": 6.25,
+      "max_possible": 52.5,
+      "roll_percent": 56.324324324324316,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 6,
+  "origin_chest": "fb9908c7c6c5de9b",
+  "created_at": "2026-01-06T23:51:29.306695",
+  "current_vault": 6,
+  "status": "inventory"
+}

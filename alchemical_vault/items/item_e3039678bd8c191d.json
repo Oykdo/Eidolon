@@ -1,0 +1,59 @@
+{
+  "item_id": "e3039678bd8c191d",
+  "item_type": "rune_raidho",
+  "category": "rune",
+  "rarity": "legendary",
+  "value": 735.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_arcane_resonance",
+      "tier": "greater",
+      "rolled_value": 48.8,
+      "min_possible": 8.75,
+      "max_possible": 87.5,
+      "roll_percent": 50.857142857142854,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_damage_reduction",
+      "tier": "greater",
+      "rolled_value": 7.3,
+      "min_possible": 1.75,
+      "max_possible": 25.0,
+      "roll_percent": 23.870967741935484,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_entropy_absorption",
+      "tier": "standard",
+      "rolled_value": 11.0,
+      "min_possible": 1.25,
+      "max_possible": 12.0,
+      "roll_percent": 90.69767441860465,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_celestial_blessing",
+      "tier": "standard",
+      "rolled_value": 6.3,
+      "min_possible": 1.25,
+      "max_possible": 7.5,
+      "roll_percent": 80.8,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 6,
+  "origin_chest": "4bd88ae40ce180bd",
+  "created_at": "2026-01-06T23:51:29.316217",
+  "current_vault": 6,
+  "status": "inventory"
+}

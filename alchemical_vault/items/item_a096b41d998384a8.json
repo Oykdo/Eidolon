@@ -1,0 +1,41 @@
+{
+  "item_id": "a096b41d998384a8",
+  "item_type": "rune_raidho",
+  "category": "rune",
+  "rarity": "refined",
+  "value": 39.6,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_entropy_absorption",
+      "tier": "minor",
+      "rolled_value": 2.8,
+      "min_possible": 1.0,
+      "max_possible": 8.0,
+      "roll_percent": 25.71428571428571,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_fire_damage",
+      "tier": "standard",
+      "rolled_value": 42,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 21.454545454545453,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 1,
+  "origin_chest": "65069663dc1006eb",
+  "created_at": "2026-01-06T23:51:28.796655",
+  "current_vault": 1,
+  "status": "inventory"
+}

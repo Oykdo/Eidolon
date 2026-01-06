@@ -1,0 +1,50 @@
+{
+  "item_id": "eb5a3a14041e2c62",
+  "item_type": "orb_dimensional",
+  "category": "orb",
+  "rarity": "legendary",
+  "value": 45.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_spell_power",
+      "tier": "greater",
+      "rolled_value": 59.6,
+      "min_possible": 8.75,
+      "max_possible": 100.0,
+      "roll_percent": 55.72602739726028,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_corrupted_power",
+      "tier": "standard",
+      "rolled_value": 108.6,
+      "min_possible": 18.75,
+      "max_possible": 120.0,
+      "roll_percent": 88.74074074074073,
+      "penalty_value": 54.3
+    },
+    {
+      "mod_id": "mod_void_touched",
+      "tier": "greater",
+      "rolled_value": 80.7,
+      "min_possible": 43.75,
+      "max_possible": 300.0,
+      "roll_percent": 14.419512195121953,
+      "penalty_value": 32.3
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 4,
+  "origin_chest": "2c30744ae394150a",
+  "created_at": "2026-01-06T23:51:29.077355",
+  "current_vault": 4,
+  "status": "inventory"
+}

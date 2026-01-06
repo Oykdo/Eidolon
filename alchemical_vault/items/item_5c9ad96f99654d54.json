@@ -1,0 +1,68 @@
+{
+  "item_id": "5c9ad96f99654d54",
+  "item_type": "crystal_amplifier",
+  "category": "crystal",
+  "rarity": "legendary",
+  "value": 660.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_critical_damage",
+      "tier": "standard",
+      "rolled_value": 120.0,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 78.18181818181819,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_void_damage",
+      "tier": "minor",
+      "rolled_value": 72,
+      "min_possible": 15.0,
+      "max_possible": 120.0,
+      "roll_percent": 54.285714285714285,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_power_percent",
+      "tier": "standard",
+      "rolled_value": 7.1,
+      "min_possible": 3.75,
+      "max_possible": 37.5,
+      "roll_percent": 9.925925925925926,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_spell_power",
+      "tier": "standard",
+      "rolled_value": 49.9,
+      "min_possible": 6.25,
+      "max_possible": 60.0,
+      "roll_percent": 81.20930232558139,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_health_flat",
+      "tier": "superior",
+      "rolled_value": 90,
+      "min_possible": 62.5,
+      "max_possible": 1000.0,
+      "roll_percent": 2.933333333333333,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 6,
+  "origin_chest": "4bd88ae40ce180bd",
+  "created_at": "2026-01-06T23:51:29.316217",
+  "current_vault": 6,
+  "status": "inventory"
+}

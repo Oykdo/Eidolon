@@ -1,0 +1,50 @@
+{
+  "item_id": "497b81a5981590b1",
+  "item_type": "potion_primordial",
+  "category": "potion",
+  "rarity": "legendary",
+  "value": 1800.0,
+  "duration": 24,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_fire_damage",
+      "tier": "standard",
+      "rolled_value": 149,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 99.27272727272727,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_ice_damage",
+      "tier": "standard",
+      "rolled_value": 115,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 74.54545454545455,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_lightning_damage",
+      "tier": "minor",
+      "rolled_value": 49,
+      "min_possible": 10.0,
+      "max_possible": 100.0,
+      "roll_percent": 43.333333333333336,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 1,
+  "origin_chest": "78055a84ce3c0191",
+  "created_at": "2026-01-06T23:51:28.795150",
+  "current_vault": 1,
+  "status": "inventory"
+}

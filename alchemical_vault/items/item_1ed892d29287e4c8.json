@@ -1,0 +1,59 @@
+{
+  "item_id": "1ed892d29287e4c8",
+  "item_type": "potion_luck",
+  "category": "potion",
+  "rarity": "exquisite",
+  "value": 45.0,
+  "duration": 3,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_damage_over_time",
+      "tier": "standard",
+      "rolled_value": 25,
+      "min_possible": 6.25,
+      "max_possible": 112.5,
+      "roll_percent": 17.647058823529413,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_void_damage",
+      "tier": "standard",
+      "rolled_value": 64,
+      "min_possible": 18.75,
+      "max_possible": 180.0,
+      "roll_percent": 28.06201550387597,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_corrupted_power",
+      "tier": "minor",
+      "rolled_value": 77.1,
+      "min_possible": 15.0,
+      "max_possible": 80.0,
+      "roll_percent": 95.53846153846153,
+      "penalty_value": 38.5
+    },
+    {
+      "mod_id": "mod_spell_power",
+      "tier": "greater",
+      "rolled_value": 22.5,
+      "min_possible": 8.75,
+      "max_possible": 100.0,
+      "roll_percent": 15.068493150684931,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 1,
+  "origin_chest": "78055a84ce3c0191",
+  "created_at": "2026-01-06T23:51:28.795150",
+  "current_vault": 1,
+  "status": "inventory"
+}

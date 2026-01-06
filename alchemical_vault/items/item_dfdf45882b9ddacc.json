@@ -1,0 +1,32 @@
+{
+  "item_id": "dfdf45882b9ddacc",
+  "item_type": "orb_resonance",
+  "category": "orb",
+  "rarity": "common",
+  "value": 429.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_damage_reduction",
+      "tier": "minor",
+      "rolled_value": 3.9,
+      "min_possible": 1.0,
+      "max_possible": 10.0,
+      "roll_percent": 32.22222222222222,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 5,
+  "origin_chest": "694aa86fb490aad1",
+  "created_at": "2026-01-06T23:51:29.159833",
+  "current_vault": 5,
+  "status": "inventory"
+}

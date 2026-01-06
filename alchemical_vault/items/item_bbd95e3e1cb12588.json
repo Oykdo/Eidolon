@@ -1,0 +1,50 @@
+{
+  "item_id": "bbd95e3e1cb12588",
+  "item_type": "talisman_resurrection",
+  "category": "talisman",
+  "rarity": "legendary",
+  "value": 615.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_critical_damage",
+      "tier": "standard",
+      "rolled_value": 28.1,
+      "min_possible": 12.5,
+      "max_possible": 150.0,
+      "roll_percent": 11.345454545454546,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_health_flat",
+      "tier": "minor",
+      "rolled_value": 239,
+      "min_possible": 25.0,
+      "max_possible": 250.0,
+      "roll_percent": 95.11111111111111,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_experience_bonus",
+      "tier": "superior",
+      "rolled_value": 28.9,
+      "min_possible": 12.5,
+      "max_possible": 200.0,
+      "roll_percent": 8.746666666666666,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 6,
+  "origin_chest": "5a34cff091311509",
+  "created_at": "2026-01-06T23:51:29.306695",
+  "current_vault": 6,
+  "status": "inventory"
+}

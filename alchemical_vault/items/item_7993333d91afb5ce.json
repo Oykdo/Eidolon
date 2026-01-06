@@ -1,0 +1,41 @@
+{
+  "item_id": "7993333d91afb5ce",
+  "item_type": "scroll_teleport",
+  "category": "scroll",
+  "rarity": "refined",
+  "value": 1.8,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_arcane_resonance",
+      "tier": "standard",
+      "rolled_value": 26.2,
+      "min_possible": 6.25,
+      "max_possible": 52.5,
+      "roll_percent": 43.13513513513513,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_defense_flat",
+      "tier": "greater",
+      "rolled_value": 238,
+      "min_possible": 17.5,
+      "max_possible": 250.0,
+      "roll_percent": 94.83870967741936,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 6,
+  "origin_chest": "fb9908c7c6c5de9b",
+  "created_at": "2026-01-06T23:51:29.306695",
+  "current_vault": 6,
+  "status": "inventory"
+}

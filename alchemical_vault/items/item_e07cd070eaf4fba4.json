@@ -1,0 +1,32 @@
+{
+  "item_id": "e07cd070eaf4fba4",
+  "item_type": "essence_void",
+  "category": "essence",
+  "rarity": "refined",
+  "value": 64.8,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_duration_increase",
+      "tier": "superior",
+      "rolled_value": 52.4,
+      "min_possible": 12.5,
+      "max_possible": 200.0,
+      "roll_percent": 21.279999999999998,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 4,
+  "origin_chest": "2c30744ae394150a",
+  "created_at": "2026-01-06T23:51:29.078049",
+  "current_vault": 4,
+  "status": "inventory"
+}

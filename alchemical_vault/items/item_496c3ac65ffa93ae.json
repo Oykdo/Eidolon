@@ -1,0 +1,41 @@
+{
+  "item_id": "496c3ac65ffa93ae",
+  "item_type": "talisman_anchor",
+  "category": "talisman",
+  "rarity": "common",
+  "value": 1.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_arcane_resonance",
+      "tier": "greater",
+      "rolled_value": 56.8,
+      "min_possible": 8.75,
+      "max_possible": 87.5,
+      "roll_percent": 61.01587301587301,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_corrupted_power",
+      "tier": "greater",
+      "rolled_value": 114.4,
+      "min_possible": 26.25,
+      "max_possible": 200.0,
+      "roll_percent": 50.73381294964029,
+      "penalty_value": 57.2
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 1,
+  "origin_chest": "a4a81b27476353af",
+  "created_at": "2026-01-06T23:51:28.787108",
+  "current_vault": 1,
+  "status": "inventory"
+}

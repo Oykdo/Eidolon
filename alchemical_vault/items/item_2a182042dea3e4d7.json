@@ -1,0 +1,59 @@
+{
+  "item_id": "2a182042dea3e4d7",
+  "item_type": "essence_spatial",
+  "category": "essence",
+  "rarity": "exquisite",
+  "value": 145.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_nexus_connection",
+      "tier": "minor",
+      "rolled_value": 10.9,
+      "min_possible": 5.0,
+      "max_possible": 50.0,
+      "roll_percent": 13.111111111111112,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_penetration",
+      "tier": "prime",
+      "rolled_value": 80.6,
+      "min_possible": 7.0,
+      "max_possible": 120.0,
+      "roll_percent": 65.13274336283186,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_fire_resistance",
+      "tier": "standard",
+      "rolled_value": 39.0,
+      "min_possible": 6.25,
+      "max_possible": 60.0,
+      "roll_percent": 60.93023255813953,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_dimensional_shift",
+      "tier": "greater",
+      "rolled_value": 17.7,
+      "min_possible": 1.75,
+      "max_possible": 25.0,
+      "roll_percent": 68.60215053763442,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 4,
+  "origin_chest": "b2e34db365577824",
+  "created_at": "2026-01-06T23:51:29.064143",
+  "current_vault": 4,
+  "status": "inventory"
+}

@@ -1,0 +1,50 @@
+{
+  "item_id": "fa9aa4612cfdc484",
+  "item_type": "seal_portal",
+  "category": "seal",
+  "rarity": "legendary",
+  "value": 15.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_experience_bonus",
+      "tier": "greater",
+      "rolled_value": 55.5,
+      "min_possible": 8.75,
+      "max_possible": 125.0,
+      "roll_percent": 40.215053763440864,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_temporal_acceleration",
+      "tier": "prime",
+      "rolled_value": 75.5,
+      "min_possible": 7.0,
+      "max_possible": 120.0,
+      "roll_percent": 60.61946902654868,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_critical_chance",
+      "tier": "greater",
+      "rolled_value": 25.8,
+      "min_possible": 1.75,
+      "max_possible": 37.5,
+      "roll_percent": 67.27272727272727,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 3,
+  "origin_chest": "e2be6438e079ef9b",
+  "created_at": "2026-01-06T23:51:28.946290",
+  "current_vault": 3,
+  "status": "inventory"
+}

@@ -1,0 +1,41 @@
+{
+  "item_id": "6431f3c57da945d3",
+  "item_type": "talisman_stealth",
+  "category": "talisman",
+  "rarity": "refined",
+  "value": 16.2,
+  "duration": 0,
+  "charges": 3,
+  "max_charges": 3,
+  "mods": [
+    {
+      "mod_id": "mod_health_flat",
+      "tier": "prime",
+      "rolled_value": 1092,
+      "min_possible": 87.5,
+      "max_possible": 1500.0,
+      "roll_percent": 71.11504424778761,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_celestial_blessing",
+      "tier": "superior",
+      "rolled_value": 8.8,
+      "min_possible": 2.5,
+      "max_possible": 20.0,
+      "roll_percent": 36.00000000000001,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 6,
+  "origin_chest": "13815a3164301714",
+  "created_at": "2026-01-06T23:51:29.320231",
+  "current_vault": 6,
+  "status": "inventory"
+}

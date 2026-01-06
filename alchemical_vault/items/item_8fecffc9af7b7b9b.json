@@ -1,0 +1,41 @@
+{
+  "item_id": "8fecffc9af7b7b9b",
+  "item_type": "essence_harmonic",
+  "category": "essence",
+  "rarity": "refined",
+  "value": 100.8,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_defense_percent",
+      "tier": "standard",
+      "rolled_value": 19.8,
+      "min_possible": 3.75,
+      "max_possible": 30.0,
+      "roll_percent": 61.142857142857146,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_void_touched",
+      "tier": "standard",
+      "rolled_value": 126.7,
+      "min_possible": 31.25,
+      "max_possible": 180.0,
+      "roll_percent": 64.16806722689076,
+      "penalty_value": 50.7
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 3,
+  "origin_chest": "e2be6438e079ef9b",
+  "created_at": "2026-01-06T23:51:28.950041",
+  "current_vault": 3,
+  "status": "inventory"
+}

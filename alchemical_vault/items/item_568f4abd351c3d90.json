@@ -1,0 +1,59 @@
+{
+  "item_id": "568f4abd351c3d90",
+  "item_type": "seal_lock",
+  "category": "seal",
+  "rarity": "exquisite",
+  "value": 10.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_spell_power",
+      "tier": "standard",
+      "rolled_value": 22.3,
+      "min_possible": 6.25,
+      "max_possible": 60.0,
+      "roll_percent": 29.860465116279073,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_luck_bonus",
+      "tier": "prime",
+      "rolled_value": 46.2,
+      "min_possible": 7.0,
+      "max_possible": 150.0,
+      "roll_percent": 27.412587412587413,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_defense_percent",
+      "tier": "superior",
+      "rolled_value": 10.6,
+      "min_possible": 7.5,
+      "max_possible": 80.0,
+      "roll_percent": 4.275862068965517,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_mana_regen",
+      "tier": "superior",
+      "rolled_value": 7,
+      "min_possible": 2.5,
+      "max_possible": 60.0,
+      "roll_percent": 7.82608695652174,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 6,
+  "origin_chest": "4bd88ae40ce180bd",
+  "created_at": "2026-01-06T23:51:29.316217",
+  "current_vault": 6,
+  "status": "inventory"
+}

@@ -1,0 +1,59 @@
+{
+  "item_id": "54eaa98964a621eb",
+  "item_type": "rune_kenaz",
+  "category": "rune",
+  "rarity": "exquisite",
+  "value": 90.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_ice_damage",
+      "tier": "greater",
+      "rolled_value": 91,
+      "min_possible": 17.5,
+      "max_possible": 250.0,
+      "roll_percent": 31.61290322580645,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_nexus_connection",
+      "tier": "minor",
+      "rolled_value": 6.0,
+      "min_possible": 5.0,
+      "max_possible": 50.0,
+      "roll_percent": 2.2222222222222223,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_quantum_flux",
+      "tier": "greater",
+      "rolled_value": 61.1,
+      "min_possible": 5.25,
+      "max_possible": 62.5,
+      "roll_percent": 97.55458515283844,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_fire_damage",
+      "tier": "minor",
+      "rolled_value": 23,
+      "min_possible": 10.0,
+      "max_possible": 100.0,
+      "roll_percent": 14.444444444444443,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 5,
+  "origin_chest": "ef499f1db0f7e36c",
+  "created_at": "2026-01-06T23:51:29.170925",
+  "current_vault": 5,
+  "status": "inventory"
+}

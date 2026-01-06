@@ -1,0 +1,32 @@
+{
+  "item_id": "9b4cf3251262baec",
+  "item_type": "elixir_affinity",
+  "category": "elixir",
+  "rarity": "refined",
+  "value": 36.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_corrupted_power",
+      "tier": "prime",
+      "rolled_value": 75.8,
+      "min_possible": 52.5,
+      "max_possible": 480.0,
+      "roll_percent": 5.450292397660818,
+      "penalty_value": 37.9
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 1,
+  "origin_chest": "78055a84ce3c0191",
+  "created_at": "2026-01-06T23:51:28.795150",
+  "current_vault": 1,
+  "status": "inventory"
+}

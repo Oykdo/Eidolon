@@ -1,0 +1,22 @@
+{
+  "item_id": "06bdf0e31d251421",
+  "item_type": "rune_wunjo",
+  "category": "rune",
+  "rarity": "crude",
+  "value": 2.7,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 1,
+  "origin_chest": "a4a81b27476353af",
+  "created_at": "2026-01-06T23:51:28.784768",
+  "current_vault": 1,
+  "status": "inventory"
+}

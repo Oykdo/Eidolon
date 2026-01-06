@@ -1,0 +1,41 @@
+{
+  "item_id": "ad6c7f44424820b3",
+  "item_type": "orb_energy",
+  "category": "orb",
+  "rarity": "refined",
+  "value": 1708.2,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_power_flat",
+      "tier": "minor",
+      "rolled_value": 22,
+      "min_possible": 5.0,
+      "max_possible": 50.0,
+      "roll_percent": 37.77777777777778,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_unstable_essence",
+      "tier": "greater",
+      "rolled_value": 69.8,
+      "min_possible": 17.5,
+      "max_possible": 125.0,
+      "roll_percent": 48.65116279069767,
+      "penalty_value": 20.9
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 2,
+  "origin_chest": "9d240d4afc150995",
+  "created_at": "2026-01-06T23:51:28.863277",
+  "current_vault": 2,
+  "status": "inventory"
+}

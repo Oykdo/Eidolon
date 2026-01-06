@@ -1,0 +1,59 @@
+{
+  "item_id": "7c1b9b7e170557eb",
+  "item_type": "crystal_amplifier",
+  "category": "crystal",
+  "rarity": "masterwork",
+  "value": 624.0,
+  "duration": 0,
+  "charges": 4,
+  "max_charges": 4,
+  "mods": [
+    {
+      "mod_id": "mod_defense_percent",
+      "tier": "standard",
+      "rolled_value": 15.7,
+      "min_possible": 3.75,
+      "max_possible": 30.0,
+      "roll_percent": 45.52380952380952,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_block_chance",
+      "tier": "greater",
+      "rolled_value": 36.8,
+      "min_possible": 3.5,
+      "max_possible": 37.5,
+      "roll_percent": 97.94117647058823,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_temporal_acceleration",
+      "tier": "divine",
+      "rolled_value": 104.9,
+      "min_possible": 11.0,
+      "max_possible": 200.0,
+      "roll_percent": 49.682539682539684,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_charges_extra",
+      "tier": "superior",
+      "rolled_value": 3,
+      "min_possible": 1,
+      "max_possible": 5,
+      "roll_percent": 50.0,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 5,
+  "origin_chest": "ef499f1db0f7e36c",
+  "created_at": "2026-01-06T23:51:29.170376",
+  "current_vault": 5,
+  "status": "inventory"
+}

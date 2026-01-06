@@ -1,0 +1,59 @@
+{
+  "item_id": "b731815d22db942c",
+  "item_type": "essence_entropic",
+  "category": "essence",
+  "rarity": "exquisite",
+  "value": 185.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_entropy_absorption",
+      "tier": "greater",
+      "rolled_value": 5.3,
+      "min_possible": 1.75,
+      "max_possible": 20.0,
+      "roll_percent": 19.452054794520546,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_elemental_resistance",
+      "tier": "standard",
+      "rolled_value": 19.5,
+      "min_possible": 2.5,
+      "max_possible": 22.5,
+      "roll_percent": 85.0,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_nexus_connection",
+      "tier": "standard",
+      "rolled_value": 68.0,
+      "min_possible": 6.25,
+      "max_possible": 75.0,
+      "roll_percent": 89.81818181818181,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_blood_price",
+      "tier": "standard",
+      "rolled_value": 31.8,
+      "min_possible": 25.0,
+      "max_possible": 150.0,
+      "roll_percent": 5.44,
+      "penalty_value": 6.4
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 5,
+  "origin_chest": "3713a5476aa9694e",
+  "created_at": "2026-01-06T23:51:29.165900",
+  "current_vault": 5,
+  "status": "inventory"
+}

@@ -1,0 +1,24 @@
+{
+  "chest_id": "1dbb433a8e896e3e",
+  "tier": "epic",
+  "items": [
+    "9b9ca8a16f9889f3",
+    "1a30fa1a9fd60f93",
+    "1aa9b487e88123a7",
+    "202d49aa69dffa5f",
+    "3b57ca85bec9298c",
+    "6eb001b4b4a23fa3",
+    "96bbe20f07a8f349",
+    "b558fa30bd04fe5e",
+    "dcf751cf51998285",
+    "f2baf696de4c839a"
+  ],
+  "item_count": 10,
+  "is_opened": true,
+  "opened_at": "2026-01-06T23:51:28.863893",
+  "opened_by_vault": 2,
+  "origin_vault": 2,
+  "created_at": "2026-01-06T23:51:28.863893",
+  "bonus_rarity_boost": 1.2,
+  "guaranteed_legendary": false
+}

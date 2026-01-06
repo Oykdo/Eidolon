@@ -1,0 +1,41 @@
+{
+  "item_id": "59f7ee8e118bcdc7",
+  "item_type": "sigil_beacon",
+  "category": "sigil",
+  "rarity": "refined",
+  "value": 7.2,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_area_of_effect",
+      "tier": "standard",
+      "rolled_value": 27.3,
+      "min_possible": 6.25,
+      "max_possible": 60.0,
+      "roll_percent": 39.162790697674424,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_temporal_acceleration",
+      "tier": "standard",
+      "rolled_value": 15.0,
+      "min_possible": 2.5,
+      "max_possible": 30.0,
+      "roll_percent": 45.45454545454545,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 3,
+  "origin_chest": "b4be116cd29a364b",
+  "created_at": "2026-01-06T23:51:28.951558",
+  "current_vault": 3,
+  "status": "inventory"
+}

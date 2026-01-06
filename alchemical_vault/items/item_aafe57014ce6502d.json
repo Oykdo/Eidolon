@@ -1,0 +1,59 @@
+{
+  "item_id": "aafe57014ce6502d",
+  "item_type": "orb_dimensional",
+  "category": "orb",
+  "rarity": "legendary",
+  "value": 30.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "mods": [
+    {
+      "mod_id": "mod_power_flat",
+      "tier": "greater",
+      "rolled_value": 112,
+      "min_possible": 8.75,
+      "max_possible": 125.0,
+      "roll_percent": 88.81720430107526,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_defense_flat",
+      "tier": "greater",
+      "rolled_value": 160,
+      "min_possible": 17.5,
+      "max_possible": 250.0,
+      "roll_percent": 61.29032258064516,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_critical_damage",
+      "tier": "minor",
+      "rolled_value": 62.4,
+      "min_possible": 10.0,
+      "max_possible": 100.0,
+      "roll_percent": 58.22222222222222,
+      "penalty_value": 0.0
+    },
+    {
+      "mod_id": "mod_health_flat",
+      "tier": "standard",
+      "rolled_value": 222,
+      "min_possible": 31.25,
+      "max_possible": 375.0,
+      "roll_percent": 55.49090909090909,
+      "penalty_value": 0.0
+    }
+  ],
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 6,
+  "origin_chest": "5a34cff091311509",
+  "created_at": "2026-01-06T23:51:29.306695",
+  "current_vault": 6,
+  "status": "inventory"
+}
