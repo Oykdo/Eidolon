@@ -10,14 +10,14 @@
     "vault_number": 6,
     "element": "spatial",
     "stats": {
-      "base_power": 2528.15,
+      "base_power": 3522.6950725256934,
       "spinor_resonance": 41.67,
       "entropy_coefficient": 1.518,
       "dimensional_affinity": 3.8,
       "stability": 93,
       "purity": 57,
       "coherence": 61,
-      "effective_power": 38058.40149573,
+      "effective_power": 53030.13801286022,
       "total_multiplier": 9.9169
     },
     "signature": {
@@ -65,7 +65,450 @@
       }
     ],
     "description": "LEGENDARY Quantum Key",
-    "lore": "Les 4 dimensions convergent en cet artefact de Spatial."
+    "lore": "Les 4 dimensions convergent en cet artefact de Spatial.",
+    "glyph_array": {
+      "array_id": "array_05a72ed6338ee9d3",
+      "glyphs": [
+        {
+          "glyph_id": "glyph_0_13102d9f9d36",
+          "glyph_type": "glyph_void",
+          "dimension": 0,
+          "gems": [
+            {
+              "gem_id": "21445d6d72d5",
+              "gem_type": "void_crystal",
+              "rarity": "polished",
+              "base_power": 126.84,
+              "resonance": 10.97,
+              "purity": 35.14,
+              "spinor_hash": "2e4c110cc9423947",
+              "entropy_bits": 512,
+              "dimension_affinity": 0,
+              "power_multiplier": 1.0548529934969257,
+              "special_effect": null
+            },
+            {
+              "gem_id": "d0a4621fd2d7",
+              "gem_type": "void_crystal",
+              "rarity": "standard",
+              "base_power": 141.63,
+              "resonance": 16.47,
+              "purity": 99.88,
+              "spinor_hash": "70088708f93488a4",
+              "entropy_bits": 512,
+              "dimension_affinity": 0,
+              "power_multiplier": 1.0823636130757832,
+              "special_effect": null
+            },
+            {
+              "gem_id": "0d0c5a11ca8c",
+              "gem_type": "void_crystal",
+              "rarity": "polished",
+              "base_power": 209.69,
+              "resonance": 20.85,
+              "purity": 57.51,
+              "spinor_hash": "dbe7555656bc9774",
+              "entropy_bits": 512,
+              "dimension_affinity": 0,
+              "power_multiplier": 1.104241857690874,
+              "special_effect": null
+            }
+          ],
+          "activation_level": 64.26,
+          "resonance_frequency": 104.64,
+          "dimensional_stability": 92.43,
+          "glyph_hash": "34abe9e14491964f",
+          "spinor_signature": [
+            0.8362,
+            0.8441,
+            -0.7321,
+            -0.1961,
+            0.3861,
+            0.7116,
+            -0.5043
+          ],
+          "total_power": 841.5770421257367,
+          "synergy_bonus": 1.2
+        },
+        {
+          "glyph_id": "glyph_1_43aedd454eba",
+          "glyph_type": "glyph_quantum",
+          "dimension": 1,
+          "gems": [
+            {
+              "gem_id": "393d4aee37ce",
+              "gem_type": "quantum_shard",
+              "rarity": "standard",
+              "base_power": 149.47,
+              "resonance": 20.51,
+              "purity": 51.65,
+              "spinor_hash": "81a6364fc7477471",
+              "entropy_bits": 512,
+              "dimension_affinity": 1,
+              "power_multiplier": 1.1025252364238913,
+              "special_effect": null
+            },
+            {
+              "gem_id": "a12ddc27b175",
+              "gem_type": "quantum_shard",
+              "rarity": "standard",
+              "base_power": 52.28,
+              "resonance": 49.58,
+              "purity": 42.53,
+              "spinor_hash": "595fe9d3b4b25561",
+              "entropy_bits": 512,
+              "dimension_affinity": 1,
+              "power_multiplier": 1.2478844554150759,
+              "special_effect": null
+            },
+            {
+              "gem_id": "0173094bf5aa",
+              "gem_type": "quantum_shard",
+              "rarity": "standard",
+              "base_power": 105.39,
+              "resonance": 21.0,
+              "purity": 66.06,
+              "spinor_hash": "fadeda047c033b14",
+              "entropy_bits": 512,
+              "dimension_affinity": 1,
+              "power_multiplier": 1.1050174462316695,
+              "special_effect": null
+            }
+          ],
+          "activation_level": 9.36,
+          "resonance_frequency": 373.24,
+          "dimensional_stability": 61.88,
+          "glyph_hash": "c06cd4751310d780",
+          "spinor_signature": [
+            0.093,
+            -0.1615,
+            0.2685,
+            0.947,
+            0.7056,
+            -0.0085,
+            0.3564
+          ],
+          "total_power": 519.7374526136023,
+          "synergy_bonus": 1.5
+        },
+        {
+          "glyph_id": "glyph_2_551edb85f3fd",
+          "glyph_type": "glyph_temporal",
+          "dimension": 2,
+          "gems": [
+            {
+              "gem_id": "7dd501bc4ea9",
+              "gem_type": "temporal_essence",
+              "rarity": "standard",
+              "base_power": 101.59,
+              "resonance": 84.02,
+              "purity": 66.71,
+              "spinor_hash": "787e00c20c339db2",
+              "entropy_bits": 512,
+              "dimension_affinity": 2,
+              "power_multiplier": 1.4200782247311674,
+              "special_effect": null
+            },
+            {
+              "gem_id": "1e39ae9ffc3c",
+              "gem_type": "temporal_essence",
+              "rarity": "polished",
+              "base_power": 281.6,
+              "resonance": 86.57,
+              "purity": 73.8,
+              "spinor_hash": "9593fa97775b98fc",
+              "entropy_bits": 512,
+              "dimension_affinity": 2,
+              "power_multiplier": 1.432856698152658,
+              "special_effect": null
+            },
+            {
+              "gem_id": "a48fe4e4d368",
+              "gem_type": "temporal_essence",
+              "rarity": "pristine",
+              "base_power": 735.49,
+              "resonance": 19.97,
+              "purity": 71.04,
+              "spinor_hash": "de543e51dfc2e2af",
+              "entropy_bits": 512,
+              "dimension_affinity": 2,
+              "power_multiplier": 1.099841743276182,
+              "special_effect": null
+            }
+          ],
+          "activation_level": 45.32,
+          "resonance_frequency": 262.56,
+          "dimensional_stability": 73.61,
+          "glyph_hash": "69eff51dd1b37f9f",
+          "spinor_signature": [
+            0.6287,
+            -0.8079,
+            0.8761,
+            0.0465,
+            0.7948,
+            0.4466,
+            0.8414
+          ],
+          "total_power": 2771.81092555562,
+          "synergy_bonus": 1.0
+        },
+        {
+          "glyph_id": "glyph_3_755636de4b43",
+          "glyph_type": "glyph_spatial",
+          "dimension": 3,
+          "gems": [
+            {
+              "gem_id": "6795a77c8239",
+              "gem_type": "spatial_prism",
+              "rarity": "standard",
+              "base_power": 122.1,
+              "resonance": 95.36,
+              "purity": 82.56,
+              "spinor_hash": "3485617ce68942bd",
+              "entropy_bits": 512,
+              "dimension_affinity": 3,
+              "power_multiplier": 1.4767815733391338,
+              "special_effect": null
+            },
+            {
+              "gem_id": "dcc3e3278268",
+              "gem_type": "spatial_prism",
+              "rarity": "standard",
+              "base_power": 52.38,
+              "resonance": 93.91,
+              "purity": 50.87,
+              "spinor_hash": "b3d391e3c985395a",
+              "entropy_bits": 512,
+              "dimension_affinity": 3,
+              "power_multiplier": 1.469548985592482,
+              "special_effect": null
+            },
+            {
+              "gem_id": "e6f852a5cca0",
+              "gem_type": "entropy_sapphire",
+              "rarity": "polished",
+              "base_power": 155.6,
+              "resonance": 39.96,
+              "purity": 34.94,
+              "spinor_hash": "b800b1e09814a69c",
+              "entropy_bits": 512,
+              "dimension_affinity": 3,
+              "power_multiplier": 1.1998145561701277,
+              "special_effect": null
+            }
+          ],
+          "activation_level": 33.58,
+          "resonance_frequency": 201.98,
+          "dimensional_stability": 71.96,
+          "glyph_hash": "81f3406800c05bfe",
+          "spinor_signature": [
+            -0.4661,
+            0.6288,
+            0.3232,
+            -0.7261,
+            -0.0303,
+            0.0184,
+            0.4019
+          ],
+          "total_power": 644.7920680561803,
+          "synergy_bonus": 1.2
+        },
+        {
+          "glyph_id": "glyph_4_c7fa3617f90b",
+          "glyph_type": "glyph_entropic",
+          "dimension": 4,
+          "gems": [
+            {
+              "gem_id": "5f2e6f9b892d",
+              "gem_type": "clifford_stone",
+              "rarity": "pristine",
+              "base_power": 508.99,
+              "resonance": 39.01,
+              "purity": 96.99,
+              "spinor_hash": "6ed1036e247b4729",
+              "entropy_bits": 512,
+              "dimension_affinity": 4,
+              "power_multiplier": 1.1950560808697503,
+              "special_effect": null
+            },
+            {
+              "gem_id": "4789c882432c",
+              "gem_type": "entropic_core",
+              "rarity": "polished",
+              "base_power": 221.03,
+              "resonance": 40.17,
+              "purity": 70.98,
+              "spinor_hash": "f1c987303e6d0f7d",
+              "entropy_bits": 512,
+              "dimension_affinity": 4,
+              "power_multiplier": 1.2008422526617997,
+              "special_effect": null
+            },
+            {
+              "gem_id": "d5302902af48",
+              "gem_type": "entropic_core",
+              "rarity": "standard",
+              "base_power": 95.29,
+              "resonance": 67.86,
+              "purity": 39.47,
+              "spinor_hash": "8484f213b18ea395",
+              "entropy_bits": 512,
+              "dimension_affinity": 4,
+              "power_multiplier": 1.3392858479888792,
+              "special_effect": null
+            }
+          ],
+          "activation_level": 36.69,
+          "resonance_frequency": 589.19,
+          "dimensional_stability": 72.47,
+          "glyph_hash": "27d21a252bba80af",
+          "spinor_signature": [
+            -0.7793,
+            -0.6964,
+            -0.2393,
+            0.7834,
+            -0.5884,
+            -0.9934,
+            0.2079
+          ],
+          "total_power": 2046.4327796183522,
+          "synergy_bonus": 1.0
+        },
+        {
+          "glyph_id": "glyph_5_c5eef8c85392",
+          "glyph_type": "glyph_harmonic",
+          "dimension": 5,
+          "gems": [
+            {
+              "gem_id": "28cd78240765",
+              "gem_type": "clifford_stone",
+              "rarity": "pristine",
+              "base_power": 707.92,
+              "resonance": 19.89,
+              "purity": 31.07,
+              "spinor_hash": "98cb811042549521",
+              "entropy_bits": 512,
+              "dimension_affinity": 5,
+              "power_multiplier": 1.0994475135839148,
+              "special_effect": null
+            },
+            {
+              "gem_id": "f654d71abb60",
+              "gem_type": "clifford_stone",
+              "rarity": "polished",
+              "base_power": 135.91,
+              "resonance": 15.79,
+              "purity": 80.36,
+              "spinor_hash": "dd9d1c6934d45820",
+              "entropy_bits": 512,
+              "dimension_affinity": 5,
+              "power_multiplier": 1.0789685712895423,
+              "special_effect": null
+            },
+            {
+              "gem_id": "e051166844e4",
+              "gem_type": "harmonic_gem",
+              "rarity": "standard",
+              "base_power": 99.69,
+              "resonance": 88.44,
+              "purity": 51.98,
+              "spinor_hash": "038dfa0609f0f29a",
+              "entropy_bits": 512,
+              "dimension_affinity": 5,
+              "power_multiplier": 1.4422132662030558,
+              "special_effect": null
+            }
+          ],
+          "activation_level": 92.39,
+          "resonance_frequency": 208.62,
+          "dimensional_stability": 99.86,
+          "glyph_hash": "d318bde28234004a",
+          "spinor_signature": [
+            0.3356,
+            0.0254,
+            -0.3857,
+            -0.3225,
+            0.8885,
+            0.0303,
+            0.2046
+          ],
+          "total_power": 2309.540377834537,
+          "synergy_bonus": 1.0
+        },
+        {
+          "glyph_id": "glyph_6_0bf90b9ad086",
+          "glyph_type": "glyph_celestial",
+          "dimension": 6,
+          "gems": [
+            {
+              "gem_id": "54fe06ab6c1b",
+              "gem_type": "clifford_stone",
+              "rarity": "polished",
+              "base_power": 179.18,
+              "resonance": 19.39,
+              "purity": 46.82,
+              "spinor_hash": "1c8f9c867c34fc19",
+              "entropy_bits": 512,
+              "dimension_affinity": 6,
+              "power_multiplier": 1.096957356497568,
+              "special_effect": null
+            },
+            {
+              "gem_id": "dcbc5ea22250",
+              "gem_type": "dirac_pearl",
+              "rarity": "polished",
+              "base_power": 113.84,
+              "resonance": 88.14,
+              "purity": 34.17,
+              "spinor_hash": "c880a5e6edf1e73c",
+              "entropy_bits": 512,
+              "dimension_affinity": 6,
+              "power_multiplier": 1.4406995790077533,
+              "special_effect": null
+            },
+            {
+              "gem_id": "be78a3f6387b",
+              "gem_type": "celestial_tear",
+              "rarity": "standard",
+              "base_power": 99.22,
+              "resonance": 73.04,
+              "purity": 82.61,
+              "spinor_hash": "71a1e8959284e557",
+              "entropy_bits": 512,
+              "dimension_affinity": 6,
+              "power_multiplier": 1.3652184780642733,
+              "special_effect": null
+            }
+          ],
+          "activation_level": 90.56,
+          "resonance_frequency": 564.3,
+          "dimensional_stability": 99.08,
+          "glyph_hash": "03a6dcf7636469ab",
+          "spinor_signature": [
+            -0.7554,
+            -0.9044,
+            -0.7566,
+            -0.9797,
+            0.7966,
+            0.9683,
+            0.5121
+          ],
+          "total_power": 811.5600794529031,
+          "synergy_bonus": 1.2
+        }
+      ],
+      "total_gems": 21,
+      "total_power": 9945.450725256933,
+      "average_resonance": 48.13809523809523,
+      "dimensional_balance": 100.0,
+      "poly_spinor_hash": "36a1dabbbf60d9af8bd2e0eb147569de",
+      "bell_correlation": 2.283,
+      "entanglement_degree": 0.1756,
+      "set_bonus": {
+        "complete_array": 2.0,
+        "dimensional_mastery": 1.5
+      }
+    }
   },
   "origin_block_id": "genesis_00000006_e12315519056ecf2",
   "origin_vault_number": 6,
