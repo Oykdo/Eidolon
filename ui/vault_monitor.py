@@ -1237,7 +1237,7 @@ class VaultMonitorGUI:
             messagebox.showerror("Erreur", f"Erreur de vérification: {e}")
     
     def _show_rune_details(self):
-        """Affiche les details d'une rune selectionnee"""
+        """Affiche les details d'une rune selectionnee avec coffres et items"""
         selection = self.runes_tree.selection()
         if not selection:
             messagebox.showwarning("Attention", "Veuillez sélectionner une rune")
@@ -1252,14 +1252,40 @@ class VaultMonitorGUI:
             messagebox.showerror("Erreur", "Rune non trouvée")
             return
         
-        # Fenetre de details
+        # Charger les coffres et items du vault
+        vault_chests = self._load_vault_chests(vault_num)
+        vault_items = self._load_vault_items(vault_num)
+        
+        # Fenetre de details avec scrollbar
         dialog = tk.Toplevel(self.root)
-        dialog.title(f"Rune Details - {asset.rune_symbols}")
-        dialog.geometry("600x500")
+        dialog.title(f"Vault #{vault_num} - Details & Inventory")
+        dialog.geometry("900x750")
         dialog.configure(bg=CypherpunkTheme.BG_DARK)
         
-        # Contenu
-        content = tk.Frame(dialog, bg=CypherpunkTheme.BG_DARK)
+        # Canvas scrollable
+        canvas = tk.Canvas(dialog, bg=CypherpunkTheme.BG_DARK, highlightthickness=0)
+        scrollbar = ttk.Scrollbar(dialog, orient="vertical", command=canvas.yview)
+        
+        content = tk.Frame(canvas, bg=CypherpunkTheme.BG_DARK)
+        
+        canvas.configure(yscrollcommand=scrollbar.set)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        
+        canvas_frame = canvas.create_window((0, 0), window=content, anchor="nw")
+        
+        def configure_scroll(event):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+            canvas.itemconfig(canvas_frame, width=event.width)
+        
+        content.bind("<Configure>", configure_scroll)
+        canvas.bind("<Configure>", lambda e: canvas.itemconfig(canvas_frame, width=e.width))
+        
+        # Scroll avec molette
+        def on_mousewheel(event):
+            canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+        canvas.bind_all("<MouseWheel>", on_mousewheel)
+        dialog.bind("<Destroy>", lambda e: canvas.unbind_all("<MouseWheel>"))
         content.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
         
         # Titre avec runes
@@ -1481,6 +1507,176 @@ class VaultMonitorGUI:
                     bg=CypherpunkTheme.BG_TERTIARY,
                     fg=CypherpunkTheme.TEXT_SECONDARY
                 ).pack(anchor='w')
+        
+        # === COFFRES ET ITEMS ===
+        if vault_chests:
+            inventory_frame = tk.Frame(content, bg=CypherpunkTheme.BG_PANEL, padx=20, pady=15)
+            inventory_frame.pack(fill=tk.BOTH, expand=True, pady=10)
+            
+            tk.Label(
+                inventory_frame,
+                text=f"📦 INVENTORY ({len(vault_chests)} Chests, {len(vault_items)} Items)",
+                bg=CypherpunkTheme.BG_PANEL,
+                fg="#FFD700",
+                font=CypherpunkTheme.FONT_TITLE
+            ).pack(anchor='w', pady=(0, 10))
+            
+            # Notebook pour les coffres
+            inv_notebook = ttk.Notebook(inventory_frame)
+            inv_notebook.pack(fill=tk.BOTH, expand=True)
+            
+            # Onglet par coffre
+            for chest in vault_chests:
+                chest_tier = chest.get('tier', 'common').upper()
+                chest_items = [i for i in vault_items if i.get('origin_chest') == chest.get('chest_id')]
+                
+                chest_frame = tk.Frame(inv_notebook, bg=CypherpunkTheme.BG_SECONDARY)
+                inv_notebook.add(chest_frame, text=f" {chest_tier} ({len(chest_items)}) ")
+                
+                # Liste des items du coffre
+                items_text = tk.Text(
+                    chest_frame,
+                    bg=CypherpunkTheme.BG_SECONDARY,
+                    fg=CypherpunkTheme.TEXT_PRIMARY,
+                    font=CypherpunkTheme.FONT_MONO_SMALL,
+                    padx=10,
+                    pady=10,
+                    wrap=tk.WORD,
+                    height=15
+                )
+                items_text.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+                
+                # Couleurs de rarete
+                rarity_colors = {
+                    'primordial': '#ff00ff', 'mythical': '#ffd700', 'legendary': '#ff8000',
+                    'masterwork': '#aa55ff', 'exquisite': '#0088ff', 'superior': '#00cccc',
+                    'refined': '#00ff00', 'common': '#ffffff', 'crude': '#888888'
+                }
+                
+                # Afficher les items
+                for idx, item_data in enumerate(chest_items):
+                    item_name = item_data.get('item_type', 'unknown').replace('_', ' ').title()
+                    item_rarity = item_data.get('rarity', 'common')
+                    item_value = item_data.get('value', 0)
+                    item_mods = item_data.get('mods', [])
+                    
+                    color = rarity_colors.get(item_rarity, '#ffffff')
+                    
+                    # Ligne principale
+                    line = f"[{item_rarity.upper():11}] {item_name}\n"
+                    items_text.insert(tk.END, line)
+                    items_text.tag_add(f"rarity_{idx}", f"{items_text.index(tk.END)}-2l", f"{items_text.index(tk.END)}-1l-1c")
+                    items_text.tag_config(f"rarity_{idx}", foreground=color)
+                    
+                    # Mods
+                    if item_mods:
+                        for mod in item_mods[:3]:  # Max 3 mods affiches
+                            mod_tier = mod.get('tier', 'standard')
+                            mod_id = mod.get('mod_id', '').replace('mod_', '').replace('_', ' ').title()
+                            mod_value = mod.get('rolled_value', 0)
+                            roll_pct = mod.get('roll_percent', 50)
+                            
+                            # Indicateur de qualite
+                            if roll_pct >= 95:
+                                quality = "★"
+                            elif roll_pct >= 80:
+                                quality = "◆"
+                            elif roll_pct >= 60:
+                                quality = "●"
+                            else:
+                                quality = "○"
+                            
+                            mod_line = f"   {quality} [{mod_tier.upper()[:3]}] {mod_id}: {mod_value:.0f} ({roll_pct:.0f}%)\n"
+                            items_text.insert(tk.END, mod_line, "mod")
+                        
+                        if len(item_mods) > 3:
+                            items_text.insert(tk.END, f"   ... +{len(item_mods)-3} more mods\n", "more")
+                    
+                    items_text.insert(tk.END, "\n")
+                
+                items_text.tag_config("mod", foreground=CypherpunkTheme.NEON_CYAN)
+                items_text.tag_config("more", foreground=CypherpunkTheme.TEXT_SECONDARY)
+                items_text.config(state=tk.DISABLED)
+            
+            # Stats globales
+            stats_frame = tk.Frame(inventory_frame, bg=CypherpunkTheme.BG_TERTIARY, padx=10, pady=8)
+            stats_frame.pack(fill=tk.X, pady=(10, 0))
+            
+            # Compter par rarete
+            rarity_counts = {}
+            total_mods = 0
+            perfect_mods = 0
+            for item_data in vault_items:
+                r = item_data.get('rarity', 'common')
+                rarity_counts[r] = rarity_counts.get(r, 0) + 1
+                mods = item_data.get('mods', [])
+                total_mods += len(mods)
+                perfect_mods += sum(1 for m in mods if m.get('roll_percent', 0) >= 95)
+            
+            stats_text = " | ".join([f"{r.upper()}: {c}" for r, c in sorted(rarity_counts.items(), key=lambda x: -x[1])[:5]])
+            
+            tk.Label(
+                stats_frame,
+                text=f"Items: {len(vault_items)} | Mods: {total_mods} | Perfect: {perfect_mods}",
+                bg=CypherpunkTheme.BG_TERTIARY,
+                fg=CypherpunkTheme.NEON_GREEN,
+                font=CypherpunkTheme.FONT_MONO_SMALL
+            ).pack(side=tk.LEFT)
+            
+            tk.Label(
+                stats_frame,
+                text=stats_text,
+                bg=CypherpunkTheme.BG_TERTIARY,
+                fg=CypherpunkTheme.TEXT_SECONDARY,
+                font=CypherpunkTheme.FONT_MONO_SMALL
+            ).pack(side=tk.RIGHT)
+    
+    def _load_vault_chests(self, vault_num: int) -> list:
+        """Charge les coffres d'un vault"""
+        chests = []
+        chests_dir = self.base_path / "alchemical_vault" / "chests"
+        
+        if not chests_dir.exists():
+            return chests
+        
+        for f in chests_dir.glob("chest_*.json"):
+            try:
+                with open(f, 'r', encoding='utf-8') as file:
+                    data = json.load(file)
+                if data.get('origin_vault') == vault_num:
+                    chests.append(data)
+            except:
+                pass
+        
+        # Trier par tier
+        tier_order = {'primordial': 0, 'legendary': 1, 'epic': 2, 'rare': 3, 'common': 4}
+        chests.sort(key=lambda x: tier_order.get(x.get('tier', 'common'), 5))
+        
+        return chests
+    
+    def _load_vault_items(self, vault_num: int) -> list:
+        """Charge les items d'un vault"""
+        items = []
+        items_dir = self.base_path / "alchemical_vault" / "items"
+        
+        if not items_dir.exists():
+            return items
+        
+        for f in items_dir.glob("item_*.json"):
+            try:
+                with open(f, 'r', encoding='utf-8') as file:
+                    data = json.load(file)
+                if data.get('origin_vault') == vault_num:
+                    items.append(data)
+            except:
+                pass
+        
+        # Trier par rarete
+        rarity_order = {'primordial': 0, 'mythical': 1, 'legendary': 2, 'masterwork': 3, 
+                       'exquisite': 4, 'superior': 5, 'refined': 6, 'common': 7, 'crude': 8}
+        items.sort(key=lambda x: rarity_order.get(x.get('rarity', 'common'), 9))
+        
+        return items
     
     def _export_runes(self):
         """Exporte le portfolio de runes"""
