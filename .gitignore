@@ -170,3 +170,6 @@ site/
 .local/
 scratch/
 tmp/
+
+node_modules/
+vault_storage/
