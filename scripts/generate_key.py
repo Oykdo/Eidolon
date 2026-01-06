@@ -16,9 +16,16 @@ La clé utilise 9 phases de génération d'entropie:
 8. Construction de l'arbre de Merkle
 9. Dérivation de la clé vault finale
 
++ GENESIS SYSTEM: Les 100,000 premiers utilisateurs recoivent un Easter Egg!
+  - Tier 1 (1-100): Quantum Pioneer - Mythic - 1 milliard runes
+  - Tier 2 (101-1000): Spinor Visionary - Legendary - 100M runes
+  - Tier 3 (1001-10000): Bell Verifier - Epic - 10M runes
+  - Tier 4 (10001-100000): Post-Quantum Guardian - Rare - 1M runes
+
 Fichiers générés:
 - .psnx      : Données cryptographiques compressées
 - .blend_data : Structure 3D pour vérification visuelle
+- genesis_XXXXXX.json : Bloc Genesis avec Easter Egg (si fondateur)
 
 IMPORTANT: Les deux fichiers sont nécessaires pour déverrouiller le vault!
 
@@ -49,23 +56,25 @@ def print_banner():
     """)
 
 
-def generate_full_key(name: str, output_dir: str, generate_blend: bool = True):
+def generate_full_key(name: str, output_dir: str, generate_blend: bool = True, wallet_address: str = None):
     """
-    Génère une clé complète avec toutes les phases.
+    Génère une clé complète avec toutes les phases + Genesis Block.
     
     Args:
         name: Nom du vault/utilisateur
         output_dir: Répertoire de sortie
         generate_blend: Générer le fichier .blend_data
+        wallet_address: Adresse wallet optionnelle pour le Genesis
     
     Returns:
-        (psnx_path, blend_path, vault_key, entropy_bits)
+        (psnx_path, blend_path, vault_key, entropy_bits, key_data, genesis_block)
     """
     from core.complete_key_generator import (
         CompletePolySpinorKeyGenerator,
         CompleteKeyFileGenerator,
         PQ_AVAILABLE
     )
+    from core.genesis_system import GenesisManager, EasterEggGenerator
     
     print(f"\n[INFO] Génération de clé pour: {name}")
     print(f"[INFO] Post-Quantique disponible: {PQ_AVAILABLE}")
@@ -110,7 +119,60 @@ def generate_full_key(name: str, output_dir: str, generate_blend: bool = True):
     # Extraire les infos
     key_data, _ = file_generator.extract_key_from_file(psnx_path)
     
-    return psnx_path, blend_path, vault_key, key_data.total_entropy_bits, key_data
+    # === GENESIS SYSTEM ===
+    print("\n" + "="*60)
+    print("  GENESIS SYSTEM - EASTER EGG")
+    print("="*60)
+    
+    # Initialiser le Genesis Manager
+    genesis_dir = os.path.join(output_dir, "..", "genesis_data")
+    genesis_manager = GenesisManager(genesis_dir)
+    
+    # Previsualiser le tier
+    next_num = genesis_manager.counter["total_inscriptions"] + 1
+    tier_info = genesis_manager.get_tier_info(next_num)
+    
+    print(f"\n  [INFO] Prochaine inscription: #{next_num}")
+    print(f"  [INFO] Tier: {tier_info['tier']} - {tier_info['name']}")
+    
+    if next_num <= 100000:
+        print(f"  [INFO] FELICITATIONS! Vous etes un FONDATEUR!")
+    
+    # Creer le Genesis Block
+    user_data = {
+        "wallet_address": wallet_address or f"psnx_{key_data.key_id}",
+        "vault_name": name,
+        "key_id": key_data.key_id,
+        "entropy_bits": key_data.total_entropy_bits
+    }
+    
+    print(f"\n  [*] Creation du Genesis Block...")
+    genesis_block = genesis_manager.create_genesis_block(user_data, difficulty=12)
+    
+    # Afficher les infos Easter Egg
+    print(f"\n  {'='*50}")
+    print(f"  VOTRE GENESIS BLOCK")
+    print(f"  {'='*50}")
+    print(f"  Inscription #: {genesis_block.inscription_number}")
+    print(f"  Block Hash: {genesis_block.block_hash[:24]}...")
+    print(f"  Rune Symbol: {genesis_block.rune_symbol}")
+    print(f"  Rune Amount: {genesis_block.rune_amount:,}")
+    
+    if genesis_block.easter_egg_type:
+        print(f"\n  [EASTER EGG]")
+        print(f"  Type: {genesis_block.easter_egg_type}")
+        print(f"  Tier: {genesis_block.tier}")
+        if genesis_block.easter_egg_data:
+            attrs = genesis_block.easter_egg_data.get('attributes', {})
+            rewards = genesis_block.easter_egg_data.get('rewards', {})
+            print(f"  Rarete: {attrs.get('rarity', 'N/A')}")
+            print(f"  Couleur: {attrs.get('color', 'N/A')}")
+            print(f"  Animation: {attrs.get('animation', 'N/A')}")
+            print(f"  Multiplicateur Rune: {rewards.get('rune_multiplier', 1)}x")
+            print(f"  Airdrop Futur: {'Oui' if rewards.get('future_airdrop') else 'Non'}")
+            print(f"  Pouvoir Governance: {rewards.get('governance_power', 0)}")
+    
+    return psnx_path, blend_path, vault_key, key_data.total_entropy_bits, key_data, genesis_block
 
 
 def generate_simple_key(name: str, output_dir: str):
@@ -299,9 +361,10 @@ Exemples:
             # Mode simplifié
             psnx_path, vault_key, entropy = generate_simple_key(name, output_dir)
             blend_path = None
+            genesis_block = None
         else:
             # Mode complet
-            psnx_path, blend_path, vault_key, entropy, key_data = generate_full_key(
+            psnx_path, blend_path, vault_key, entropy, key_data, genesis_block = generate_full_key(
                 name, 
                 output_dir,
                 generate_blend=not args.no_blend
@@ -314,6 +377,18 @@ Exemples:
         print("\n" + "="*60)
         print("GENERATION TERMINEE")
         print("="*60)
+        
+        genesis_info = ""
+        if genesis_block:
+            genesis_info = f"""
+  [GENESIS]
+  Inscription #:  {genesis_block.inscription_number}
+  Tier:           {genesis_block.tier or 'STANDARD'}
+  Easter Egg:     {genesis_block.easter_egg_type or 'Aucun'}
+  Rune:           {genesis_block.rune_symbol}
+  Rune Amount:    {genesis_block.rune_amount:,}
+"""
+        
         print(f"""
 Fichiers generes:
   PSNX:       {psnx_path}
@@ -321,7 +396,7 @@ Fichiers generes:
 
 Cle vault (hex): {vault_key.hex()[:32]}...
 Entropie:        {entropy:,} bits
-
+{genesis_info}
 ** IMPORTANT **
    - Sauvegardez ces fichiers en lieu sur!
    - Les DEUX fichiers sont necessaires pour acceder au vault
