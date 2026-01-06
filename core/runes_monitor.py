@@ -96,7 +96,6 @@ class RunesMonitor:
         # Chercher genesis blocks dans plusieurs emplacements
         possible_paths = [
             Path(genesis_dir) if genesis_dir else None,
-            Path("C:/eggs"),                              # Emplacement personnalise
             base_path / "genesis_data" / "blocks",
             base_path / "genesis_data",
             base_path / "vault_storage" / "genesis_data" / "blocks",
