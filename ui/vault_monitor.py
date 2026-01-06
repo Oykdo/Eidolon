@@ -384,6 +384,13 @@ except ImportError as e:
     RUNES_AVAILABLE = False
     print(f"[INFO] Module runes non disponible: {e}")
 
+try:
+    from core.alchemy_integration import AlchemyClient, AlchemyNetwork, AlchemyNFT, AlchemyToken
+    ALCHEMY_AVAILABLE = True
+except ImportError as e:
+    ALCHEMY_AVAILABLE = False
+    print(f"[INFO] Module Alchemy non disponible: {e}")
+
 
 # ============================================================================
 # GESTIONNAIRE DE VAULT SECURISE
@@ -661,6 +668,10 @@ class VaultMonitorGUI:
         if RUNES_AVAILABLE:
             self.runes_tab = self._create_runes_tab()
             self.notebook.add(self.runes_tab, text="  ᚠ RUNES  ")
+        
+        # Onglet Blockchain (Alchemy)
+        self.blockchain_tab = self._create_blockchain_tab()
+        self.notebook.add(self.blockchain_tab, text="  ⛓ BLOCKCHAIN  ")
         
         # === BARRE DE STATUT CYPHERPUNK ===
         status_bar_frame = tk.Frame(self.root, bg=CypherpunkTheme.BG_TERTIARY, height=32)
@@ -1391,6 +1402,392 @@ class VaultMonitorGUI:
             
         except Exception as e:
             messagebox.showerror("Erreur", f"Erreur d'export: {e}")
+    
+    def _create_blockchain_tab(self) -> tk.Frame:
+        """Créer l'onglet Blockchain avec monitoring temps réel via Alchemy"""
+        frame = tk.Frame(self.notebook, bg=CypherpunkTheme.BG_DARK)
+        
+        # Variables
+        self.alchemy_client = None
+        self.alchemy_address = tk.StringVar(value="")
+        self.alchemy_network = tk.StringVar(value="ETH_MAINNET")
+        self.alchemy_api_key = tk.StringVar(value="")
+        
+        # === HEADER ===
+        header_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
+        header_frame.pack(fill=tk.X, pady=(10, 15), padx=10)
+        
+        title_lbl = tk.Label(
+            header_frame,
+            text="⛓ BLOCKCHAIN MONITOR",
+            bg=CypherpunkTheme.BG_DARK,
+            fg=CypherpunkTheme.NEON_CYAN,
+            font=("Consolas", 16, "bold")
+        )
+        title_lbl.pack(side=tk.LEFT)
+        
+        # Status indicator
+        self.blockchain_status = tk.Label(
+            header_frame,
+            text="● DISCONNECTED",
+            bg=CypherpunkTheme.BG_DARK,
+            fg=CypherpunkTheme.TEXT_SECONDARY,
+            font=CypherpunkTheme.FONT_MONO_SMALL
+        )
+        self.blockchain_status.pack(side=tk.RIGHT)
+        
+        # === CONFIG PANEL ===
+        config_outer, config_inner = CypherpunkTheme.create_card_frame(frame, "⚙ CONFIGURATION")
+        config_outer.pack(fill=tk.X, padx=10, pady=(0, 10))
+        
+        # API Key
+        key_frame = tk.Frame(config_inner, bg=CypherpunkTheme.BG_PANEL)
+        key_frame.pack(fill=tk.X, pady=5)
+        
+        tk.Label(key_frame, text="API Key:", bg=CypherpunkTheme.BG_PANEL, 
+                fg=CypherpunkTheme.TEXT_SECONDARY, width=12, anchor='w').pack(side=tk.LEFT)
+        
+        key_entry = tk.Entry(key_frame, textvariable=self.alchemy_api_key, width=50,
+                            bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.NEON_GREEN,
+                            insertbackground=CypherpunkTheme.NEON_CYAN, show="*")
+        key_entry.pack(side=tk.LEFT, padx=5)
+        
+        # Network selection
+        net_frame = tk.Frame(config_inner, bg=CypherpunkTheme.BG_PANEL)
+        net_frame.pack(fill=tk.X, pady=5)
+        
+        tk.Label(net_frame, text="Network:", bg=CypherpunkTheme.BG_PANEL,
+                fg=CypherpunkTheme.TEXT_SECONDARY, width=12, anchor='w').pack(side=tk.LEFT)
+        
+        networks = ["ETH_MAINNET", "ETH_SEPOLIA", "POLYGON_MAINNET", "ARB_MAINNET", "OPT_MAINNET", "BASE_MAINNET"]
+        net_combo = ttk.Combobox(net_frame, textvariable=self.alchemy_network, values=networks, width=20)
+        net_combo.pack(side=tk.LEFT, padx=5)
+        
+        # Wallet address
+        addr_frame = tk.Frame(config_inner, bg=CypherpunkTheme.BG_PANEL)
+        addr_frame.pack(fill=tk.X, pady=5)
+        
+        tk.Label(addr_frame, text="Address:", bg=CypherpunkTheme.BG_PANEL,
+                fg=CypherpunkTheme.TEXT_SECONDARY, width=12, anchor='w').pack(side=tk.LEFT)
+        
+        addr_entry = tk.Entry(addr_frame, textvariable=self.alchemy_address, width=50,
+                             bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.NEON_GREEN,
+                             insertbackground=CypherpunkTheme.NEON_CYAN)
+        addr_entry.pack(side=tk.LEFT, padx=5)
+        
+        # Connect button
+        connect_btn = CypherpunkTheme.create_neon_button(
+            config_inner, "▶ CONNECT", self._connect_alchemy, CypherpunkTheme.NEON_GREEN
+        )
+        connect_btn.pack(pady=10)
+        
+        # === BALANCE DISPLAY ===
+        balance_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
+        balance_frame.pack(fill=tk.X, padx=10, pady=(0, 10))
+        
+        self.eth_balance_var = tk.StringVar(value="0.00 ETH")
+        balance_card = CypherpunkTheme.create_metric_display(
+            balance_frame, "NATIVE BALANCE", self.eth_balance_var, "#FFD700"
+        )
+        balance_card.pack(side=tk.LEFT, padx=5)
+        
+        self.nft_count_var = tk.StringVar(value="0")
+        nft_card = CypherpunkTheme.create_metric_display(
+            balance_frame, "NFTs", self.nft_count_var, CypherpunkTheme.NEON_PURPLE
+        )
+        nft_card.pack(side=tk.LEFT, padx=5)
+        
+        self.token_count_var = tk.StringVar(value="0")
+        token_card = CypherpunkTheme.create_metric_display(
+            balance_frame, "TOKENS", self.token_count_var, CypherpunkTheme.NEON_CYAN
+        )
+        token_card.pack(side=tk.LEFT, padx=5)
+        
+        # === NOTEBOOK FOR NFTs/TOKENS ===
+        assets_notebook = ttk.Notebook(frame)
+        assets_notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=(0, 10))
+        
+        # NFT Tab
+        nft_frame = tk.Frame(assets_notebook, bg=CypherpunkTheme.BG_DARK)
+        assets_notebook.add(nft_frame, text="  NFTs  ")
+        
+        # NFT List
+        nft_columns = ('Collection', 'Name', 'Token ID', 'Type', 'Contract')
+        self.nft_tree = ttk.Treeview(nft_frame, columns=nft_columns, show='headings', height=10)
+        
+        for col in nft_columns:
+            self.nft_tree.heading(col, text=col)
+            self.nft_tree.column(col, width=150)
+        
+        nft_scroll = ttk.Scrollbar(nft_frame, orient=tk.VERTICAL, command=self.nft_tree.yview)
+        self.nft_tree.configure(yscrollcommand=nft_scroll.set)
+        self.nft_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        nft_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        # Token Tab
+        token_frame = tk.Frame(assets_notebook, bg=CypherpunkTheme.BG_DARK)
+        assets_notebook.add(token_frame, text="  TOKENS  ")
+        
+        # Token List
+        token_columns = ('Symbol', 'Name', 'Balance', 'Contract')
+        self.token_tree = ttk.Treeview(token_frame, columns=token_columns, show='headings', height=10)
+        
+        for col in token_columns:
+            self.token_tree.heading(col, text=col)
+            self.token_tree.column(col, width=180)
+        
+        token_scroll = ttk.Scrollbar(token_frame, orient=tk.VERTICAL, command=self.token_tree.yview)
+        self.token_tree.configure(yscrollcommand=token_scroll.set)
+        self.token_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        token_scroll.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        # === ACTIONS ===
+        actions_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
+        actions_frame.pack(fill=tk.X, padx=10, pady=10)
+        
+        refresh_btn = CypherpunkTheme.create_neon_button(
+            actions_frame, "↻ REFRESH", self._refresh_blockchain, CypherpunkTheme.NEON_CYAN
+        )
+        refresh_btn.pack(side=tk.LEFT, padx=(0, 10))
+        
+        transfer_nft_btn = CypherpunkTheme.create_neon_button(
+            actions_frame, "↗ TRANSFER NFT", self._transfer_nft_dialog, CypherpunkTheme.NEON_PURPLE
+        )
+        transfer_nft_btn.pack(side=tk.LEFT, padx=(0, 10))
+        
+        transfer_token_btn = CypherpunkTheme.create_neon_button(
+            actions_frame, "↗ TRANSFER TOKEN", self._transfer_token_dialog, CypherpunkTheme.NEON_GREEN
+        )
+        transfer_token_btn.pack(side=tk.LEFT)
+        
+        return frame
+    
+    def _connect_alchemy(self):
+        """Connecte au client Alchemy"""
+        api_key = self.alchemy_api_key.get().strip()
+        address = self.alchemy_address.get().strip()
+        network_name = self.alchemy_network.get()
+        
+        if not api_key:
+            messagebox.showerror("Erreur", "Clé API Alchemy requise\n\nObtenez-en une sur https://www.alchemy.com/")
+            return
+        
+        if not address:
+            messagebox.showerror("Erreur", "Adresse wallet requise")
+            return
+        
+        if not ALCHEMY_AVAILABLE:
+            messagebox.showerror("Erreur", "Module Alchemy non disponible")
+            return
+        
+        try:
+            network = getattr(AlchemyNetwork, network_name)
+            self.alchemy_client = AlchemyClient(api_key, network)
+            
+            # Test connection
+            block = self.alchemy_client.get_block_number()
+            
+            self.blockchain_status.configure(text="● CONNECTED", fg=CypherpunkTheme.NEON_GREEN)
+            self._log_activity(f"Alchemy connected to {network_name} (block {block})")
+            
+            # Refresh data
+            self._refresh_blockchain()
+            
+        except Exception as e:
+            self.blockchain_status.configure(text="● ERROR", fg=CypherpunkTheme.TEXT_ERROR)
+            messagebox.showerror("Erreur de connexion", f"Impossible de se connecter:\n{e}")
+    
+    def _refresh_blockchain(self):
+        """Rafraichit les données blockchain"""
+        if not self.alchemy_client:
+            messagebox.showwarning("Attention", "Connectez-vous d'abord à Alchemy")
+            return
+        
+        address = self.alchemy_address.get().strip()
+        if not address:
+            return
+        
+        try:
+            # Balance native
+            balance_wei = self.alchemy_client.get_balance(address)
+            balance_eth = balance_wei / 1e18
+            self.eth_balance_var.set(f"{balance_eth:.4f} ETH")
+            
+            # NFTs
+            for item in self.nft_tree.get_children():
+                self.nft_tree.delete(item)
+            
+            nfts, _ = self.alchemy_client.get_nfts_for_owner(address, page_size=50)
+            self.nft_count_var.set(str(len(nfts)))
+            
+            for nft in nfts:
+                self.nft_tree.insert('', tk.END, values=(
+                    nft.collection_name or "Unknown",
+                    nft.name or f"#{nft.token_id}",
+                    nft.token_id[:10] + "..." if len(nft.token_id) > 10 else nft.token_id,
+                    nft.token_type,
+                    nft.contract_address[:10] + "..."
+                ))
+            
+            # Tokens
+            for item in self.token_tree.get_children():
+                self.token_tree.delete(item)
+            
+            tokens = self.alchemy_client.get_token_balances(address)
+            self.token_count_var.set(str(len(tokens)))
+            
+            for token in tokens:
+                self.token_tree.insert('', tk.END, values=(
+                    token.symbol,
+                    token.name,
+                    token.formatted_balance,
+                    token.contract_address[:10] + "..."
+                ))
+            
+            self._log_activity(f"Blockchain data refreshed: {len(nfts)} NFTs, {len(tokens)} tokens")
+            
+        except Exception as e:
+            messagebox.showerror("Erreur", f"Erreur de rafraîchissement:\n{e}")
+    
+    def _transfer_nft_dialog(self):
+        """Dialogue pour transférer un NFT"""
+        selection = self.nft_tree.selection()
+        if not selection:
+            messagebox.showwarning("Attention", "Sélectionnez un NFT à transférer")
+            return
+        
+        item = self.nft_tree.item(selection[0])
+        nft_name = item['values'][1]
+        token_id = item['values'][2]
+        
+        dialog = tk.Toplevel(self.root)
+        dialog.title(f"Transférer NFT: {nft_name}")
+        dialog.geometry("500x300")
+        dialog.configure(bg=CypherpunkTheme.BG_DARK)
+        dialog.transient(self.root)
+        dialog.grab_set()
+        
+        content = tk.Frame(dialog, bg=CypherpunkTheme.BG_DARK)
+        content.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
+        
+        tk.Label(content, text=f"NFT: {nft_name}", bg=CypherpunkTheme.BG_DARK,
+                fg=CypherpunkTheme.NEON_PURPLE, font=CypherpunkTheme.FONT_TITLE).pack(pady=10)
+        
+        tk.Label(content, text="Adresse destinataire:", bg=CypherpunkTheme.BG_DARK,
+                fg=CypherpunkTheme.TEXT_PRIMARY).pack(anchor='w', pady=(10, 5))
+        
+        to_address = tk.StringVar()
+        to_entry = tk.Entry(content, textvariable=to_address, width=50,
+                           bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.NEON_GREEN)
+        to_entry.pack(fill=tk.X, pady=5)
+        
+        warning = tk.Label(content, 
+                          text="⚠ Cette action nécessite une signature avec votre wallet externe\n(MetaMask, Ledger, etc.)",
+                          bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.TEXT_WARNING,
+                          font=CypherpunkTheme.FONT_SMALL)
+        warning.pack(pady=20)
+        
+        def prepare_transfer():
+            dest = to_address.get().strip()
+            if not dest or len(dest) != 42:
+                messagebox.showerror("Erreur", "Adresse invalide")
+                return
+            
+            # Préparer les données de transaction
+            tx_info = f"""
+Transaction NFT Transfer préparée:
+- NFT: {nft_name}
+- Token ID: {token_id}
+- To: {dest}
+
+Pour exécuter ce transfert:
+1. Ouvrez MetaMask ou votre wallet
+2. Allez sur le contrat NFT
+3. Appelez safeTransferFrom avec ces paramètres
+"""
+            self._log_activity(f"NFT transfer prepared: {nft_name} -> {dest[:10]}...")
+            messagebox.showinfo("Transaction préparée", tx_info)
+            dialog.destroy()
+        
+        CypherpunkTheme.create_neon_button(
+            content, "PRÉPARER TRANSFERT", prepare_transfer, CypherpunkTheme.NEON_GREEN
+        ).pack(pady=10)
+    
+    def _transfer_token_dialog(self):
+        """Dialogue pour transférer un Token"""
+        selection = self.token_tree.selection()
+        if not selection:
+            messagebox.showwarning("Attention", "Sélectionnez un token à transférer")
+            return
+        
+        item = self.token_tree.item(selection[0])
+        symbol = item['values'][0]
+        balance = item['values'][2]
+        
+        dialog = tk.Toplevel(self.root)
+        dialog.title(f"Transférer {symbol}")
+        dialog.geometry("500x350")
+        dialog.configure(bg=CypherpunkTheme.BG_DARK)
+        dialog.transient(self.root)
+        dialog.grab_set()
+        
+        content = tk.Frame(dialog, bg=CypherpunkTheme.BG_DARK)
+        content.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
+        
+        tk.Label(content, text=f"Token: {symbol}", bg=CypherpunkTheme.BG_DARK,
+                fg=CypherpunkTheme.NEON_CYAN, font=CypherpunkTheme.FONT_TITLE).pack(pady=10)
+        
+        tk.Label(content, text=f"Balance disponible: {balance}", bg=CypherpunkTheme.BG_DARK,
+                fg=CypherpunkTheme.TEXT_SECONDARY).pack()
+        
+        tk.Label(content, text="Adresse destinataire:", bg=CypherpunkTheme.BG_DARK,
+                fg=CypherpunkTheme.TEXT_PRIMARY).pack(anchor='w', pady=(15, 5))
+        
+        to_address = tk.StringVar()
+        tk.Entry(content, textvariable=to_address, width=50,
+                bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.NEON_GREEN).pack(fill=tk.X, pady=5)
+        
+        tk.Label(content, text="Montant:", bg=CypherpunkTheme.BG_DARK,
+                fg=CypherpunkTheme.TEXT_PRIMARY).pack(anchor='w', pady=(10, 5))
+        
+        amount = tk.StringVar()
+        tk.Entry(content, textvariable=amount, width=20,
+                bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.NEON_GREEN).pack(anchor='w', pady=5)
+        
+        warning = tk.Label(content,
+                          text="⚠ Cette action nécessite une signature avec votre wallet externe",
+                          bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.TEXT_WARNING,
+                          font=CypherpunkTheme.FONT_SMALL)
+        warning.pack(pady=15)
+        
+        def prepare_transfer():
+            dest = to_address.get().strip()
+            amt = amount.get().strip()
+            
+            if not dest or len(dest) != 42:
+                messagebox.showerror("Erreur", "Adresse invalide")
+                return
+            if not amt:
+                messagebox.showerror("Erreur", "Montant requis")
+                return
+            
+            tx_info = f"""
+Transaction Token Transfer préparée:
+- Token: {symbol}
+- Amount: {amt}
+- To: {dest}
+
+Pour exécuter ce transfert:
+1. Ouvrez MetaMask ou votre wallet
+2. Initiez un transfer ERC20
+"""
+            self._log_activity(f"Token transfer prepared: {amt} {symbol} -> {dest[:10]}...")
+            messagebox.showinfo("Transaction préparée", tx_info)
+            dialog.destroy()
+        
+        CypherpunkTheme.create_neon_button(
+            content, "PRÉPARER TRANSFERT", prepare_transfer, CypherpunkTheme.NEON_GREEN
+        ).pack(pady=10)
     
     def _populate_ui_from_state(self):
         """Remplir l'interface avec les données existantes"""
