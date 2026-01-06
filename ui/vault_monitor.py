@@ -18,6 +18,7 @@ import hashlib
 import threading
 import time
 from datetime import datetime
+from pathlib import Path
 from typing import Dict, List, Optional, Any, Tuple
 
 import tkinter as tk
@@ -1752,7 +1753,7 @@ class VaultMonitorGUI:
     def _load_vault_chests(self, vault_num: int) -> list:
         """Charge les coffres d'un vault"""
         chests = []
-        chests_dir = self.base_path / "alchemical_vault" / "chests"
+        chests_dir = Path(self.base_path) / "alchemical_vault" / "chests"
         
         if not chests_dir.exists():
             return chests
@@ -1775,7 +1776,7 @@ class VaultMonitorGUI:
     def _load_vault_items(self, vault_num: int) -> list:
         """Charge les items d'un vault"""
         items = []
-        items_dir = self.base_path / "alchemical_vault" / "items"
+        items_dir = Path(self.base_path) / "alchemical_vault" / "items"
         
         if not items_dir.exists():
             return items
