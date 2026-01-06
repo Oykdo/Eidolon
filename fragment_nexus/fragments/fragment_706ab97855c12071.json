@@ -1,0 +1,32 @@
+{
+  "fragment_id": "706ab97855c12071",
+  "fragment_type": "bond",
+  "essence": "quantum",
+  "mass": 2214.0,
+  "purity": 69,
+  "stability": 63,
+  "soul": null,
+  "resonance_frequency": 1000,
+  "entangled_fragments": [],
+  "voting_power": 0.0,
+  "governance_tier": 0,
+  "votes_cast": [],
+  "prophecy_text": null,
+  "prophecy_fulfilled": false,
+  "prophecy_target_date": null,
+  "constellation_id": null,
+  "constellation_position": null,
+  "birth_cycle": 0,
+  "optimal_cycles": [
+    1,
+    2,
+    3
+  ],
+  "market_value": 1527.66,
+  "price_history": [],
+  "origin_vault": 2,
+  "created_at": "2026-01-06T22:37:10.534335",
+  "current_vault": 2,
+  "status": "active",
+  "transfer_history": []
+}
