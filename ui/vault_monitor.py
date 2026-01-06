@@ -1056,6 +1056,52 @@ class VaultMonitorGUI:
         sep = tk.Frame(frame, bg=CypherpunkTheme.BORDER_INACTIVE, height=1)
         sep.pack(fill=tk.X, padx=10, pady=10)
         
+        # === ACTIONS (pack en premier pour etre visible) ===
+        actions_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
+        actions_frame.pack(fill=tk.X, padx=10, pady=10, side=tk.BOTTOM)
+        
+        sign_btn = CypherpunkTheme.create_neon_button(
+            actions_frame,
+            "✎ SIGN ALL",
+            self._sign_all_runes,
+            CypherpunkTheme.NEON_GREEN
+        )
+        sign_btn.pack(side=tk.LEFT, padx=(0, 10))
+        
+        verify_btn = CypherpunkTheme.create_neon_button(
+            actions_frame,
+            "✓ VERIFY",
+            self._verify_runes,
+            CypherpunkTheme.NEON_CYAN
+        )
+        verify_btn.pack(side=tk.LEFT, padx=(0, 10))
+        
+        details_btn = CypherpunkTheme.create_neon_button(
+            actions_frame,
+            "◉ DETAILS",
+            self._show_rune_details,
+            CypherpunkTheme.NEON_PURPLE
+        )
+        details_btn.pack(side=tk.LEFT, padx=(0, 10))
+        
+        # Bouton inventaire
+        inventory_btn = CypherpunkTheme.create_neon_button(
+            actions_frame,
+            "📦 INVENTORY",
+            self._show_vault_inventory,
+            "#FFD700"
+        )
+        inventory_btn.pack(side=tk.LEFT)
+        
+        # Export button a droite
+        export_btn = CypherpunkTheme.create_neon_button(
+            actions_frame,
+            "↓ EXPORT",
+            self._export_runes,
+            CypherpunkTheme.TEXT_SECONDARY
+        )
+        export_btn.pack(side=tk.RIGHT)
+        
         # === LISTE DES RUNES ===
         list_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
         list_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=(0, 10))
@@ -1096,47 +1142,119 @@ class VaultMonitorGUI:
         self.runes_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         
-        # === ACTIONS ===
-        actions_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
-        actions_frame.pack(fill=tk.X, padx=10, pady=10)
-        
-        sign_btn = CypherpunkTheme.create_neon_button(
-            actions_frame,
-            "✎ SIGN ALL",
-            self._sign_all_runes,
-            CypherpunkTheme.NEON_GREEN
-        )
-        sign_btn.pack(side=tk.LEFT, padx=(0, 10))
-        
-        verify_btn = CypherpunkTheme.create_neon_button(
-            actions_frame,
-            "✓ VERIFY",
-            self._verify_runes,
-            CypherpunkTheme.NEON_CYAN
-        )
-        verify_btn.pack(side=tk.LEFT, padx=(0, 10))
-        
-        details_btn = CypherpunkTheme.create_neon_button(
-            actions_frame,
-            "◉ DETAILS",
-            self._show_rune_details,
-            CypherpunkTheme.NEON_PURPLE
-        )
-        details_btn.pack(side=tk.LEFT)
-        
-        # Export button a droite
-        export_btn = CypherpunkTheme.create_neon_button(
-            actions_frame,
-            "↓ EXPORT",
-            self._export_runes,
-            CypherpunkTheme.TEXT_SECONDARY
-        )
-        export_btn.pack(side=tk.RIGHT)
-        
         # Charger les donnees
         self._refresh_runes()
         
         return frame
+    
+    def _show_vault_inventory(self):
+        """Affiche l'inventaire complet du vault selectionne"""
+        selection = self.runes_tree.selection()
+        if not selection:
+            messagebox.showwarning("Attention", "Veuillez selectionner un vault")
+            return
+        
+        item = self.runes_tree.item(selection[0])
+        vault_str = item['values'][0]
+        vault_num = int(vault_str.replace('#', ''))
+        
+        # Charger les donnees
+        vault_chests = self._load_vault_chests(vault_num)
+        vault_items = self._load_vault_items(vault_num)
+        
+        if not vault_chests and not vault_items:
+            messagebox.showinfo("Info", f"Vault #{vault_num} n'a pas d'inventaire")
+            return
+        
+        # Fenetre d'inventaire
+        dialog = tk.Toplevel(self.root)
+        dialog.title(f"Inventaire Vault #{vault_num}")
+        dialog.geometry("800x600")
+        dialog.configure(bg=CypherpunkTheme.BG_DARK)
+        
+        # Header
+        header = tk.Label(
+            dialog,
+            text=f"📦 INVENTAIRE VAULT #{vault_num}",
+            bg=CypherpunkTheme.BG_DARK,
+            fg="#FFD700",
+            font=("Consolas", 18, "bold")
+        )
+        header.pack(pady=15)
+        
+        # Stats
+        stats_frame = tk.Frame(dialog, bg=CypherpunkTheme.BG_PANEL, padx=15, pady=10)
+        stats_frame.pack(fill=tk.X, padx=20, pady=(0, 15))
+        
+        tk.Label(
+            stats_frame,
+            text=f"Coffres: {len(vault_chests)} | Items: {len(vault_items)}",
+            bg=CypherpunkTheme.BG_PANEL,
+            fg=CypherpunkTheme.NEON_GREEN,
+            font=("Consolas", 12)
+        ).pack(side=tk.LEFT)
+        
+        # Notebook pour les coffres
+        notebook = ttk.Notebook(dialog)
+        notebook.pack(fill=tk.BOTH, expand=True, padx=20, pady=(0, 20))
+        
+        # Couleurs de rarete
+        rarity_colors = {
+            'primordial': '#ff00ff', 'mythical': '#ffd700', 'legendary': '#ff8000',
+            'masterwork': '#aa55ff', 'exquisite': '#0088ff', 'superior': '#00cccc',
+            'refined': '#00ff00', 'common': '#ffffff', 'crude': '#888888'
+        }
+        
+        for chest in vault_chests:
+            chest_tier = chest.get('tier', 'common').upper()
+            chest_items = [i for i in vault_items if i.get('origin_chest') == chest.get('chest_id')]
+            
+            # Frame du coffre
+            chest_frame = tk.Frame(notebook, bg=CypherpunkTheme.BG_SECONDARY)
+            notebook.add(chest_frame, text=f" {chest_tier} ({len(chest_items)}) ")
+            
+            # Liste des items
+            items_list = tk.Text(
+                chest_frame,
+                bg=CypherpunkTheme.BG_SECONDARY,
+                fg=CypherpunkTheme.TEXT_PRIMARY,
+                font=("Consolas", 10),
+                padx=10,
+                pady=10
+            )
+            items_list.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+            
+            for item_data in chest_items:
+                item_type = item_data.get('item_type', 'unknown').replace('_', ' ').title()
+                rarity = item_data.get('rarity', 'common')
+                mods = item_data.get('mods', [])
+                color = rarity_colors.get(rarity, '#ffffff')
+                
+                # Item header
+                items_list.insert(tk.END, f"[{rarity.upper()}] ", f"r_{rarity}")
+                items_list.insert(tk.END, f"{item_type}\n")
+                
+                # Mods
+                for mod in mods[:3]:
+                    mod_name = mod.get('mod_id', '').replace('mod_', '').replace('_', ' ').title()
+                    mod_value = mod.get('rolled_value', 0)
+                    roll_pct = mod.get('roll_percent', 50)
+                    tier = mod.get('tier', 'standard')[:3].upper()
+                    
+                    quality = "★" if roll_pct >= 95 else "◆" if roll_pct >= 80 else "●" if roll_pct >= 60 else "○"
+                    items_list.insert(tk.END, f"  {quality} [{tier}] {mod_name}: {mod_value:.0f} ({roll_pct:.0f}%)\n", "mod")
+                
+                if len(mods) > 3:
+                    items_list.insert(tk.END, f"  ... +{len(mods)-3} more\n", "more")
+                
+                items_list.insert(tk.END, "\n")
+            
+            # Tags de couleur
+            for rarity, color in rarity_colors.items():
+                items_list.tag_config(f"r_{rarity}", foreground=color)
+            items_list.tag_config("mod", foreground=CypherpunkTheme.NEON_CYAN)
+            items_list.tag_config("more", foreground=CypherpunkTheme.TEXT_SECONDARY)
+            items_list.config(state=tk.DISABLED)
     
     def _refresh_runes(self):
         """Rafraichit les donnees des runes"""
