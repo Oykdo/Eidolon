@@ -140,6 +140,104 @@ poly_spinor_nexus_7d/
 
 **Total: ~8,400 bits d'entropie effective**
 
+---
+
+## 🥚 Genesis System - Easter Eggs pour les Fondateurs
+
+Les **100,000 premiers utilisateurs** qui generent un vault recoivent un **Easter Egg exclusif** avec des recompenses uniques!
+
+### Tiers de Fondateurs
+
+| Tier | Inscription | Easter Egg | Rarete | Runes | Multiplicateur | Airdrop |
+|------|-------------|------------|--------|-------|----------------|---------|
+| 🏆 **FOUNDER_1** | #1 - #100 | Quantum Pioneer | Mythic | 1 Milliard | 10x | ✅ |
+| 🥇 **FOUNDER_10** | #101 - #1,000 | Spinor Visionary | Legendary | 100 Millions | 5x | ✅ |
+| 🥈 **FOUNDER_100** | #1,001 - #10,000 | Bell Verifier | Epic | 10 Millions | 2.5x | ✅ |
+| 🥉 **FOUNDER_1000** | #10,001 - #100,000 | Post-Quantum Guardian | Rare | 1 Million | 1.5x | ❌ |
+| ⚪ **STANDARD** | > #100,000 | - | Common | 100,000 | 1x | ❌ |
+
+### Symboles Runiques
+
+Chaque fondateur recoit un **symbole runique unique** base sur son numero d'inscription:
+
+```
+#1      → ᛏᚨᛚ•ᚢ      (Tier 1 - Mythic)
+#100    → ᛏᚨᛚ•ᚱᚱ     (Tier 1 - Mythic)
+#500    → ᚨᚾᚲ•ᛚᛚ     (Tier 2 - Legendary)
+#5000   → ᚠᛟᚱ•ᚺᛏᚺ    (Tier 3 - Epic)
+#50000  → ᛖᚨᚱ•ᚨᛉᛗᚺ   (Tier 4 - Rare)
+```
+
+### Ce que vous recevez
+
+Lors de la generation de votre vault, vous obtenez automatiquement:
+
+1. **Genesis Block** - Bloc mine avec votre numero d'inscription unique
+2. **Easter Egg NFT** - Attributs de rarete, couleur, animation
+3. **Rune Token** - Symbole runique + allocation de tokens
+4. **Inscription Bitcoin** - Format compatible Ordinals/Runes Protocol
+
+### Exemple de sortie
+
+```
+============================================================
+  GENESIS SYSTEM - EASTER EGG
+============================================================
+
+  [INFO] Prochaine inscription: #42
+  [INFO] Tier: FOUNDER_1 - Quantum Pioneer
+  [INFO] FELICITATIONS! Vous etes un FONDATEUR!
+
+  ==================================================
+  VOTRE GENESIS BLOCK
+  ==================================================
+  Inscription #: 42
+  Block Hash: 0000007a3f2b1c8d...
+  Rune Symbol: ᛏᚨᛚ•ᚢᛚ
+  Rune Amount: 1,000,000,000
+
+  [EASTER EGG]
+  Type: Quantum Pioneer
+  Tier: FOUNDER_1
+  Rarete: Mythic
+  Couleur: #FFD700
+  Animation: quantum_flare
+  Multiplicateur Rune: 10x
+  Airdrop Futur: Oui
+  Pouvoir Governance: 100
+```
+
+### Recompenses des Easter Eggs
+
+| Attribut | FOUNDER_1 | FOUNDER_10 | FOUNDER_100 | FOUNDER_1000 |
+|----------|-----------|------------|-------------|--------------|
+| Rarete | Mythic | Legendary | Epic | Rare |
+| Couleur | #FFD700 (Or) | #C0C0C0 (Argent) | #A335EE (Violet) | #0070DD (Bleu) |
+| Glow | ✅ | ✅ | ❌ | ❌ |
+| Animation | quantum_flare | spinor_pulse | bell_oscillation | lattice_shield |
+| Multiplicateur | 10x | 5x | 2.5x | 1.5x |
+| Airdrop Futur | ✅ | ✅ | ✅ | ❌ |
+| Pouvoir Governance | 100 | 50 | 25 | 10 |
+
+### Integration Bitcoin (Rune Protocol)
+
+Les inscriptions Genesis sont compatibles avec le **Rune Protocol** de Bitcoin:
+
+```json
+{
+  "p": "rune",
+  "op": "deploy",
+  "sym": "ᛏᚨᛚ•ᚢᛚ",
+  "amt": "1000000000",
+  "dec": "8",
+  "genesis": "0000007a3f2b1c8d...",
+  "tier": "FOUNDER_1",
+  "easter_egg": "a1b2c3d4e5f6"
+}
+```
+
+---
+
 ## Securite
 
 ### Score: 10/10
