@@ -1071,6 +1071,32 @@ class VaultMonitorGUI:
         sep = tk.Frame(frame, bg=CypherpunkTheme.BORDER_INACTIVE, height=1)
         sep.pack(fill=tk.X, padx=10, pady=10)
         
+        # === BARRE D'ACTIONS EN BAS (pack en premier avec side=BOTTOM) ===
+        actions_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_PANEL, height=50)
+        actions_frame.pack(fill=tk.X, side=tk.BOTTOM, padx=10, pady=(5, 10))
+        actions_frame.pack_propagate(False)
+        
+        # Boutons
+        tk.Button(actions_frame, text="✎ SIGN ALL", bg="#00ff41", fg="black",
+                  font=("Consolas", 10, "bold"), command=self._sign_all_runes
+        ).pack(side=tk.LEFT, padx=(10, 5), pady=10)
+        
+        tk.Button(actions_frame, text="✓ VERIFY", bg="#00ffff", fg="black",
+                  font=("Consolas", 10, "bold"), command=self._verify_runes
+        ).pack(side=tk.LEFT, padx=5, pady=10)
+        
+        tk.Button(actions_frame, text="◉ DETAILS", bg="#aa00ff", fg="white",
+                  font=("Consolas", 10, "bold"), command=self._show_rune_details
+        ).pack(side=tk.LEFT, padx=5, pady=10)
+        
+        tk.Button(actions_frame, text="📦 INVENTORY", bg="#FFD700", fg="black",
+                  font=("Consolas", 10, "bold"), command=self._show_vault_inventory
+        ).pack(side=tk.LEFT, padx=5, pady=10)
+        
+        tk.Button(actions_frame, text="↓ EXPORT", bg="#444444", fg="white",
+                  font=("Consolas", 10, "bold"), command=self._export_runes
+        ).pack(side=tk.RIGHT, padx=(5, 10), pady=10)
+        
         # === LISTE DES RUNES ===
         list_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
         list_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=(0, 5))
@@ -1110,72 +1136,6 @@ class VaultMonitorGUI:
         
         self.runes_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-        
-        # === BARRE D'ACTIONS EN BAS ===
-        actions_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_PANEL, height=50)
-        actions_frame.pack(fill=tk.X, padx=10, pady=(5, 10))
-        actions_frame.pack_propagate(False)  # Forcer la hauteur fixe
-        
-        # Boutons d'action
-        sign_btn = tk.Button(
-            actions_frame,
-            text="✎ SIGN ALL",
-            bg=CypherpunkTheme.NEON_GREEN,
-            fg="black",
-            font=("Consolas", 10, "bold"),
-            relief=tk.FLAT,
-            padx=15,
-            command=self._sign_all_runes
-        )
-        sign_btn.pack(side=tk.LEFT, padx=(10, 5), pady=10)
-        
-        verify_btn = tk.Button(
-            actions_frame,
-            text="✓ VERIFY",
-            bg=CypherpunkTheme.NEON_CYAN,
-            fg="black",
-            font=("Consolas", 10, "bold"),
-            relief=tk.FLAT,
-            padx=15,
-            command=self._verify_runes
-        )
-        verify_btn.pack(side=tk.LEFT, padx=5, pady=10)
-        
-        details_btn = tk.Button(
-            actions_frame,
-            text="◉ DETAILS",
-            bg=CypherpunkTheme.NEON_PURPLE,
-            fg="white",
-            font=("Consolas", 10, "bold"),
-            relief=tk.FLAT,
-            padx=15,
-            command=self._show_rune_details
-        )
-        details_btn.pack(side=tk.LEFT, padx=5, pady=10)
-        
-        inventory_btn = tk.Button(
-            actions_frame,
-            text="📦 INVENTORY",
-            bg="#FFD700",
-            fg="black",
-            font=("Consolas", 10, "bold"),
-            relief=tk.FLAT,
-            padx=15,
-            command=self._show_vault_inventory
-        )
-        inventory_btn.pack(side=tk.LEFT, padx=5, pady=10)
-        
-        export_btn = tk.Button(
-            actions_frame,
-            text="↓ EXPORT",
-            bg="#444444",
-            fg="white",
-            font=("Consolas", 10, "bold"),
-            relief=tk.FLAT,
-            padx=15,
-            command=self._export_runes
-        )
-        export_btn.pack(side=tk.RIGHT, padx=(5, 10), pady=10)
         
         # Charger les donnees
         self._refresh_runes()
