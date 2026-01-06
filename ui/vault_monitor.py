@@ -1143,7 +1143,7 @@ class VaultMonitorGUI:
         return frame
     
     def _show_vault_inventory(self):
-        """Affiche l'inventaire complet du vault selectionne"""
+        """Affiche l'inventaire COMPLET du vault: Items, Fragments, Gems, Pierres"""
         selection = self.runes_tree.selection()
         if not selection:
             messagebox.showwarning("Attention", "Veuillez selectionner un vault")
@@ -1153,103 +1153,454 @@ class VaultMonitorGUI:
         vault_str = item['values'][0]
         vault_num = int(vault_str.replace('#', ''))
         
-        # Charger les donnees
-        vault_chests = self._load_vault_chests(vault_num)
+        # Charger TOUTES les donnees du vault
         vault_items = self._load_vault_items(vault_num)
+        vault_fragments = self._load_vault_fragments(vault_num)
+        vault_gems = self._load_vault_gems(vault_num)
+        vault_stones = self._load_vault_stones(vault_num)
+        vault_artifacts = self._load_vault_artifacts(vault_num)
         
-        if not vault_chests and not vault_items:
-            messagebox.showinfo("Info", f"Vault #{vault_num} n'a pas d'inventaire")
-            return
-        
-        # Fenetre d'inventaire
+        # Fenetre d'inventaire - taille adaptee
         dialog = tk.Toplevel(self.root)
-        dialog.title(f"Inventaire Vault #{vault_num}")
-        dialog.geometry("700x500")
+        dialog.title(f"⚗ INVENTAIRE COMPLET - Vault #{vault_num}")
+        
+        # Taille responsive
+        screen_w = dialog.winfo_screenwidth()
+        screen_h = dialog.winfo_screenheight()
+        win_w = min(1000, int(screen_w * 0.85))
+        win_h = min(700, int(screen_h * 0.85))
+        pos_x = (screen_w - win_w) // 2
+        pos_y = (screen_h - win_h) // 2
+        dialog.geometry(f"{win_w}x{win_h}+{pos_x}+{pos_y}")
         dialog.configure(bg=CypherpunkTheme.BG_DARK)
         
-        # Header
-        header = tk.Label(
-            dialog,
-            text=f"📦 INVENTAIRE VAULT #{vault_num}",
-            bg=CypherpunkTheme.BG_DARK,
-            fg="#FFD700",
-            font=("Consolas", 18, "bold")
-        )
-        header.pack(pady=15)
-        
-        # Stats
-        stats_frame = tk.Frame(dialog, bg=CypherpunkTheme.BG_PANEL, padx=15, pady=10)
-        stats_frame.pack(fill=tk.X, padx=20, pady=(0, 15))
+        # === HEADER ===
+        header_frame = tk.Frame(dialog, bg=CypherpunkTheme.BG_DARK)
+        header_frame.pack(fill=tk.X, padx=15, pady=10)
         
         tk.Label(
-            stats_frame,
-            text=f"Coffres: {len(vault_chests)} | Items: {len(vault_items)}",
-            bg=CypherpunkTheme.BG_PANEL,
-            fg=CypherpunkTheme.NEON_GREEN,
-            font=("Consolas", 12)
+            header_frame,
+            text=f"⚗ INVENTAIRE VAULT #{vault_num}",
+            bg=CypherpunkTheme.BG_DARK,
+            fg="#FFD700",
+            font=("Consolas", 16, "bold")
         ).pack(side=tk.LEFT)
         
-        # Notebook pour les coffres
+        # === STATS GLOBALES ===
+        stats_frame = tk.Frame(dialog, bg=CypherpunkTheme.BG_PANEL)
+        stats_frame.pack(fill=tk.X, padx=15, pady=(0, 10))
+        
+        stats = [
+            ("📦 Items", len(vault_items), "#00ff41"),
+            ("💎 Gems", len(vault_gems), "#00ffff"),
+            ("🔮 Fragments", len(vault_fragments), "#aa00ff"),
+            ("⚗ Pierres", len(vault_stones), "#ffd700"),
+            ("🏛 Artifacts", len(vault_artifacts), "#ff8000"),
+        ]
+        
+        for label, count, color in stats:
+            stat_card = tk.Frame(stats_frame, bg=CypherpunkTheme.BG_SECONDARY, padx=10, pady=5)
+            stat_card.pack(side=tk.LEFT, padx=5, pady=5, fill=tk.X, expand=True)
+            tk.Label(stat_card, text=label, bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.TEXT_SECONDARY,
+                    font=("Consolas", 9)).pack()
+            tk.Label(stat_card, text=str(count), bg=CypherpunkTheme.BG_SECONDARY, fg=color,
+                    font=("Consolas", 14, "bold")).pack()
+        
+        # === NOTEBOOK PRINCIPAL ===
         notebook = ttk.Notebook(dialog)
-        notebook.pack(fill=tk.BOTH, expand=True, padx=20, pady=(0, 20))
+        notebook.pack(fill=tk.BOTH, expand=True, padx=15, pady=(0, 15))
         
         # Couleurs de rarete
         rarity_colors = {
             'primordial': '#ff00ff', 'mythical': '#ffd700', 'legendary': '#ff8000',
             'masterwork': '#aa55ff', 'exquisite': '#0088ff', 'superior': '#00cccc',
-            'refined': '#00ff00', 'common': '#ffffff', 'crude': '#888888'
+            'refined': '#00ff00', 'common': '#ffffff', 'crude': '#888888',
+            'divine': '#ff00ff', 'transcendent': '#ffd700', 'ethereal': '#00ffff',
+            'radiant': '#ff8000', 'pristine': '#aa55ff', 'polished': '#0088ff',
+            'cut': '#00ff00', 'rough': '#888888', 'flawed': '#666666'
         }
         
-        for chest in vault_chests:
-            chest_tier = chest.get('tier', 'common').upper()
-            chest_items = [i for i in vault_items if i.get('origin_chest') == chest.get('chest_id')]
+        # === ONGLET ITEMS ALCHIMIQUES ===
+        items_frame = tk.Frame(notebook, bg=CypherpunkTheme.BG_SECONDARY)
+        notebook.add(items_frame, text=f" 📦 ITEMS ({len(vault_items)}) ")
+        self._create_items_tab(items_frame, vault_items, rarity_colors)
+        
+        # === ONGLET GEMS ===
+        gems_frame = tk.Frame(notebook, bg=CypherpunkTheme.BG_SECONDARY)
+        notebook.add(gems_frame, text=f" 💎 GEMS ({len(vault_gems)}) ")
+        self._create_gems_tab(gems_frame, vault_gems, rarity_colors)
+        
+        # === ONGLET FRAGMENTS ===
+        fragments_frame = tk.Frame(notebook, bg=CypherpunkTheme.BG_SECONDARY)
+        notebook.add(fragments_frame, text=f" 🔮 FRAGMENTS ({len(vault_fragments)}) ")
+        self._create_fragments_tab(fragments_frame, vault_fragments)
+        
+        # === ONGLET PIERRES PHILOSOPHALES ===
+        stones_frame = tk.Frame(notebook, bg=CypherpunkTheme.BG_SECONDARY)
+        notebook.add(stones_frame, text=f" ⚗ PIERRES ({len(vault_stones)}) ")
+        self._create_stones_tab(stones_frame, vault_stones)
+        
+        # === ONGLET ARTIFACTS ===
+        artifacts_frame = tk.Frame(notebook, bg=CypherpunkTheme.BG_SECONDARY)
+        notebook.add(artifacts_frame, text=f" 🏛 ARTIFACTS ({len(vault_artifacts)}) ")
+        self._create_artifacts_tab(artifacts_frame, vault_artifacts)
+    
+    def _create_items_tab(self, parent, items, rarity_colors):
+        """Cree l'onglet des items alchimiques"""
+        # Canvas scrollable
+        canvas = tk.Canvas(parent, bg=CypherpunkTheme.BG_SECONDARY, highlightthickness=0)
+        scrollbar = ttk.Scrollbar(parent, orient="vertical", command=canvas.yview)
+        content = tk.Frame(canvas, bg=CypherpunkTheme.BG_SECONDARY)
+        
+        canvas.configure(yscrollcommand=scrollbar.set)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        canvas.create_window((0, 0), window=content, anchor="nw")
+        content.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        
+        # Grouper par categorie
+        categories = {}
+        for item in items:
+            cat = item.get('category', 'misc').upper()
+            if cat not in categories:
+                categories[cat] = []
+            categories[cat].append(item)
+        
+        # Icones par categorie
+        cat_icons = {
+            'POTION': '🧪', 'ELIXIR': '⚗', 'SCROLL': '📜', 'RUNE': 'ᚱ',
+            'TALISMAN': '🔮', 'ESSENCE': '✨', 'REAGENT': '🌿', 'CATALYST': '⚡',
+            'ARTIFACT_COMPONENT': '🔧', 'MISC': '📦'
+        }
+        
+        for cat_name, cat_items in sorted(categories.items()):
+            icon = cat_icons.get(cat_name, '📦')
             
-            # Frame du coffre
-            chest_frame = tk.Frame(notebook, bg=CypherpunkTheme.BG_SECONDARY)
-            notebook.add(chest_frame, text=f" {chest_tier} ({len(chest_items)}) ")
+            # Header categorie
+            cat_header = tk.Frame(content, bg=CypherpunkTheme.BG_PANEL)
+            cat_header.pack(fill=tk.X, padx=5, pady=(10, 5))
+            tk.Label(cat_header, text=f" {icon} {cat_name} ({len(cat_items)})",
+                    bg=CypherpunkTheme.BG_PANEL, fg="#FFD700",
+                    font=("Consolas", 11, "bold")).pack(side=tk.LEFT, padx=5, pady=3)
             
-            # Liste des items
-            items_list = tk.Text(
-                chest_frame,
-                bg=CypherpunkTheme.BG_SECONDARY,
-                fg=CypherpunkTheme.TEXT_PRIMARY,
-                font=("Consolas", 10),
-                padx=10,
-                pady=10
-            )
-            items_list.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
-            
-            for item_data in chest_items:
-                item_type = item_data.get('item_type', 'unknown').replace('_', ' ').title()
-                rarity = item_data.get('rarity', 'common')
-                mods = item_data.get('mods', [])
-                color = rarity_colors.get(rarity, '#ffffff')
+            # Items de cette categorie
+            for item_data in sorted(cat_items, key=lambda x: x.get('rarity', 'common')):
+                item_frame = tk.Frame(content, bg=CypherpunkTheme.BG_DARK, padx=10, pady=5)
+                item_frame.pack(fill=tk.X, padx=10, pady=2)
                 
-                # Item header
-                items_list.insert(tk.END, f"[{rarity.upper()}] ", f"r_{rarity}")
-                items_list.insert(tk.END, f"{item_type}\n")
+                rarity = item_data.get('rarity', 'common')
+                color = rarity_colors.get(rarity, '#ffffff')
+                item_type = item_data.get('item_type', 'unknown').replace('_', ' ').title()
+                mods = item_data.get('mods', [])
+                value = item_data.get('value', 0)
+                
+                # Ligne principale
+                main_line = tk.Frame(item_frame, bg=CypherpunkTheme.BG_DARK)
+                main_line.pack(fill=tk.X)
+                
+                tk.Label(main_line, text=f"[{rarity.upper()[:3]}]", bg=CypherpunkTheme.BG_DARK,
+                        fg=color, font=("Consolas", 9, "bold")).pack(side=tk.LEFT)
+                tk.Label(main_line, text=f" {item_type}", bg=CypherpunkTheme.BG_DARK,
+                        fg=CypherpunkTheme.TEXT_PRIMARY, font=("Consolas", 10)).pack(side=tk.LEFT)
+                tk.Label(main_line, text=f"  💰 {value:.1f}", bg=CypherpunkTheme.BG_DARK,
+                        fg=CypherpunkTheme.TEXT_SECONDARY, font=("Consolas", 9)).pack(side=tk.RIGHT)
                 
                 # Mods
-                for mod in mods[:3]:
-                    mod_name = mod.get('mod_id', '').replace('mod_', '').replace('_', ' ').title()
-                    mod_value = mod.get('rolled_value', 0)
-                    roll_pct = mod.get('roll_percent', 50)
-                    tier = mod.get('tier', 'standard')[:3].upper()
-                    
-                    quality = "★" if roll_pct >= 95 else "◆" if roll_pct >= 80 else "●" if roll_pct >= 60 else "○"
-                    items_list.insert(tk.END, f"  {quality} [{tier}] {mod_name}: {mod_value:.0f} ({roll_pct:.0f}%)\n", "mod")
-                
-                if len(mods) > 3:
-                    items_list.insert(tk.END, f"  ... +{len(mods)-3} more\n", "more")
-                
-                items_list.insert(tk.END, "\n")
+                if mods:
+                    for mod in mods[:2]:
+                        mod_name = mod.get('mod_id', '').replace('mod_', '').replace('_', ' ').title()
+                        roll_pct = mod.get('roll_percent', 50)
+                        quality = "★" if roll_pct >= 95 else "◆" if roll_pct >= 80 else "●" if roll_pct >= 60 else "○"
+                        mod_text = f"  {quality} {mod_name}: {mod.get('rolled_value', 0):.0f}"
+                        tk.Label(item_frame, text=mod_text, bg=CypherpunkTheme.BG_DARK,
+                                fg=CypherpunkTheme.NEON_CYAN, font=("Consolas", 8)).pack(anchor=tk.W)
+    
+    def _create_gems_tab(self, parent, gems, rarity_colors):
+        """Cree l'onglet des gems"""
+        canvas = tk.Canvas(parent, bg=CypherpunkTheme.BG_SECONDARY, highlightthickness=0)
+        scrollbar = ttk.Scrollbar(parent, orient="vertical", command=canvas.yview)
+        content = tk.Frame(canvas, bg=CypherpunkTheme.BG_SECONDARY)
+        
+        canvas.configure(yscrollcommand=scrollbar.set)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        canvas.create_window((0, 0), window=content, anchor="nw")
+        content.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        
+        # Grouper par rarete
+        by_rarity = {}
+        for gem in gems:
+            r = gem.get('rarity', 'flawed')
+            if r not in by_rarity:
+                by_rarity[r] = []
+            by_rarity[r].append(gem)
+        
+        rarity_order = ['divine', 'transcendent', 'ethereal', 'radiant', 'pristine', 'polished', 'cut', 'rough', 'flawed']
+        
+        for rarity in rarity_order:
+            if rarity not in by_rarity:
+                continue
             
-            # Tags de couleur
-            for rarity, color in rarity_colors.items():
-                items_list.tag_config(f"r_{rarity}", foreground=color)
-            items_list.tag_config("mod", foreground=CypherpunkTheme.NEON_CYAN)
-            items_list.tag_config("more", foreground=CypherpunkTheme.TEXT_SECONDARY)
-            items_list.config(state=tk.DISABLED)
+            rarity_gems = by_rarity[rarity]
+            color = rarity_colors.get(rarity, '#ffffff')
+            
+            # Header rarete
+            header = tk.Frame(content, bg=color)
+            header.pack(fill=tk.X, padx=5, pady=(10, 5))
+            tk.Label(header, text=f" 💎 {rarity.upper()} ({len(rarity_gems)})",
+                    bg=color, fg="black", font=("Consolas", 11, "bold")).pack(side=tk.LEFT, padx=5, pady=3)
+            
+            for gem in rarity_gems:
+                gem_frame = tk.Frame(content, bg=CypherpunkTheme.BG_DARK, padx=10, pady=8)
+                gem_frame.pack(fill=tk.X, padx=10, pady=2)
+                
+                gem_type = gem.get('gem_type', 'unknown').replace('_', ' ').title()
+                power = gem.get('base_power', 0)
+                resonance = gem.get('resonance', 0)
+                purity = gem.get('purity', 0)
+                power_name = gem.get('power_name', 'Unknown')
+                power_desc = gem.get('power_description', '')
+                
+                # Nom et stats
+                main_line = tk.Frame(gem_frame, bg=CypherpunkTheme.BG_DARK)
+                main_line.pack(fill=tk.X)
+                tk.Label(main_line, text=f"💎 {gem_type}", bg=CypherpunkTheme.BG_DARK,
+                        fg=color, font=("Consolas", 10, "bold")).pack(side=tk.LEFT)
+                tk.Label(main_line, text=f"  ⚡{power:.0f}  🔄{resonance:.0f}%  ✨{purity:.0f}%",
+                        bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.TEXT_SECONDARY,
+                        font=("Consolas", 9)).pack(side=tk.RIGHT)
+                
+                # Pouvoir
+                tk.Label(gem_frame, text=f"  ⟡ {power_name}: {power_desc}",
+                        bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.NEON_PURPLE,
+                        font=("Consolas", 9)).pack(anchor=tk.W)
+    
+    def _create_fragments_tab(self, parent, fragments):
+        """Cree l'onglet des fragments"""
+        canvas = tk.Canvas(parent, bg=CypherpunkTheme.BG_SECONDARY, highlightthickness=0)
+        scrollbar = ttk.Scrollbar(parent, orient="vertical", command=canvas.yview)
+        content = tk.Frame(canvas, bg=CypherpunkTheme.BG_SECONDARY)
+        
+        canvas.configure(yscrollcommand=scrollbar.set)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        canvas.create_window((0, 0), window=content, anchor="nw")
+        content.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        
+        # Couleurs par essence
+        essence_colors = {
+            'quantum': '#00ffff', 'void': '#aa00ff', 'temporal': '#ffd700',
+            'chaos': '#ff0000', 'order': '#0088ff', 'life': '#00ff00',
+            'death': '#666666', 'fire': '#ff4400', 'ice': '#88ccff',
+            'lightning': '#ffff00', 'earth': '#8b4513', 'wind': '#aaffaa',
+            'light': '#ffffff', 'shadow': '#333333', 'spirit': '#ff88ff',
+            'matter': '#888888', 'energy': '#ffaa00', 'entropy': '#880088'
+        }
+        
+        # Grouper par essence
+        by_essence = {}
+        for frag in fragments:
+            e = frag.get('essence', 'unknown')
+            if e not in by_essence:
+                by_essence[e] = []
+            by_essence[e].append(frag)
+        
+        for essence, essence_frags in sorted(by_essence.items()):
+            color = essence_colors.get(essence, '#ffffff')
+            
+            # Header essence
+            header = tk.Frame(content, bg=CypherpunkTheme.BG_PANEL)
+            header.pack(fill=tk.X, padx=5, pady=(10, 5))
+            tk.Label(header, text=f" 🔮 {essence.upper()} ({len(essence_frags)})",
+                    bg=CypherpunkTheme.BG_PANEL, fg=color,
+                    font=("Consolas", 11, "bold")).pack(side=tk.LEFT, padx=5, pady=3)
+            
+            for frag in essence_frags:
+                frag_frame = tk.Frame(content, bg=CypherpunkTheme.BG_DARK, padx=10, pady=5)
+                frag_frame.pack(fill=tk.X, padx=10, pady=2)
+                
+                frag_type = frag.get('fragment_type', 'shard').title()
+                mass = frag.get('mass', 0)
+                purity = frag.get('purity', 0)
+                stability = frag.get('stability', 0)
+                voting = frag.get('voting_power', 0)
+                value = frag.get('market_value', 0)
+                
+                # Ligne principale
+                main_line = tk.Frame(frag_frame, bg=CypherpunkTheme.BG_DARK)
+                main_line.pack(fill=tk.X)
+                tk.Label(main_line, text=f"🔮 {frag_type}", bg=CypherpunkTheme.BG_DARK,
+                        fg=color, font=("Consolas", 10, "bold")).pack(side=tk.LEFT)
+                tk.Label(main_line, text=f"  💰 {value:.0f}", bg=CypherpunkTheme.BG_DARK,
+                        fg=CypherpunkTheme.TEXT_SECONDARY, font=("Consolas", 9)).pack(side=tk.RIGHT)
+                
+                # Stats
+                stats_text = f"  ⚖ Mass: {mass:.0f}  ✨ Purity: {purity}%  🔒 Stability: {stability}%"
+                if voting > 0:
+                    stats_text += f"  🗳 Vote: {voting:.2f}"
+                tk.Label(frag_frame, text=stats_text, bg=CypherpunkTheme.BG_DARK,
+                        fg=CypherpunkTheme.TEXT_SECONDARY, font=("Consolas", 8)).pack(anchor=tk.W)
+    
+    def _create_stones_tab(self, parent, stones):
+        """Cree l'onglet des pierres philosophales"""
+        canvas = tk.Canvas(parent, bg=CypherpunkTheme.BG_SECONDARY, highlightthickness=0)
+        scrollbar = ttk.Scrollbar(parent, orient="vertical", command=canvas.yview)
+        content = tk.Frame(canvas, bg=CypherpunkTheme.BG_SECONDARY)
+        
+        canvas.configure(yscrollcommand=scrollbar.set)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        canvas.create_window((0, 0), window=content, anchor="nw")
+        content.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        
+        if not stones:
+            tk.Label(content, text="\n\n  ⚗ Aucune Pierre Philosophale dans ce vault\n\n"
+                    "  Les Pierres Philosophales sont des objets extremement rares\n"
+                    "  reserves aux 1000 premiers vaults.",
+                    bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.TEXT_SECONDARY,
+                    font=("Consolas", 11), justify=tk.LEFT).pack(padx=20, pady=20)
+            return
+        
+        for stone in stones:
+            stone_frame = tk.Frame(content, bg=CypherpunkTheme.BG_DARK, padx=15, pady=10)
+            stone_frame.pack(fill=tk.X, padx=10, pady=5)
+            
+            stone_type = stone.get('stone_type', 'Unknown').replace('_', ' ').title()
+            transmutation = stone.get('transmutation_power', 0)
+            purity = stone.get('purity', 0)
+            abilities = stone.get('abilities', [])
+            
+            # Header
+            tk.Label(stone_frame, text=f"⚗ {stone_type}",
+                    bg=CypherpunkTheme.BG_DARK, fg="#FFD700",
+                    font=("Consolas", 12, "bold")).pack(anchor=tk.W)
+            
+            # Stats
+            tk.Label(stone_frame, text=f"  🔥 Transmutation: {transmutation}  ✨ Purity: {purity}%",
+                    bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.NEON_CYAN,
+                    font=("Consolas", 10)).pack(anchor=tk.W)
+            
+            # Abilities
+            if abilities:
+                tk.Label(stone_frame, text="  Abilities:", bg=CypherpunkTheme.BG_DARK,
+                        fg=CypherpunkTheme.TEXT_SECONDARY, font=("Consolas", 9)).pack(anchor=tk.W)
+                for ability in abilities[:5]:
+                    tk.Label(stone_frame, text=f"    ⟡ {ability}",
+                            bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.NEON_PURPLE,
+                            font=("Consolas", 9)).pack(anchor=tk.W)
+    
+    def _create_artifacts_tab(self, parent, artifacts):
+        """Cree l'onglet des artifacts"""
+        canvas = tk.Canvas(parent, bg=CypherpunkTheme.BG_SECONDARY, highlightthickness=0)
+        scrollbar = ttk.Scrollbar(parent, orient="vertical", command=canvas.yview)
+        content = tk.Frame(canvas, bg=CypherpunkTheme.BG_SECONDARY)
+        
+        canvas.configure(yscrollcommand=scrollbar.set)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        canvas.create_window((0, 0), window=content, anchor="nw")
+        content.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
+        
+        if not artifacts:
+            tk.Label(content, text="\n\n  🏛 Aucun Artifact dans ce vault",
+                    bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.TEXT_SECONDARY,
+                    font=("Consolas", 11)).pack(padx=20, pady=20)
+            return
+        
+        for artifact in artifacts:
+            art_frame = tk.Frame(content, bg=CypherpunkTheme.BG_DARK, padx=15, pady=10)
+            art_frame.pack(fill=tk.X, padx=10, pady=5)
+            
+            art_name = artifact.get('name', 'Unknown Artifact')
+            art_type = artifact.get('artifact_type', 'unknown').replace('_', ' ').title()
+            power = artifact.get('power', 0)
+            resonance = artifact.get('resonance', 0)
+            tier = artifact.get('tier', 'common').upper()
+            
+            tier_colors = {'PRIMORDIAL': '#ff00ff', 'LEGENDARY': '#ff8000', 'EPIC': '#aa00ff', 
+                          'RARE': '#0088ff', 'COMMON': '#ffffff'}
+            color = tier_colors.get(tier, '#ffffff')
+            
+            # Header
+            main_line = tk.Frame(art_frame, bg=CypherpunkTheme.BG_DARK)
+            main_line.pack(fill=tk.X)
+            tk.Label(main_line, text=f"🏛 [{tier}]", bg=CypherpunkTheme.BG_DARK,
+                    fg=color, font=("Consolas", 10, "bold")).pack(side=tk.LEFT)
+            tk.Label(main_line, text=f" {art_name}", bg=CypherpunkTheme.BG_DARK,
+                    fg=CypherpunkTheme.TEXT_PRIMARY, font=("Consolas", 11, "bold")).pack(side=tk.LEFT)
+            
+            # Type et stats
+            tk.Label(art_frame, text=f"  Type: {art_type}  ⚡ Power: {power:,.0f}  🔄 Resonance: {resonance:.1f}%",
+                    bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.NEON_CYAN,
+                    font=("Consolas", 9)).pack(anchor=tk.W)
+    
+    def _load_vault_fragments(self, vault_num: int) -> list:
+        """Charge les fragments d'un vault"""
+        fragments = []
+        fragments_dir = Path(self.base_path) / "fragment_nexus" / "fragments"
+        if not fragments_dir.exists():
+            return fragments
+        for f in fragments_dir.glob("fragment_*.json"):
+            try:
+                with open(f, 'r', encoding='utf-8') as file:
+                    data = json.load(file)
+                if data.get('current_vault') == vault_num or data.get('origin_vault') == vault_num:
+                    fragments.append(data)
+            except:
+                pass
+        return fragments
+    
+    def _load_vault_gems(self, vault_num: int) -> list:
+        """Charge les gems d'un vault"""
+        gems = []
+        gems_dir = Path(self.base_path) / "gem_vault" / "gems"
+        if not gems_dir.exists():
+            return gems
+        for f in gems_dir.glob("gem_*.json"):
+            try:
+                with open(f, 'r', encoding='utf-8') as file:
+                    data = json.load(file)
+                if data.get('current_vault') == vault_num or data.get('origin_vault') == vault_num:
+                    gems.append(data)
+            except:
+                pass
+        # Trier par rarete
+        rarity_order = {'divine': 0, 'transcendent': 1, 'ethereal': 2, 'radiant': 3, 
+                       'pristine': 4, 'polished': 5, 'cut': 6, 'rough': 7, 'flawed': 8}
+        gems.sort(key=lambda x: rarity_order.get(x.get('rarity', 'flawed'), 9))
+        return gems
+    
+    def _load_vault_stones(self, vault_num: int) -> list:
+        """Charge les pierres philosophales d'un vault"""
+        stones = []
+        stones_dir = Path(self.base_path) / "philosopher_stones"
+        if not stones_dir.exists():
+            return stones
+        for f in stones_dir.glob("stone_*.json"):
+            try:
+                with open(f, 'r', encoding='utf-8') as file:
+                    data = json.load(file)
+                if data.get('owner_vault') == vault_num or data.get('origin_vault') == vault_num:
+                    stones.append(data)
+            except:
+                pass
+        return stones
+    
+    def _load_vault_artifacts(self, vault_num: int) -> list:
+        """Charge les artifacts d'un vault"""
+        artifacts = []
+        artifacts_dir = Path(self.base_path) / "artifact_vault" / "artifacts"
+        if not artifacts_dir.exists():
+            return artifacts
+        for f in artifacts_dir.glob("artifact_*.json"):
+            try:
+                with open(f, 'r', encoding='utf-8') as file:
+                    data = json.load(file)
+                if data.get('current_vault') == vault_num or data.get('origin_vault') == vault_num:
+                    artifacts.append(data)
+            except:
+                pass
+        return artifacts
     
     def _refresh_runes(self):
         """Rafraichit les donnees des runes"""
