@@ -152,7 +152,7 @@ class StrengthEvaluator:
         }
 
     @staticmethod
-    def analyze_algorithm_vulnerabilities(algorithm: str) -> Dict[str, str]:
+    def analyze_algorithm_vulnerabilities(algorithm: str) -> Dict[str, Union[str, bool]]:
         """
         Analyze known vulnerabilities for an algorithm.
 
@@ -175,7 +175,7 @@ class StrengthEvaluator:
         }
 
     @staticmethod
-    def assess_post_quantum_readiness(system_config: Dict) -> Dict[str, Union[str, bool]]:
+    def assess_post_quantum_readiness(system_config: Dict) -> Dict[str, Union[str, bool, List[str]]]:
         """
         Assess system readiness for post-quantum cryptography.
 
@@ -228,14 +228,14 @@ class ComplianceChecker:
     }
 
     @staticmethod
-    def check_nist_compliance(system_config: Dict) -> Dict[str, Union[str, List[str]]]:
+    def check_nist_compliance(system_config: Dict) -> Dict[str, Union[bool, List[str]]]:
         """
         Check compliance with NIST standards.
 
         :param system_config: System configuration
         :return: Compliance report
         """
-        report = {
+        report: Dict[str, Union[bool, List[str]]] = {
             'compliant': True,
             'violations': [],
             'recommendations': []
@@ -397,7 +397,7 @@ class SecurityAuditor:
         self.compliance_checker = ComplianceChecker()
         self.quantum_auditor = QuantumSecurityAuditor()
 
-    def audit_entropy(self, data: Union[bytes, np.ndarray]) -> Dict[str, float]:
+    def audit_entropy(self, data: Union[bytes, np.ndarray]) -> Dict[str, Union[float, Dict[str, float]]]:
         """
         Comprehensive entropy audit.
 
@@ -419,7 +419,7 @@ class SecurityAuditor:
         else:
             raise ValueError("Unsupported data type for entropy audit")
 
-    def audit_cryptographic_strength(self, system_config: Dict) -> Dict[str, Union[str, Dict]]:
+    def audit_cryptographic_strength(self, system_config: Dict) -> Dict[str, Union[str, bool, List[str]]]:
         """
         Audit cryptographic strength.
 
@@ -428,7 +428,7 @@ class SecurityAuditor:
         """
         return self.strength_evaluator.assess_post_quantum_readiness(system_config)
 
-    def audit_compliance(self, system_config: Dict) -> Dict[str, Union[str, List[str]]]:
+    def audit_compliance(self, system_config: Dict) -> Dict[str, Union[bool, List[str]]]:
         """
         Audit compliance with standards.
 
@@ -505,7 +505,7 @@ class SecurityAuditor:
 # Utility Functions
 # ============================================================================
 
-def audit_key_entropy(key: bytes) -> Dict[str, float]:
+def audit_key_entropy(key: bytes) -> Dict[str, Union[float, Dict[str, float]]]:
     """
     Convenience function to audit key entropy.
 

@@ -33,11 +33,16 @@ if module_dir not in sys.path:
     sys.path.insert(0, module_dir)
 
 # Blender disponible?
+from typing import Any
+bpy: Any = None
+BLENDER_AVAILABLE = False
+
 try:
-    import bpy
+    import bpy as _bpy
+    bpy = _bpy
     BLENDER_AVAILABLE = True
 except ImportError:
-    BLENDER_AVAILABLE = False
+    pass
 
 # ============================================================================
 # IMPORTS CORE

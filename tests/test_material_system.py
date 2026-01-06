@@ -1,12 +1,24 @@
 """
 Test du système de simulation matérielle
 """
+from __future__ import annotations
 
 import sys
 import os
+from typing import TYPE_CHECKING
 
-# Ajouter le répertoire parent au path
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+# Ajouter le répertoire parent (poly_spinor_nexus_7d) au path
+_parent_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _parent_dir not in sys.path:
+    sys.path.insert(0, _parent_dir)
+
+# Imports pour le type checking (pyright) - ignorés car sys.path est modifié dynamiquement
+if TYPE_CHECKING:
+    from core.material_database import PolyhedronMaterialDatabase, SurfaceMaterialDatabase, MaterialProperties  # type: ignore[import-not-found]
+    from core.physics_engine import PolyhedronPhysicsEngine, PolyhedronType  # type: ignore[import-not-found]
+    from core.material_fingerprint import MaterialFingerprintExtractor, CryptoVertexCalculator  # type: ignore[import-not-found]
+    from protocols.material_vault import MaterialBasedVaultSystem, AccessLevel, VaultAccessDenied  # type: ignore[import-not-found]
+    from core.material_simulation_pipeline import CompleteMaterialSimulationPipeline  # type: ignore[import-not-found]
 
 def test_material_database():
     print("\n" + "=" * 60)
@@ -45,6 +57,7 @@ def test_physics_engine():
     
     # Obtenir le tungsten
     tungsten = MATERIAL_DB.get_material('tungsten')
+    assert tungsten is not None, "Matériau tungsten non trouvé!"
     print(f"Matériau: {tungsten.name} (densité: {tungsten.density} kg/m³)")
     
     # Créer le moteur
@@ -100,6 +113,7 @@ def test_fingerprint_extraction():
     
     for mat_name in materials:
         material = MATERIAL_DB.get_material(mat_name)
+        assert material is not None, f"Matériau {mat_name} non trouvé!"
         engine = PolyhedronPhysicsEngine(PolyhedronType.D6, material)
         engine.dt = 0.001  # Faster for testing
         
@@ -145,6 +159,7 @@ def test_vault_system():
         results = []
         for mat_name in ['tungsten', 'sapphire']:
             material = MATERIAL_DB.get_material(mat_name)
+            assert material is not None, f"Matériau {mat_name} non trouvé!"
             engine = PolyhedronPhysicsEngine(PolyhedronType.D20, material)
             engine.dt = 0.001  # Faster for testing
             result = engine.simulate_throw(

@@ -1,0 +1,174 @@
+version: '3.8'
+
+services:
+  # ===========================================================================
+  # Main Vault Application
+  # ===========================================================================
+  vault-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: polyspinor-vault
+    restart: unless-stopped
+    ports:
+      - "8080:8080"  # API
+      - "9090:9090"  # Prometheus metrics
+    volumes:
+      - vault_data:/app/vault_storage
+      - vault_keys:/app/vault_storage/keys
+      - vault_logs:/app/vault_storage/logs
+      - ./config:/app/config:ro
+    environment:
+      - VAULT_ENV=production
+      - VAULT_LOG_LEVEL=INFO
+      - VAULT_API_ENABLED=true
+      - VAULT_PROMETHEUS_ENABLED=true
+    networks:
+      - vault-network
+    depends_on:
+      - redis
+    healthcheck:
+      test: ["CMD", "python", "-c", "import requests; requests.get('http://localhost:8080/health')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # ===========================================================================
+  # Redis Cache (for session management and caching)
+  # ===========================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: polyspinor-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    networks:
+      - vault-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  # ===========================================================================
+  # Prometheus (Monitoring)
+  # ===========================================================================
+  prometheus:
+    image: prom/prometheus:v2.47.0
+    container_name: polyspinor-prometheus
+    restart: unless-stopped
+    ports:
+      - "9091:9090"
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--storage.tsdb.retention.time=30d'
+      - '--web.enable-lifecycle'
+    networks:
+      - vault-network
+    depends_on:
+      - vault-app
+
+  # ===========================================================================
+  # Grafana (Dashboards)
+  # ===========================================================================
+  grafana:
+    image: grafana/grafana:10.1.0
+    container_name: polyspinor-grafana
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    volumes:
+      - grafana_data:/var/lib/grafana
+      - ./docker/grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./docker/grafana/dashboards:/var/lib/grafana/dashboards:ro
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+      - GF_USERS_ALLOW_SIGN_UP=false
+      - GF_SERVER_ROOT_URL=http://localhost:3000
+    networks:
+      - vault-network
+    depends_on:
+      - prometheus
+
+  # ===========================================================================
+  # Blockchain Node (Optional - for local testing)
+  # ===========================================================================
+  ganache:
+    image: trufflesuite/ganache:v7.9.1
+    container_name: polyspinor-ganache
+    restart: unless-stopped
+    ports:
+      - "8545:8545"
+    command:
+      - --chain.chainId=1337
+      - --wallet.totalAccounts=10
+      - --wallet.defaultBalance=1000
+      - --miner.blockGasLimit=30000000
+      - --database.dbPath=/data
+    volumes:
+      - ganache_data:/data
+    networks:
+      - vault-network
+    profiles:
+      - dev
+
+  # ===========================================================================
+  # Backup Service (Scheduled backups)
+  # ===========================================================================
+  backup:
+    build:
+      context: .
+      dockerfile: Dockerfile.backup
+    container_name: polyspinor-backup
+    restart: unless-stopped
+    volumes:
+      - vault_data:/app/vault_storage:ro
+      - vault_backups:/backups
+    environment:
+      - BACKUP_SCHEDULE=0 3 * * *
+      - BACKUP_RETENTION_DAYS=30
+      - BACKUP_COMPRESSION=true
+    networks:
+      - vault-network
+    profiles:
+      - backup
+
+# =============================================================================
+# Networks
+# =============================================================================
+networks:
+  vault-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.28.0.0/16
+
+# =============================================================================
+# Volumes
+# =============================================================================
+volumes:
+  vault_data:
+    driver: local
+  vault_keys:
+    driver: local
+  vault_logs:
+    driver: local
+  vault_backups:
+    driver: local
+  redis_data:
+    driver: local
+  prometheus_data:
+    driver: local
+  grafana_data:
+    driver: local
+  ganache_data:
+    driver: local

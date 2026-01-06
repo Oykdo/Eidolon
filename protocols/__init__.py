@@ -32,7 +32,21 @@ try:
     from .authority_rotation import PolySpinorAuthorityRotation
     from .emergency_protocol import PolySpinorEmergencyProtocol
     from .material_vault import MaterialBasedVaultSystem, VaultCredentials
-    from .vault_monitoring import VaultMonitoringSystem, create_vault_monitoring
+    from .vault_monitoring import VaultMonitoringSystem, VaultActivityMonitor, create_vault_monitoring
     from .hyper_cluster import HyperCluster, HyperVerifiableEscrow
 except ImportError as e:
     print(f"[WARN] Import partiel protocols: {e}")
+
+# Tâches programmées
+try:
+    from .scheduled_tasks import (
+        ScheduledTaskManager,
+        ScheduledTask,
+        RecurringTask,
+        TaskStatus,
+        TaskPriority,
+        TaskType
+    )
+    SCHEDULED_TASKS_AVAILABLE = True
+except ImportError:
+    SCHEDULED_TASKS_AVAILABLE = False

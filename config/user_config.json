@@ -1,0 +1,26 @@
+{
+  "_comment": "Configuration utilisateur - surcharge vault_config.json",
+  "_note": "Modifiez ce fichier pour personnaliser votre configuration",
+  
+  "chains": {
+    "ethereum": {
+      "rpc": "YOUR_ETHEREUM_RPC_URL_HERE",
+      "enabled": true
+    },
+    "polygon": {
+      "rpc": "YOUR_POLYGON_RPC_URL_HERE",
+      "enabled": true
+    }
+  },
+  
+  "notifications": {
+    "webhook_url": "",
+    "email_enabled": false,
+    "email_recipients": []
+  },
+  
+  "api": {
+    "enabled": false,
+    "port": 8080
+  }
+}

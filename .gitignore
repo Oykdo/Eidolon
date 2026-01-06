@@ -1,4 +1,11 @@
+# =============================================================================
+# Poly-Spinor Nexus 7D - GitIgnore
+# IMPORTANT: Protège les données sensibles et clés cryptographiques
+# =============================================================================
+
+# -----------------------------------------------------------------------------
 # Python
+# -----------------------------------------------------------------------------
 __pycache__/
 *.py[cod]
 *$py.class
@@ -8,39 +15,151 @@ __pycache__/
 .eggs/
 dist/
 build/
+wheels/
+*.egg
+MANIFEST
 
+# -----------------------------------------------------------------------------
 # Virtual environments
+# -----------------------------------------------------------------------------
 venv/
 .venv/
 env/
+ENV/
 
+# -----------------------------------------------------------------------------
 # IDE
+# -----------------------------------------------------------------------------
 .idea/
-.vscode/
 *.swp
 *.swo
+*~
 
-# Vault storage data (sensitive)
+# -----------------------------------------------------------------------------
+# SENSITIVE DATA - CRITICAL SECURITY
+# -----------------------------------------------------------------------------
+
+# Vault cryptographic keys (NEVER COMMIT)
+*.psnx
+*.blend_data
+*.vault_key
+*.master_key
+*.private_key
+*.secret_key
+
+# Encrypted vault data
 vault_storage/data/
 vault_storage/keys/*.psnx
 vault_storage/keys/*.blend_data
 vault_storage/keys/*.enc
+vault_storage/documents/*.enc
+vault_storage/persistent/
+vault_storage/backups/*.enc
+vault_storage/backups/*.tar.gz
+vault_storage/backups/*.zip
+
+# Avatar and identity files
 vault_storage/avatars/*.png
+vault_storage/avatars/*.jpg
+
+# Salt and key files
 *.salt
 *.key
+*.pem
+*.p12
+*.pfx
 
-# Keep directory structure
+# Environment files with secrets
+.env
+.env.*
+!.env.example
+
+# Wallet and blockchain keys
+**/wallet_*.json
+**/keystore/
+*.keystore
+
+# -----------------------------------------------------------------------------
+# Quantum/Post-Quantum sensitive data
+# -----------------------------------------------------------------------------
+
+# Lattice-based keys
+*.lattice_key
+*.kyber_key
+*.dilithium_key
+*.ntru_key
+
+# Bell state data
+*.bell_state
+*.epr_data
+*.quantum_state
+
+# Spinor cryptographic data
+*.spinor_key
+*.clifford_data
+
+# -----------------------------------------------------------------------------
+# Keep directory structure (empty dirs for git)
+# -----------------------------------------------------------------------------
 !vault_storage/.gitkeep
 !vault_storage/keys/.gitkeep
+!vault_storage/data/.gitkeep
+!vault_storage/documents/.gitkeep
+!vault_storage/persistent/.gitkeep
+!vault_storage/backups/.gitkeep
+!vault_storage/avatars/.gitkeep
+!vault_storage/logs/.gitkeep
 
-# OS
+# -----------------------------------------------------------------------------
+# OS Files
+# -----------------------------------------------------------------------------
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+desktop.ini
 
-# Logs
+# -----------------------------------------------------------------------------
+# Logs and temp files
+# -----------------------------------------------------------------------------
 *.log
+*.tmp
+*.temp
+*.bak
+*.swp
+logs/
+*.cache
 
+# -----------------------------------------------------------------------------
 # Test artifacts
+# -----------------------------------------------------------------------------
 .pytest_cache/
 .coverage
 htmlcov/
+.tox/
+.nox/
+coverage.xml
+*.cover
+
+# -----------------------------------------------------------------------------
+# Build artifacts
+# -----------------------------------------------------------------------------
+*.spec
+specs/
+
+# -----------------------------------------------------------------------------
+# Documentation build
+# -----------------------------------------------------------------------------
+docs/_build/
+site/
+
+# -----------------------------------------------------------------------------
+# Local development
+# -----------------------------------------------------------------------------
+*.local
+.local/
+scratch/
+tmp/

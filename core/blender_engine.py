@@ -5,15 +5,20 @@ Visualisation des clusters quantiques et matériaux cryptographiques
 
 import numpy as np
 import math
-from typing import List, Dict, Optional, Any, Tuple
+from typing import List, Dict, Optional, Any, Tuple, TYPE_CHECKING
 from dataclasses import dataclass
 from enum import Enum
 
+# Blender Python API (optionnel)
+bpy: Any = None
+BLENDER_AVAILABLE = False
+
 try:
-    import bpy
+    import bpy as _bpy
+    bpy = _bpy
     BLENDER_AVAILABLE = True
 except ImportError:
-    BLENDER_AVAILABLE = False
+    pass
     
 from .quantum_verification import AdvancedBellVerification
 from .spatial_capture import SpatialCaptureSystem, Point7D, DieType

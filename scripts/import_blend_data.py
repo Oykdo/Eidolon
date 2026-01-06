@@ -12,15 +12,20 @@ Usage:
 
 import json
 import math
+from typing import Any
 
 # MODIFIER CE CHEMIN avec votre fichier .blend_data
 BLEND_DATA_PATH = r"C:\Users\jerem\Desktop\scrt\Enoptron\poly_spinor_nexus_7d\vault_storage\keys\complete_key_alice.blend_data"
 
+# Blender Python API (optionnel)
+bpy: Any = None
+BLENDER_AVAILABLE = False
+
 try:
-    import bpy
+    import bpy as _bpy
+    bpy = _bpy
     BLENDER_AVAILABLE = True
 except ImportError:
-    BLENDER_AVAILABLE = False
     print("Ce script doit etre execute dans Blender!")
 
 

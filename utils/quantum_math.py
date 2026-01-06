@@ -108,7 +108,10 @@ class SpinorMath:
     @staticmethod
     def spinor_inner_product(phi: np.ndarray, psi: np.ndarray) -> complex:
         """Produit interne de Dirac <phi|psi>"""
-        return np.conj(phi).T @ psi
+        result = np.conj(phi).T @ psi
+        if np.isscalar(result):
+            return complex(float(np.real(result)), float(np.imag(result)))
+        return complex(float(np.real(result.item())), float(np.imag(result.item())))
 
     @staticmethod
     def spinor_norm(spinor: np.ndarray) -> float:
@@ -282,7 +285,10 @@ class QuantumMathHelpers:
     def expectation_value(operator: np.ndarray, state: np.ndarray) -> complex:
         """Valeur d'expectation <psi|O|psi>"""
         bra = np.conj(state).T
-        return bra @ operator @ state
+        result = bra @ operator @ state
+        if np.isscalar(result):
+            return complex(float(np.real(result)), float(np.imag(result)))
+        return complex(float(np.real(result.item())), float(np.imag(result.item())))
 
     @staticmethod
     def commutator(A: np.ndarray, B: np.ndarray) -> np.ndarray:

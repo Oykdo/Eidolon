@@ -853,7 +853,7 @@ class CompletePolySpinorKeyGenerator:
     def _generate_native_blend(self, key_data: CompleteKeyData,
                                 output_path: str) -> str:
         """Genere un fichier .blend natif (requiert Blender)"""
-        import bpy
+        import bpy  # type: ignore[import-not-found]
         
         self._report_progress(9, 0.1, "Initialisation Blender...")
         
@@ -1101,7 +1101,7 @@ class CompletePolySpinorKeyGenerator:
     
     def _create_key_polyhedra(self, key_data: CompleteKeyData):
         """Cree les 7 polyedres-cles dans Blender"""
-        import bpy
+        import bpy  # type: ignore[import-not-found]
         
         for i, (poly_name, traj) in enumerate(key_data.physics_data.trajectories.items()):
             angle = i * 2 * np.pi / 7
@@ -1130,7 +1130,7 @@ class CompletePolySpinorKeyGenerator:
     
     def _store_crypto_data_in_scene(self, key_data: CompleteKeyData):
         """Stocke les donnees cryptographiques dans la scene Blender"""
-        import bpy
+        import bpy  # type: ignore[import-not-found]
         
         scene = bpy.context.scene
         scene.name = 'PolySpinorVault'
@@ -1163,7 +1163,7 @@ class CompletePolySpinorKeyGenerator:
     
     def _setup_camera_and_lights(self):
         """Configure camera et lumieres pour la scene"""
-        import bpy
+        import bpy  # type: ignore[import-not-found]
         
         # Camera
         bpy.ops.object.camera_add(location=(15, -15, 12))

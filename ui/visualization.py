@@ -7,11 +7,16 @@ import numpy as np
 from typing import Dict, List, Optional, Any
 from datetime import datetime
 
+# Blender Python API (optionnel)
+bpy: Any = None
+BLENDER_AVAILABLE = False
+
 try:
-    import bpy
+    import bpy as _bpy
+    bpy = _bpy
     BLENDER_AVAILABLE = True
 except ImportError:
-    BLENDER_AVAILABLE = False
+    pass
 
 import sys
 sys.path.append('..')

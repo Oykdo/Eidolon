@@ -13,7 +13,13 @@ Modules:
 - evm_wallet: Wallet EVM pour tokens ERC20/NFTs
 - real_post_quantum: Algorithmes post-quantiques reels (pqcrypto)
 - secure_key_storage: Stockage securise des cles
+- persistent_vault: Gestionnaire de vault persistant
+- vault_config: Configuration du vault
 """
+
+__version__ = "1.0.0"
+__author__ = "Poly-Spinor Team"
+__license__ = "MIT"
 
 # Capture et verification
 from .spatial_capture import SpatialCaptureSystem, QuantumDataFusion, Point7D, DieType
@@ -47,3 +53,50 @@ try:
     from .evm_wallet import VaultHDWallet, VaultAssetManager, EVMChain, WEB3_AVAILABLE
 except ImportError:
     WEB3_AVAILABLE = False
+
+# Alchemy Integration (optionnel)
+try:
+    from .alchemy_integration import (
+        AlchemyClient,
+        AlchemyNetwork,
+        AlchemyVaultIntegration,
+        AlchemyWebhookManager,
+        AlchemyNFT,
+        AlchemyToken,
+        AlchemyTransfer,
+        AlchemyGasEstimate,
+        create_alchemy_client
+    )
+    ALCHEMY_AVAILABLE = True
+except ImportError:
+    ALCHEMY_AVAILABLE = False
+
+# Vault Persistant
+try:
+    from .persistent_vault import (
+        PersistentVaultManager,
+        VaultAsset,
+        VaultDocument,
+        VaultToken,
+        VaultTransfer,
+        create_vault,
+        open_vault
+    )
+    PERSISTENT_VAULT_AVAILABLE = True
+except ImportError:
+    PERSISTENT_VAULT_AVAILABLE = False
+
+# Configuration du Vault
+try:
+    from .vault_config import (
+        VaultConfigManager,
+        VaultConfiguration,
+        SecurityConfig,
+        BackupConfig,
+        NetworkConfig,
+        UIConfig,
+        TransferConfig
+    )
+    VAULT_CONFIG_AVAILABLE = True
+except ImportError:
+    VAULT_CONFIG_AVAILABLE = False

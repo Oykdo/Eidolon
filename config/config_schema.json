@@ -1,0 +1,187 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Poly-Spinor Nexus 7D Vault Configuration",
+  "description": "Schema for vault configuration validation",
+  "type": "object",
+  "properties": {
+    "version": {
+      "type": "string",
+      "description": "Configuration version"
+    },
+    "vault_settings": {
+      "type": "object",
+      "properties": {
+        "persistence": {
+          "type": "object",
+          "properties": {
+            "auto_save_interval": {
+              "type": "integer",
+              "minimum": 60,
+              "maximum": 3600,
+              "description": "Auto-save interval in seconds"
+            },
+            "backup_count": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100
+            },
+            "backup_interval": {
+              "type": "integer",
+              "minimum": 3600
+            },
+            "backup_retention_days": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 365
+            },
+            "compress_backups": {
+              "type": "boolean"
+            }
+          }
+        },
+        "security": {
+          "type": "object",
+          "properties": {
+            "require_dual_key": {
+              "type": "boolean"
+            },
+            "max_login_attempts": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 10
+            },
+            "session_timeout": {
+              "type": "integer",
+              "minimum": 300,
+              "maximum": 86400
+            },
+            "auto_lock_minutes": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 60
+            },
+            "kdf_iterations": {
+              "type": "integer",
+              "minimum": 10000
+            }
+          }
+        },
+        "monitoring": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "check_interval": {
+              "type": "integer",
+              "minimum": 10,
+              "maximum": 3600
+            },
+            "alert_threshold": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 100
+            }
+          }
+        },
+        "transfers": {
+          "type": "object",
+          "properties": {
+            "default_delay_days": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 365
+            },
+            "min_delay_days": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "max_delay_days": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "auto_execute": {
+              "type": "boolean"
+            },
+            "confirmation_required": {
+              "type": "boolean"
+            }
+          }
+        }
+      }
+    },
+    "chains": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "properties": {
+          "rpc": {
+            "type": "string",
+            "format": "uri"
+          },
+          "chain_id": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "explorer": {
+            "type": "string",
+            "format": "uri"
+          },
+          "symbol": {
+            "type": "string"
+          },
+          "enabled": {
+            "type": "boolean"
+          }
+        },
+        "required": ["rpc", "chain_id"]
+      }
+    },
+    "storage": {
+      "type": "object",
+      "properties": {
+        "vault_directory": {
+          "type": "string"
+        },
+        "max_document_size_mb": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "max_vault_size_gb": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "encryption_algorithm": {
+          "type": "string",
+          "enum": ["AES-256-GCM", "AES-128-GCM", "ChaCha20-Poly1305"]
+        },
+        "compression_enabled": {
+          "type": "boolean"
+        }
+      }
+    },
+    "ui": {
+      "type": "object",
+      "properties": {
+        "theme": {
+          "type": "string",
+          "enum": ["dark", "light", "system"]
+        },
+        "language": {
+          "type": "string",
+          "enum": ["fr", "en", "de", "es"]
+        },
+        "window_width": {
+          "type": "integer",
+          "minimum": 800
+        },
+        "window_height": {
+          "type": "integer",
+          "minimum": 600
+        }
+      }
+    }
+  },
+  "required": ["version", "vault_settings"]
+}

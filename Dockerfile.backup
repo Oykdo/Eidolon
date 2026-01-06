@@ -1,0 +1,41 @@
+# =============================================================================
+# Poly-Spinor Nexus 7D - Backup Service Dockerfile
+# =============================================================================
+
+FROM python:3.11-alpine
+
+LABEL maintainer="Poly-Spinor Team"
+LABEL description="Automated backup service for Poly-Spinor Vault"
+
+# Install dependencies
+RUN apk add --no-cache \
+    bash \
+    dcron \
+    gzip \
+    tar \
+    tzdata
+
+# Create backup user
+RUN addgroup -S backup && adduser -S backup -G backup
+
+WORKDIR /app
+
+# Copy backup script
+COPY docker/scripts/backup.sh /app/backup.sh
+RUN chmod +x /app/backup.sh
+
+# Create directories
+RUN mkdir -p /backups /app/vault_storage && \
+    chown -R backup:backup /backups /app
+
+# Environment variables
+ENV BACKUP_SCHEDULE="0 3 * * *"
+ENV BACKUP_RETENTION_DAYS=30
+ENV BACKUP_COMPRESSION=true
+ENV TZ=UTC
+
+# Setup cron
+RUN echo "${BACKUP_SCHEDULE} /app/backup.sh >> /var/log/backup.log 2>&1" > /etc/crontabs/backup
+
+# Start cron daemon
+CMD ["crond", "-f", "-l", "2"]

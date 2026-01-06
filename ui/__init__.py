@@ -1,6 +1,7 @@
 """
 UI components for Poly-Spinor Nexus 7D
 - vault_gui_complete.py: Interface principale du vault (tkinter)
+- vault_monitor.py: Interface de monitoring du vault (tkinter)
 - main_panel.py: Panneau Blender pour generation de cles
 - visualization.py: Visualisation quantique Blender
 - escrow_interface.py: Interface d'entiercement Blender
@@ -8,6 +9,13 @@ UI components for Poly-Spinor Nexus 7D
 
 # Interface principale Vault (tkinter)
 from .vault_gui_complete import VaultCompleteGUI, DualKeyAuthenticator
+
+# Interface de monitoring (tkinter)
+try:
+    from .vault_monitor import VaultMonitorGUI, SecureVaultManager
+    VAULT_MONITOR_AVAILABLE = True
+except ImportError:
+    VAULT_MONITOR_AVAILABLE = False
 
 # Interfaces Blender (optionnelles)
 try:
