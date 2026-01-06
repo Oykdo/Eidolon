@@ -300,6 +300,8 @@ class GenesisBlock:
     # Hash et signature
     block_hash: str = ""
     signature: str = ""
+    signer_public_key: str = ""              # Cle publique du signataire
+    signed_at: Optional[str] = None          # Date de signature
     
     # Donnees cryptographiques
     spinor_seed: str = ""                    # Seed spinoriel
