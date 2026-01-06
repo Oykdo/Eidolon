@@ -34,6 +34,34 @@ if sys.platform == 'win32':
 
 
 # ============================================================================
+# REGLE FONDAMENTALE: LIMITE DES 21 PIERRES
+# ============================================================================
+
+PHILOSOPHER_STONE_MAX_VAULT = 21
+"""
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    REGLE IMMUABLE DES 21 PIERRES                             ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  Les Pierres Philosophales sont STRICTEMENT LIMITEES.                        ║
+║                                                                              ║
+║  SEULS les vaults #1 a #21 peuvent posseder une Pierre Philosophale.         ║
+║  Apres la creation du 21eme vault, AUCUNE nouvelle Pierre ne sera            ║
+║  jamais generee, quelle que soit la rarete ou le tier du vault.              ║
+║                                                                              ║
+║  Cette regle est PERMANENTE et IMMUABLE.                                     ║
+║                                                                              ║
+║  Consequences:                                                               ║
+║  - Maximum de 21 Pierres dans tout l'ecosysteme                              ║
+║  - Les detenteurs controlent l'alchimie supreme                              ║
+║  - Valeur croissante a mesure que de nouveaux vaults sont crees              ║
+║  - Aucun moyen de creer de nouvelles Pierres apres le vault #21              ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+"""
+
+
+# ============================================================================
 # ETATS DE LA PIERRE PHILOSOPHALE
 # ============================================================================
 

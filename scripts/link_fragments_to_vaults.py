@@ -1,6 +1,29 @@
 """
 Liaison des Fragments aux Vaults selon le rang de Pionnier
 RNG Poly-Spinoral optimise par tier
+
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                    REGLE DES 21 PIERRES PHILOSOPHALES                        ║
+╠══════════════════════════════════════════════════════════════════════════════╣
+║                                                                              ║
+║  Les Pierres Philosophales sont STRICTEMENT LIMITEES aux 21 premiers vaults. ║
+║                                                                              ║
+║  Apres la creation du 21eme vault, plus AUCUNE Pierre Philosophale ne sera   ║
+║  jamais generee dans l'ecosysteme. Cette regle est IMMUABLE.                 ║
+║                                                                              ║
+║  Cela fait des Pierres Philosophales les artefacts les plus rares et         ║
+║  precieux de tout le Nexus, conferant un avantage permanent aux premiers     ║
+║  pionniers.                                                                  ║
+║                                                                              ║
+║  Distribution estimee (basee sur les probabilites par tier):                 ║
+║  - Vaults 1-6 (Quantum Pioneers): ~6 pierres garanties                       ║
+║  - Vaults 7-21: Selon tier et chance (0.5% a 25%)                           ║
+║  - Vaults 22+: ZERO pierre possible                                         ║
+║                                                                              ║
+║  Maximum theorique: 21 Pierres Philosophales                                 ║
+║  Ces 21 Pierres controlent l'alchimie de tout l'ecosysteme.                 ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
 """
 
 import sys
@@ -23,6 +46,21 @@ from core.fragment_nexus import (
     FragmentSoul, CosmicCycle, CONSTELLATIONS, ALCHEMICAL_RECIPES,
     format_fragment_display
 )
+
+
+# ============================================================================
+# CONSTANTE IMMUABLE: LIMITE DES PIERRES PHILOSOPHALES
+# ============================================================================
+
+PHILOSOPHER_STONE_MAX_VAULT = 21
+"""
+Les Pierres Philosophales ne peuvent etre generees QUE pour les vaults 1 a 21.
+Apres le vault #21, plus AUCUNE Pierre ne sera jamais creee.
+Cette limite est PERMANENTE et ne peut pas etre modifiee.
+
+Maximum theorique: 21 Pierres (si tous les vaults 1-21 en obtiennent une)
+Estimation realiste: ~10-15 Pierres (selon les probabilites)
+"""
 
 
 # ============================================================================
@@ -359,16 +397,23 @@ class TierFragmentGenerator:
             fragments.append(special_fragment)
         
         # 4. Chance de Pierre Philosophale (tres rare)
-        if rng.next_float(0) < config["philosopher_chance"]:
-            phil_ftype = next(f for f in FragmentType if f.type_id == "philosopher")
-            phil_fragment = self._create_fragment(
-                vault_number, phil_ftype, FragmentEssence.VOID,
-                5000 * config["mass_multiplier"],
-                95, 90, rng
-            )
-            phil_fragment.prophecy_text = "Ce fragment contient le secret de la transmutation ultime."
-            self.nexus._save_fragment(phil_fragment)
-            fragments.append(phil_fragment)
+        # LIMITE: Seuls les 21 premiers vaults peuvent obtenir une Pierre Philosophale
+        # Apres le vault #21, plus aucune Pierre ne sera jamais creee
+        # Voir: PHILOSOPHER_STONE_MAX_VAULT
+        
+        if vault_number <= PHILOSOPHER_STONE_MAX_VAULT:
+            # Les premiers vaults ont une chance de Pierre
+            if rng.next_float(0) < config["philosopher_chance"]:
+                phil_ftype = next(f for f in FragmentType if f.type_id == "philosopher")
+                phil_fragment = self._create_fragment(
+                    vault_number, phil_ftype, FragmentEssence.VOID,
+                    5000 * config["mass_multiplier"],
+                    95, 90, rng
+                )
+                phil_fragment.prophecy_text = f"Pierre Philosophale #{vault_number} - L'une des 21 pierres originelles. Apres le 21eme vault, plus aucune ne sera jamais creee."
+                self.nexus._save_fragment(phil_fragment)
+                fragments.append(phil_fragment)
+        # Vaults > 21: Aucune chance de Pierre Philosophale
         
         return fragments
     
