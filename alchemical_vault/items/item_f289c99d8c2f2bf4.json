@@ -1,0 +1,21 @@
+{
+  "item_id": "f289c99d8c2f2bf4",
+  "item_type": "elixir_immortality",
+  "category": "elixir",
+  "rarity": "primordial",
+  "value": 5000.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 2,
+  "origin_chest": null,
+  "created_at": "2026-01-06T23:05:51.522277",
+  "current_vault": 2,
+  "status": "inventory"
+}

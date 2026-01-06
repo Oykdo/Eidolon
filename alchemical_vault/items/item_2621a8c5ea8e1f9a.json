@@ -1,0 +1,21 @@
+{
+  "item_id": "2621a8c5ea8e1f9a",
+  "item_type": "elixir_purity",
+  "category": "elixir",
+  "rarity": "superior",
+  "value": 27.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 3,
+  "origin_chest": null,
+  "created_at": "2026-01-06T23:05:51.799209",
+  "current_vault": 3,
+  "status": "inventory"
+}

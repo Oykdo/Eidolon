@@ -1,0 +1,21 @@
+{
+  "item_id": "b157e1058388755b",
+  "item_type": "rune_othala",
+  "category": "rune",
+  "rarity": "refined",
+  "value": 46.8,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 2,
+  "origin_chest": null,
+  "created_at": "2026-01-06T23:05:51.674415",
+  "current_vault": 2,
+  "status": "inventory"
+}

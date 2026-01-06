@@ -1,0 +1,21 @@
+{
+  "item_id": "12e8b84f16430b47",
+  "item_type": "seal_crown",
+  "category": "seal",
+  "rarity": "primordial",
+  "value": 50.0,
+  "duration": 0,
+  "charges": 1,
+  "max_charges": 1,
+  "is_used": false,
+  "is_bound": false,
+  "bound_to": null,
+  "linked_gem_id": null,
+  "linked_artifact_id": null,
+  "enchanted_on": null,
+  "origin_vault": 6,
+  "origin_chest": null,
+  "created_at": "2026-01-06T23:05:52.145797",
+  "current_vault": 6,
+  "status": "inventory"
+}
