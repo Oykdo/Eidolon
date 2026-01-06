@@ -45,6 +45,8 @@ from datetime import datetime
 # Ajouter le répertoire parent au path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
+from core.identity_registry import IdentityRegistry, interactive_name_selection
+
 
 def print_banner():
     """Affiche la banniere"""
@@ -311,6 +313,7 @@ Exemples:
   %(prog)s --name "MonVault"            # Avec nom spécifié
   %(prog)s --simple                     # Mode simplifié (rapide)
   %(prog)s --output ./mes_cles          # Répertoire personnalisé
+  %(prog)s --list                       # Lister les identités existantes
         """
     )
     
@@ -338,20 +341,59 @@ Exemples:
         action="store_true",
         help="Mode silencieux"
     )
+    parser.add_argument(
+        "--list", "-l",
+        action="store_true",
+        help="Lister les identités enregistrées"
+    )
+    parser.add_argument(
+        "--no-registry",
+        action="store_true",
+        help="Ne pas enregistrer dans le registre d'identités"
+    )
     
     args = parser.parse_args()
+    
+    # Initialiser le registre d'identités
+    registry = IdentityRegistry()
+    
+    # Mode liste des identités
+    if args.list:
+        print("\n" + "="*60)
+        print("  IDENTITES ENREGISTREES")
+        print("="*60)
+        
+        identities = registry.list_identities()
+        if not identities:
+            print("\n  Aucune identité enregistrée.\n")
+        else:
+            print(f"\n  {len(identities)} identité(s) trouvée(s):\n")
+            for identity in identities:
+                status = "OK" if identity.psnx_path and os.path.exists(identity.psnx_path) else "?"
+                print(f"  [{status}] {identity.full_id}")
+                print(f"      Nom: {identity.name}")
+                print(f"      Créé: {identity.created_at[:19]}")
+                if identity.psnx_path:
+                    print(f"      PSNX: {identity.psnx_path}")
+                print()
+        return
     
     if not args.quiet:
         print_banner()
     
-    # Obtenir le nom si non fourni
+    # Obtenir le nom avec vérification d'unicité
     if args.name:
         name = args.name
+        # Vérifier disponibilité
+        available, error = registry.check_name_available(name)
+        if not available:
+            print(f"\n[ERREUR] {error}")
+            print("[INFO] Utilisez --list pour voir les identités existantes")
+            print("[INFO] Ou choisissez un autre nom\n")
+            sys.exit(1)
     else:
-        name = input("Nom du vault: ").strip()
-        if not name:
-            name = f"vault_{datetime.now().strftime('%Y%m%d_%H%M%S')}"
-            print(f"[INFO] Nom par défaut: {name}")
+        # Mode interactif avec vérification
+        name = interactive_name_selection(registry)
     
     # Résoudre le chemin de sortie
     output_dir = os.path.abspath(args.output)
@@ -373,6 +415,32 @@ Exemples:
         # Vérifier les fichiers
         verify_key_files(psnx_path, blend_path)
         
+        # === ENREGISTREMENT IDENTITE ===
+        identity = None
+        if not args.no_registry:
+            print("\n" + "="*60)
+            print("  ENREGISTREMENT IDENTITE")
+            print("="*60)
+            
+            success, identity, error = registry.register_identity(
+                name=name,
+                vault_key=vault_key,
+                psnx_path=psnx_path,
+                blend_path=blend_path,
+                metadata={
+                    "entropy_bits": entropy,
+                    "genesis_inscription": genesis_block.inscription_number if genesis_block else None,
+                    "simple_mode": args.simple
+                }
+            )
+            
+            if success:
+                print(f"\n  [OK] Identité enregistrée avec succès!")
+                print(f"  [ID] {identity.full_id}")
+                print(f"\n  Votre identité unique: {identity.name}_{identity.fingerprint}")
+            else:
+                print(f"\n  [WARN] Impossible d'enregistrer l'identité: {error}")
+        
         # Resume
         print("\n" + "="*60)
         print("GENERATION TERMINEE")
@@ -389,6 +457,15 @@ Exemples:
   Rune Amount:    {genesis_block.rune_amount:,}
 """
         
+        identity_info = ""
+        if identity:
+            identity_info = f"""
+  [IDENTITE]
+  Nom:            {identity.name}
+  Fingerprint:    {identity.fingerprint}
+  Full ID:        {identity.full_id}
+"""
+        
         print(f"""
 Fichiers generes:
   PSNX:       {psnx_path}
@@ -396,12 +473,13 @@ Fichiers generes:
 
 Cle vault (hex): {vault_key.hex()[:32]}...
 Entropie:        {entropy:,} bits
-{genesis_info}
+{identity_info}{genesis_info}
 ** IMPORTANT **
    - Sauvegardez ces fichiers en lieu sur!
    - Les DEUX fichiers sont necessaires pour acceder au vault
    - Ne partagez JAMAIS ces fichiers
    - Faites des copies de sauvegarde sur supports separes
+   - Utilisez 'python scripts/generate_key.py --list' pour voir vos identités
 """)
         
         # Proposer de lancer le vault
