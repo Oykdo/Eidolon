@@ -377,6 +377,13 @@ except ImportError as e:
     MONITORING_AVAILABLE = False
     print(f"[INFO] Module monitoring non disponible: {e}")
 
+try:
+    from core.runes_monitor import RunesMonitor, RuneStatus, RunePortfolio
+    RUNES_AVAILABLE = True
+except ImportError as e:
+    RUNES_AVAILABLE = False
+    print(f"[INFO] Module runes non disponible: {e}")
+
 
 # ============================================================================
 # GESTIONNAIRE DE VAULT SECURISE
@@ -649,6 +656,11 @@ class VaultMonitorGUI:
         
         self.transfers_tab = self._create_transfers_tab()
         self.notebook.add(self.transfers_tab, text="  ⇄ TRANSFERS  ")
+        
+        # Onglet Runes (si disponible)
+        if RUNES_AVAILABLE:
+            self.runes_tab = self._create_runes_tab()
+            self.notebook.add(self.runes_tab, text="  ᚠ RUNES  ")
         
         # === BARRE DE STATUT CYPHERPUNK ===
         status_bar_frame = tk.Frame(self.root, bg=CypherpunkTheme.BG_TERTIARY, height=32)
@@ -976,6 +988,409 @@ class VaultMonitorGUI:
         ttk.Button(action_frame, text="Annuler", command=self.cancel_transfer).pack(side=tk.LEFT, padx=5)
         
         return frame
+    
+    def _create_runes_tab(self) -> tk.Frame:
+        """Créer l'onglet de monitoring des Runes - Style Cypherpunk"""
+        frame = tk.Frame(self.notebook, bg=CypherpunkTheme.BG_DARK)
+        
+        # Initialiser le moniteur de runes
+        self.runes_monitor = RunesMonitor()
+        
+        # === HEADER RUNES ===
+        header_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
+        header_frame.pack(fill=tk.X, pady=(10, 15), padx=10)
+        
+        # Titre avec rune
+        title_lbl = tk.Label(
+            header_frame,
+            text="ᚠ RUNES PORTFOLIO",
+            bg=CypherpunkTheme.BG_DARK,
+            fg="#FFD700",
+            font=("Consolas", 16, "bold")
+        )
+        title_lbl.pack(side=tk.LEFT)
+        
+        # Bouton refresh
+        refresh_btn = CypherpunkTheme.create_neon_button(
+            header_frame,
+            "↻ REFRESH",
+            self._refresh_runes,
+            CypherpunkTheme.NEON_CYAN
+        )
+        refresh_btn.pack(side=tk.RIGHT)
+        
+        # === PORTFOLIO SUMMARY ===
+        summary_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
+        summary_frame.pack(fill=tk.X, pady=(0, 15), padx=10)
+        
+        # Variables pour les metriques
+        self.runes_total_var = tk.StringVar(value="0")
+        self.runes_count_var = tk.StringVar(value="0")
+        self.runes_signed_var = tk.StringVar(value="0")
+        self.runes_strength_var = tk.StringVar(value="0")
+        
+        # Cartes de metriques
+        metrics = [
+            ("TOTAL BALANCE", self.runes_total_var, "#FFD700"),
+            ("ASSETS", self.runes_count_var, CypherpunkTheme.NEON_CYAN),
+            ("SIGNED", self.runes_signed_var, CypherpunkTheme.NEON_GREEN),
+            ("STRENGTH", self.runes_strength_var, CypherpunkTheme.NEON_PURPLE),
+        ]
+        
+        for i, (label, var, color) in enumerate(metrics):
+            card = CypherpunkTheme.create_metric_display(summary_frame, label, var, color)
+            card.pack(side=tk.LEFT, padx=5, fill=tk.X, expand=True)
+        
+        # Separateur
+        sep = tk.Frame(frame, bg=CypherpunkTheme.BORDER_INACTIVE, height=1)
+        sep.pack(fill=tk.X, padx=10, pady=10)
+        
+        # === LISTE DES RUNES ===
+        list_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
+        list_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=(0, 10))
+        
+        # Titre liste
+        list_title = tk.Label(
+            list_frame,
+            text="◈ GENESIS BLOCKS",
+            bg=CypherpunkTheme.BG_DARK,
+            fg=CypherpunkTheme.NEON_GREEN,
+            font=CypherpunkTheme.FONT_TITLE
+        )
+        list_title.pack(anchor=tk.W, pady=(0, 10))
+        
+        # Frame pour le treeview avec bordure neon
+        tree_outer = tk.Frame(list_frame, bg=CypherpunkTheme.NEON_GREEN, padx=1, pady=1)
+        tree_outer.pack(fill=tk.BOTH, expand=True)
+        
+        tree_inner = tk.Frame(tree_outer, bg=CypherpunkTheme.BG_SECONDARY)
+        tree_inner.pack(fill=tk.BOTH, expand=True)
+        
+        # Treeview pour les runes
+        columns = ('Vault', 'Runes', 'Tier', 'Balance', 'Strength', 'Status', 'Signed')
+        self.runes_tree = ttk.Treeview(tree_inner, columns=columns, show='headings', height=12)
+        
+        col_widths = {
+            'Vault': 80, 'Runes': 80, 'Tier': 150, 
+            'Balance': 120, 'Strength': 100, 'Status': 80, 'Signed': 180
+        }
+        
+        for col in columns:
+            self.runes_tree.heading(col, text=col, command=lambda c=col: self._sort_treeview(self.runes_tree, c))
+            self.runes_tree.column(col, width=col_widths.get(col, 100))
+        
+        scrollbar = ttk.Scrollbar(tree_inner, orient=tk.VERTICAL, command=self.runes_tree.yview)
+        self.runes_tree.configure(yscrollcommand=scrollbar.set)
+        
+        self.runes_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        # === ACTIONS ===
+        actions_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
+        actions_frame.pack(fill=tk.X, padx=10, pady=10)
+        
+        sign_btn = CypherpunkTheme.create_neon_button(
+            actions_frame,
+            "✎ SIGN ALL",
+            self._sign_all_runes,
+            CypherpunkTheme.NEON_GREEN
+        )
+        sign_btn.pack(side=tk.LEFT, padx=(0, 10))
+        
+        verify_btn = CypherpunkTheme.create_neon_button(
+            actions_frame,
+            "✓ VERIFY",
+            self._verify_runes,
+            CypherpunkTheme.NEON_CYAN
+        )
+        verify_btn.pack(side=tk.LEFT, padx=(0, 10))
+        
+        details_btn = CypherpunkTheme.create_neon_button(
+            actions_frame,
+            "◉ DETAILS",
+            self._show_rune_details,
+            CypherpunkTheme.NEON_PURPLE
+        )
+        details_btn.pack(side=tk.LEFT)
+        
+        # Export button a droite
+        export_btn = CypherpunkTheme.create_neon_button(
+            actions_frame,
+            "↓ EXPORT",
+            self._export_runes,
+            CypherpunkTheme.TEXT_SECONDARY
+        )
+        export_btn.pack(side=tk.RIGHT)
+        
+        # Charger les donnees
+        self._refresh_runes()
+        
+        return frame
+    
+    def _refresh_runes(self):
+        """Rafraichit les donnees des runes"""
+        if not RUNES_AVAILABLE:
+            return
+        
+        # Vider le treeview
+        for item in self.runes_tree.get_children():
+            self.runes_tree.delete(item)
+        
+        # Obtenir le portfolio
+        portfolio = self.runes_monitor.get_portfolio()
+        
+        # Mettre a jour les metriques
+        self.runes_total_var.set(self.runes_monitor.format_balance(portfolio.total_balance))
+        self.runes_count_var.set(str(portfolio.total_assets))
+        self.runes_signed_var.set(str(portfolio.signed_count))
+        self.runes_strength_var.set(f"{portfolio.total_strength:,.0f}")
+        
+        # Remplir le treeview
+        for asset in portfolio.assets:
+            status = "✓" if asset.status == RuneStatus.SIGNED else "○"
+            signed_at = asset.signed_at[:19] if asset.signed_at else "Not signed"
+            
+            self.runes_tree.insert('', tk.END, values=(
+                f"#{asset.vault_number:05d}",
+                asset.rune_symbols,
+                asset.tier_name,
+                self.runes_monitor.format_balance(asset.balance),
+                f"{asset.strength:,.0f}",
+                status,
+                signed_at
+            ), tags=(asset.tier,))
+        
+        # Couleurs par tier
+        self.runes_tree.tag_configure('quantum_pioneer', foreground='#FFD700')
+        self.runes_tree.tag_configure('spinor_visionary', foreground='#9400D3')
+        self.runes_tree.tag_configure('bell_verifier', foreground='#00CED1')
+        self.runes_tree.tag_configure('post_quantum_guardian', foreground='#32CD32')
+        
+        self._log_activity("Runes portfolio refreshed")
+    
+    def _sign_all_runes(self):
+        """Lance la signature de tous les blocs non signes"""
+        import subprocess
+        
+        result = messagebox.askyesno(
+            "Signature Runes",
+            "Voulez-vous signer tous les blocs Genesis non signés?\n\n"
+            "Cette action nécessite votre fichier .psnx"
+        )
+        
+        if result:
+            try:
+                # Lancer le script de signature
+                subprocess.Popen(
+                    ["python", "scripts/sign_genesis.py", "--all"],
+                    cwd=self.base_path
+                )
+                self._log_activity("Signature process started")
+                messagebox.showinfo("Info", "Processus de signature lancé.\nRafraîchissez après la signature.")
+            except Exception as e:
+                messagebox.showerror("Erreur", f"Impossible de lancer la signature: {e}")
+    
+    def _verify_runes(self):
+        """Verifie les signatures des runes"""
+        import subprocess
+        
+        try:
+            result = subprocess.run(
+                ["python", "scripts/sign_genesis.py", "--verify"],
+                cwd=self.base_path,
+                capture_output=True,
+                text=True
+            )
+            
+            # Afficher le resultat
+            dialog = tk.Toplevel(self.root)
+            dialog.title("Vérification des Signatures")
+            dialog.geometry("500x400")
+            dialog.configure(bg=CypherpunkTheme.BG_DARK)
+            
+            text = tk.Text(
+                dialog,
+                bg=CypherpunkTheme.BG_SECONDARY,
+                fg=CypherpunkTheme.NEON_GREEN,
+                font=CypherpunkTheme.FONT_MONO,
+                padx=10,
+                pady=10
+            )
+            text.pack(fill=tk.BOTH, expand=True, padx=10, pady=10)
+            text.insert(tk.END, result.stdout)
+            text.config(state=tk.DISABLED)
+            
+            self._log_activity("Runes signatures verified")
+            
+        except Exception as e:
+            messagebox.showerror("Erreur", f"Erreur de vérification: {e}")
+    
+    def _show_rune_details(self):
+        """Affiche les details d'une rune selectionnee"""
+        selection = self.runes_tree.selection()
+        if not selection:
+            messagebox.showwarning("Attention", "Veuillez sélectionner une rune")
+            return
+        
+        item = self.runes_tree.item(selection[0])
+        vault_str = item['values'][0]
+        vault_num = int(vault_str.replace('#', ''))
+        
+        asset = self.runes_monitor.get_asset(vault_num)
+        if not asset:
+            messagebox.showerror("Erreur", "Rune non trouvée")
+            return
+        
+        # Fenetre de details
+        dialog = tk.Toplevel(self.root)
+        dialog.title(f"Rune Details - {asset.rune_symbols}")
+        dialog.geometry("600x500")
+        dialog.configure(bg=CypherpunkTheme.BG_DARK)
+        
+        # Contenu
+        content = tk.Frame(dialog, bg=CypherpunkTheme.BG_DARK)
+        content.pack(fill=tk.BOTH, expand=True, padx=20, pady=20)
+        
+        # Titre avec runes
+        title = tk.Label(
+            content,
+            text=f"{asset.rune_symbols} VAULT #{asset.vault_number:05d}",
+            bg=CypherpunkTheme.BG_DARK,
+            fg=asset.color,
+            font=("Consolas", 20, "bold")
+        )
+        title.pack(pady=(0, 20))
+        
+        # Infos
+        info_frame = tk.Frame(content, bg=CypherpunkTheme.BG_PANEL, padx=20, pady=15)
+        info_frame.pack(fill=tk.X, pady=5)
+        
+        infos = [
+            ("Tier", f"{asset.tier_name} ({asset.rarity})"),
+            ("Balance", f"{asset.balance:,} PSNX"),
+            ("Strength", f"{asset.strength:,.0f}"),
+            ("Ancestry", f"Depth {asset.ancestry_depth}"),
+            ("Status", asset.status.value.upper()),
+            ("Created", asset.created_at[:19] if asset.created_at else "N/A"),
+            ("Block Hash", asset.block_hash[:32] + "..." if asset.block_hash else "N/A"),
+        ]
+        
+        for label, value in infos:
+            row = tk.Frame(info_frame, bg=CypherpunkTheme.BG_PANEL)
+            row.pack(fill=tk.X, pady=3)
+            
+            lbl = tk.Label(row, text=f"{label}:", bg=CypherpunkTheme.BG_PANEL, 
+                          fg=CypherpunkTheme.TEXT_SECONDARY, width=12, anchor='w')
+            lbl.pack(side=tk.LEFT)
+            
+            val = tk.Label(row, text=value, bg=CypherpunkTheme.BG_PANEL,
+                          fg=CypherpunkTheme.NEON_GREEN)
+            val.pack(side=tk.LEFT)
+        
+        # Abilities
+        if asset.abilities:
+            abilities_frame = tk.Frame(content, bg=CypherpunkTheme.BG_PANEL, padx=20, pady=15)
+            abilities_frame.pack(fill=tk.X, pady=10)
+            
+            tk.Label(
+                abilities_frame, 
+                text="SPECIAL ABILITIES",
+                bg=CypherpunkTheme.BG_PANEL,
+                fg=CypherpunkTheme.NEON_CYAN,
+                font=CypherpunkTheme.FONT_TITLE
+            ).pack(anchor='w', pady=(0, 10))
+            
+            for ability in asset.abilities:
+                tk.Label(
+                    abilities_frame,
+                    text=f"  ▸ {ability.replace('_', ' ').title()}",
+                    bg=CypherpunkTheme.BG_PANEL,
+                    fg=CypherpunkTheme.TEXT_PRIMARY
+                ).pack(anchor='w')
+        
+        # Signature
+        if asset.signature:
+            sig_frame = tk.Frame(content, bg=CypherpunkTheme.BG_TERTIARY, padx=15, pady=10)
+            sig_frame.pack(fill=tk.X, pady=10)
+            
+            tk.Label(
+                sig_frame,
+                text="✓ SIGNED",
+                bg=CypherpunkTheme.BG_TERTIARY,
+                fg=CypherpunkTheme.NEON_GREEN,
+                font=CypherpunkTheme.FONT_TITLE
+            ).pack(anchor='w')
+            
+            tk.Label(
+                sig_frame,
+                text=f"Signature: {asset.signature}",
+                bg=CypherpunkTheme.BG_TERTIARY,
+                fg=CypherpunkTheme.TEXT_SECONDARY,
+                font=CypherpunkTheme.FONT_MONO_SMALL
+            ).pack(anchor='w')
+            
+            if asset.signed_at:
+                tk.Label(
+                    sig_frame,
+                    text=f"Signed at: {asset.signed_at[:19]}",
+                    bg=CypherpunkTheme.BG_TERTIARY,
+                    fg=CypherpunkTheme.TEXT_SECONDARY
+                ).pack(anchor='w')
+    
+    def _export_runes(self):
+        """Exporte le portfolio de runes"""
+        save_path = filedialog.asksaveasfilename(
+            title="Exporter le portfolio Runes",
+            initialfile=f"runes_portfolio_{datetime.now().strftime('%Y%m%d')}.json",
+            defaultextension=".json",
+            filetypes=[("JSON files", "*.json"), ("All files", "*.*")]
+        )
+        
+        if not save_path:
+            return
+        
+        try:
+            portfolio = self.runes_monitor.get_portfolio()
+            
+            export_data = {
+                "exported_at": datetime.now().isoformat(),
+                "summary": {
+                    "total_balance": portfolio.total_balance,
+                    "total_assets": portfolio.total_assets,
+                    "signed_count": portfolio.signed_count,
+                    "pending_count": portfolio.pending_count,
+                    "total_strength": portfolio.total_strength,
+                    "tier_breakdown": portfolio.tier_breakdown
+                },
+                "assets": [
+                    {
+                        "vault_number": a.vault_number,
+                        "inscription_id": a.inscription_id,
+                        "tier": a.tier,
+                        "tier_name": a.tier_name,
+                        "rarity": a.rarity,
+                        "rune_symbols": a.rune_symbols,
+                        "rune_names": a.rune_names,
+                        "balance": a.balance,
+                        "strength": a.strength,
+                        "status": a.status.value,
+                        "signature": a.signature,
+                        "signed_at": a.signed_at,
+                        "created_at": a.created_at,
+                        "abilities": a.abilities
+                    }
+                    for a in portfolio.assets
+                ]
+            }
+            
+            with open(save_path, 'w', encoding='utf-8') as f:
+                json.dump(export_data, f, indent=2, ensure_ascii=False)
+            
+            self._log_activity(f"Runes portfolio exported to {save_path}")
+            messagebox.showinfo("Succès", f"Portfolio exporté vers:\n{save_path}")
+            
+        except Exception as e:
+            messagebox.showerror("Erreur", f"Erreur d'export: {e}")
     
     def _populate_ui_from_state(self):
         """Remplir l'interface avec les données existantes"""
