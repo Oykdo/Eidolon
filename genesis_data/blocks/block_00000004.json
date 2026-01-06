@@ -1,0 +1,153 @@
+{
+  "block_id": "genesis_00000004_cb5d7b9b68059725",
+  "vault_number": 4,
+  "vault_name": "Bell Entanglement",
+  "genesis_type": "founder",
+  "created_at": "2026-01-06T17:57:51.807473",
+  "parent_hash": "c0dd9001e567a27c5ceea382d724afffbf6159ddaa59dfd29ff31c9f2ffb8d19",
+  "parent_number": 3,
+  "ancestry_depth": 3,
+  "ancestor_hashes": [
+    "357896c767ce8948eb7f99bcaa06f9229c526397e3e7ce66c0d15936c1b218d4",
+    "6192c23ce2316f521a4b8915c8c65ccf429d25f6f9c5250c1db4aa9a820e90c2",
+    "c0dd9001e567a27c5ceea382d724afffbf6159ddaa59dfd29ff31c9f2ffb8d19"
+  ],
+  "inherited_strength": 29103708.159999996,
+  "own_entropy": 8192,
+  "total_strength": 291119001.59999996,
+  "tier": "quantum_pioneer",
+  "tier_config": {
+    "tier": "quantum_pioneer",
+    "name": "Quantum Pioneer",
+    "rarity": "Mythic",
+    "min_number": 1,
+    "max_number": 100,
+    "rune_reward": 1000000000,
+    "strength_multiplier": 10.0,
+    "runes": [
+      "FEHU",
+      "SOWILO",
+      "DAGAZ",
+      "OTHALA"
+    ],
+    "color": "#FFD700",
+    "special_abilities": [
+      "quantum_resonance",
+      "primordial_link",
+      "infinite_inheritance",
+      "rune_mastery"
+    ]
+  },
+  "is_founder": true,
+  "runic_inscription": {
+    "inscription_id": "psnx_00000004_25d9cda1d9b40842",
+    "vault_number": 4,
+    "tier": "quantum_pioneer",
+    "runes": [
+      "FEHU",
+      "SOWILO",
+      "DAGAZ",
+      "OTHALA"
+    ],
+    "rune_symbols": "ᚠᛊᛞᛟ",
+    "content": {
+      "tier_name": "Quantum Pioneer",
+      "rarity": "Mythic",
+      "reward": 1000000000,
+      "multiplier": 10.0,
+      "abilities": [
+        "quantum_resonance",
+        "primordial_link",
+        "infinite_inheritance",
+        "rune_mastery"
+      ]
+    },
+    "txid": null,
+    "block_height": null,
+    "sat_number": null,
+    "status": "pending",
+    "created_at": "2026-01-06T17:57:51.807473",
+    "inscribed_at": null
+  },
+  "rune_balance": 1000000000,
+  "block_hash": "36cb729857a5241b4d397206ea5a5ffe4fe11795aac684469ee5ce9252220e16",
+  "signature": "3045022100eb76dc1847f39d7fd3f2e85e35d6c8f2cf9f53f0c5abc78ff8a1051a76457c2d02207e27b9b66f0de2a0551d449d63b84f4860118281a3c3105444220bc6c7b44d75",
+  "spinor_seed": "544340495c204ea627ef62959216b546cd968458ac517d8faec8b6786a4756f8",
+  "bell_proof": "2275665439e5f7f01f5fb2c5203b6968b635a441c967c7da273671bd3ed4dcb6f5de451f0fb590a8a4d8ff58272b79ccf1019dba2857115ba271c4f8de05051e",
+  "merkle_root": "4d9f2200459cf8d3cfab67bce947faa7c0d87bd68a725ce6921edd902d3acde0",
+  "signer_public_key": "02ac374375a9a201c331be6ac2a1976534511cf45ab6a099dfeeeff10322eb71a7",
+  "signed_at": "2026-01-06T18:11:03.669048",
+  "artifact": {
+    "artifact_id": "58df5dbf88f8b62c",
+    "name": "Alpha Key of Infinity",
+    "artifact_type": "quantum_key",
+    "rarity": "transcendent",
+    "created_at": "2026-01-06T21:10:29.757663",
+    "genesis_block_id": "genesis_00000004_cb5d7b9b68059725",
+    "vault_number": 4,
+    "element": "temporal",
+    "stats": {
+      "base_power": 12267.88,
+      "spinor_resonance": 58.74,
+      "entropy_coefficient": 1.154,
+      "dimensional_affinity": 2.26,
+      "stability": 52,
+      "purity": 34,
+      "coherence": 86,
+      "effective_power": 449460.67499295995,
+      "total_multiplier": 31.748000000000005
+    },
+    "signature": {
+      "seed_7d": [
+        -0.2925705115547992,
+        -0.049368961756670236,
+        0.7800513752376744,
+        0.2854073038884704,
+        -0.14396237790572283,
+        0.33802877509524426,
+        -0.2950239061769356
+      ],
+      "dirac_components": [
+        -0.15486810983480284,
+        -0.026132769673645435,
+        0.4129092895080442,
+        0.1510763660061336,
+        -0.0762044719924104,
+        0.17893080608354098,
+        -0.1561667799768823,
+        0.0
+      ],
+      "bell_violation": 2.0517135584681987,
+      "entanglement_degree": 0.24554920700469934,
+      "quantum_state": "5d2a326b4f16250e"
+    },
+    "abilities": [
+      {
+        "id": "entropy_boost",
+        "name": "Entropy Boost",
+        "description": "Augmente l'entropie generee de 46%",
+        "value": 46
+      },
+      {
+        "id": "primordial_link",
+        "name": "Primordial Link",
+        "description": "Connexion directe au bloc Genesis #1",
+        "value": 1
+      },
+      {
+        "id": "spinor_mastery",
+        "name": "Spinor Mastery",
+        "description": "Controle parfait des 6 dimensions spinoriales",
+        "value": 6
+      },
+      {
+        "id": "dimension_shift",
+        "name": "Dimension Shift",
+        "description": "Peut traverser 4 dimensions simultanement",
+        "value": 4
+      }
+    ],
+    "description": "TRANSCENDENT Quantum Key",
+    "lore": "Ne dans le chaos de Temporal, il confere Entropy Boost a son porteur."
+  }
+}

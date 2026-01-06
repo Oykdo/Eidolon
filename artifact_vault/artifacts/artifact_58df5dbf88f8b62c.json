@@ -1,0 +1,86 @@
+{
+  "artifact_id": "58df5dbf88f8b62c",
+  "artifact_data": {
+    "artifact_id": "58df5dbf88f8b62c",
+    "name": "Alpha Key of Infinity",
+    "artifact_type": "quantum_key",
+    "rarity": "transcendent",
+    "created_at": "2026-01-06T21:10:29.757663",
+    "genesis_block_id": "genesis_00000004_cb5d7b9b68059725",
+    "vault_number": 4,
+    "element": "temporal",
+    "stats": {
+      "base_power": 12267.88,
+      "spinor_resonance": 58.74,
+      "entropy_coefficient": 1.154,
+      "dimensional_affinity": 2.26,
+      "stability": 52,
+      "purity": 34,
+      "coherence": 86,
+      "effective_power": 449460.67499295995,
+      "total_multiplier": 31.748000000000005
+    },
+    "signature": {
+      "seed_7d": [
+        -0.2925705115547992,
+        -0.049368961756670236,
+        0.7800513752376744,
+        0.2854073038884704,
+        -0.14396237790572283,
+        0.33802877509524426,
+        -0.2950239061769356
+      ],
+      "dirac_components": [
+        -0.15486810983480284,
+        -0.026132769673645435,
+        0.4129092895080442,
+        0.1510763660061336,
+        -0.0762044719924104,
+        0.17893080608354098,
+        -0.1561667799768823,
+        0.0
+      ],
+      "bell_violation": 2.0517135584681987,
+      "entanglement_degree": 0.24554920700469934,
+      "quantum_state": "5d2a326b4f16250e"
+    },
+    "abilities": [
+      {
+        "id": "entropy_boost",
+        "name": "Entropy Boost",
+        "description": "Augmente l'entropie generee de 46%",
+        "value": 46
+      },
+      {
+        "id": "primordial_link",
+        "name": "Primordial Link",
+        "description": "Connexion directe au bloc Genesis #1",
+        "value": 1
+      },
+      {
+        "id": "spinor_mastery",
+        "name": "Spinor Mastery",
+        "description": "Controle parfait des 6 dimensions spinoriales",
+        "value": 6
+      },
+      {
+        "id": "dimension_shift",
+        "name": "Dimension Shift",
+        "description": "Peut traverser 4 dimensions simultanement",
+        "value": 4
+      }
+    ],
+    "description": "TRANSCENDENT Quantum Key",
+    "lore": "Ne dans le chaos de Temporal, il confere Entropy Boost a son porteur."
+  },
+  "origin_block_id": "genesis_00000004_cb5d7b9b68059725",
+  "origin_vault_number": 4,
+  "origin_tier": "quantum_pioneer",
+  "created_at": "2026-01-06T21:10:29.757663",
+  "current_owner_vault": 4,
+  "status": "attached",
+  "transfer_history": [],
+  "detached_at": null,
+  "is_founder_artifact": true,
+  "founder_bonus_applied": true
+}

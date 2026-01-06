@@ -1,0 +1,145 @@
+{
+  "block_id": "genesis_00000002_24c8881ccca9e57f",
+  "vault_number": 2,
+  "vault_name": "Quantum Nexus",
+  "genesis_type": "founder",
+  "created_at": "2026-01-06T17:57:51.799725",
+  "parent_hash": "357896c767ce8948eb7f99bcaa06f9229c526397e3e7ce66c0d15936c1b218d4",
+  "parent_number": 1,
+  "ancestry_depth": 1,
+  "ancestor_hashes": [
+    "357896c767ce8948eb7f99bcaa06f9229c526397e3e7ce66c0d15936c1b218d4"
+  ],
+  "inherited_strength": 118784.0,
+  "own_entropy": 8192,
+  "total_strength": 1269760.0,
+  "tier": "quantum_pioneer",
+  "tier_config": {
+    "tier": "quantum_pioneer",
+    "name": "Quantum Pioneer",
+    "rarity": "Mythic",
+    "min_number": 1,
+    "max_number": 100,
+    "rune_reward": 1000000000,
+    "strength_multiplier": 10.0,
+    "runes": [
+      "FEHU",
+      "SOWILO",
+      "DAGAZ",
+      "OTHALA"
+    ],
+    "color": "#FFD700",
+    "special_abilities": [
+      "quantum_resonance",
+      "primordial_link",
+      "infinite_inheritance",
+      "rune_mastery"
+    ]
+  },
+  "is_founder": true,
+  "runic_inscription": {
+    "inscription_id": "psnx_00000002_103e571091bf3974",
+    "vault_number": 2,
+    "tier": "quantum_pioneer",
+    "runes": [
+      "FEHU",
+      "SOWILO",
+      "DAGAZ",
+      "OTHALA"
+    ],
+    "rune_symbols": "ᚠᛊᛞᛟ",
+    "content": {
+      "tier_name": "Quantum Pioneer",
+      "rarity": "Mythic",
+      "reward": 1000000000,
+      "multiplier": 10.0,
+      "abilities": [
+        "quantum_resonance",
+        "primordial_link",
+        "infinite_inheritance",
+        "rune_mastery"
+      ]
+    },
+    "txid": null,
+    "block_height": null,
+    "sat_number": null,
+    "status": "pending",
+    "created_at": "2026-01-06T17:57:51.799725",
+    "inscribed_at": null
+  },
+  "rune_balance": 1000000000,
+  "block_hash": "6192c23ce2316f521a4b8915c8c65ccf429d25f6f9c5250c1db4aa9a820e90c2",
+  "signature": "3045022100b070b813fb51a19ff0dacb01c949ccb1d25426111e0fb838b9eb9fb422e25f6a022036af937fdcfeeaa570b6dbef30212a6c7f725a7e5e802e9cfcf4a684d7b8cb29",
+  "spinor_seed": "f578dc98892594eb15d1f0f6eaade0a12d63d50f1627e15ea5d290c97503baba",
+  "bell_proof": "8eb7586b16249b532b08e7e160fc185c5e55cbfb98882ca72749ff76b81c0fc2f42d4a9466f45e4448b0f260c4d3499f371756963f09c03433c8a46c25add6e5",
+  "merkle_root": "0e7b6bf05404542f1f917691a2379d829ce98ffd3ad86d28b1d81cf31b231770",
+  "signer_public_key": "02ac374375a9a201c331be6ac2a1976534511cf45ab6a099dfeeeff10322eb71a7",
+  "signed_at": "2026-01-06T18:11:03.658935",
+  "artifact": {
+    "artifact_id": "6261b9bc73160df0",
+    "name": "Ancient Nexus of Resonance",
+    "artifact_type": "nexus_core",
+    "rarity": "mythic",
+    "created_at": "2026-01-06T21:10:29.748619",
+    "genesis_block_id": "genesis_00000002_24c8881ccca9e57f",
+    "vault_number": 2,
+    "element": "quantum",
+    "stats": {
+      "base_power": 8903.85,
+      "spinor_resonance": 42.1,
+      "entropy_coefficient": 2.081,
+      "dimensional_affinity": 1.62,
+      "stability": 75,
+      "purity": 81,
+      "coherence": 29,
+      "effective_power": 315955.0048662,
+      "total_multiplier": 17.052
+    },
+    "signature": {
+      "seed_7d": [
+        -0.3348413380311066,
+        0.5001654836326898,
+        0.4775894623384721,
+        0.41279605502335853,
+        -0.4867851164267776,
+        -0.04404604017413744,
+        -0.01799129008058939
+      ],
+      "dirac_components": [
+        -0.16036619891007037,
+        0.2395452064187488,
+        0.22873282959946206,
+        0.19770119979337333,
+        -0.23313692170261927,
+        -0.02109505379861575,
+        -0.008616602778730208,
+        7.136641473406125e-09
+      ],
+      "bell_violation": 2.0178048189624636,
+      "entanglement_degree": 0.13623005743732408,
+      "quantum_state": "79524842cd148684"
+    },
+    "abilities": [
+      {
+        "id": "void_channel",
+        "name": "Void Channel",
+        "description": "Puise 36% d'energie du vide primordial",
+        "value": 36
+      },
+      {
+        "id": "temporal_echo",
+        "name": "Temporal Echo",
+        "description": "Duplique les gains d'entropie 4 fois",
+        "value": 4
+      },
+      {
+        "id": "rune_resonance",
+        "name": "Rune Resonance",
+        "description": "Les runes gagnent 77% de puissance",
+        "value": 77
+      }
+    ],
+    "description": "MYTHIC Nexus Core",
+    "lore": "Les anciens ont cree cet objet pour canaliser Quantum. Sa puissance est incommensurable."
+  }
+}

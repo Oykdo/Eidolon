@@ -1,0 +1,92 @@
+{
+  "artifact_id": "a3030418a95e7844",
+  "artifact_data": {
+    "artifact_id": "a3030418a95e7844",
+    "name": "Primordial Nexus of Order",
+    "artifact_type": "nexus_core",
+    "rarity": "primordial",
+    "created_at": "2026-01-06T21:10:29.745072",
+    "genesis_block_id": "genesis_00000001_976c00da3d58229c",
+    "vault_number": 1,
+    "element": "celestial",
+    "stats": {
+      "base_power": 35911.93,
+      "spinor_resonance": 56.75,
+      "entropy_coefficient": 1.481,
+      "dimensional_affinity": 6.17,
+      "stability": 94,
+      "purity": 90,
+      "coherence": 73,
+      "effective_power": 4168418.9178637504,
+      "total_multiplier": 78.375
+    },
+    "signature": {
+      "seed_7d": [
+        0.4571721990378221,
+        0.10308273881206483,
+        -0.38275398332368116,
+        -0.12674583078961404,
+        0.47252859920757234,
+        -0.02299421524431713,
+        -0.6276865467806833
+      ],
+      "dirac_components": [
+        -0.06957852736687277,
+        -0.015688498072679344,
+        0.058252576511685646,
+        0.01928986118314382,
+        -0.07191566797103978,
+        0.0034995645798753428,
+        0.0955296618318309,
+        -0.0
+      ],
+      "bell_violation": 2.010533101072843,
+      "entanglement_degree": 0.11513301486673966,
+      "quantum_state": "feaaa830d78680ab"
+    },
+    "abilities": [
+      {
+        "id": "temporal_echo",
+        "name": "Temporal Echo",
+        "description": "Duplique les gains d'entropie 2 fois",
+        "value": 2
+      },
+      {
+        "id": "strength_amplifier",
+        "name": "Strength Amplifier",
+        "description": "Multiplie la force de base par 1.39",
+        "value": 1.39
+      },
+      {
+        "id": "omega_protocol",
+        "name": "Omega Protocol",
+        "description": "Active le protocole Omega niveau 1",
+        "value": 1
+      },
+      {
+        "id": "genesis_authority",
+        "name": "Genesis Authority",
+        "description": "Autorite absolue sur la creation de 90 vaults",
+        "value": 90
+      },
+      {
+        "id": "primordial_link",
+        "name": "Primordial Link",
+        "description": "Connexion directe au bloc Genesis #47",
+        "value": 47
+      }
+    ],
+    "description": "PRIMORDIAL Nexus Core",
+    "lore": "Les 7 dimensions convergent en cet artefact de Celestial."
+  },
+  "origin_block_id": "genesis_00000001_976c00da3d58229c",
+  "origin_vault_number": 1,
+  "origin_tier": "quantum_pioneer",
+  "created_at": "2026-01-06T21:10:29.745213",
+  "current_owner_vault": 1,
+  "status": "attached",
+  "transfer_history": [],
+  "detached_at": null,
+  "is_founder_artifact": true,
+  "founder_bonus_applied": true
+}

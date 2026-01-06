@@ -1,0 +1,148 @@
+{
+  "block_id": "genesis_00000005_488ede1b317aaf08",
+  "vault_number": 5,
+  "vault_name": "Post-Quantum Shield",
+  "genesis_type": "founder",
+  "created_at": "2026-01-06T17:57:51.811010",
+  "parent_hash": "36cb729857a5241b4d397206ea5a5ffe4fe11795aac684469ee5ce9252220e16",
+  "parent_number": 4,
+  "ancestry_depth": 4,
+  "ancestor_hashes": [
+    "357896c767ce8948eb7f99bcaa06f9229c526397e3e7ce66c0d15936c1b218d4",
+    "6192c23ce2316f521a4b8915c8c65ccf429d25f6f9c5250c1db4aa9a820e90c2",
+    "c0dd9001e567a27c5ceea382d724afffbf6159ddaa59dfd29ff31c9f2ffb8d19",
+    "36cb729857a5241b4d397206ea5a5ffe4fe11795aac684469ee5ce9252220e16"
+  ],
+  "inherited_strength": 440635510.27199996,
+  "own_entropy": 8192,
+  "total_strength": 4406437022.719999,
+  "tier": "quantum_pioneer",
+  "tier_config": {
+    "tier": "quantum_pioneer",
+    "name": "Quantum Pioneer",
+    "rarity": "Mythic",
+    "min_number": 1,
+    "max_number": 100,
+    "rune_reward": 1000000000,
+    "strength_multiplier": 10.0,
+    "runes": [
+      "FEHU",
+      "SOWILO",
+      "DAGAZ",
+      "OTHALA"
+    ],
+    "color": "#FFD700",
+    "special_abilities": [
+      "quantum_resonance",
+      "primordial_link",
+      "infinite_inheritance",
+      "rune_mastery"
+    ]
+  },
+  "is_founder": true,
+  "runic_inscription": {
+    "inscription_id": "psnx_00000005_24b4a9c4968a7e3b",
+    "vault_number": 5,
+    "tier": "quantum_pioneer",
+    "runes": [
+      "FEHU",
+      "SOWILO",
+      "DAGAZ",
+      "OTHALA"
+    ],
+    "rune_symbols": "ᚠᛊᛞᛟ",
+    "content": {
+      "tier_name": "Quantum Pioneer",
+      "rarity": "Mythic",
+      "reward": 1000000000,
+      "multiplier": 10.0,
+      "abilities": [
+        "quantum_resonance",
+        "primordial_link",
+        "infinite_inheritance",
+        "rune_mastery"
+      ]
+    },
+    "txid": null,
+    "block_height": null,
+    "sat_number": null,
+    "status": "pending",
+    "created_at": "2026-01-06T17:57:51.811010",
+    "inscribed_at": null
+  },
+  "rune_balance": 1000000000,
+  "block_hash": "3d13b90463a29d14805a38f028cb713ffedae3fdfc984626b87b35396103dde1",
+  "signature": "3046022100a8dfb4fe08eeb0803e54ebf7fee9d93291fc8857d1e76e6dc2d3c95b39838a3a02210085d0e18419ddc7839e08de9e2e832e4e9705df18549c3b982ad641a719fdad4f",
+  "spinor_seed": "a51fc08cc0042221c25252d2a73898f53d16238eb6c4b2aad6460f1651068ddf",
+  "bell_proof": "3c33ffd22c5bb1010c6704918d68e2fc92650d96300a80dd38fa075b93e2ae696b2916b21f7a1b5458e1380fdf4a4095928c67eedff6044e7ad1b0870fdd97c6",
+  "merkle_root": "d1e86e2e0adf88ee4a09d9f4179f92684be70ef557ec8a826209cf74a4ae1782",
+  "signer_public_key": "02ac374375a9a201c331be6ac2a1976534511cf45ab6a099dfeeeff10322eb71a7",
+  "signed_at": "2026-01-06T18:11:03.673484",
+  "artifact": {
+    "artifact_id": "af3e86a6b44f9574",
+    "name": "Alpha Node of the Spinor",
+    "artifact_type": "spinor_orb",
+    "rarity": "mythic",
+    "created_at": "2026-01-06T21:10:29.762100",
+    "genesis_block_id": "genesis_00000005_488ede1b317aaf08",
+    "vault_number": 5,
+    "element": "spatial",
+    "stats": {
+      "base_power": 7655.14,
+      "spinor_resonance": 52.78,
+      "entropy_coefficient": 1.666,
+      "dimensional_affinity": 3.96,
+      "stability": 91,
+      "purity": 97,
+      "coherence": 26,
+      "effective_power": 233816.893656864,
+      "total_multiplier": 18.3336
+    },
+    "signature": {
+      "seed_7d": [
+        0.2584597823922837,
+        0.5409708776894255,
+        -0.37594245235795065,
+        0.6106032129150344,
+        -0.32587378629556296,
+        -0.13687117330850382,
+        0.03811294521735095
+      ],
+      "dirac_components": [
+        -0.09173931146308596,
+        -0.192015544474477,
+        0.13343933593783003,
+        -0.21673127560307698,
+        0.11566765437126784,
+        0.048581899598634515,
+        -0.013528044168834208,
+        0.0
+      ],
+      "bell_violation": 2.077106676806736,
+      "entanglement_degree": 0.2852426147471424,
+      "quantum_state": "3c0ba75167c4dc22"
+    },
+    "abilities": [
+      {
+        "id": "strength_amplifier",
+        "name": "Strength Amplifier",
+        "description": "Multiplie la force de base par 1.6",
+        "value": 1.6
+      },
+      {
+        "id": "void_channel",
+        "name": "Void Channel",
+        "description": "Puise 19% d'energie du vide primordial",
+        "value": 19
+      },
+      {
+        "id": "rune_resonance",
+        "name": "Rune Resonance",
+        "description": "Les runes gagnent 27% de puissance",
+        "value": 27
+      }
+    ],
+    "description": "MYTHIC Spinor Orb",
+    "lore": "Les 4 dimensions convergent en cet artefact de Spatial."
+  }
+}
