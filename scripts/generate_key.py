@@ -40,12 +40,12 @@ sys.path.insert(0, str(Path(__file__).parent.parent))
 
 
 def print_banner():
-    """Affiche la bannière"""
+    """Affiche la banniere"""
     print("""
-╔══════════════════════════════════════════════════════════════════╗
-║     Poly-Spinor Nexus 7D - Générateur de Clé                     ║
-║     Cryptographie Post-Quantique + Vérification Bell             ║
-╚══════════════════════════════════════════════════════════════════╝
++====================================================================+
+|     Poly-Spinor Nexus 7D - Generateur de Cle                       |
+|     Cryptographie Post-Quantique + Verification Bell               |
++====================================================================+
     """)
 
 
@@ -75,12 +75,12 @@ def generate_full_key(name: str, output_dir: str, generate_blend: bool = True):
     # Créer le répertoire
     os.makedirs(output_dir, exist_ok=True)
     
-    # Callback de progression
+    # Callback de progression (ASCII compatible)
     def progress_callback(phase, progress, message):
         bar_length = 30
         filled = int(bar_length * progress)
-        bar = '█' * filled + '░' * (bar_length - filled)
-        print(f"\r  Phase {phase}/9 [{bar}] {progress:.0%} - {message}", end='', flush=True)
+        bar = '#' * filled + '-' * (bar_length - filled)
+        print(f"\r  Phase {phase}/9 [{bar}] {int(progress*100)}% - {message}", end='', flush=True)
         if progress >= 1.0:
             print()
     
@@ -310,23 +310,23 @@ Exemples:
         # Vérifier les fichiers
         verify_key_files(psnx_path, blend_path)
         
-        # Résumé
+        # Resume
         print("\n" + "="*60)
-        print("GÉNÉRATION TERMINÉE")
+        print("GENERATION TERMINEE")
         print("="*60)
         print(f"""
-Fichiers générés:
+Fichiers generes:
   PSNX:       {psnx_path}
-  Blend:      {blend_path or 'Non généré'}
+  Blend:      {blend_path or 'Non genere'}
 
-Clé vault (hex): {vault_key.hex()[:32]}...
+Cle vault (hex): {vault_key.hex()[:32]}...
 Entropie:        {entropy:,} bits
 
-⚠️  IMPORTANT:
-   - Sauvegardez ces fichiers en lieu sûr!
-   - Les DEUX fichiers sont nécessaires pour accéder au vault
+** IMPORTANT **
+   - Sauvegardez ces fichiers en lieu sur!
+   - Les DEUX fichiers sont necessaires pour acceder au vault
    - Ne partagez JAMAIS ces fichiers
-   - Faites des copies de sauvegarde sur supports séparés
+   - Faites des copies de sauvegarde sur supports separes
 """)
         
         # Proposer de lancer le vault

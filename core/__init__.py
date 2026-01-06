@@ -15,9 +15,19 @@ Modules:
 - secure_key_storage: Stockage securise des cles
 - persistent_vault: Gestionnaire de vault persistant
 - vault_config: Configuration du vault
+
+Security Suite (v10/10):
+- secure_memory: Protection memoire avancee
+- authenticated_files: Fichiers authentifies HMAC
+- quantum_entropy: Sources d'entropie quantique
+- secret_sharing: Shamir Secret Sharing
+- constant_time: Operations en temps constant
+- zkp_auth: Zero-Knowledge Proofs
+- hardware_security: Integration HSM
+- security_suite: Suite integree
 """
 
-__version__ = "1.0.0"
+__version__ = "2.0.0"
 __author__ = "Poly-Spinor Team"
 __license__ = "MIT"
 
@@ -91,7 +101,7 @@ try:
     from .vault_config import (
         VaultConfigManager,
         VaultConfiguration,
-        SecurityConfig,
+        SecurityConfig as VaultSecurityConfig,
         BackupConfig,
         NetworkConfig,
         UIConfig,
@@ -100,3 +110,113 @@ try:
     VAULT_CONFIG_AVAILABLE = True
 except ImportError:
     VAULT_CONFIG_AVAILABLE = False
+
+# =============================================================================
+# SECURITY SUITE v10/10
+# =============================================================================
+
+# Secure Memory
+try:
+    from .secure_memory import (
+        SecureBuffer,
+        SecureKeyStorage as SecureMemoryStorage,
+        SecureZeroMethod,
+        MemoryStats
+    )
+    SECURE_MEMORY_AVAILABLE = True
+except ImportError:
+    SECURE_MEMORY_AVAILABLE = False
+
+# Authenticated Files
+try:
+    from .authenticated_files import (
+        AuthenticatedFileFormat,
+        SecurePSNXFile,
+        FileMetadata,
+        AuthenticationError,
+        verify_file_integrity
+    )
+    AUTHENTICATED_FILES_AVAILABLE = True
+except ImportError:
+    AUTHENTICATED_FILES_AVAILABLE = False
+
+# Quantum Entropy
+try:
+    from .quantum_entropy import (
+        HybridEntropyPool,
+        QuantumEntropyManager,
+        get_quantum_entropy,
+        EntropyQuality,
+        ANUQuantumSource,
+        OSEntropySource
+    )
+    QUANTUM_ENTROPY_AVAILABLE = True
+except ImportError:
+    QUANTUM_ENTROPY_AVAILABLE = False
+
+# Secret Sharing (Shamir)
+try:
+    from .secret_sharing import (
+        ShamirSecretSharing,
+        VaultKeySharing,
+        Share,
+        create_recovery_shares,
+        recover_from_shares
+    )
+    SECRET_SHARING_AVAILABLE = True
+except ImportError:
+    SECRET_SHARING_AVAILABLE = False
+
+# Constant Time Operations
+try:
+    from .constant_time import (
+        constant_time_compare,
+        constant_time_select,
+        secure_key_compare,
+        ConstantTimeHMAC,
+        BlindedScalarOperations
+    )
+    CONSTANT_TIME_AVAILABLE = True
+except ImportError:
+    CONSTANT_TIME_AVAILABLE = False
+
+# Zero-Knowledge Proofs
+try:
+    from .zkp_auth import (
+        VaultZKPAuth,
+        SchnorrZKP,
+        SchnorrProof,
+        create_vault_zkp_credentials,
+        verify_vault_ownership,
+        MultiPartyZKP
+    )
+    ZKP_AVAILABLE = True
+except ImportError:
+    ZKP_AVAILABLE = False
+
+# Hardware Security Module
+try:
+    from .hardware_security import (
+        HSMManager,
+        HardwareSecurityModule,
+        SoftwareHSM,
+        YubiHSM2,
+        TPM2Integration,
+        KeyType,
+        KeyUsage,
+        HSMKeyInfo
+    )
+    HSM_AVAILABLE = True
+except ImportError:
+    HSM_AVAILABLE = False
+
+# Security Suite (integrated)
+try:
+    from .security_suite import (
+        SecureVaultManager,
+        SecurityConfig,
+        create_secure_vault
+    )
+    SECURITY_SUITE_AVAILABLE = True
+except ImportError:
+    SECURITY_SUITE_AVAILABLE = False
