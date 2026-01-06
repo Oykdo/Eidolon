@@ -1401,6 +1401,45 @@ class VaultMonitorGUI:
                         justify='left'
                     ).pack(anchor='w')
             
+            # Glyphes et Gemmes (7 glyphes x 3 gemmes)
+            glyph_array = art.get('glyph_array')
+            if glyph_array:
+                tk.Label(
+                    artifact_frame,
+                    text="⬡ Glyph Array (7 Glyphs, 21 Gems):",
+                    bg=CypherpunkTheme.BG_PANEL,
+                    fg=CypherpunkTheme.NEON_CYAN
+                ).pack(anchor='w', pady=(10, 5))
+                
+                total_power = glyph_array.get('total_power', 0)
+                bell = glyph_array.get('bell_correlation', 0)
+                tk.Label(
+                    artifact_frame,
+                    text=f"  Glyph Power: {total_power:,.0f} | Bell: {bell:.3f}",
+                    bg=CypherpunkTheme.BG_PANEL,
+                    fg=CypherpunkTheme.NEON_GREEN,
+                    font=("Consolas", 9)
+                ).pack(anchor='w')
+                
+                # Afficher les 7 glyphes
+                glyph_symbols = {
+                    'glyph_void': 'ᛟ', 'glyph_quantum': 'ᚠ', 'glyph_temporal': 'ᛞ',
+                    'glyph_spatial': 'ᚱ', 'glyph_entropic': 'ᚺ', 'glyph_harmonic': 'ᚹ',
+                    'glyph_celestial': 'ᛊ'
+                }
+                glyphs_text = ""
+                for g in glyph_array.get('glyphs', [])[:7]:
+                    sym = glyph_symbols.get(g.get('glyph_type', ''), '?')
+                    glyphs_text += sym
+                
+                tk.Label(
+                    artifact_frame,
+                    text=f"  Glyphs: {glyphs_text}",
+                    bg=CypherpunkTheme.BG_PANEL,
+                    fg=CypherpunkTheme.NEON_PURPLE,
+                    font=("Segoe UI", 12)
+                ).pack(anchor='w')
+            
             # Lore
             lore = art.get('lore', '')
             if lore:

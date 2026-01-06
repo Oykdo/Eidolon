@@ -307,6 +307,9 @@ class SpinorArtifact:
     # Capacites
     abilities: List[Dict[str, Any]] = field(default_factory=list)
     
+    # Glyphes et Gemmes (7 glyphes x 3 gemmes = 21 gemmes)
+    glyph_array: Optional[Dict[str, Any]] = None
+    
     # Visuel
     description: str = ""
     lore: str = ""
@@ -700,6 +703,28 @@ class SpinorArtifactGenerator:
             quantum_state=hashlib.sha256(dirac.tobytes()).hexdigest()[:16]
         )
         
+        # Genere les 7 glyphes avec 21 gemmes (poly-spinor optimise)
+        glyph_array = None
+        try:
+            from core.glyph_gem_system import PolySpinorGlyphGenerator
+            glyph_generator = PolySpinorGlyphGenerator(self.vault_seed)
+            array = glyph_generator.generate_glyph_array()
+            glyph_array = array.to_dict()
+            
+            # Ajoute la puissance des glyphes aux stats
+            stats.base_power += array.total_power * 0.1
+            stats.calculate_effective_power(RARITY_MULTIPLIERS.get(rarity, 1.0))
+        except ImportError:
+            try:
+                from glyph_gem_system import PolySpinorGlyphGenerator
+                glyph_generator = PolySpinorGlyphGenerator(self.vault_seed)
+                array = glyph_generator.generate_glyph_array()
+                glyph_array = array.to_dict()
+                stats.base_power += array.total_power * 0.1
+                stats.calculate_effective_power(RARITY_MULTIPLIERS.get(rarity, 1.0))
+            except ImportError:
+                pass  # Glyph system not available
+        
         # Genere le lore
         lore = self._generate_lore(element, abilities, stats)
         
@@ -720,6 +745,7 @@ class SpinorArtifactGenerator:
             stats=stats,
             signature=signature,
             abilities=abilities,
+            glyph_array=glyph_array,
             description=f"{rarity.value.upper()} {artifact_type.value.replace('_', ' ').title()}",
             lore=lore
         )
