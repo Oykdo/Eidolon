@@ -1191,7 +1191,7 @@ class VaultMonitorGUI:
         return frame
     
     def _show_vault_inventory(self):
-        """Affiche l'inventaire COMPLET du vault: Items, Fragments, Gems, Pierres"""
+        """Affiche l'inventaire COMPLET du vault: Equipements, Fragments, Gems, Pierres"""
         selection = self.runes_tree.selection()
         if not selection:
             messagebox.showwarning("Attention", "Veuillez selectionner un vault")
@@ -1239,7 +1239,7 @@ class VaultMonitorGUI:
         stats_frame.pack(fill=tk.X, padx=15, pady=(0, 10))
         
         stats = [
-            ("📦 Items", len(vault_items), "#00ff41"),
+            ("📦 Equipements", len(vault_items), "#00ff41"),
             ("💎 Gems", len(vault_gems), "#00ffff"),
             ("🔮 Fragments", len(vault_fragments), "#aa00ff"),
             ("⚗ Pierres", len(vault_stones), "#ffd700"),
@@ -1268,9 +1268,9 @@ class VaultMonitorGUI:
             'cut': '#00ff00', 'rough': '#888888', 'flawed': '#666666'
         }
         
-        # === ONGLET ITEMS ALCHIMIQUES ===
+        # === ONGLET EQUIPEMENTS ALCHIMIQUES ===
         items_frame = tk.Frame(notebook, bg=CypherpunkTheme.BG_SECONDARY)
-        notebook.add(items_frame, text=f" 📦 ITEMS ({len(vault_items)}) ")
+        notebook.add(items_frame, text=f" 📦 EQUIPEMENTS ({len(vault_items)}) ")
         self._create_items_tab(items_frame, vault_items, rarity_colors)
         
         # === ONGLET GEMS ===
@@ -1294,7 +1294,7 @@ class VaultMonitorGUI:
         self._create_artifacts_tab(artifacts_frame, vault_artifacts)
     
     def _create_items_tab(self, parent, items, rarity_colors):
-        """Cree l'onglet des items alchimiques"""
+        """Cree l'onglet des equipements alchimiques"""
         # Canvas scrollable
         canvas = tk.Canvas(parent, bg=CypherpunkTheme.BG_SECONDARY, highlightthickness=0)
         scrollbar = ttk.Scrollbar(parent, orient="vertical", command=canvas.yview)
@@ -2275,7 +2275,7 @@ class VaultMonitorGUI:
             
             tk.Label(
                 inventory_frame,
-                text=f"📦 INVENTORY ({len(vault_chests)} Chests, {len(vault_items)} Items)",
+                text=f"📦 INVENTORY ({len(vault_chests)} Chests, {len(vault_items)} Equipements)",
                 bg=CypherpunkTheme.BG_PANEL,
                 fg="#FFD700",
                 font=CypherpunkTheme.FONT_TITLE
@@ -2377,7 +2377,7 @@ class VaultMonitorGUI:
             
             tk.Label(
                 stats_frame,
-                text=f"Items: {len(vault_items)} | Mods: {total_mods} | Perfect: {perfect_mods}",
+                text=f"Equipements: {len(vault_items)} | Mods: {total_mods} | Perfect: {perfect_mods}",
                 bg=CypherpunkTheme.BG_TERTIARY,
                 fg=CypherpunkTheme.NEON_GREEN,
                 font=CypherpunkTheme.FONT_MONO_SMALL
@@ -3140,7 +3140,7 @@ SELLER: {item['values'][5]}
         btn_frame.pack(pady=10)
         
         asset_types = [
-            ("ITEMS", "#00ffff", self._inscribe_items_dialog),
+            ("EQUIPEMENTS", "#00ffff", self._inscribe_items_dialog),
             ("GEMS", "#ff00ff", self._inscribe_gems_dialog),
             ("FRAGMENTS", "#00ff00", self._inscribe_fragments_dialog),
             ("STONES", "#ffd700", self._inscribe_stones_dialog),
@@ -3300,7 +3300,7 @@ SELLER: {item['values'][5]}
     
     def _inscribe_items_dialog(self):
         """Dialog pour inscrire des items"""
-        self._inscribe_assets_dialog("item", "Items Alchimiques")
+        self._inscribe_assets_dialog("item", "Equipements Alchimiques")
     
     def _inscribe_gems_dialog(self):
         """Dialog pour inscrire des gems"""
