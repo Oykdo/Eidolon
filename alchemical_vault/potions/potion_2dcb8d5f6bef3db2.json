@@ -1,0 +1,20 @@
+{
+  "potion_id": "2dcb8d5f6bef3db2",
+  "potion_type": "power",
+  "quality": "standard",
+  "name": "Power Elixir",
+  "effects": {
+    "phys_damage_boost": 1.0
+  },
+  "duration": 60,
+  "power": 100.0,
+  "stack_size": 1,
+  "max_stack": 20,
+  "category": "offensive",
+  "color": "#0070dd",
+  "description": "A standard concoction. Increases physical damage temporarily.",
+  "origin_vault": 2,
+  "origin_chest": "0644ff4a68078870",
+  "pioneer_tier": "genesis",
+  "created_at": "2026-01-07T07:53:24.135506"
+}

@@ -1,0 +1,21 @@
+{
+  "potion_id": "89ad08e3600f7545",
+  "potion_type": "void_essence",
+  "quality": "lesser",
+  "name": "Lesser Void Essence",
+  "effects": {
+    "void_damage": 0.375,
+    "life_steal": 0.375
+  },
+  "duration": 33,
+  "power": 56.25,
+  "stack_size": 1,
+  "max_stack": 20,
+  "category": "special",
+  "color": "#1eff00",
+  "description": "A modest concoction. Infuses attacks with void energy.",
+  "origin_vault": 6,
+  "origin_chest": "56de31cf24c9612d",
+  "pioneer_tier": "genesis",
+  "created_at": "2026-01-07T07:53:24.237955"
+}

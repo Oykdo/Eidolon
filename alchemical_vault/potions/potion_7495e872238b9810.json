@@ -1,0 +1,21 @@
+{
+  "potion_id": "7495e872238b9810",
+  "potion_type": "insight",
+  "quality": "superior",
+  "name": "Superior Insight Philter",
+  "effects": {
+    "exp_boost": 1.2,
+    "loot_boost": 0.8
+  },
+  "duration": 240,
+  "power": 400.0,
+  "stack_size": 1,
+  "max_stack": 20,
+  "category": "utility",
+  "color": "#ff8000",
+  "description": "A powerful concoction. Increases experience and loot gains.",
+  "origin_vault": 5,
+  "origin_chest": "5c82c38e66e4be3a",
+  "pioneer_tier": "genesis",
+  "created_at": "2026-01-07T07:53:24.212756"
+}

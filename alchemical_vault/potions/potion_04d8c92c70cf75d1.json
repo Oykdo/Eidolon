@@ -1,0 +1,20 @@
+{
+  "potion_id": "04d8c92c70cf75d1",
+  "potion_type": "invisibility",
+  "quality": "superior",
+  "name": "Superior Invisibility Vial",
+  "effects": {
+    "stealth": 2.0
+  },
+  "duration": 60,
+  "power": 400.0,
+  "stack_size": 1,
+  "max_stack": 20,
+  "category": "utility",
+  "color": "#ff8000",
+  "description": "A powerful concoction. Grants temporary invisibility.",
+  "origin_vault": 2,
+  "origin_chest": "0644ff4a68078870",
+  "pioneer_tier": "genesis",
+  "created_at": "2026-01-07T07:53:24.134370"
+}

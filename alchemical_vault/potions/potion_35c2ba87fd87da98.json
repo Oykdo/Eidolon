@@ -1,0 +1,21 @@
+{
+  "potion_id": "35c2ba87fd87da98",
+  "potion_type": "fury",
+  "quality": "lesser",
+  "name": "Lesser Fury Tonic",
+  "effects": {
+    "attack_speed_boost": 0.375,
+    "crit_chance_boost": 0.375
+  },
+  "duration": 33,
+  "power": 56.25,
+  "stack_size": 1,
+  "max_stack": 20,
+  "category": "offensive",
+  "color": "#1eff00",
+  "description": "A modest concoction. Increases attack speed and critical chance.",
+  "origin_vault": 4,
+  "origin_chest": "292e385a65baa20d",
+  "pioneer_tier": "genesis",
+  "created_at": "2026-01-07T07:53:24.180288"
+}

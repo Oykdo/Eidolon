@@ -1,0 +1,20 @@
+{
+  "potion_id": "8dd67212b0988353",
+  "potion_type": "nexus_catalyst",
+  "quality": "superior",
+  "name": "Superior Nexus Catalyst",
+  "effects": {
+    "all_stats_boost": 2.0
+  },
+  "duration": 60,
+  "power": 400.0,
+  "stack_size": 1,
+  "max_stack": 20,
+  "category": "special",
+  "color": "#ff8000",
+  "description": "A powerful concoction. Boosts all stats temporarily.",
+  "origin_vault": 3,
+  "origin_chest": "5fd96bf023f1581a",
+  "pioneer_tier": "genesis",
+  "created_at": "2026-01-07T07:53:24.173780"
+}

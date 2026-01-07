@@ -118,30 +118,47 @@ class PotionQuality(Enum):
 # ============================================================================
 
 class PotionPioneerTier(Enum):
-    """Pioneer tiers affect potion quality chances"""
-    GENESIS = ("genesis", 1, 10, 4.0, {
-        "supreme_boost": 0.15, "superior_boost": 0.20, "greater_boost": 0.25
+    """
+    Pioneer tiers affect potion quality chances.
+    
+    Balanced RNG with progressive scaling:
+    - Genesis gets best odds but not overwhelming
+    - Each tier drops ~20-30% from previous
+    - Standard tier uses base rates only
+    
+    Expected Supreme rates:
+    - Genesis: ~5-6%
+    - Primordial: ~4%
+    - Supreme: ~3%
+    - Elite: ~2.5%
+    - Veteran: ~2%
+    - Early: ~1.5%
+    - Pioneer: ~1.2%
+    - Standard: ~1%
+    """
+    GENESIS = ("genesis", 1, 10, 1.8, {
+        "supreme_boost": 0.03, "superior_boost": 0.06, "greater_boost": 0.08
     })
-    PRIMORDIAL = ("primordial", 11, 33, 3.0, {
-        "supreme_boost": 0.10, "superior_boost": 0.15, "greater_boost": 0.20
+    PRIMORDIAL = ("primordial", 11, 33, 1.6, {
+        "supreme_boost": 0.02, "superior_boost": 0.04, "greater_boost": 0.06
     })
-    SUPREME = ("supreme", 34, 100, 2.5, {
-        "supreme_boost": 0.06, "superior_boost": 0.12, "greater_boost": 0.18
+    SUPREME = ("supreme", 34, 100, 1.4, {
+        "supreme_boost": 0.01, "superior_boost": 0.03, "greater_boost": 0.05
     })
-    ELITE = ("elite", 101, 333, 2.0, {
-        "supreme_boost": 0.04, "superior_boost": 0.08, "greater_boost": 0.14
+    ELITE = ("elite", 101, 333, 1.25, {
+        "supreme_boost": 0.006, "superior_boost": 0.02, "greater_boost": 0.04
     })
-    VETERAN = ("veteran", 334, 1000, 1.6, {
-        "supreme_boost": 0.02, "superior_boost": 0.05, "greater_boost": 0.10
+    VETERAN = ("veteran", 334, 1000, 1.15, {
+        "supreme_boost": 0.003, "superior_boost": 0.012, "greater_boost": 0.025
     })
-    EARLY = ("early", 1001, 3333, 1.3, {
-        "supreme_boost": 0.01, "superior_boost": 0.03, "greater_boost": 0.06
+    EARLY = ("early", 1001, 3333, 1.08, {
+        "supreme_boost": 0.001, "superior_boost": 0.006, "greater_boost": 0.015
     })
-    PIONEER = ("pioneer", 3334, 10000, 1.1, {
-        "supreme_boost": 0.005, "superior_boost": 0.02, "greater_boost": 0.04
+    PIONEER = ("pioneer", 3334, 10000, 1.03, {
+        "supreme_boost": 0.0, "superior_boost": 0.003, "greater_boost": 0.008
     })
     STANDARD = ("standard", 10001, float('inf'), 1.0, {
-        "supreme_boost": 0.0, "superior_boost": 0.01, "greater_boost": 0.02
+        "supreme_boost": 0.0, "superior_boost": 0.0, "greater_boost": 0.0
     })
     
     def __init__(self, tier_id: str, min_vault: int, max_vault: int,

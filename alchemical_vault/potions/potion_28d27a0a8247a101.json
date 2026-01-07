@@ -1,0 +1,21 @@
+{
+  "potion_id": "28d27a0a8247a101",
+  "potion_type": "void_essence",
+  "quality": "minor",
+  "name": "Minor Void Essence",
+  "effects": {
+    "void_damage": 0.25,
+    "life_steal": 0.25
+  },
+  "duration": 22,
+  "power": 25.0,
+  "stack_size": 1,
+  "max_stack": 20,
+  "category": "special",
+  "color": "#808080",
+  "description": "A weak concoction. Infuses attacks with void energy.",
+  "origin_vault": 6,
+  "origin_chest": "56de31cf24c9612d",
+  "pioneer_tier": "genesis",
+  "created_at": "2026-01-07T07:53:24.242654"
+}

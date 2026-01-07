@@ -1,0 +1,20 @@
+{
+  "potion_id": "3f774a28f06bf4ee",
+  "potion_type": "fortitude",
+  "quality": "standard",
+  "name": "Fortitude Brew",
+  "effects": {
+    "defense_boost": 1.0
+  },
+  "duration": 60,
+  "power": 100.0,
+  "stack_size": 1,
+  "max_stack": 20,
+  "category": "defensive",
+  "color": "#0070dd",
+  "description": "A standard concoction. Enhances defensive capabilities.",
+  "origin_vault": 1,
+  "origin_chest": "6610b2311d2da643",
+  "pioneer_tier": "genesis",
+  "created_at": "2026-01-07T07:53:24.113589"
+}

@@ -1,0 +1,34 @@
+{
+  "chest_id": "5fd96bf023f1581a",
+  "vault_number": 3,
+  "pioneer_tier": "genesis",
+  "potions": [
+    "16f1937becc19824",
+    "738315ba1e92bc8a",
+    "d1002651aa670429",
+    "c3d7ab200a5e32cb",
+    "c623b8a0d6e0de37",
+    "4ec3e1f4ec261879",
+    "824198c0a49d17fb",
+    "b25187f0cbc78959",
+    "6835a4f48e2a3956",
+    "2d7805fa2abb4610",
+    "1aa39527159da710",
+    "7af589f835977dc1",
+    "bb590604d893aea7",
+    "b6ad088f732db8b6",
+    "8dd67212b0988353",
+    "f754b58a505f9402"
+  ],
+  "is_opened": true,
+  "created_at": "2026-01-07T07:53:24.038584",
+  "opened_at": "2026-01-07T07:53:24.173780",
+  "total_potions": 16,
+  "quality_distribution": {
+    "greater": 2,
+    "standard": 3,
+    "superior": 4,
+    "minor": 2,
+    "lesser": 5
+  }
+}

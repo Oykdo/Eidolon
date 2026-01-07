@@ -1,0 +1,21 @@
+{
+  "potion_id": "406a1fc7c0671e8e",
+  "potion_type": "ironhide",
+  "quality": "minor",
+  "name": "Minor Ironhide Potion",
+  "effects": {
+    "damage_reduction": 0.35,
+    "health_boost": 0.15
+  },
+  "duration": 22,
+  "power": 25.0,
+  "stack_size": 1,
+  "max_stack": 20,
+  "category": "defensive",
+  "color": "#808080",
+  "description": "A weak concoction. Reduces incoming damage.",
+  "origin_vault": 5,
+  "origin_chest": "5c82c38e66e4be3a",
+  "pioneer_tier": "genesis",
+  "created_at": "2026-01-07T07:53:24.218846"
+}

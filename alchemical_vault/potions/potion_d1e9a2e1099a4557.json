@@ -1,0 +1,21 @@
+{
+  "potion_id": "d1e9a2e1099a4557",
+  "potion_type": "insight",
+  "quality": "lesser",
+  "name": "Lesser Insight Philter",
+  "effects": {
+    "exp_boost": 0.44999999999999996,
+    "loot_boost": 0.30000000000000004
+  },
+  "duration": 90,
+  "power": 56.25,
+  "stack_size": 1,
+  "max_stack": 20,
+  "category": "utility",
+  "color": "#1eff00",
+  "description": "A modest concoction. Increases experience and loot gains.",
+  "origin_vault": 5,
+  "origin_chest": "5c82c38e66e4be3a",
+  "pioneer_tier": "genesis",
+  "created_at": "2026-01-07T07:53:24.218308"
+}
