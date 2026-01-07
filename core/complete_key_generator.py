@@ -311,9 +311,10 @@ class CompletePolySpinorKeyGenerator:
         self.derived_seeds: Dict[str, bytes] = {}
         
     def _report_progress(self, phase: int, progress: float, message: str):
-        """Rapporte la progression"""
+        """Rapporte la progression (silencieux par defaut)"""
         self.progress_callback(phase, progress, message)
-        print(f"[Phase {phase}] {progress:.0%} - {message}")
+        # Messages de debug desactives - decommenter pour debug:
+        # print(f"[Phase {phase}] {progress:.0%} - {message}")
     
     def _derive_seed(self, context: str, key_id: str = "") -> bytes:
         """

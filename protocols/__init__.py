@@ -34,8 +34,9 @@ try:
     from .material_vault import MaterialBasedVaultSystem, VaultCredentials
     from .vault_monitoring import VaultMonitoringSystem, VaultActivityMonitor, create_vault_monitoring
     from .hyper_cluster import HyperCluster, HyperVerifiableEscrow
-except ImportError as e:
-    print(f"[WARN] Import partiel protocols: {e}")
+except ImportError:
+    # Import partiel - certains modules peuvent ne pas etre disponibles
+    pass
 
 # Tâches programmées
 try:
