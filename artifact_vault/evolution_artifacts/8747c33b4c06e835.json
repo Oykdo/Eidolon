@@ -1,0 +1,66 @@
+{
+  "artifact_id": "8747c33b4c06e835",
+  "artifact_type": "origin_key",
+  "name": "Cle de l'Origine",
+  "description": "Artefact primordial qui deverrouille les secrets de la creation elle-meme.",
+  "rarity": "primordial",
+  "evolution_stage": "primordial",
+  "power_bonus": 4.5,
+  "stat_bonuses": {
+    "primordial_power": 2.0,
+    "all_stats": 1.75,
+    "power": 2.5,
+    "divine": 2.0,
+    "wisdom": 2.0
+  },
+  "visual_effects": [
+    "reality_warp",
+    "cosmos_background",
+    "primordial_flames",
+    "origin_crown",
+    "universe_projection",
+    "eternal_wings",
+    "genesis_aura"
+  ],
+  "color_primary": "#ff00ff",
+  "color_secondary": "#aa00aa",
+  "glow_intensity": 3.5,
+  "abilities": [
+    {
+      "id": "genesis_power",
+      "name": "Pouvoir de Genese",
+      "description": "Cree de la matiere a partir du neant",
+      "value": 1
+    },
+    {
+      "id": "reality_shaping",
+      "name": "Faconner la Realite",
+      "description": "Modifie les lois de la physique dans un rayon de {value}m",
+      "value": 50
+    },
+    {
+      "id": "cosmic_dominion",
+      "name": "Domination Cosmique",
+      "description": "Controle {value} dimensions simultanement",
+      "value": 7
+    },
+    {
+      "id": "eternal_existence",
+      "name": "Existence Eternelle",
+      "description": "Immunite totale a la mort",
+      "value": 1
+    },
+    {
+      "id": "origin_command",
+      "name": "Commandement de l'Origine",
+      "description": "Tous les artefacts obeissent",
+      "value": 100
+    }
+  ],
+  "created_at": "2026-01-07T05:08:30.408041",
+  "vault_id": "vault_00001",
+  "origin_vault": 1,
+  "current_vault": 1,
+  "bound_to_avatar": null,
+  "is_bound": false
+}

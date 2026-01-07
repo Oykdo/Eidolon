@@ -1802,19 +1802,28 @@ class VaultMonitorGUI:
                     bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.TEXT_SECONDARY,
                     font=("Consolas", 9)).pack(anchor=tk.W)
     
-    def _load_evolution_artifacts(self) -> list:
+    def _load_evolution_artifacts(self, vault_num: int = None) -> list:
         """Charge les artefacts d'evolution du vault"""
         if not EVOLUTION_ARTIFACTS_AVAILABLE:
             return []
         
         try:
             evo_system = get_evolution_artifact_system()
-            vault_num = self.current_vault_number if hasattr(self, 'current_vault_number') else None
+            
+            # Utiliser le parametre ou essayer plusieurs attributs
+            if vault_num is None:
+                if hasattr(self, 'current_vault_num'):
+                    vault_num = self.current_vault_num
+                elif hasattr(self, 'current_vault_number'):
+                    vault_num = self.current_vault_number
+                elif hasattr(self, 'vault_number'):
+                    vault_num = self.vault_number
+            
             if vault_num is None:
                 return []
             
-            vault_id = f"vault_{vault_num:05d}"
-            artifacts = evo_system.get_vault_artifacts(vault_id)
+            # Utiliser la methode par numero (plus fiable)
+            artifacts = evo_system.get_vault_artifacts_by_number(vault_num)
             return [a.to_dict() for a in artifacts]
         except Exception as e:
             print(f"[WARN] Erreur chargement artefacts evolution: {e}")

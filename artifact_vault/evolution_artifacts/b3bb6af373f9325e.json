@@ -1,5 +1,5 @@
 {
-  "artifact_id": "3226a4cb6c737a8e",
+  "artifact_id": "b3bb6af373f9325e",
   "artifact_type": "infinity_fragment",
   "name": "Fragment d'Infini",
   "description": "Eclat de l'infini cristallise, il transcende les limites du possible.",
@@ -39,8 +39,10 @@
       "value": 5
     }
   ],
-  "created_at": "2026-01-07T04:58:07.968330",
+  "created_at": "2026-01-07T05:08:30.408041",
   "vault_id": "vault_00001",
+  "origin_vault": 1,
+  "current_vault": 1,
   "bound_to_avatar": null,
   "is_bound": false
 }

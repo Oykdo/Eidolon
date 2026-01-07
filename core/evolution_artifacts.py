@@ -60,6 +60,8 @@ class EvolutionArtifact:
     # Metadonnees
     created_at: str = ""
     vault_id: Optional[str] = None
+    origin_vault: Optional[int] = None  # Numero du vault (pour compatibilite)
+    current_vault: Optional[int] = None  # Proprietaire actuel
     bound_to_avatar: Optional[str] = None
     is_bound: bool = False
     
@@ -307,7 +309,9 @@ class EvolutionArtifactSystem:
             color_secondary=definition["color_secondary"],
             glow_intensity=definition["glow_intensity"],
             abilities=definition["abilities"].copy(),
-            vault_id=vault_id
+            vault_id=vault_id,
+            origin_vault=vault_number,
+            current_vault=vault_number
         )
         
         # Sauvegarder
@@ -349,8 +353,13 @@ class EvolutionArtifactSystem:
         return distributed
     
     def get_vault_artifacts(self, vault_id: str) -> List[EvolutionArtifact]:
-        """Recupere tous les artefacts d'un vault"""
+        """Recupere tous les artefacts d'un vault par vault_id"""
         return [a for a in self.artifacts.values() if a.vault_id == vault_id]
+    
+    def get_vault_artifacts_by_number(self, vault_number: int) -> List[EvolutionArtifact]:
+        """Recupere tous les artefacts d'un vault par numero"""
+        return [a for a in self.artifacts.values() 
+                if a.current_vault == vault_number or a.origin_vault == vault_number]
     
     def get_artifact(self, artifact_id: str) -> Optional[EvolutionArtifact]:
         """Recupere un artefact par son ID"""

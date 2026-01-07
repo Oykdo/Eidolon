@@ -1,5 +1,5 @@
 {
-  "artifact_id": "87b72d4f03c0105f",
+  "artifact_id": "2c0764aec73df2c7",
   "artifact_type": "cosmic_lens",
   "name": "Lentille Cosmique",
   "description": "Cristal taille dans une etoile morte, il permet de voir au-dela des dimensions.",
@@ -39,8 +39,10 @@
       "value": 2
     }
   ],
-  "created_at": "2026-01-07T04:58:07.966741",
+  "created_at": "2026-01-07T05:08:30.408041",
   "vault_id": "vault_00001",
+  "origin_vault": 1,
+  "current_vault": 1,
   "bound_to_avatar": null,
   "is_bound": false
 }
