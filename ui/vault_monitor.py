@@ -4091,9 +4091,13 @@ INSTRUCTIONS:
         # Initialiser le manager
         self.avatar_manager = AvatarManager()
         
+        # Track current avatar index for navigation
+        self.current_avatar_index = 0
+        self.avatar_list = []
+        
         # === HEADER ===
         header_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
-        header_frame.pack(fill=tk.X, pady=(10, 10), padx=10)
+        header_frame.pack(fill=tk.X, pady=(10, 5), padx=10)
         
         tk.Label(
             header_frame,
@@ -4102,6 +4106,48 @@ INSTRUCTIONS:
             fg=CypherpunkTheme.NEON_MAGENTA,
             font=("Consolas", 16, "bold")
         ).pack(side=tk.LEFT)
+        
+        # === AVATAR NAVIGATION BAR ===
+        nav_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_PANEL)
+        nav_frame.pack(fill=tk.X, padx=10, pady=(0, 10))
+        
+        # Previous button
+        self.avatar_prev_btn = tk.Button(
+            nav_frame,
+            text="◀",
+            bg=CypherpunkTheme.BG_SECONDARY,
+            fg=CypherpunkTheme.NEON_CYAN,
+            font=("Consolas", 14, "bold"),
+            width=3,
+            command=self._prev_avatar
+        )
+        self.avatar_prev_btn.pack(side=tk.LEFT, padx=5, pady=5)
+        
+        # Avatar selector (thumbnails)
+        self.avatar_selector_frame = tk.Frame(nav_frame, bg=CypherpunkTheme.BG_PANEL)
+        self.avatar_selector_frame.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=10, pady=5)
+        
+        # Current avatar indicator
+        self.avatar_nav_label = tk.Label(
+            nav_frame,
+            text="0 / 0",
+            bg=CypherpunkTheme.BG_PANEL,
+            fg=CypherpunkTheme.NEON_YELLOW,
+            font=("Consolas", 12, "bold")
+        )
+        self.avatar_nav_label.pack(side=tk.LEFT, padx=10)
+        
+        # Next button
+        self.avatar_next_btn = tk.Button(
+            nav_frame,
+            text="▶",
+            bg=CypherpunkTheme.BG_SECONDARY,
+            fg=CypherpunkTheme.NEON_CYAN,
+            font=("Consolas", 14, "bold"),
+            width=3,
+            command=self._next_avatar
+        )
+        self.avatar_next_btn.pack(side=tk.RIGHT, padx=5, pady=5)
         
         # Boutons principaux
         btn_frame = tk.Frame(header_frame, bg=CypherpunkTheme.BG_DARK)
@@ -5097,20 +5143,216 @@ INSTRUCTIONS:
         }
         return colors.get(rarity.lower(), "white")
     
+    def _load_all_avatars(self):
+        """Load all avatars from consolidated slots or current vault"""
+        avatars = []
+        
+        try:
+            # Try to load from consolidated slots first
+            slots_file = os.path.join(self.base_path, "vault_storage", "consolidated_slots.json")
+            if os.path.exists(slots_file):
+                with open(slots_file, 'r', encoding='utf-8') as f:
+                    slots_data = json.load(f)
+                
+                # Load avatars from all slots
+                for slot in slots_data.get('slots', []):
+                    slot_num = slot.get('slot_number', 0)
+                    slot_avatars = self.avatar_manager.get_avatars_owned_by_vault(slot_num)
+                    if not slot_avatars:
+                        slot_avatars = self.avatar_manager.get_avatars_by_vault(f"vault_{slot_num:04d}")
+                    
+                    for av in slot_avatars:
+                        av._slot_info = slot  # Attach slot info
+                        avatars.append(av)
+            
+            # If no consolidated slots, just load from current vault
+            if not avatars:
+                avatars = self.avatar_manager.get_avatars_owned_by_vault(self.current_vault_num)
+                if not avatars:
+                    avatars = self.avatar_manager.get_avatars_by_vault(f"vault_{self.current_vault_num:04d}")
+        except Exception:
+            # Fallback to current vault only
+            avatars = self.avatar_manager.get_avatars_owned_by_vault(self.current_vault_num)
+            if not avatars:
+                avatars = self.avatar_manager.get_avatars_by_vault(f"vault_{self.current_vault_num:04d}")
+        
+        return avatars if avatars else []
+    
+    def _update_avatar_navigation(self):
+        """Update the avatar navigation bar with thumbnails"""
+        # Clear existing thumbnails
+        for widget in self.avatar_selector_frame.winfo_children():
+            widget.destroy()
+        
+        if not self.avatar_list:
+            self.avatar_nav_label.configure(text="0 / 0")
+            self.avatar_prev_btn.configure(state=tk.DISABLED)
+            self.avatar_next_btn.configure(state=tk.DISABLED)
+            return
+        
+        # Update navigation label
+        self.avatar_nav_label.configure(
+            text=f"{self.current_avatar_index + 1} / {len(self.avatar_list)}"
+        )
+        
+        # Enable/disable prev/next buttons
+        self.avatar_prev_btn.configure(
+            state=tk.NORMAL if self.current_avatar_index > 0 else tk.DISABLED
+        )
+        self.avatar_next_btn.configure(
+            state=tk.NORMAL if self.current_avatar_index < len(self.avatar_list) - 1 else tk.DISABLED
+        )
+        
+        # Create thumbnail buttons
+        rarity_colors = {
+            "common": "#808080", "uncommon": "#00ff00", "rare": "#0080ff",
+            "epic": "#a020f0", "legendary": "#ffd700", "mythical": "#ff00ff",
+            "primordial": "#00ffff"
+        }
+        
+        for i, avatar in enumerate(self.avatar_list):
+            is_current = (i == self.current_avatar_index)
+            rarity = getattr(avatar, 'rarity_tier', 'common').lower()
+            color = rarity_colors.get(rarity, '#808080')
+            
+            # Get slot info if available
+            slot_info = getattr(avatar, '_slot_info', None)
+            slot_name = slot_info.get('name', f"#{i+1}")[:8] if slot_info else f"#{i+1}"
+            
+            btn_frame = tk.Frame(
+                self.avatar_selector_frame,
+                bg=color if is_current else CypherpunkTheme.BG_SECONDARY,
+                padx=2, pady=2
+            )
+            btn_frame.pack(side=tk.LEFT, padx=2)
+            
+            btn = tk.Button(
+                btn_frame,
+                text=f"🎭\n{slot_name}",
+                bg=CypherpunkTheme.BG_SECONDARY if is_current else CypherpunkTheme.BG_DARK,
+                fg=color,
+                font=("Consolas", 8, "bold" if is_current else "normal"),
+                width=8,
+                height=2,
+                relief=tk.SUNKEN if is_current else tk.RAISED,
+                command=lambda idx=i: self._select_avatar(idx)
+            )
+            btn.pack()
+    
+    def _prev_avatar(self):
+        """Navigate to previous avatar"""
+        if self.current_avatar_index > 0:
+            self.current_avatar_index -= 1
+            self._display_current_avatar()
+    
+    def _next_avatar(self):
+        """Navigate to next avatar"""
+        if self.current_avatar_index < len(self.avatar_list) - 1:
+            self.current_avatar_index += 1
+            self._display_current_avatar()
+    
+    def _select_avatar(self, index: int):
+        """Select avatar by index"""
+        if 0 <= index < len(self.avatar_list):
+            self.current_avatar_index = index
+            self._display_current_avatar()
+    
+    def _display_current_avatar(self):
+        """Display the currently selected avatar"""
+        if not self.avatar_list:
+            self._display_avatar_placeholder()
+            self._display_stats_placeholder()
+            return
+        
+        avatar = self.avatar_list[self.current_avatar_index]
+        self._display_avatar_info(avatar)
+        self._update_avatar_buttons(avatar)
+        self._update_avatar_navigation()
+        
+        # Update quick info
+        self.avatar_type_var.set(avatar.geometry_type.replace("_", " ").upper())
+        self.avatar_rarity_var.set(avatar.rarity_tier.upper())
+        self.avatar_power_var.set(f"{avatar.effective_power:,.0f}")
+        
+        # Get slot info
+        slot_info = getattr(avatar, '_slot_info', None)
+        slot_name = slot_info.get('name', '') if slot_info else ''
+        
+        # Rarity color
+        rarity_colors = {
+            "common": "#808080", "uncommon": "#00ff00", "rare": "#0080ff",
+            "epic": "#a020f0", "legendary": "#ffd700", "mythical": "#ff00ff",
+            "primordial": "#00ffff"
+        }
+        rarity_color = rarity_colors.get(avatar.rarity_tier.lower(), "#ffffff")
+        self.avatar_rarity_label.configure(fg=rarity_color)
+        
+        # Preview text with slot info
+        slot_text = f"Slot: {slot_name}\n" if slot_name else ""
+        self.avatar_preview_label.configure(
+            text=f"🎭 AVATAR {self.current_avatar_index + 1}/{len(self.avatar_list)}\n\n"
+                 f"{slot_text}"
+                 f"Type: {avatar.geometry_type.replace('_', ' ').title()}\n"
+                 f"Rarete: {avatar.rarity_tier.upper()}\n"
+                 f"Puissance: {avatar.effective_power:,.0f}\n\n"
+                 f"Cliquez sur VISUALISER 3D\npour voir votre avatar unique",
+            fg=rarity_color
+        )
+        
+        # Generate stats
+        try:
+            from core.avatar_system import QuantumAvatarGenerator
+            
+            # Use slot number if available
+            vault_num = slot_info.get('slot_number', self.current_vault_num) if slot_info else self.current_vault_num
+            
+            gen = QuantumAvatarGenerator(avatar.avatar_id.encode(), vault_number=vault_num)
+            stats = gen.generate_stats()
+            avatar_class = gen.select_class()
+            
+            if avatar_class:
+                stats = gen.apply_class_bonuses(stats, avatar_class)
+                self.avatar_class_var.set(f"{avatar_class.icon} {avatar_class.name}")
+            else:
+                self.avatar_class_var.set("---")
+            
+            self._display_avatar_stats(avatar, stats)
+        except Exception:
+            self._display_stats_placeholder()
+            self.avatar_class_var.set("---")
+        
+        # Update state
+        if avatar.binding:
+            state_text = avatar.binding.state.upper()
+            state_color = {
+                "attached": CypherpunkTheme.NEON_GREEN,
+                "detached": "#ff6600",
+                "soul_bound": CypherpunkTheme.NEON_MAGENTA
+            }.get(avatar.binding.state, "white")
+            
+            self.avatar_state_var.set(state_text)
+            self.avatar_state_label.configure(fg=state_color)
+        else:
+            self.avatar_state_var.set("ACTIVE")
+            self.avatar_state_label.configure(fg=CypherpunkTheme.NEON_GREEN)
+    
     def _refresh_avatar(self):
         """Rafraichit l'affichage de l'avatar"""
         if not AVATAR_AVAILABLE:
             return
         
-        # Chercher l'avatar du vault courant
-        avatars = self.avatar_manager.get_avatars_owned_by_vault(self.current_vault_num)
+        # Load all avatars
+        self.avatar_list = self._load_all_avatars()
         
-        if not avatars:
-            # Verifier si cree mais transfere
-            avatars = self.avatar_manager.get_avatars_by_vault(f"vault_{self.current_vault_num:04d}")
+        # Reset index if needed
+        if self.current_avatar_index >= len(self.avatar_list):
+            self.current_avatar_index = 0
         
-        if avatars:
-            avatar = avatars[0]  # Premier avatar
+        # Update navigation and display
+        self._update_avatar_navigation()
+        
+        if self.avatar_list:
+            avatar = self.avatar_list[self.current_avatar_index]
             self._display_avatar_info(avatar)
             self._update_avatar_buttons(avatar)
             
