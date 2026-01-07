@@ -20,6 +20,11 @@ import argparse
 import getpass
 import hashlib
 
+# Fix Windows console encoding for Unicode
+if sys.platform == 'win32':
+    sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+    sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+
 # Ajouter le répertoire parent au path
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
