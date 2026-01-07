@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Eidolon - Quick Connect Interface
-Interface de connexion rapide et standardisee
+Interface de connexion avec gestion des vaults locaux
 """
 
 import sys
@@ -18,6 +18,8 @@ if sys.platform == 'win32':
 
 # Add parent to path
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from core.vault_registry import VaultRegistry
 
 
 # =============================================================================
@@ -43,6 +45,9 @@ class Colors:
     BG_CYAN = '\033[46m'
 
 
+# =============================================================================
+# UI Helpers
+# =============================================================================
 def clear_screen():
     os.system('cls' if os.name == 'nt' else 'clear')
 
@@ -76,21 +81,6 @@ def print_status(message: str, status: str = "info"):
     print(f"    {icon} {message}")
 
 
-def print_menu():
-    """Print the main menu"""
-    print(f"""
-{Colors.WHITE}{Colors.BOLD}    CONNECTION MODE{Colors.RESET}
-{Colors.DIM}    ─────────────────────────────────────{Colors.RESET}
-
-    {Colors.CYAN}[1]{Colors.RESET} Quick Connect     {Colors.DIM}(Password){Colors.RESET}
-    {Colors.CYAN}[2]{Colors.RESET} Key Files         {Colors.DIM}(.psnx + .blend_data){Colors.RESET}
-    {Colors.CYAN}[3]{Colors.RESET} Demo Mode         {Colors.DIM}(Test vault){Colors.RESET}
-    
-    {Colors.DIM}[Q]{Colors.RESET} Quit
-
-""")
-
-
 def loading_animation(message: str, duration: float = 1.0):
     """Show a simple loading animation"""
     frames = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']
@@ -103,39 +93,25 @@ def loading_animation(message: str, duration: float = 1.0):
     print(f"\r    {Colors.GREEN}✓{Colors.RESET} {message}   ")
 
 
-def derive_vault_key(vault_name: str, password: str) -> bytes:
-    """Derive vault key from password"""
-    salt = hashlib.sha256(f"eidolon_{vault_name}".encode()).digest()[:16]
-    vault_key = hashlib.pbkdf2_hmac(
-        'sha256',
-        password.encode(),
-        salt,
-        iterations=100000,
-        dklen=32
-    )
-    return vault_key
+def print_section(title: str):
+    """Print a section header"""
+    print(f"""
+{Colors.WHITE}{Colors.BOLD}    {title}{Colors.RESET}
+{Colors.DIM}    ─────────────────────────────────────{Colors.RESET}
+""")
 
 
-def authenticate_with_files(psnx_path: str, blend_path: str) -> tuple:
-    """Authenticate with key files"""
-    try:
-        from ui.vault_gui_complete import DualKeyAuthenticator
-        
-        if not os.path.exists(psnx_path):
-            return False, None, f"File not found: {psnx_path}"
-        if not os.path.exists(blend_path):
-            return False, None, f"File not found: {blend_path}"
-        
-        auth = DualKeyAuthenticator()
-        success, msg = auth.authenticate(psnx_path, blend_path)
-        
-        if success:
-            return True, auth.vault_key, "Authentication successful"
-        return False, None, msg
-    except ImportError as e:
-        return False, None, f"Authentication module not available: {e}"
+def get_input(prompt: str, hidden: bool = False) -> str:
+    """Get user input with styled prompt"""
+    print(f"    {Colors.CYAN}{prompt}{Colors.RESET}")
+    if hidden:
+        return getpass.getpass(f"    {Colors.DIM}>{Colors.RESET} ")
+    return input(f"    {Colors.DIM}>{Colors.RESET} ").strip()
 
 
+# =============================================================================
+# Main Functions
+# =============================================================================
 def launch_vault(vault_key: bytes, vault_name: str):
     """Launch the vault monitor"""
     try:
@@ -143,7 +119,7 @@ def launch_vault(vault_key: bytes, vault_name: str):
         
         print()
         print_status("Initializing vault interface...", "wait")
-        time.sleep(0.5)
+        time.sleep(0.3)
         print_status(f"Vault: {Colors.GREEN}{vault_name}{Colors.RESET}", "ok")
         print_status(f"Key: {Colors.DIM}{vault_key.hex()[:16]}...{Colors.RESET}", "ok")
         print()
@@ -158,53 +134,161 @@ def launch_vault(vault_key: bytes, vault_name: str):
         sys.exit(1)
 
 
-def quick_connect():
-    """Quick connect with password"""
+def print_menu(registry: VaultRegistry):
+    """Print the main menu with registered vaults"""
+    vaults = registry.get_registered_vaults()
+    
     print(f"""
-{Colors.WHITE}{Colors.BOLD}    QUICK CONNECT{Colors.RESET}
+{Colors.WHITE}{Colors.BOLD}    SELECT ACTION{Colors.RESET}
 {Colors.DIM}    ─────────────────────────────────────{Colors.RESET}
 """)
     
-    # Vault name
-    print(f"    {Colors.CYAN}Vault Name{Colors.RESET}")
-    vault_name = input(f"    {Colors.DIM}>{Colors.RESET} ").strip()
+    if vaults:
+        print(f"    {Colors.GREEN}Registered Vaults:{Colors.RESET}")
+        for i, vault in enumerate(vaults[:5], 1):  # Show max 5 recent vaults
+            last_login = vault.get('last_login', '')[:10] if vault.get('last_login') else 'never'
+            print(f"    {Colors.DIM}  • {vault['name']}{Colors.RESET} {Colors.DIM}(last: {last_login}){Colors.RESET}")
+        print()
+    
+    print(f"""    {Colors.CYAN}[1]{Colors.RESET} Login             {Colors.DIM}(Existing vault){Colors.RESET}
+    {Colors.CYAN}[2]{Colors.RESET} Genesis           {Colors.DIM}(Create new vault){Colors.RESET}
+    {Colors.CYAN}[3]{Colors.RESET} Key Files         {Colors.DIM}(.psnx + .blend_data){Colors.RESET}
+    {Colors.CYAN}[4]{Colors.RESET} Demo Mode         {Colors.DIM}(Test vault){Colors.RESET}
+    
+    {Colors.DIM}[Q]{Colors.RESET} Quit
+
+""")
+
+
+def login_vault(registry: VaultRegistry):
+    """Login to existing vault"""
+    print_section("LOGIN TO VAULT")
+    
+    vaults = registry.get_registered_vaults()
+    
+    if not vaults:
+        print_status("No vaults registered on this device", "warn")
+        print_status("Use 'Genesis' to create a new vault", "info")
+        print()
+        input(f"    {Colors.DIM}Press Enter to continue...{Colors.RESET}")
+        return
+    
+    # Show registered vaults
+    print(f"    {Colors.DIM}Registered vaults:{Colors.RESET}")
+    for vault in vaults:
+        print(f"    {Colors.DIM}  • {vault['name']}{Colors.RESET}")
+    print()
+    
+    # Get vault name
+    vault_name = get_input("Vault Name")
     
     if not vault_name:
-        vault_name = "main_vault"
-        print(f"    {Colors.DIM}Using default: {vault_name}{Colors.RESET}")
+        print_status("Vault name required", "error")
+        return
+    
+    if not registry.vault_exists(vault_name):
+        print_status(f"Vault '{vault_name}' not found", "error")
+        print_status("Use 'Genesis' to create a new vault", "info")
+        return
     
     print()
     
-    # Password
-    print(f"    {Colors.CYAN}Password{Colors.RESET}")
-    password = getpass.getpass(f"    {Colors.DIM}>{Colors.RESET} ")
+    # Get password
+    password = get_input("Password", hidden=True)
     
     if not password:
         print_status("Password required", "error")
         return
     
     print()
-    loading_animation("Deriving vault key", 1.5)
-    loading_animation("Verifying credentials", 0.8)
+    loading_animation("Verifying credentials", 1.2)
+    loading_animation("Deriving vault key", 0.8)
     
-    vault_key = derive_vault_key(vault_name, password)
+    # Authenticate
+    success, vault_key, msg = registry.authenticate(vault_name, password)
     
     print()
-    print_status("Authentication successful", "ok")
     
+    if not success:
+        print_status(msg, "error")
+        return
+    
+    print_status(msg, "ok")
+    
+    # Launch vault
+    launch_vault(vault_key, vault_name)
+
+
+def genesis_vault(registry: VaultRegistry):
+    """Create a new vault (Genesis)"""
+    print_section("GENESIS - CREATE NEW VAULT")
+    
+    print(f"    {Colors.DIM}Create a new vault on this device.{Colors.RESET}")
+    print(f"    {Colors.DIM}Your password will be used for all future logins.{Colors.RESET}")
+    print()
+    
+    # Get vault name
+    vault_name = get_input("Vault Name")
+    
+    if not vault_name:
+        print_status("Vault name required", "error")
+        return
+    
+    if registry.vault_exists(vault_name):
+        print_status(f"Vault '{vault_name}' already exists on this device", "error")
+        print_status("Use 'Login' to access it", "info")
+        return
+    
+    print()
+    
+    # Get password
+    print(f"    {Colors.DIM}Password must be at least 8 characters{Colors.RESET}")
+    password = get_input("Create Password", hidden=True)
+    
+    if not password:
+        print_status("Password required", "error")
+        return
+    
+    if len(password) < 8:
+        print_status("Password must be at least 8 characters", "error")
+        return
+    
+    print()
+    
+    # Confirm password
+    password_confirm = get_input("Confirm Password", hidden=True)
+    
+    if password != password_confirm:
+        print_status("Passwords do not match", "error")
+        return
+    
+    print()
+    loading_animation("Generating cryptographic keys", 1.5)
+    loading_animation("Creating vault identity", 1.0)
+    loading_animation("Securing credentials", 0.8)
+    
+    # Register vault
+    success, vault_key, msg = registry.register_vault(vault_name, password)
+    
+    print()
+    
+    if not success:
+        print_status(msg, "error")
+        return
+    
+    print_status(msg, "ok")
+    print_status(f"Vault '{vault_name}' is now registered on this device", "info")
+    
+    # Launch vault
     launch_vault(vault_key, vault_name)
 
 
 def key_files_connect():
     """Connect with key files"""
-    print(f"""
-{Colors.WHITE}{Colors.BOLD}    KEY FILES AUTHENTICATION{Colors.RESET}
-{Colors.DIM}    ─────────────────────────────────────{Colors.RESET}
-""")
+    print_section("KEY FILES AUTHENTICATION")
     
     # PSNX file
-    print(f"    {Colors.CYAN}Path to .psnx file{Colors.RESET}")
-    psnx_path = input(f"    {Colors.DIM}>{Colors.RESET} ").strip()
+    psnx_path = get_input("Path to .psnx file")
     
     if not psnx_path:
         print_status("PSNX file path required", "error")
@@ -213,8 +297,7 @@ def key_files_connect():
     print()
     
     # Blend data file
-    print(f"    {Colors.CYAN}Path to .blend_data file{Colors.RESET}")
-    blend_path = input(f"    {Colors.DIM}>{Colors.RESET} ").strip()
+    blend_path = get_input("Path to .blend_data file")
     
     if not blend_path:
         print_status("Blend data file path required", "error")
@@ -225,35 +308,46 @@ def key_files_connect():
     loading_animation("Verifying signatures", 1.2)
     loading_animation("Deriving vault key", 0.8)
     
-    success, vault_key, msg = authenticate_with_files(psnx_path, blend_path)
-    
-    print()
-    
-    if not success:
-        print_status(f"Authentication failed: {msg}", "error")
-        return
-    
-    print_status("Authentication successful", "ok")
-    
-    # Vault name
-    print()
-    print(f"    {Colors.CYAN}Vault Name (optional){Colors.RESET}")
-    vault_name = input(f"    {Colors.DIM}>{Colors.RESET} ").strip()
-    
-    if not vault_name:
-        vault_name = os.path.splitext(os.path.basename(psnx_path))[0]
-    
-    launch_vault(vault_key, vault_name)
+    try:
+        from ui.vault_gui_complete import DualKeyAuthenticator
+        
+        if not os.path.exists(psnx_path):
+            print_status(f"File not found: {psnx_path}", "error")
+            return
+        if not os.path.exists(blend_path):
+            print_status(f"File not found: {blend_path}", "error")
+            return
+        
+        auth = DualKeyAuthenticator()
+        success, msg = auth.authenticate(psnx_path, blend_path)
+        
+        print()
+        
+        if not success:
+            print_status(f"Authentication failed: {msg}", "error")
+            return
+        
+        print_status("Authentication successful", "ok")
+        
+        # Vault name
+        print()
+        vault_name = get_input("Vault Name (optional)")
+        
+        if not vault_name:
+            vault_name = os.path.splitext(os.path.basename(psnx_path))[0]
+        
+        launch_vault(auth.vault_key, vault_name)
+        
+    except ImportError as e:
+        print_status(f"Authentication module not available: {e}", "error")
 
 
 def demo_mode():
     """Launch in demo mode"""
-    print(f"""
-{Colors.WHITE}{Colors.BOLD}    DEMO MODE{Colors.RESET}
-{Colors.DIM}    ─────────────────────────────────────{Colors.RESET}
-""")
+    print_section("DEMO MODE")
     
     print_status("Launching demo vault...", "info")
+    print(f"    {Colors.DIM}This is a test environment with sample data.{Colors.RESET}")
     print()
     
     loading_animation("Generating demo credentials", 1.0)
@@ -277,27 +371,42 @@ def main():
         print_status("Python 3.8+ required", "error")
         sys.exit(1)
     
+    # Initialize registry
+    registry = VaultRegistry()
+    
     print_status(f"Python {sys.version.split()[0]} detected", "ok")
-    print_status("System ready", "ok")
+    print_status(f"Device: {Colors.DIM}{registry._get_device_id()[:12]}...{Colors.RESET}", "ok")
+    
+    vaults = registry.get_registered_vaults()
+    if vaults:
+        print_status(f"{len(vaults)} vault(s) registered on this device", "ok")
+    else:
+        print_status("No vaults registered yet", "info")
     
     while True:
-        print_menu()
+        print_menu(registry)
         
         choice = input(f"    {Colors.CYAN}Select option:{Colors.RESET} ").strip().lower()
         
         if choice == '1':
             clear_screen()
             print_header()
-            quick_connect()
+            login_vault(registry)
             break
             
         elif choice == '2':
             clear_screen()
             print_header()
-            key_files_connect()
+            genesis_vault(registry)
             break
             
         elif choice == '3':
+            clear_screen()
+            print_header()
+            key_files_connect()
+            break
+            
+        elif choice == '4':
             clear_screen()
             print_header()
             demo_mode()
