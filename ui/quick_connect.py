@@ -244,9 +244,53 @@ def login_vault(registry: VaultRegistry):
     launch_vault(vault_key, vault_name)
 
 
+def check_machine_lock():
+    """Check if this machine can create a new vault"""
+    try:
+        from core.machine_lock import MachineLock
+        lock = MachineLock()
+        can_create, message = lock.can_create_vault()
+        return can_create, message, lock
+    except ImportError:
+        return True, "OK", None
+
+
+def get_machine_vault_info():
+    """Get info about vault registered on this machine"""
+    try:
+        from core.machine_lock import MachineLock, MachineIdentifier
+        lock = MachineLock()
+        vault_info = lock.get_registered_vault()
+        machine_id = MachineIdentifier.get_short_id()
+        return vault_info, machine_id
+    except ImportError:
+        return None, None
+
+
 def genesis_vault(registry: VaultRegistry):
     """Create a new vault (Genesis)"""
     print_section("GENESIS - CREATE NEW VAULT")
+    
+    # Check machine lock first
+    can_create, message, machine_lock = check_machine_lock()
+    
+    if not can_create:
+        print_status("This machine already has a registered vault!", "error")
+        print()
+        
+        vault_info, machine_id = get_machine_vault_info()
+        if vault_info:
+            print(f"    {Colors.YELLOW}Existing Vault:{Colors.RESET} {vault_info.get('vault_name', 'Unknown')}")
+            print(f"    {Colors.DIM}Number: #{vault_info.get('vault_number', '?')}{Colors.RESET}")
+            print(f"    {Colors.DIM}Created: {vault_info.get('created_at', '')[:19]}{Colors.RESET}")
+            print(f"    {Colors.DIM}Machine ID: {machine_id}{Colors.RESET}")
+        
+        print()
+        print(f"    {Colors.DIM}Only ONE vault is allowed per machine to ensure{Colors.RESET}")
+        print(f"    {Colors.DIM}fair item distribution and rewards.{Colors.RESET}")
+        print()
+        print_status("Use 'Login' to access your existing vault", "info")
+        return
     
     print(f"    {Colors.DIM}Create a new vault on this device.{Colors.RESET}")
     print(f"    {Colors.DIM}Your password will be used for all future logins.{Colors.RESET}")
@@ -302,6 +346,21 @@ def genesis_vault(registry: VaultRegistry):
         return
     
     print_status(msg, "ok")
+    
+    # Lock machine to this vault
+    if machine_lock:
+        loading_animation("Locking machine to vault", 0.5)
+        vault_key_hash = hashlib.sha256(vault_key).hexdigest()
+        lock_success, lock_msg = machine_lock.register_vault(
+            vault_name=vault_name,
+            vault_number=0,
+            vault_key_hash=vault_key_hash
+        )
+        if lock_success:
+            print_status("Machine locked to this vault", "ok")
+        else:
+            print_status(f"Machine lock warning: {lock_msg}", "warn")
+    
     print_status(f"Vault '{vault_name}' is now registered on this device", "info")
     
     # Launch vault
@@ -484,6 +543,13 @@ def main():
     
     print_status(f"Python {sys.version.split()[0]} detected", "ok")
     print_status(f"Device: {Colors.DIM}{registry._get_device_id()[:12]}...{Colors.RESET}", "ok")
+    
+    # Check machine lock status
+    vault_info, machine_id = get_machine_vault_info()
+    if vault_info:
+        print_status(f"Machine locked: {Colors.GREEN}{vault_info.get('vault_name')}{Colors.RESET} (#{vault_info.get('vault_number', '?')})", "ok")
+    else:
+        print_status("Machine not locked (can create vault)", "info")
     
     vaults = registry.get_registered_vaults()
     if vaults:

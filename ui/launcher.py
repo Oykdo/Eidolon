@@ -170,6 +170,32 @@ def generate_key():
     """Generate new vault key"""
     print_section("GENERATE NEW KEY")
     
+    # Check machine lock first
+    try:
+        from core.machine_lock import MachineLock, MachineIdentifier
+        lock = MachineLock()
+        can_create, message = lock.can_create_vault()
+        
+        if not can_create:
+            print_status("This machine already has a registered vault!", "error")
+            print()
+            
+            vault_info = lock.get_registered_vault()
+            if vault_info:
+                print(f"    {Colors.YELLOW}Existing Vault:{Colors.RESET} {vault_info.get('vault_name', 'Unknown')}")
+                print(f"    {Colors.DIM}Number: #{vault_info.get('vault_number', '?')}{Colors.RESET}")
+                print(f"    {Colors.DIM}Created: {vault_info.get('created_at', '')[:19]}{Colors.RESET}")
+                print(f"    {Colors.DIM}Machine ID: {MachineIdentifier.get_short_id()}{Colors.RESET}")
+            
+            print()
+            print(f"    {Colors.DIM}Only ONE vault is allowed per machine to ensure{Colors.RESET}")
+            print(f"    {Colors.DIM}fair item distribution and rewards.{Colors.RESET}")
+            print()
+            print_status("Use Quick Connect to access your existing vault", "info")
+            return
+    except ImportError:
+        pass
+    
     print(f"    {Colors.DIM}This will create a new cryptographic key pair:{Colors.RESET}")
     print(f"    {Colors.DIM}  • .psnx file (encrypted key data){Colors.RESET}")
     print(f"    {Colors.DIM}  • .blend_data file (3D entropy data){Colors.RESET}")
@@ -389,6 +415,22 @@ def main():
     # System info
     print_status(f"Python {sys.version.split()[0]}", "ok")
     print_status(f"Platform: {sys.platform}", "ok")
+    
+    # Check machine lock
+    try:
+        from core.machine_lock import MachineLock, MachineIdentifier
+        lock = MachineLock()
+        vault_info = lock.get_registered_vault()
+        machine_id = MachineIdentifier.get_short_id()
+        
+        if vault_info:
+            print_status(f"Machine ID: {Colors.DIM}{machine_id}{Colors.RESET}", "ok")
+            print_status(f"Locked to: {Colors.GREEN}{vault_info.get('vault_name')}{Colors.RESET} (#{vault_info.get('vault_number', '?')})", "ok")
+        else:
+            print_status(f"Machine ID: {Colors.DIM}{machine_id}{Colors.RESET}", "ok")
+            print_status("Machine not locked (can create vault)", "info")
+    except:
+        pass
     
     # Check for vaults
     try:
