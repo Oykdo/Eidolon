@@ -7,8 +7,8 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
-            background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2a 50%, #0a1a2a 100%);
-            font-family: 'Segoe UI', 'Consolas', monospace;
+            background: radial-gradient(ellipse at center, #1a1a2e 0%, #0a0a15 50%, #050508 100%);
+            font-family: 'Segoe UI', system-ui, sans-serif;
             color: #e0e0e0;
             overflow: hidden;
         }
@@ -19,140 +19,151 @@
             position: absolute;
             top: 20px;
             left: 20px;
-            background: rgba(10, 10, 30, 0.9);
-            border: 1px solid #ffd700;
-            border-radius: 12px;
-            padding: 20px;
-            min-width: 300px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 40px #ffd70044;
+            background: linear-gradient(135deg, rgba(10,10,30,0.95) 0%, rgba(20,10,40,0.9) 100%);
+            border: 1px solid #ff00ff66;
+            border-radius: 16px;
+            padding: 24px;
+            min-width: 320px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 60px #ff00ff22, inset 0 1px 0 rgba(255,255,255,0.05);
         }
         #info-panel h1 {
-            color: #ffd700;
-            font-size: 1.3em;
-            margin-bottom: 15px;
-            text-shadow: 0 0 15px #ffd700;
+            color: #ff00ff;
+            font-size: 1.4em;
+            margin-bottom: 18px;
+            text-shadow: 0 0 20px #ff00ff88;
+            letter-spacing: 2px;
         }
         .info-row {
             display: flex;
             justify-content: space-between;
-            margin: 8px 0;
-            padding: 6px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
+            align-items: center;
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
         }
-        .info-label { color: #777; font-size: 0.9em; }
-        .info-value { color: #28fef5; font-weight: bold; }
+        .info-label { color: #666; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; }
+        .info-value { color: #383682; font-weight: 600; font-size: 1.05em; }
         .rarity-badge {
             display: inline-block;
-            padding: 4px 12px;
+            padding: 5px 14px;
             border-radius: 20px;
-            background: #ffd70033;
-            border: 1px solid #ffd700;
-            color: #ffd700;
+            background: linear-gradient(135deg, #ff00ff44 0%, #ff00ff22 100%);
+            border: 1px solid #ff00ff88;
+            color: #ff00ff;
             font-size: 0.85em;
-            text-shadow: 0 0 8px #ffd700;
+            font-weight: 600;
+            text-shadow: 0 0 10px #ff00ff;
+            letter-spacing: 1px;
         }
         .dna-code {
-            font-family: monospace;
+            font-family: 'Consolas', monospace;
             font-size: 0.7em;
-            color: #5388dd;
+            color: #098edd;
             word-break: break-all;
-            padding: 8px;
-            background: rgba(0,0,0,0.3);
-            border-radius: 4px;
-            margin-top: 10px;
+            padding: 10px;
+            background: rgba(0,0,0,0.4);
+            border-radius: 8px;
+            margin-top: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
         }
         
         #power-indicator {
             position: absolute;
             top: 20px;
             right: 20px;
-            width: 90px;
-            height: 90px;
+            width: 100px;
+            height: 100px;
             border-radius: 50%;
-            background: radial-gradient(circle, #ffd70055 0%, transparent 70%);
-            border: 3px solid #ffd700;
+            background: radial-gradient(circle at 30% 30%, #ff00ff44 0%, transparent 60%);
+            border: 3px solid #ff00ff88;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 35px #ffd70066;
+            box-shadow: 0 0 40px #ff00ff44, inset 0 0 20px #ff00ff22;
         }
         #power-indicator .power-value {
-            font-size: 1.4em;
-            font-weight: bold;
-            color: #ffd700;
+            font-size: 1.6em;
+            font-weight: 700;
+            color: #ff00ff;
+            text-shadow: 0 0 15px #ff00ff;
         }
         #power-indicator .power-label {
             font-size: 0.7em;
             color: #888;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
         
         #controls {
             position: absolute;
-            bottom: 20px;
+            bottom: 25px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 12px;
+            gap: 15px;
         }
         .control-btn {
-            background: rgba(10, 10, 30, 0.85);
-            border: 1px solid #ffd700;
-            color: #ffd700;
-            padding: 12px 22px;
-            border-radius: 6px;
+            background: linear-gradient(135deg, rgba(10,10,30,0.9) 0%, rgba(20,15,40,0.85) 100%);
+            border: 1px solid #ff00ff66;
+            color: #ff00ff;
+            padding: 14px 28px;
+            border-radius: 12px;
             cursor: pointer;
             font-family: inherit;
-            font-size: 0.9em;
-            transition: all 0.3s;
+            font-size: 0.95em;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(10px);
         }
         .control-btn:hover {
-            background: #ffd70033;
-            box-shadow: 0 0 20px #ffd70055;
+            background: linear-gradient(135deg, #ff00ff33 0%, #ff00ff22 100%);
+            box-shadow: 0 0 25px #ff00ff44;
+            transform: translateY(-2px);
         }
         .control-btn.active {
-            background: #ffd700;
+            background: linear-gradient(135deg, #ff00ff 0%, #ff00ffcc 100%);
             color: #000;
+            font-weight: 600;
         }
         
         #unique-params {
             position: absolute;
-            bottom: 80px;
+            bottom: 90px;
             right: 20px;
-            background: rgba(10, 10, 30, 0.85);
-            border: 1px solid #5388dd;
-            border-radius: 8px;
-            padding: 12px;
-            font-size: 0.75em;
+            background: linear-gradient(135deg, rgba(10,10,30,0.9) 0%, rgba(15,10,35,0.85) 100%);
+            border: 1px solid #098edd44;
+            border-radius: 12px;
+            padding: 16px;
+            font-size: 0.8em;
+            backdrop-filter: blur(10px);
         }
         #unique-params h3 {
-            color: #5388dd;
-            margin-bottom: 8px;
-            font-size: 0.9em;
+            color: #098edd;
+            margin-bottom: 12px;
+            font-size: 0.95em;
+            letter-spacing: 1px;
         }
-        .param-row {
-            display: flex;
-            justify-content: space-between;
-            margin: 3px 0;
-        }
-        .param-name { color: #666; }
-        .param-val { color: #2c3bcd; font-family: monospace; }
+        .param-row { display: flex; justify-content: space-between; margin: 5px 0; gap: 20px; }
+        .param-name { color: #555; }
+        .param-val { color: #2c9bf4; font-family: 'Consolas', monospace; font-weight: 600; }
         
         #loading {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: #ffd700;
-            font-size: 1.5em;
+            color: #ff00ff;
+            font-size: 1.3em;
+            text-shadow: 0 0 20px #ff00ff;
         }
         
         @keyframes glow {
-            from { text-shadow: 0 0 5px #ffd700, 0 0 10px #ffd700; }
-            to { text-shadow: 0 0 15px #ffd700, 0 0 25px #ffd700; }
+            0%, 100% { text-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff88; }
+            50% { text-shadow: 0 0 20px #ff00ff, 0 0 40px #ff00ff, 0 0 60px #ff00ff66; }
         }
-        .glow { animation: glow 2s ease-in-out infinite alternate; }
+        .glow { animation: glow 3s ease-in-out infinite; }
     </style>
 </head>
 <body>
@@ -160,138 +171,172 @@
         <div id="canvas-container"></div>
         
         <div id="info-panel">
-            <h1 class="glow">🎭 AVATAR UNIQUE</h1>
+            <h1 class="glow">✦ AVATAR UNIQUE</h1>
             <div class="info-row">
                 <span class="info-label">Type</span>
                 <span class="info-value">7D Projection</span>
             </div>
             <div class="info-row">
                 <span class="info-label">Rarete</span>
-                <span class="rarity-badge">LEGENDARY</span>
+                <span class="rarity-badge">MYTHICAL</span>
             </div>
             <div class="info-row">
                 <span class="info-label">Score</span>
-                <span class="info-value">85.0/100</span>
+                <span class="info-value">90.0/100</span>
             </div>
             <div class="info-row">
                 <span class="info-label">Puissance</span>
-                <span class="info-value">15,000</span>
+                <span class="info-value">25,000</span>
             </div>
-            <div class="dna-code">DNA: test_7d_projection_12345...</div>
+            <div class="dna-code">DNA: test_7d_projection_v2_premium...</div>
         </div>
         
         <div id="power-indicator">
-            <span class="power-value">15K</span>
-            <span class="power-label">POWER</span>
+            <span class="power-value">25K</span>
+            <span class="power-label">Power</span>
         </div>
         
         <div id="unique-params">
-            <h3>⚙️ PARAMETRES UNIQUES</h3>
-            <div class="param-row"><span class="param-name">Scale</span><span class="param-val">1.15x0.70x1.17</span></div>
-            <div class="param-row"><span class="param-name">Metalness</span><span class="param-val">0.38</span></div>
-            <div class="param-row"><span class="param-name">IOR</span><span class="param-val">2.14</span></div>
-            <div class="param-row"><span class="param-name">Particles</span><span class="param-val">135</span></div>
-            <div class="param-row"><span class="param-name">Complexity</span><span class="param-val">1.8x</span></div>
+            <h3>⚙ PARAMETRES</h3>
+            <div class="param-row"><span class="param-name">Scale</span><span class="param-val">1.11×0.84×1.20</span></div>
+            <div class="param-row"><span class="param-name">Metalness</span><span class="param-val">0.62</span></div>
+            <div class="param-row"><span class="param-name">IOR</span><span class="param-val">1.51</span></div>
+            <div class="param-row"><span class="param-name">Iridescence</span><span class="param-val">0.35</span></div>
+            <div class="param-row"><span class="param-name">Complexity</span><span class="param-val">2.8×</span></div>
         </div>
         
         <div id="controls">
-            <button class="control-btn active" onclick="toggleRotation()">⟳ Auto-Rotate</button>
+            <button class="control-btn active" onclick="toggleRotation()">⟳ Rotation</button>
             <button class="control-btn" onclick="resetCamera()">⌖ Reset</button>
             <button class="control-btn" onclick="toggleWireframe()">◇ Wireframe</button>
-            <button class="control-btn" onclick="screenshot()">📷 Screenshot</button>
+            <button class="control-btn" onclick="screenshot()">📷 Capture</button>
         </div>
         
-        <div id="loading">Chargement de l'avatar unique...</div>
+        <div id="loading">Chargement...</div>
     </div>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
     
-    <script>
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        
         let scene, camera, renderer, controls;
         let autoRotate = true;
         let wireframeMode = false;
         const animationCallbacks = [];
         
         function init() {
+            // Scene avec brouillard
             scene = new THREE.Scene();
-            scene.background = new THREE.Color(0x0a0a1a);
-            scene.fog = new THREE.FogExp2(0x0a0a1a, 0.08);
+            scene.background = new THREE.Color(0x050508);
+            scene.fog = new THREE.FogExp2(0x050508, 0.06);
             
-            camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.set(3.5, 2.5, 3.5);
+            // Camera
+            camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(4, 3, 4);
             
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            // Renderer haute qualite
+            renderer = new THREE.WebGLRenderer({ 
+                antialias: true, 
+                alpha: true,
+                powerPreference: "high-performance"
+            });
             renderer.setSize(window.innerWidth, window.innerHeight);
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
-            renderer.toneMappingExposure = 1.3;
-            renderer.outputEncoding = THREE.sRGBEncoding;
+            renderer.toneMappingExposure = 1.4;
             document.getElementById('canvas-container').appendChild(renderer.domElement);
             
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            // Controles
+            controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
-            controls.dampingFactor = 0.05;
+            controls.dampingFactor = 0.04;
             controls.autoRotate = autoRotate;
-            controls.autoRotateSpeed = 0.8;
-            controls.minDistance = 2;
-            controls.maxDistance = 12;
+            controls.autoRotateSpeed = 0.6;
+            controls.minDistance = 2.5;
+            controls.maxDistance = 15;
+            controls.maxPolarAngle = Math.PI * 0.85;
             
-            // Eclairage avance
-            const ambientLight = new THREE.AmbientLight(0x404050, 0.4);
+            // === ECLAIRAGE CINEMATOGRAPHIQUE ===
+            const ambientLight = new THREE.AmbientLight(0x202030, 0.4);
             scene.add(ambientLight);
             
-            const mainLight = new THREE.DirectionalLight(0xffffff, 1.2);
-            mainLight.position.set(5, 8, 5);
-            mainLight.castShadow = true;
-            scene.add(mainLight);
+            // Key light
+            const keyLight = new THREE.DirectionalLight(0xffffff, 1.5);
+            keyLight.position.set(5, 8, 5);
+            keyLight.castShadow = true;
+            keyLight.shadow.mapSize.width = 2048;
+            keyLight.shadow.mapSize.height = 2048;
+            scene.add(keyLight);
             
-            const fillLight = new THREE.DirectionalLight('#ffd700', 0.6);
-            fillLight.position.set(-5, 2, -5);
+            // Fill light (couleur primaire)
+            const fillLight = new THREE.DirectionalLight('#ff00ff', 0.8);
+            fillLight.position.set(-5, 3, -3);
             scene.add(fillLight);
             
-            const backLight = new THREE.DirectionalLight('#28fef5', 0.4);
-            backLight.position.set(0, -5, -3);
+            // Back light (accent)
+            const backLight = new THREE.DirectionalLight('#383682', 0.5);
+            backLight.position.set(0, -3, -5);
             scene.add(backLight);
             
-            const rimLight = new THREE.DirectionalLight('#5388dd', 0.3);
-            rimLight.position.set(3, 0, -5);
+            // Rim light
+            const rimLight = new THREE.DirectionalLight('#098edd', 0.4);
+            rimLight.position.set(4, 0, -4);
             scene.add(rimLight);
             
-            // Grille de sol
-            const gridHelper = new THREE.GridHelper(12, 24, '#ffd700', 0x222244);
+            // Sol avec grille
+            const gridHelper = new THREE.GridHelper(15, 30, '#ff00ff', 0x151520);
             gridHelper.position.y = -2;
-            gridHelper.material.opacity = 0.3;
+            gridHelper.material.opacity = 0.25;
             gridHelper.material.transparent = true;
             scene.add(gridHelper);
             
-            // Creer la geometrie unique de l'avatar
+            // Cercle de sol lumineux
+            const floorGeom = new THREE.RingGeometry(0.5, 3, 64);
+            const floorMat = new THREE.MeshBasicMaterial({
+                color: '#ff00ff',
+                transparent: true,
+                opacity: 0.08,
+                side: THREE.DoubleSide
+            });
+            const floor = new THREE.Mesh(floorGeom, floorMat);
+            floor.rotation.x = -Math.PI / 2;
+            floor.position.y = -1.99;
+            scene.add(floor);
             
-            // === 7D PROJECTION UNIQUE ===
+            // === GEOMETRIE AVATAR ===
+            
+            // === 7D PROJECTION - Dimensions Multiples ===
             const mainGroup = new THREE.Group();
-            mainGroup.scale.set(1.151, 0.704, 1.168);
+            mainGroup.scale.set(1.107, 0.839, 1.198);
             scene.add(mainGroup);
             
             const dimCount = 7;
             const layers = [];
             
+            // Creation des 7 dimensions
             for (let d = 0; d < dimCount; d++) {
                 const layerGroup = new THREE.Group();
                 const hue = d / dimCount;
-                const color = new THREE.Color().setHSL(hue, 0.8, 0.5);
+                const color = new THREE.Color().setHSL(hue, 0.9, 0.55);
                 
-                // Heptagone unique par dimension
+                // Heptagone pour chaque dimension
+                const r = 1.25 - d * 0.1 + -0.061 * Math.sin(d * 2);
                 const points = [];
-                const r = 1.3 - d * 0.12 + -0.016 * Math.sin(d);
+                
                 for (let i = 0; i < 7; i++) {
-                    const angle = (i / 7) * Math.PI * 2 + d * 0.144;
-                    points.push(new THREE.Vector3(
-                        Math.cos(angle) * r,
-                        Math.sin(angle) * r,
-                        0
-                    ));
+                    const angle = (i / 7) * Math.PI * 2 + d * 0.027;
+                    points.push(new THREE.Vector3(Math.cos(angle) * r, Math.sin(angle) * r, 0));
                 }
                 points.push(points[0].clone());
                 
@@ -299,66 +344,341 @@
                 const lineMat = new THREE.LineBasicMaterial({
                     color: color,
                     transparent: true,
-                    opacity: 0.85 - d * 0.08
+                    opacity: 0.85 - d * 0.07
                 });
                 const line = new THREE.Line(lineGeom, lineMat);
                 layerGroup.add(line);
                 
                 // Noeuds aux sommets
                 for (let i = 0; i < 7; i++) {
-                    const nodeGeom = new THREE.IcosahedronGeometry(0.06 - d * 0.005, 0);
+                    const nodeGeom = new THREE.OctahedronGeometry(0.06 - d * 0.005, 0);
                     const nodeMat = new THREE.MeshBasicMaterial({ color: color });
                     const node = new THREE.Mesh(nodeGeom, nodeMat);
                     node.position.copy(points[i]);
                     layerGroup.add(node);
                 }
                 
-                // Lignes vers le centre
+                // Rayons vers le centre
                 for (let i = 0; i < 7; i++) {
-                    const centerPoints = [points[i], new THREE.Vector3(0, 0, 0)];
-                    const centerGeom = new THREE.BufferGeometry().setFromPoints(centerPoints);
-                    const centerMat = new THREE.LineBasicMaterial({
-                        color: '#7883df',
+                    const rayPoints = [points[i], new THREE.Vector3(0, 0, 0)];
+                    const rayGeom = new THREE.BufferGeometry().setFromPoints(rayPoints);
+                    const rayMat = new THREE.LineBasicMaterial({
+                        color: '#7870b5',
                         transparent: true,
-                        opacity: 0.25
+                        opacity: 0.2
                     });
-                    layerGroup.add(new THREE.Line(centerGeom, centerMat));
+                    layerGroup.add(new THREE.Line(rayGeom, rayMat));
                 }
                 
-                layerGroup.position.z = d * 0.18 - 0.6;
-                layerGroup.rotation.z = d * 0.12 + 0.044;
+                layerGroup.position.z = d * 0.15 - 0.5;
+                layerGroup.rotation.z = d * 0.1 + 3.364;
                 mainGroup.add(layerGroup);
                 layers.push(layerGroup);
                 
                 animationCallbacks.push((time) => {
-                    layerGroup.rotation.z = d * 0.12 + 0.044 + time * 0.959 * (0.15 + d * 0.05);
-                    layerGroup.position.z = (d * 0.18 - 0.6) + Math.sin(time * 1.62 + d * 0.5) * 0.08;
+                    layerGroup.rotation.z = d * 0.1 + 3.364 + time * 1.164 * (0.12 + d * 0.04);
+                    layerGroup.position.z = (d * 0.15 - 0.5) + Math.sin(time * 1.89 + d * 0.5) * 0.08;
                 });
             }
             
-            // Centre 7D
-            const centerGeom = new THREE.DodecahedronGeometry(0.12, 0);
+            // Centre multidimensionnel
+            const centerGeom = new THREE.DodecahedronGeometry(0.12, 1);
             const centerMat = new THREE.MeshPhysicalMaterial({
-                color: '#ffd700',
-                emissive: '#ffd700',
-                emissiveIntensity: 0.246,
-                metalness: 0.380,
-                roughness: 0.291
+                color: '#ff00ff',
+                emissive: '#ff00ff',
+                emissiveIntensity: 0.8,
+                metalness: 0.616,
+                roughness: 0.198,
+                iridescence: 1.0
             });
             const center = new THREE.Mesh(centerGeom, centerMat);
             mainGroup.add(center);
             
-            const centerLight = new THREE.PointLight('#ffd700', 2, 4);
+            const centerLight = new THREE.PointLight('#ff00ff', 3, 5);
             mainGroup.add(centerLight);
             
             animationCallbacks.push((time) => {
-                center.rotation.x = time * 0.959 * 0.5;
-                center.rotation.y = time * 0.959 * 0.7;
-                center.scale.setScalar(1 + Math.sin(time * 1.62) * 0.15);
+                center.rotation.x = time * 1.164 * 0.5;
+                center.rotation.y = time * 1.164 * 0.7;
+                center.scale.setScalar(1 + Math.sin(time * 1.89) * 0.15);
+                centerLight.intensity = 2 + Math.sin(time * 1.89) * 1.5;
+            });
+        
+            // === AURA ENERGETIQUE ===
+            const auraGroup = new THREE.Group();
+            scene.add(auraGroup);
+            
+            // Sphere d'aura externe avec shader
+            const auraGeom = new THREE.SphereGeometry(2.2, 64, 64);
+            const auraMat = new THREE.ShaderMaterial({
+                uniforms: {
+                    time: { value: 0 },
+                    color1: { value: new THREE.Color('#ff00ff') },
+                    color2: { value: new THREE.Color('#7870b5') },
+                    opacity: { value: 0.15 }
+                },
+                vertexShader: `
+                    varying vec3 vNormal;
+                    varying vec3 vPosition;
+                    varying vec2 vUv;
+                    void main() {
+                        vNormal = normalize(normalMatrix * normal);
+                        vPosition = position;
+                        vUv = uv;
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                    }
+                `,
+                fragmentShader: `
+                    uniform float time;
+                    uniform vec3 color1;
+                    uniform vec3 color2;
+                    uniform float opacity;
+                    varying vec3 vNormal;
+                    varying vec3 vPosition;
+                    varying vec2 vUv;
+                    
+                    void main() {
+                        float pulse = sin(time * 1.89) * 0.5 + 0.5;
+                        float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.5);
+                        float wave = sin(vPosition.y * 8.0 + time * 3.0) * 0.5 + 0.5;
+                        vec3 color = mix(color1, color2, wave * pulse);
+                        float alpha = fresnel * opacity * (0.6 + pulse * 0.4);
+                        gl_FragColor = vec4(color, alpha);
+                    }
+                `,
+                transparent: true,
+                blending: THREE.AdditiveBlending,
+                side: THREE.BackSide,
+                depthWrite: false
+            });
+            const aura = new THREE.Mesh(auraGeom, auraMat);
+            auraGroup.add(aura);
+            
+            // Anneaux d'energie rotatifs
+            for (let i = 0; i < 3; i++) {
+                const ringGeom = new THREE.TorusGeometry(1.8 + i * 0.3, 0.02, 16, 100);
+                const ringMat = new THREE.MeshBasicMaterial({
+                    color: '#5a93c6',
+                    transparent: true,
+                    opacity: 0.4 - i * 0.1,
+                    blending: THREE.AdditiveBlending
+                });
+                const ring = new THREE.Mesh(ringGeom, ringMat);
+                ring.rotation.x = Math.PI / 2 + i * 0.3;
+                ring.rotation.y = i * 0.5;
+                auraGroup.add(ring);
+                
+                animationCallbacks.push((time) => {
+                    ring.rotation.z = time * (0.3 + i * 0.15);
+                    ring.rotation.x = Math.PI / 2 + Math.sin(time + i) * 0.2;
+                });
+            }
+            
+            animationCallbacks.push((time) => {
+                auraMat.uniforms.time.value = time;
+                aura.rotation.y = time * 0.05;
+            });
+        
+            // === PARTICULES ORBITALES DYNAMIQUES ===
+            const particleCount = 95;
+            const particlesGeom = new THREE.BufferGeometry();
+            const positions = new Float32Array(particleCount * 3);
+            const colors = new Float32Array(particleCount * 3);
+            const sizes = new Float32Array(particleCount);
+            const phases = new Float32Array(particleCount * 4);
+            
+            const colorPalette = [
+                new THREE.Color('#ff00ff'),
+                new THREE.Color('#383682'),
+                new THREE.Color('#098edd'),
+                new THREE.Color('#2c9bf4')
+            ];
+            
+            for (let i = 0; i < particleCount; i++) {
+                const theta = Math.random() * Math.PI * 2;
+                const phi = Math.acos(2 * Math.random() - 1);
+                const r = 1.2 + Math.random() * 1.5;
+                
+                positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
+                positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
+                positions[i * 3 + 2] = r * Math.cos(phi);
+                
+                const color = colorPalette[Math.floor(Math.random() * 4)];
+                colors[i * 3] = color.r;
+                colors[i * 3 + 1] = color.g;
+                colors[i * 3 + 2] = color.b;
+                
+                sizes[i] = 0.02 + Math.random() * 0.08;
+                phases[i * 4] = r;
+                phases[i * 4 + 1] = theta;
+                phases[i * 4 + 2] = phi;
+                phases[i * 4 + 3] = 0.2 + Math.random() * 0.42;
+            }
+            
+            particlesGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            particlesGeom.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+            particlesGeom.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
+            
+            const particlesMat = new THREE.PointsMaterial({
+                size: 0.1,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.85,
+                blending: THREE.AdditiveBlending,
+                depthWrite: false,
+                sizeAttenuation: true
             });
             
+            const particles = new THREE.Points(particlesGeom, particlesMat);
+            scene.add(particles);
             
+            animationCallbacks.push((time) => {
+                const pos = particles.geometry.attributes.position.array;
+                for (let i = 0; i < particleCount; i++) {
+                    const r = phases[i * 4];
+                    const baseTheta = phases[i * 4 + 1];
+                    const basePhi = phases[i * 4 + 2];
+                    const speed = phases[i * 4 + 3];
+                    
+                    const theta = baseTheta + time * speed;
+                    const phi = basePhi + Math.sin(time * speed * 0.5) * 0.3;
+                    const dynamicR = r + Math.sin(time * 2 + i) * 0.1;
+                    
+                    pos[i * 3] = dynamicR * Math.sin(phi) * Math.cos(theta);
+                    pos[i * 3 + 1] = dynamicR * Math.sin(phi) * Math.sin(theta);
+                    pos[i * 3 + 2] = dynamicR * Math.cos(phi);
+                }
+                particles.geometry.attributes.position.needsUpdate = true;
+            });
+        
+            // === COEUR D'ENERGIE PULSANT ===
+            const coreGroup = new THREE.Group();
+            scene.add(coreGroup);
             
+            // Noyau central
+            const coreGeom = new THREE.IcosahedronGeometry(0.2, 3);
+            const coreMat = new THREE.MeshPhysicalMaterial({
+                color: '#7870b5',
+                emissive: '#ff00ff',
+                emissiveIntensity: 1.5,
+                metalness: 0.0,
+                roughness: 0.0,
+                transparent: true,
+                opacity: 0.95,
+                envMapIntensity: 2.0
+            });
+            const core = new THREE.Mesh(coreGeom, coreMat);
+            coreGroup.add(core);
+            
+            // Halo interne
+            const haloGeom = new THREE.SphereGeometry(0.35, 32, 32);
+            const haloMat = new THREE.MeshBasicMaterial({
+                color: '#ff66ff',
+                transparent: true,
+                opacity: 0.3,
+                blending: THREE.AdditiveBlending,
+                side: THREE.BackSide
+            });
+            const halo = new THREE.Mesh(haloGeom, haloMat);
+            coreGroup.add(halo);
+            
+            // Rayons d'energie
+            for (let i = 0; i < 13; i++) {
+                const angle = (i / 13) * Math.PI * 2;
+                const rayGeom = new THREE.CylinderGeometry(0.008, 0.002, 2.5, 8);
+                const rayMat = new THREE.MeshBasicMaterial({
+                    color: '#2c9bf4',
+                    transparent: true,
+                    opacity: 0.6,
+                    blending: THREE.AdditiveBlending
+                });
+                const ray = new THREE.Mesh(rayGeom, rayMat);
+                ray.position.set(Math.cos(angle) * 0.1, 0, Math.sin(angle) * 0.1);
+                ray.rotation.z = Math.PI / 2;
+                ray.rotation.y = angle;
+                coreGroup.add(ray);
+                
+                animationCallbacks.push((time) => {
+                    ray.scale.y = 0.5 + Math.sin(time * 3 + i) * 0.5;
+                    ray.material.opacity = 0.3 + Math.sin(time * 2 + i * 0.5) * 0.3;
+                });
+            }
+            
+            // Point light central
+            const coreLight = new THREE.PointLight('#ff00ff', 3, 5);
+            coreGroup.add(coreLight);
+            
+            animationCallbacks.push((time) => {
+                const pulse = 1 + Math.sin(time * 1.89) * 0.3;
+                core.scale.setScalar(pulse);
+                halo.scale.setScalar(pulse * 1.2);
+                coreLight.intensity = 2 + Math.sin(time * 1.89) * 1.5;
+                core.rotation.x = time * 0.5;
+                core.rotation.y = time * 0.7;
+            });
+        
+            // === EFFET HOLOGRAPHIQUE ===
+            const holoGroup = new THREE.Group();
+            scene.add(holoGroup);
+            
+            // Lignes de scan horizontales
+            for (let i = 0; i < 20; i++) {
+                const y = -1.5 + i * 0.15;
+                const lineGeom = new THREE.PlaneGeometry(3, 0.003);
+                const lineMat = new THREE.MeshBasicMaterial({
+                    color: '#ff00ff',
+                    transparent: true,
+                    opacity: 0.15,
+                    blending: THREE.AdditiveBlending,
+                    side: THREE.DoubleSide
+                });
+                const line = new THREE.Mesh(lineGeom, lineMat);
+                line.position.y = y;
+                holoGroup.add(line);
+            }
+            
+            // Grille hexagonale de fond
+            const hexRadius = 2.5;
+            const hexGeom = new THREE.CircleGeometry(hexRadius, 6);
+            const hexMat = new THREE.MeshBasicMaterial({
+                color: '#098edd',
+                transparent: true,
+                opacity: 0.05,
+                wireframe: true,
+                blending: THREE.AdditiveBlending
+            });
+            
+            for (let layer = 0; layer < 3; layer++) {
+                const hex = new THREE.Mesh(hexGeom, hexMat.clone());
+                hex.rotation.x = -Math.PI / 2;
+                hex.position.y = -1.5 + layer * 0.5;
+                hex.scale.setScalar(1 - layer * 0.2);
+                holoGroup.add(hex);
+            }
+            
+            // Data streams verticaux
+            for (let i = 0; i < 8; i++) {
+                const angle = (i / 8) * Math.PI * 2;
+                const streamGeom = new THREE.BoxGeometry(0.02, 3, 0.02);
+                const streamMat = new THREE.MeshBasicMaterial({
+                    color: '#2c9bf4',
+                    transparent: true,
+                    opacity: 0.2,
+                    blending: THREE.AdditiveBlending
+                });
+                const stream = new THREE.Mesh(streamGeom, streamMat);
+                stream.position.set(Math.cos(angle) * 1.8, 0, Math.sin(angle) * 1.8);
+                holoGroup.add(stream);
+                
+                animationCallbacks.push((time) => {
+                    stream.material.opacity = 0.1 + Math.sin(time * 4 + i) * 0.15;
+                    stream.scale.y = 0.8 + Math.sin(time * 2 + i * 0.5) * 0.2;
+                });
+            }
+            
+            animationCallbacks.push((time) => {
+                holoGroup.rotation.y = time * 0.1;
+            });
         
             
             document.getElementById('loading').style.display = 'none';
@@ -380,19 +700,19 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
         
-        function toggleRotation() {
+        window.toggleRotation = function() {
             autoRotate = !autoRotate;
             controls.autoRotate = autoRotate;
             event.target.classList.toggle('active', autoRotate);
-        }
+        };
         
-        function resetCamera() {
-            camera.position.set(3.5, 2.5, 3.5);
+        window.resetCamera = function() {
+            camera.position.set(4, 3, 4);
             controls.target.set(0, 0, 0);
             controls.update();
-        }
+        };
         
-        function toggleWireframe() {
+        window.toggleWireframe = function() {
             wireframeMode = !wireframeMode;
             scene.traverse((child) => {
                 if (child.isMesh && child.material && !child.material.isShaderMaterial) {
@@ -404,15 +724,15 @@
                 }
             });
             event.target.classList.toggle('active', wireframeMode);
-        }
+        };
         
-        function screenshot() {
+        window.screenshot = function() {
             renderer.render(scene, camera);
             const link = document.createElement('a');
             link.download = 'avatar_3d_test_7d_.png';
             link.href = renderer.domElement.toDataURL('image/png');
             link.click();
-        }
+        };
         
         init();
     </script>
