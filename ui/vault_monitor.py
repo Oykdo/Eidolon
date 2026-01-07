@@ -75,7 +75,7 @@ class CypherpunkTheme:
     
     @classmethod
     def apply_theme(cls, root: tk.Tk):
-        """Applique le thème cypherpunk à la fenêtre"""
+        """Applies le thème cypherpunk à la fenêtre"""
         root.configure(bg=cls.BG_DARK)
         root.option_add("*Font", cls.FONT_NORMAL)
         
@@ -541,7 +541,7 @@ class VaultMonitorGUI:
         }
     
     def _save_vault_state(self):
-        """Sauvegarder l'état persistant du vault"""
+        """Savesr l'état persistant du vault"""
         state_file = os.path.join(self.data_path, f"{self.vault_name}_state.json")
         
         self.vault_data["last_modified"] = datetime.now().isoformat()
@@ -823,7 +823,7 @@ class VaultMonitorGUI:
         ttk.Button(btn_frame, text="Détails", command=self.show_nft_details).pack(side=tk.LEFT, padx=5)
         ttk.Button(btn_frame, text="Sécuriser", command=self.secure_nft).pack(side=tk.LEFT, padx=5)
         ttk.Button(btn_frame, text="Retirer", command=self.withdraw_nft).pack(side=tk.LEFT, padx=5)
-        ttk.Button(btn_frame, text="Supprimer", command=self.delete_nft).pack(side=tk.LEFT, padx=5)
+        ttk.Button(btn_frame, text="Delete", command=self.delete_nft).pack(side=tk.LEFT, padx=5)
         
         return frame
     
@@ -1059,7 +1059,7 @@ class VaultMonitorGUI:
         
         ttk.Button(action_frame, text="Nouveau Transfer", command=self.initiate_transfer).pack(side=tk.LEFT, padx=5)
         ttk.Button(action_frame, text="Exécuter", command=self.execute_transfer).pack(side=tk.LEFT, padx=5)
-        ttk.Button(action_frame, text="Annuler", command=self.cancel_transfer).pack(side=tk.LEFT, padx=5)
+        ttk.Button(action_frame, text="Cancel", command=self.cancel_transfer).pack(side=tk.LEFT, padx=5)
         
         return frame
     
@@ -1191,10 +1191,10 @@ class VaultMonitorGUI:
         return frame
     
     def _show_vault_inventory(self):
-        """Affiche l'inventaire COMPLET du vault: Equipements, Fragments, Gems, Pierres"""
+        """Displays l'inventaire COMPLET du vault: Equipements, Fragments, Gems, Pierres"""
         selection = self.runes_tree.selection()
         if not selection:
-            messagebox.showwarning("Attention", "Veuillez selectionner un vault")
+            messagebox.showwarning("Warning", "Veuillez selectionner un vault")
             return
         
         item = self.runes_tree.item(selection[0])
@@ -1211,7 +1211,7 @@ class VaultMonitorGUI:
         
         # Fenetre d'inventaire - taille adaptee
         dialog = tk.Toplevel(self.root)
-        dialog.title(f"⚗ INVENTAIRE COMPLET - Vault #{vault_num}")
+        dialog.title(f"⚗ COMPLETE INVENTORY - Vault #{vault_num}")
         
         # Taille responsive
         screen_w = dialog.winfo_screenwidth()
@@ -1229,7 +1229,7 @@ class VaultMonitorGUI:
         
         tk.Label(
             header_frame,
-            text=f"⚗ INVENTAIRE VAULT #{vault_num}",
+            text=f"⚗ VAULT INVENTORY #{vault_num}",
             bg=CypherpunkTheme.BG_DARK,
             fg="#FFD700",
             font=("Consolas", 16, "bold")
@@ -1241,11 +1241,11 @@ class VaultMonitorGUI:
         
         total_artifacts = len(vault_artifacts) + len(vault_evo_artifacts)
         stats = [
-            ("📦 Equipements", len(vault_items), "#00ff41"),
+            ("📦 Equipment", len(vault_items), "#00ff41"),
             ("💎 Gems", len(vault_gems), "#00ffff"),
             ("🔮 Fragments", len(vault_fragments), "#aa00ff"),
-            ("⚗ Pierres", len(vault_stones), "#ffd700"),
-            ("🏛 Artefacts", total_artifacts, "#ff8000"),
+            ("⚗ Stones", len(vault_stones), "#ffd700"),
+            ("🏛 Artifacts", total_artifacts, "#ff8000"),
         ]
         
         for label, count, color in stats:
@@ -1296,7 +1296,7 @@ class VaultMonitorGUI:
         self._create_artifacts_tab(artifacts_frame, vault_artifacts, vault_evo_artifacts)
     
     def _create_items_tab(self, parent, items, rarity_colors):
-        """Cree l'onglet des equipements alchimiques"""
+        """Creates the'onglet des equipements alchimiques"""
         # Canvas scrollable
         canvas = tk.Canvas(parent, bg=CypherpunkTheme.BG_SECONDARY, highlightthickness=0)
         scrollbar = ttk.Scrollbar(parent, orient="vertical", command=canvas.yview)
@@ -1397,7 +1397,7 @@ class VaultMonitorGUI:
                                 fg=CypherpunkTheme.NEON_CYAN, font=("Consolas", 8)).pack(anchor=tk.W)
     
     def _create_gems_tab(self, parent, gems, rarity_colors):
-        """Cree l'onglet des gems"""
+        """Creates the'onglet des gems"""
         canvas = tk.Canvas(parent, bg=CypherpunkTheme.BG_SECONDARY, highlightthickness=0)
         scrollbar = ttk.Scrollbar(parent, orient="vertical", command=canvas.yview)
         content = tk.Frame(canvas, bg=CypherpunkTheme.BG_SECONDARY)
@@ -1457,7 +1457,7 @@ class VaultMonitorGUI:
                         font=("Consolas", 9)).pack(anchor=tk.W)
     
     def _create_fragments_tab(self, parent, fragments):
-        """Cree l'onglet des fragments"""
+        """Creates the'onglet des fragments"""
         canvas = tk.Canvas(parent, bg=CypherpunkTheme.BG_SECONDARY, highlightthickness=0)
         scrollbar = ttk.Scrollbar(parent, orient="vertical", command=canvas.yview)
         content = tk.Frame(canvas, bg=CypherpunkTheme.BG_SECONDARY)
@@ -1523,7 +1523,7 @@ class VaultMonitorGUI:
                         fg=CypherpunkTheme.TEXT_SECONDARY, font=("Consolas", 8)).pack(anchor=tk.W)
     
     def _create_stones_tab(self, parent, stones):
-        """Cree l'onglet des pierres philosophales"""
+        """Creates the'onglet des pierres philosophales"""
         canvas = tk.Canvas(parent, bg=CypherpunkTheme.BG_SECONDARY, highlightthickness=0)
         scrollbar = ttk.Scrollbar(parent, orient="vertical", command=canvas.yview)
         content = tk.Frame(canvas, bg=CypherpunkTheme.BG_SECONDARY)
@@ -1535,7 +1535,7 @@ class VaultMonitorGUI:
         content.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
         
         if not stones:
-            tk.Label(content, text="\n\n  ☿ Aucune Pierre Philosophale dans ce vault\n\n"
+            tk.Label(content, text="\n\n  ☿ Aucune Pierre Philosophale in this vault\n\n"
                     "  Les Pierres Philosophales sont des objets extremement rares\n"
                     "  reserves aux 1000 premiers vaults.",
                     bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.TEXT_SECONDARY,
@@ -1617,7 +1617,7 @@ class VaultMonitorGUI:
                         font=("Consolas", 9)).pack(anchor=tk.W)
     
     def _create_artifacts_tab(self, parent, artifacts, evolution_artifacts=None):
-        """Cree l'onglet des artifacts avec artefacts d'evolution"""
+        """Creates the'onglet des artifacts avec evolution artifacts"""
         canvas = tk.Canvas(parent, bg=CypherpunkTheme.BG_SECONDARY, highlightthickness=0)
         scrollbar = ttk.Scrollbar(parent, orient="vertical", command=canvas.yview)
         content = tk.Frame(canvas, bg=CypherpunkTheme.BG_SECONDARY)
@@ -1628,7 +1628,7 @@ class VaultMonitorGUI:
         canvas.create_window((0, 0), window=content, anchor="nw")
         content.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
         
-        # Charger les artefacts d'evolution si non fournis
+        # Charger les evolution artifacts si non fournis
         if evolution_artifacts is None:
             evolution_artifacts = self._load_evolution_artifacts()
         
@@ -1636,10 +1636,10 @@ class VaultMonitorGUI:
         if evolution_artifacts or EVOLUTION_ARTIFACTS_AVAILABLE:
             evo_header = tk.Frame(content, bg=CypherpunkTheme.BG_PANEL, padx=10, pady=8)
             evo_header.pack(fill=tk.X, padx=5, pady=(10, 5))
-            tk.Label(evo_header, text="⚗ ARTEFACTS D'EVOLUTION", 
+            tk.Label(evo_header, text="⚗ EVOLUTION ARTIFACTS", 
                     bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.NEON_MAGENTA,
                     font=("Consolas", 12, "bold")).pack(side=tk.LEFT)
-            tk.Label(evo_header, text=f" ({len(evolution_artifacts)} possedes)", 
+            tk.Label(evo_header, text=f" ({len(evolution_artifacts)} owned)", 
                     bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.TEXT_SECONDARY,
                     font=("Consolas", 10)).pack(side=tk.LEFT)
             
@@ -1647,22 +1647,22 @@ class VaultMonitorGUI:
                 for evo_art in evolution_artifacts:
                     self._render_evolution_artifact(content, evo_art)
             else:
-                tk.Label(content, text="    Aucun artefact d'evolution obtenu",
+                tk.Label(content, text="    Aucun evolution artifact obtained",
                         bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.TEXT_SECONDARY,
                         font=("Consolas", 10)).pack(anchor=tk.W, padx=15, pady=5)
         
         # Section Artefacts Spinoriels existants
         spinor_header = tk.Frame(content, bg=CypherpunkTheme.BG_PANEL, padx=10, pady=8)
         spinor_header.pack(fill=tk.X, padx=5, pady=(15, 5))
-        tk.Label(spinor_header, text="🏛 ARTEFACTS SPINORIELS", 
+        tk.Label(spinor_header, text="🏛 SPINOR ARTIFACTS", 
                 bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.NEON_CYAN,
                 font=("Consolas", 12, "bold")).pack(side=tk.LEFT)
-        tk.Label(spinor_header, text=f" ({len(artifacts)} possedes)", 
+        tk.Label(spinor_header, text=f" ({len(artifacts)} owned)", 
                 bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.TEXT_SECONDARY,
                 font=("Consolas", 10)).pack(side=tk.LEFT)
         
         if not artifacts:
-            tk.Label(content, text="    Aucun artefact spinoriel dans ce vault",
+            tk.Label(content, text="    Aucun spinor artifact in this vault",
                     bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.TEXT_SECONDARY,
                     font=("Consolas", 10)).pack(anchor=tk.W, padx=15, pady=5)
         else:
@@ -1670,7 +1670,7 @@ class VaultMonitorGUI:
                 self._render_spinor_artifact(content, artifact)
     
     def _render_evolution_artifact(self, parent, artifact):
-        """Affiche un artefact d'evolution"""
+        """Displays un evolution artifact"""
         rarity_colors = {
             'rare': '#0088ff', 'epic': '#aa00ff', 'legendary': '#ff8000',
             'mythical': '#ffaa00', 'transcendent': '#00ffff', 'primordial': '#ff00ff'
@@ -1703,9 +1703,9 @@ class VaultMonitorGUI:
                     fg=CypherpunkTheme.TEXT_SECONDARY, font=("Consolas", 9),
                     wraplength=500, justify=tk.LEFT).pack(anchor=tk.W, pady=(5, 0))
         
-        # Bonus de puissance
+        # Power bonus
         power_bonus = artifact.get('power_bonus', 1.0)
-        tk.Label(art_frame, text=f"  ⚡ Bonus de puissance: x{power_bonus:.2f}", 
+        tk.Label(art_frame, text=f"  ⚡ Power bonus: x{power_bonus:.2f}", 
                 bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.NEON_CYAN,
                 font=("Consolas", 9)).pack(anchor=tk.W)
         
@@ -1738,13 +1738,13 @@ class VaultMonitorGUI:
         
         # Statut de liaison
         is_bound = artifact.get('is_bound', False)
-        bound_text = "🔗 LIE A L'AVATAR" if is_bound else "○ Non lie"
+        bound_text = "🔗 LIE A L'AVATAR" if is_bound else "○ Not bound"
         bound_color = CypherpunkTheme.NEON_GREEN if is_bound else CypherpunkTheme.TEXT_SECONDARY
         tk.Label(art_frame, text=f"  {bound_text}", bg=CypherpunkTheme.BG_DARK,
                 fg=bound_color, font=("Consolas", 9)).pack(anchor=tk.W)
     
     def _render_spinor_artifact(self, parent, artifact):
-        """Affiche un artefact spinoriel existant"""
+        """Displays un spinor artifact existant"""
         art_frame = tk.Frame(parent, bg=CypherpunkTheme.BG_DARK, padx=15, pady=10)
         art_frame.pack(fill=tk.X, padx=10, pady=5)
         
@@ -1806,7 +1806,7 @@ class VaultMonitorGUI:
                     font=("Consolas", 9)).pack(anchor=tk.W)
     
     def _load_evolution_artifacts(self, vault_num: int = None) -> list:
-        """Charge les artefacts d'evolution du vault"""
+        """Loads the evolution artifacts du vault"""
         if not EVOLUTION_ARTIFACTS_AVAILABLE:
             return []
         
@@ -1833,7 +1833,7 @@ class VaultMonitorGUI:
             return []
     
     def _load_vault_fragments(self, vault_num: int) -> list:
-        """Charge les fragments d'un vault"""
+        """Loads the fragments d'un vault"""
         fragments = []
         fragments_dir = Path(self.base_path) / "fragment_nexus" / "fragments"
         if not fragments_dir.exists():
@@ -1849,7 +1849,7 @@ class VaultMonitorGUI:
         return fragments
     
     def _load_vault_gems(self, vault_num: int) -> list:
-        """Charge les gems d'un vault"""
+        """Loads the gems d'un vault"""
         gems = []
         gems_dir = Path(self.base_path) / "gem_vault" / "gems"
         if not gems_dir.exists():
@@ -1869,7 +1869,7 @@ class VaultMonitorGUI:
         return gems
     
     def _load_vault_stones(self, vault_num: int) -> list:
-        """Charge les pierres philosophales d'un vault"""
+        """Loads the pierres philosophales d'un vault"""
         stones = []
         # Chemin correct: philosopher_stones/stones/
         stones_dir = Path(self.base_path) / "philosopher_stones" / "stones"
@@ -1886,7 +1886,7 @@ class VaultMonitorGUI:
         return stones
     
     def _load_vault_artifacts(self, vault_num: int) -> list:
-        """Charge les artifacts d'un vault"""
+        """Loads the artifacts d'un vault"""
         artifacts = []
         artifacts_dir = Path(self.base_path) / "artifact_vault" / "artifacts"
         if not artifacts_dir.exists():
@@ -1962,10 +1962,10 @@ class VaultMonitorGUI:
                 self._log_activity("Signature process started")
                 messagebox.showinfo("Info", "Processus de signature lancé.\nRafraîchissez après la signature.")
             except Exception as e:
-                messagebox.showerror("Erreur", f"Impossible de lancer la signature: {e}")
+                messagebox.showerror("Error", f"Impossible de lancer la signature: {e}")
     
     def _verify_runes(self):
-        """Verifie les signatures des runes"""
+        """Verifies les signatures des runes"""
         import subprocess
         
         try:
@@ -1997,13 +1997,13 @@ class VaultMonitorGUI:
             self._log_activity("Runes signatures verified")
             
         except Exception as e:
-            messagebox.showerror("Erreur", f"Erreur de vérification: {e}")
+            messagebox.showerror("Error", f"Erreur de vérification: {e}")
     
     def _show_rune_details(self):
-        """Affiche les details d'une rune selectionnee avec coffres et items"""
+        """Displays les details d'une rune selectionnee avec coffres et items"""
         selection = self.runes_tree.selection()
         if not selection:
-            messagebox.showwarning("Attention", "Veuillez sélectionner une rune")
+            messagebox.showwarning("Warning", "Veuillez sélectionner une rune")
             return
         
         item = self.runes_tree.item(selection[0])
@@ -2012,7 +2012,7 @@ class VaultMonitorGUI:
         
         asset = self.runes_monitor.get_asset(vault_num)
         if not asset:
-            messagebox.showerror("Erreur", "Rune non trouvée")
+            messagebox.showerror("Error", "Rune non trouvée")
             return
         
         # Charger les coffres et items du vault
@@ -2361,7 +2361,7 @@ class VaultMonitorGUI:
                 items_text.tag_config("more", foreground=CypherpunkTheme.TEXT_SECONDARY)
                 items_text.config(state=tk.DISABLED)
             
-            # Stats globales
+            # All stats
             stats_frame = tk.Frame(inventory_frame, bg=CypherpunkTheme.BG_TERTIARY, padx=10, pady=8)
             stats_frame.pack(fill=tk.X, pady=(10, 0))
             
@@ -2395,7 +2395,7 @@ class VaultMonitorGUI:
             ).pack(side=tk.RIGHT)
     
     def _load_vault_chests(self, vault_num: int) -> list:
-        """Charge les coffres d'un vault"""
+        """Loads the coffres d'un vault"""
         chests = []
         chests_dir = Path(self.base_path) / "alchemical_vault" / "chests"
         
@@ -2418,7 +2418,7 @@ class VaultMonitorGUI:
         return chests
     
     def _load_vault_items(self, vault_num: int) -> list:
-        """Charge les items d'un vault"""
+        """Loads the items d'un vault"""
         items = []
         items_dir = Path(self.base_path) / "alchemical_vault" / "items"
         
@@ -2494,14 +2494,14 @@ class VaultMonitorGUI:
             messagebox.showinfo("Succès", f"Portfolio exporté vers:\n{save_path}")
             
         except Exception as e:
-            messagebox.showerror("Erreur", f"Erreur d'export: {e}")
+            messagebox.showerror("Error", f"Erreur d'export: {e}")
     
     # ========================================================================
     # ONGLET BITCOIN EXCHANGE
     # ========================================================================
     
     def _create_exchange_tab(self) -> tk.Frame:
-        """Cree l'onglet d'echange d'items via Bitcoin Runes"""
+        """Creates the'onglet d'echange d'items via Bitcoin Runes"""
         frame = tk.Frame(self.notebook, bg=CypherpunkTheme.BG_DARK)
         
         # Initialiser le gestionnaire d'echange
@@ -2839,7 +2839,7 @@ class VaultMonitorGUI:
         """Achete l'item selectionne"""
         selection = self.market_tree.selection()
         if not selection:
-            messagebox.showwarning("Attention", "Selectionnez un item")
+            messagebox.showwarning("Warning", "Selectionnez un item")
             return
         
         item = self.market_tree.item(selection[0])
@@ -2854,7 +2854,7 @@ class VaultMonitorGUI:
                 "puis confirmez la transaction.")
     
     def _view_listing_details(self):
-        """Affiche les details d'une annonce"""
+        """Displays les details d'une annonce"""
         selection = self.market_tree.selection()
         if not selection:
             return
@@ -2910,7 +2910,7 @@ SELLER: {item['values'][5]}
             inscription = self.exchange_manager.inscribe_item(
                 item_data, self.current_vault_num
             )
-            messagebox.showinfo("Succes", 
+            messagebox.showinfo("Success", 
                 f"Item inscrit!\nRune ID: {inscription.rune_id}")
             dialog.destroy()
             self._refresh_exchange()
@@ -2922,7 +2922,7 @@ SELLER: {item['values'][5]}
         """Dialog pour mettre en vente un item"""
         selection = self.my_items_tree.selection()
         if not selection:
-            messagebox.showwarning("Attention", "Selectionnez un item inscrit")
+            messagebox.showwarning("Warning", "Selectionnez un item inscrit")
             return
         
         item = self.my_items_tree.item(selection[0])
@@ -2933,7 +2933,7 @@ SELLER: {item['values'][5]}
         inscription = next((i for i in inscriptions if i.rune_id == rune_id), None)
         
         if not inscription or inscription.status != "inscribed":
-            messagebox.showerror("Erreur", "Item non disponible pour la vente")
+            messagebox.showerror("Error", "Item non disponible pour la vente")
             return
         
         # Dialog de prix
@@ -2959,12 +2959,12 @@ SELLER: {item['values'][5]}
                 listing = self.exchange_manager.create_listing(
                     inscription.inscription_id, price_sats, self.current_vault_num
                 )
-                messagebox.showinfo("Succes", 
+                messagebox.showinfo("Success", 
                     f"Item en vente!\nPrix: {listing.price_btc:.6f} BTC")
                 dialog.destroy()
                 self._refresh_exchange()
             except Exception as e:
-                messagebox.showerror("Erreur", str(e))
+                messagebox.showerror("Error", str(e))
         
         tk.Button(dialog, text="METTRE EN VENTE", bg="#f7931a", fg="black",
                  font=("Consolas", 10, "bold"), command=do_sell).pack(pady=20)
@@ -2981,7 +2981,7 @@ SELLER: {item['values'][5]}
         if not selection:
             return
         
-        if messagebox.askyesno("Confirmer", "Annuler cette annonce?"):
+        if messagebox.askyesno("Confirm", "Annuler cette annonce?"):
             # TODO: Implementer annulation
             messagebox.showinfo("Info", "Annonce annulee")
             self._refresh_exchange()
@@ -2998,7 +2998,7 @@ SELLER: {item['values'][5]}
     def _reject_trade(self):
         """Rejette une offre de trade"""
         selection = self.received_trades_tree.selection()
-        if selection and messagebox.askyesno("Confirmer", "Rejeter cette offre?"):
+        if selection and messagebox.askyesno("Confirm", "Rejeter cette offre?"):
             messagebox.showinfo("Info", "Offre rejetee")
             self._refresh_trades()
     
@@ -3013,7 +3013,7 @@ SELLER: {item['values'][5]}
     # ========================================================================
     
     def _create_bridge_tab(self) -> tk.Frame:
-        """Cree l'onglet de transfert d'actifs sur Bitcoin"""
+        """Creates the'onglet de transfert d'actifs sur Bitcoin"""
         frame = tk.Frame(self.notebook, bg=CypherpunkTheme.BG_DARK)
         
         # Initialiser le bridge
@@ -3143,7 +3143,7 @@ SELLER: {item['values'][5]}
         btn_frame.pack(pady=10)
         
         asset_types = [
-            ("EQUIPEMENTS", "#00ffff", self._inscribe_items_dialog),
+            ("EQUIPMENT", "#00ffff", self._inscribe_items_dialog),
             ("GEMS", "#ff00ff", self._inscribe_gems_dialog),
             ("FRAGMENTS", "#00ff00", self._inscribe_fragments_dialog),
             ("STONES", "#ffd700", self._inscribe_stones_dialog),
@@ -3288,22 +3288,22 @@ SELLER: {item['values'][5]}
         self.transfer_asset_combo['values'] = asset_list
     
     def _save_bridge_address(self):
-        """Sauvegarde l'adresse Bitcoin"""
+        """Saves l'adresse Bitcoin"""
         address = self.bridge_address.get()
         if not address:
-            messagebox.showwarning("Attention", "Entrez une adresse Bitcoin")
+            messagebox.showwarning("Warning", "Entrez une adresse Bitcoin")
             return
         
         # Validation basique
         if not (address.startswith('1') or address.startswith('3') or address.startswith('bc1')):
-            messagebox.showerror("Erreur", "Adresse Bitcoin invalide")
+            messagebox.showerror("Error", "Adresse Bitcoin invalide")
             return
         
-        messagebox.showinfo("Succes", f"Adresse sauvegardee:\n{address}")
+        messagebox.showinfo("Success", f"Adresse sauvegardee:\n{address}")
     
     def _inscribe_items_dialog(self):
         """Dialog pour inscrire des items"""
-        self._inscribe_assets_dialog("item", "Equipements Alchimiques")
+        self._inscribe_assets_dialog("item", "Alchemical Equipment")
     
     def _inscribe_gems_dialog(self):
         """Dialog pour inscrire des gems"""
@@ -3319,13 +3319,13 @@ SELLER: {item['values'][5]}
     
     def _inscribe_artifacts_dialog(self):
         """Dialog pour inscrire des artefacts"""
-        self._inscribe_assets_dialog("artifact", "Artefacts")
+        self._inscribe_assets_dialog("artifact", "Artifacts")
     
     def _inscribe_assets_dialog(self, asset_type: str, title: str):
         """Dialog generique pour inscrire des actifs"""
         address = self.bridge_address.get()
         if not address:
-            messagebox.showwarning("Attention", 
+            messagebox.showwarning("Warning", 
                 "Entrez d'abord votre adresse Bitcoin dans le champ en haut")
             return
         
@@ -3377,7 +3377,7 @@ SELLER: {item['values'][5]}
         def do_inscribe():
             selected = listbox.curselection()
             if not selected:
-                messagebox.showwarning("Attention", "Selectionnez au moins un actif")
+                messagebox.showwarning("Warning", "Selectionnez au moins un actif")
                 return
             
             count = 0
@@ -3399,7 +3399,7 @@ SELLER: {item['values'][5]}
                     except Exception as e:
                         print(f"Erreur inscription: {e}")
             
-            messagebox.showinfo("Succes", f"{count} actif(s) inscrit(s) sur Bitcoin!")
+            messagebox.showinfo("Success", f"{count} actif(s) inscrit(s) sur Bitcoin!")
             dialog.destroy()
             self._refresh_bridge()
         
@@ -3414,11 +3414,11 @@ SELLER: {item['values'][5]}
         priority = self.transfer_priority_var.get()
         
         if not asset_selection:
-            messagebox.showwarning("Attention", "Selectionnez un actif")
+            messagebox.showwarning("Warning", "Selectionnez un actif")
             return
         
         if not dest_address:
-            messagebox.showwarning("Attention", "Entrez une adresse destination")
+            messagebox.showwarning("Warning", "Entrez une adresse destination")
             return
         
         # Extraire le Rune ID
@@ -3427,12 +3427,12 @@ SELLER: {item['values'][5]}
         # Trouver l'actif
         asset = self.asset_bridge.get_asset_by_rune(rune_id)
         if not asset:
-            messagebox.showerror("Erreur", "Actif non trouve")
+            messagebox.showerror("Error", "Actif non trouve")
             return
         
         from_address = self.bridge_address.get()
         if not from_address:
-            messagebox.showerror("Erreur", "Configurez d'abord votre adresse Bitcoin")
+            messagebox.showerror("Error", "Configurez d'abord votre adresse Bitcoin")
             return
         
         try:
@@ -3470,14 +3470,14 @@ INSTRUCTIONS:
                 "Suivez les instructions pour completer le transfert.")
             
         except Exception as e:
-            messagebox.showerror("Erreur", str(e))
+            messagebox.showerror("Error", str(e))
     
     # ========================================================================
     # ONGLET AVATAR 3D
     # ========================================================================
     
     def _create_avatar_tab(self) -> tk.Frame:
-        """Cree l'onglet Avatar - Version simplifiee avec Three.js"""
+        """Creates the'onglet Avatar - Version simplifiee avec Three.js"""
         frame = tk.Frame(self.notebook, bg=CypherpunkTheme.BG_DARK)
         
         # Initialiser le manager
@@ -3672,7 +3672,7 @@ INSTRUCTIONS:
         return frame
     
     def _display_stats_placeholder(self):
-        """Affiche le placeholder pour les stats"""
+        """Displays le placeholder pour les stats"""
         for widget in self.avatar_stats_frame.winfo_children():
             widget.destroy()
         
@@ -3686,7 +3686,7 @@ INSTRUCTIONS:
         ).pack(pady=30, padx=10)
     
     def _display_avatar_stats(self, avatar, stats=None):
-        """Affiche les stats de combat de l'avatar"""
+        """Displays les stats de combat de l'avatar"""
         for widget in self.avatar_stats_frame.winfo_children():
             widget.destroy()
         
@@ -4020,7 +4020,7 @@ INSTRUCTIONS:
                                        fill="white", font=("Consolas", 7, "bold"))
     
     def _get_power_color(self, power_level: float) -> str:
-        """Retourne une couleur basee sur le niveau de puissance (0-1)"""
+        """Returns une couleur basee sur le niveau de puissance (0-1)"""
         if power_level >= 0.9:
             return "#ff00ff"  # Magenta - Primordial
         elif power_level >= 0.75:
@@ -4092,7 +4092,7 @@ INSTRUCTIONS:
         self._create_dna_display(dna_frame, avatar)
     
     def _create_stats_display(self, parent, stats, avatar_class):
-        """Cree l'affichage des stats dans la fenetre"""
+        """Creates the'affichage des stats dans la fenetre"""
         # Header
         header = tk.Frame(parent, bg=CypherpunkTheme.BG_DARK)
         header.pack(fill=tk.X, pady=10, padx=10)
@@ -4183,7 +4183,7 @@ INSTRUCTIONS:
                     font=("Consolas", 12, "bold")).pack(side=tk.RIGHT)
     
     def _create_class_display(self, parent, avatar_class):
-        """Affiche les informations de la classe"""
+        """Displays les informations de la classe"""
         # Header avec icone et nom
         header = tk.Frame(parent, bg=CypherpunkTheme.BG_DARK)
         header.pack(fill=tk.X, pady=20, padx=20)
@@ -4247,7 +4247,7 @@ INSTRUCTIONS:
                     font=("Consolas", 10)).pack(anchor=tk.W, padx=10, pady=2)
     
     def _create_dna_display(self, parent, avatar):
-        """Affiche les informations DNA de l'avatar"""
+        """Displays les informations DNA de l'avatar"""
         from tkinter import scrolledtext
         
         dna_text = scrolledtext.ScrolledText(
@@ -4331,7 +4331,7 @@ INSTRUCTIONS:
             )
             
         except Exception as e:
-            messagebox.showerror("Erreur", f"Erreur d'export: {e}")
+            messagebox.showerror("Error", f"Erreur d'export: {e}")
     
     def _open_threejs_viewer(self):
         """Ouvre la visualisation Three.js dans le navigateur"""
@@ -4369,10 +4369,10 @@ INSTRUCTIONS:
             )
             
         except Exception as e:
-            messagebox.showerror("Erreur", f"Impossible d'ouvrir le viewer 3D:\n{e}")
+            messagebox.showerror("Error", f"Impossible d'ouvrir le viewer 3D:\n{e}")
     
     def _display_avatar_placeholder(self):
-        """Affiche le placeholder quand pas d'avatar"""
+        """Displays le placeholder quand pas d'avatar"""
         for widget in self.avatar_info_frame.winfo_children():
             widget.destroy()
         
@@ -4389,7 +4389,7 @@ INSTRUCTIONS:
         ).pack(pady=50, padx=20)
     
     def _display_avatar_info(self, avatar):
-        """Affiche les informations detaillees de l'avatar"""
+        """Displays les informations detaillees de l'avatar"""
         for widget in self.avatar_info_frame.winfo_children():
             widget.destroy()
         
@@ -4447,7 +4447,7 @@ INSTRUCTIONS:
                 add_info("Bonus", "+50% puissance", CypherpunkTheme.NEON_GREEN)
                 add_info("Transferable", "NON", "#ff0000")
             elif binding.state == "detached":
-                add_info("Bonus", "Aucun", CypherpunkTheme.TEXT_SECONDARY)
+                add_info("Bonus", "No", CypherpunkTheme.TEXT_SECONDARY)
                 add_info("Transferable", "OUI", CypherpunkTheme.NEON_GREEN)
                 if binding.detached_at:
                     add_info("Detache le", binding.detached_at[:10])
@@ -4477,7 +4477,7 @@ INSTRUCTIONS:
                 add_info("TXID", avatar.token.inscription_txid[:20] + "...")
     
     def _get_rarity_color(self, rarity: str) -> str:
-        """Retourne la couleur selon la rarete"""
+        """Returns la couleur selon la rarete"""
         colors = {
             "common": "#808080",
             "uncommon": "#00ff00",
@@ -4695,9 +4695,9 @@ INSTRUCTIONS:
             self.tokenize_btn.configure(state=tk.DISABLED)
     
     def _generate_avatar(self):
-        """Genere un nouvel avatar UNIQUE et IMMUABLE pour le vault"""
+        """Generates un nouvel avatar UNIQUE et IMMUABLE pour le vault"""
         if not AVATAR_AVAILABLE:
-            messagebox.showerror("Erreur", "Module Avatar non disponible")
+            messagebox.showerror("Error", "Module Avatar non disponible")
             return
         
         # Importer les constantes pionniers
@@ -4790,7 +4790,7 @@ INSTRUCTIONS:
         )
         
         if not address or len(address) < 20:
-            messagebox.showwarning("Attention", "Adresse Bitcoin invalide")
+            messagebox.showwarning("Warning", "Adresse Bitcoin invalide")
             return
         
         try:
@@ -4819,7 +4819,7 @@ INSTRUCTIONS:
             self._refresh_avatar()
             
         except Exception as e:
-            messagebox.showerror("Erreur", f"Impossible de generer l'avatar:\n{e}")
+            messagebox.showerror("Error", f"Impossible de generer l'avatar:\n{e}")
     
     def _detach_avatar(self):
         """Detache l'avatar du vault"""
@@ -4870,7 +4870,7 @@ INSTRUCTIONS:
             self._refresh_avatar()
             
         except Exception as e:
-            messagebox.showerror("Erreur", str(e))
+            messagebox.showerror("Error", str(e))
     
     def _transfer_avatar_dialog(self):
         """Ouvre le dialog de transfert d'avatar"""
@@ -4881,7 +4881,7 @@ INSTRUCTIONS:
         avatar = avatars[0]
         
         if avatar.binding and avatar.binding.state != "detached":
-            messagebox.showwarning("Attention", "L'avatar doit etre DETACHE pour etre transfere")
+            messagebox.showwarning("Warning", "L'avatar doit etre DETACHE pour etre transfere")
             return
         
         # Dialog de transfert
@@ -4943,7 +4943,7 @@ INSTRUCTIONS:
         def do_transfer():
             dest = dest_var.get()
             if not dest or len(dest) < 20:
-                messagebox.showwarning("Attention", "Adresse invalide")
+                messagebox.showwarning("Warning", "Adresse invalide")
                 return
             
             to_vault = None
@@ -4964,12 +4964,12 @@ INSTRUCTIONS:
                     to_vault=to_vault
                 )
                 
-                messagebox.showinfo("Succes", "Avatar transfere avec succes!")
+                messagebox.showinfo("Success", "Avatar transfere avec succes!")
                 dialog.destroy()
                 self._refresh_avatar()
                 
             except Exception as e:
-                messagebox.showerror("Erreur", str(e))
+                messagebox.showerror("Error", str(e))
         
         tk.Button(
             dialog,
@@ -4993,7 +4993,7 @@ INSTRUCTIONS:
             return
         
         if avatar.binding and avatar.binding.state != "detached":
-            messagebox.showwarning("Attention", "L'avatar doit etre DETACHE pour etre tokenise")
+            messagebox.showwarning("Warning", "L'avatar doit etre DETACHE pour etre tokenise")
             return
         
         result = messagebox.askyesno(
@@ -5022,7 +5022,7 @@ INSTRUCTIONS:
             self._refresh_avatar()
             
         except Exception as e:
-            messagebox.showerror("Erreur", str(e))
+            messagebox.showerror("Error", str(e))
     
     def _create_blockchain_tab(self) -> tk.Frame:
         """Créer l'onglet Blockchain avec monitoring temps réel via Alchemy"""
@@ -5190,15 +5190,15 @@ INSTRUCTIONS:
         network_name = self.alchemy_network.get()
         
         if not api_key:
-            messagebox.showerror("Erreur", "Clé API Alchemy requise\n\nObtenez-en une sur https://www.alchemy.com/")
+            messagebox.showerror("Error", "Clé API Alchemy requise\n\nObtenez-en une sur https://www.alchemy.com/")
             return
         
         if not address:
-            messagebox.showerror("Erreur", "Adresse wallet requise")
+            messagebox.showerror("Error", "Adresse wallet requise")
             return
         
         if not ALCHEMY_AVAILABLE:
-            messagebox.showerror("Erreur", "Module Alchemy non disponible")
+            messagebox.showerror("Error", "Module Alchemy non disponible")
             return
         
         try:
@@ -5221,7 +5221,7 @@ INSTRUCTIONS:
     def _refresh_blockchain(self):
         """Rafraichit les données blockchain"""
         if not self.alchemy_client:
-            messagebox.showwarning("Attention", "Connectez-vous d'abord à Alchemy")
+            messagebox.showwarning("Warning", "Connectez-vous d'abord à Alchemy")
             return
         
         address = self.alchemy_address.get().strip()
@@ -5268,13 +5268,13 @@ INSTRUCTIONS:
             self._log_activity(f"Blockchain data refreshed: {len(nfts)} NFTs, {len(tokens)} tokens")
             
         except Exception as e:
-            messagebox.showerror("Erreur", f"Erreur de rafraîchissement:\n{e}")
+            messagebox.showerror("Error", f"Erreur de rafraîchissement:\n{e}")
     
     def _transfer_nft_dialog(self):
         """Dialogue pour transférer un NFT"""
         selection = self.nft_tree.selection()
         if not selection:
-            messagebox.showwarning("Attention", "Sélectionnez un NFT à transférer")
+            messagebox.showwarning("Warning", "Sélectionnez un NFT à transférer")
             return
         
         item = self.nft_tree.item(selection[0])
@@ -5311,7 +5311,7 @@ INSTRUCTIONS:
         def prepare_transfer():
             dest = to_address.get().strip()
             if not dest or len(dest) != 42:
-                messagebox.showerror("Erreur", "Adresse invalide")
+                messagebox.showerror("Error", "Adresse invalide")
                 return
             
             # Préparer les données de transaction
@@ -5338,7 +5338,7 @@ Pour exécuter ce transfert:
         """Dialogue pour transférer un Token"""
         selection = self.token_tree.selection()
         if not selection:
-            messagebox.showwarning("Attention", "Sélectionnez un token à transférer")
+            messagebox.showwarning("Warning", "Sélectionnez un token à transférer")
             return
         
         item = self.token_tree.item(selection[0])
@@ -5386,10 +5386,10 @@ Pour exécuter ce transfert:
             amt = amount.get().strip()
             
             if not dest or len(dest) != 42:
-                messagebox.showerror("Erreur", "Adresse invalide")
+                messagebox.showerror("Error", "Adresse invalide")
                 return
             if not amt:
-                messagebox.showerror("Erreur", "Montant requis")
+                messagebox.showerror("Error", "Montant requis")
                 return
             
             tx_info = f"""
@@ -5556,7 +5556,7 @@ Pour exécuter ce transfert:
         self._save_activity_log(log_entry)
     
     def _save_activity_log(self, log_entry: str):
-        """Sauvegarder le journal d'activité"""
+        """Savesr le journal d'activité"""
         log_file = os.path.join(self.data_path, f"{self.vault_name}_activity.log")
         try:
             with open(log_file, 'a', encoding='utf-8') as f:
@@ -5622,7 +5622,7 @@ Pour exécuter ce transfert:
             token_id = token_entry.get().strip()
             
             if not contract or not token_id:
-                messagebox.showerror("Erreur", "Contrat et Token ID requis")
+                messagebox.showerror("Error", "Contrat et Token ID requis")
                 return
             
             nft_data = {
@@ -5698,17 +5698,17 @@ Pour exécuter ce transfert:
             self._log_activity(f"Import CSV: {count} NFTs importés")
             messagebox.showinfo("Succès", f"{count} NFTs importés avec succès")
         except Exception as e:
-            messagebox.showerror("Erreur", f"Erreur lors de l'import: {e}")
+            messagebox.showerror("Error", f"Erreur lors de l'import: {e}")
     
     def add_nft_manual(self):
         """Alias pour deposit_nft"""
         self.deposit_nft()
     
     def show_nft_details(self):
-        """Afficher les détails d'un NFT sélectionné"""
+        """Displaysr les détails d'un NFT sélectionné"""
         selection = self.assets_tree.selection()
         if not selection:
-            messagebox.showwarning("Attention", "Veuillez sélectionner un NFT")
+            messagebox.showwarning("Warning", "Veuillez sélectionner un NFT")
             return
         
         item = self.assets_tree.item(selection[0])
@@ -5723,7 +5723,7 @@ Pour exécuter ce transfert:
                 break
         
         if not nft_data:
-            messagebox.showerror("Erreur", "NFT non trouvé")
+            messagebox.showerror("Error", "NFT non trouvé")
             return
         
         # Afficher les détails
@@ -5748,7 +5748,7 @@ Pour exécuter ce transfert:
         """Marquer un NFT comme sécurisé"""
         selection = self.assets_tree.selection()
         if not selection:
-            messagebox.showwarning("Attention", "Veuillez sélectionner un NFT")
+            messagebox.showwarning("Warning", "Veuillez sélectionner un NFT")
             return
         
         item = self.assets_tree.item(selection[0])
@@ -5770,7 +5770,7 @@ Pour exécuter ce transfert:
         """Retirer un NFT du vault"""
         selection = self.assets_tree.selection()
         if not selection:
-            messagebox.showwarning("Attention", "Veuillez sélectionner un NFT")
+            messagebox.showwarning("Warning", "Veuillez sélectionner un NFT")
             return
         
         if not messagebox.askyesno("Confirmation", "Voulez-vous vraiment retirer ce NFT du vault?"):
@@ -5795,7 +5795,7 @@ Pour exécuter ce transfert:
         """Supprimer un NFT de la liste"""
         selection = self.assets_tree.selection()
         if not selection:
-            messagebox.showwarning("Attention", "Veuillez sélectionner un NFT")
+            messagebox.showwarning("Warning", "Veuillez sélectionner un NFT")
             return
         
         if not messagebox.askyesno("Confirmation", "Voulez-vous vraiment supprimer ce NFT?"):
@@ -5845,7 +5845,7 @@ Pour exécuter ce transfert:
             amount = amount_entry.get().strip()
             
             if not contract or not symbol or not amount:
-                messagebox.showerror("Erreur", "Tous les champs sont requis")
+                messagebox.showerror("Error", "Tous les champs sont requis")
                 return
             
             token_data = {
@@ -5883,7 +5883,7 @@ Pour exécuter ce transfert:
         symbol = self.token_symbol_entry.get().strip() or "TOKEN"
         
         if not contract or not amount:
-            messagebox.showerror("Erreur", "Contrat et montant requis")
+            messagebox.showerror("Error", "Contrat et montant requis")
             return
         
         token_data = {
@@ -5978,13 +5978,13 @@ Pour exécuter ce transfert:
             self._log_activity(f"Document déposé: {doc_name}")
             messagebox.showinfo("Succès", f"Document {doc_name} sécurisé dans le vault")
         except Exception as e:
-            messagebox.showerror("Erreur", f"Erreur lors du dépôt: {e}")
+            messagebox.showerror("Error", f"Erreur lors du dépôt: {e}")
     
     def verify_document(self):
         """Vérifier l'intégrité d'un document"""
         selection = self.documents_tree.selection()
         if not selection:
-            messagebox.showwarning("Attention", "Veuillez sélectionner un document")
+            messagebox.showwarning("Warning", "Veuillez sélectionner un document")
             return
         
         item = self.documents_tree.item(selection[0])
@@ -5998,7 +5998,7 @@ Pour exécuter ce transfert:
                 break
         
         if not doc_data:
-            messagebox.showerror("Erreur", "Document non trouvé")
+            messagebox.showerror("Error", "Document non trouvé")
             return
         
         try:
@@ -6013,16 +6013,16 @@ Pour exécuter ce transfert:
                 messagebox.showinfo("Intégrité", "✓ Document intègre - Hash vérifié")
                 self._log_activity(f"Vérification intégrité OK: {doc_name}")
             else:
-                messagebox.showwarning("Attention", "⚠ Hash différent - Document potentiellement modifié")
+                messagebox.showwarning("Warning", "⚠ Hash différent - Document potentiellement modifié")
                 self._log_activity(f"ALERTE: Intégrité compromise pour {doc_name}")
         except Exception as e:
-            messagebox.showerror("Erreur", f"Erreur de vérification: {e}")
+            messagebox.showerror("Error", f"Erreur de vérification: {e}")
     
     def extract_document(self):
         """Extraire un document du vault"""
         selection = self.documents_tree.selection()
         if not selection:
-            messagebox.showwarning("Attention", "Veuillez sélectionner un document")
+            messagebox.showwarning("Warning", "Veuillez sélectionner un document")
             return
         
         item = self.documents_tree.item(selection[0])
@@ -6036,7 +6036,7 @@ Pour exécuter ce transfert:
                 break
         
         if not doc_data:
-            messagebox.showerror("Erreur", "Document non trouvé")
+            messagebox.showerror("Error", "Document non trouvé")
             return
         
         # Demander où sauvegarder
@@ -6060,7 +6060,7 @@ Pour exécuter ce transfert:
             self._log_activity(f"Document extrait: {doc_name}")
             messagebox.showinfo("Succès", f"Document extrait vers {save_path}")
         except Exception as e:
-            messagebox.showerror("Erreur", f"Erreur d'extraction: {e}")
+            messagebox.showerror("Error", f"Erreur d'extraction: {e}")
     
     # ========================================================================
     # ACTIONS TRANSFER
@@ -6127,7 +6127,7 @@ Pour exécuter ce transfert:
         """Exécuter un transfer manuellement"""
         selection = self.transfers_tree.selection()
         if not selection:
-            messagebox.showwarning("Attention", "Veuillez sélectionner un transfer")
+            messagebox.showwarning("Warning", "Veuillez sélectionner un transfer")
             return
         
         if not messagebox.askyesno("Confirmation", "Exécuter ce transfer maintenant?"):
@@ -6153,7 +6153,7 @@ Pour exécuter ce transfert:
         """Annuler un transfer"""
         selection = self.transfers_tree.selection()
         if not selection:
-            messagebox.showwarning("Attention", "Veuillez sélectionner un transfer")
+            messagebox.showwarning("Warning", "Veuillez sélectionner un transfer")
             return
         
         if not messagebox.askyesno("Confirmation", "Annuler ce transfer?"):
@@ -6218,15 +6218,15 @@ Pour exécuter ce transfert:
         
         def attempt_recovery():
             if not psnx_path.get() or not blend_path.get():
-                messagebox.showerror("Erreur", "Les deux fichiers clés sont requis")
+                messagebox.showerror("Error", "Les deux fichiers clés sont requis")
                 return
             
             if not os.path.exists(psnx_path.get()):
-                messagebox.showerror("Erreur", "Fichier .psnx introuvable")
+                messagebox.showerror("Error", "Fichier .psnx introuvable")
                 return
             
             if not os.path.exists(blend_path.get()):
-                messagebox.showerror("Erreur", "Fichier .blend_data introuvable")
+                messagebox.showerror("Error", "Fichier .blend_data introuvable")
                 return
             
             # Tentative de récupération
@@ -6244,7 +6244,7 @@ Pour exécuter ce transfert:
                     dialog.destroy()
                 else:
                     self._log_activity(f"Échec récupération: {msg}")
-                    messagebox.showerror("Erreur", f"Échec: {msg}")
+                    messagebox.showerror("Error", f"Échec: {msg}")
             except ImportError:
                 messagebox.showinfo("Info", "Module d'authentification non disponible. Vérification basique effectuée.")
                 self._log_activity("Récupération: vérification basique")
@@ -6295,7 +6295,7 @@ Pour exécuter ce transfert:
             
             messagebox.showinfo("Succès", f"Journal exporté vers {save_path}")
         except Exception as e:
-            messagebox.showerror("Erreur", f"Erreur d'export: {e}")
+            messagebox.showerror("Error", f"Erreur d'export: {e}")
     
     def run(self):
         """Exécuter l'interface"""

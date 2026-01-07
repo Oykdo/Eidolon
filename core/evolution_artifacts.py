@@ -15,7 +15,7 @@ from enum import Enum
 
 
 class EvolutionArtifactType(Enum):
-    """Types d'artefacts d'evolution"""
+    """Types d'evolution artifacts"""
     GENESIS_GLYPH = "genesis_glyph"
     COSMIC_LENS = "cosmic_lens"
     INFINITY_FRAGMENT = "infinity_fragment"
@@ -25,7 +25,7 @@ class EvolutionArtifactType(Enum):
 
 
 class EvolutionArtifactRarity(Enum):
-    """Rarete des artefacts d'evolution"""
+    """Rarete des evolution artifacts"""
     RARE = "rare"
     EPIC = "epic"
     LEGENDARY = "legendary"
@@ -77,10 +77,10 @@ class EvolutionArtifact:
         return cls(**data)
 
 
-# Definitions des 6 artefacts d'evolution
+# Definitions des 6 evolution artifacts
 EVOLUTION_ARTIFACT_DEFINITIONS = {
     "genesis_glyph": {
-        "name": "Glyphe de Genese",
+        "name": "Genesis Glyph",
         "description": "Symbole primordial grave dans l'ether, il eveille le potentiel latent de l'avatar.",
         "rarity": EvolutionArtifactRarity.RARE.value,
         "evolution_stage": "awakened",
@@ -91,13 +91,13 @@ EVOLUTION_ARTIFACT_DEFINITIONS = {
         "color_secondary": "#00aa55",
         "glow_intensity": 1.2,
         "abilities": [
-            {"id": "awakening_pulse", "name": "Pulse d'Eveil", "description": "Accelere le gain d'XP de 10%", "value": 10},
-            {"id": "genesis_mark", "name": "Marque de Genese", "description": "Revele le potentiel cache", "value": 1}
+            {"id": "awakening_pulse", "name": "Awakening Pulse", "description": "Accelerates XP gain de 10%", "value": 10},
+            {"id": "genesis_mark", "name": "Genesis Mark", "description": "Reveals hidden potential", "value": 1}
         ],
-        "lore": "Forge a l'aube de la creation du Nexus, ce glyphe porte l'empreinte du premier bloc."
+        "lore": "Forged at the dawn of Nexus creation, this glyph bears the imprint of the first block."
     },
     "cosmic_lens": {
-        "name": "Lentille Cosmique",
+        "name": "Cosmic Lens",
         "description": "Cristal taille dans une etoile morte, il permet de voir au-dela des dimensions.",
         "rarity": EvolutionArtifactRarity.EPIC.value,
         "evolution_stage": "evolved",
@@ -108,14 +108,14 @@ EVOLUTION_ARTIFACT_DEFINITIONS = {
         "color_secondary": "#0088aa",
         "glow_intensity": 1.5,
         "abilities": [
-            {"id": "cosmic_vision", "name": "Vision Cosmique", "description": "Revele les objets caches dans un rayon de {value}m", "value": 100},
-            {"id": "star_focus", "name": "Focus Stellaire", "description": "Augmente la precision de {value}%", "value": 15},
-            {"id": "dimension_peek", "name": "Apercu Dimensionnel", "description": "Voit a travers {value} dimensions", "value": 2}
+            {"id": "cosmic_vision", "name": "Cosmic Vision", "description": "Revele les objets caches dans un rayon de {value}m", "value": 100},
+            {"id": "star_focus", "name": "Star Focus", "description": "Augmente la precision de {value}%", "value": 15},
+            {"id": "dimension_peek", "name": "Dimension Peek", "description": "Voit a travers {value} dimensions", "value": 2}
         ],
         "lore": "Extraite du coeur de la nebuleuse d'Andromede, cette lentille fut polie par des eons de radiation cosmique."
     },
     "infinity_fragment": {
-        "name": "Fragment d'Infini",
+        "name": "Infinity Fragment",
         "description": "Eclat de l'infini cristallise, il transcende les limites du possible.",
         "rarity": EvolutionArtifactRarity.LEGENDARY.value,
         "evolution_stage": "ascended",
@@ -126,14 +126,14 @@ EVOLUTION_ARTIFACT_DEFINITIONS = {
         "color_secondary": "#8800aa",
         "glow_intensity": 1.8,
         "abilities": [
-            {"id": "infinite_potential", "name": "Potentiel Infini", "description": "Multiplie tous les bonus par {value}", "value": 1.2},
-            {"id": "fractal_shield", "name": "Bouclier Fractal", "description": "Absorbe {value}% des degats", "value": 20},
-            {"id": "endless_energy", "name": "Energie Sans Fin", "description": "Regenere {value} energie/sec", "value": 5}
+            {"id": "infinite_potential", "name": "Infinite Potential", "description": "Multiplie tous les bonus par {value}", "value": 1.2},
+            {"id": "fractal_shield", "name": "Fractal Shield", "description": "Absorbe {value}% des degats", "value": 20},
+            {"id": "endless_energy", "name": "Endless Energy", "description": "Regenere {value} energie/sec", "value": 5}
         ],
         "lore": "Ce fragment provient de la frontiere entre l'existant et le non-existant, ou le temps et l'espace perdent leur sens."
     },
     "soul_anchor": {
-        "name": "Ancre d'Ame",
+        "name": "Soul Anchor",
         "description": "Chaine etheree qui lie l'essence immortelle, protege contre la dissolution.",
         "rarity": EvolutionArtifactRarity.MYTHICAL.value,
         "evolution_stage": "transcendent",
@@ -144,15 +144,15 @@ EVOLUTION_ARTIFACT_DEFINITIONS = {
         "color_secondary": "#cc7700",
         "glow_intensity": 2.0,
         "abilities": [
-            {"id": "soul_binding", "name": "Lien d'Ame", "description": "Lie l'essence a jamais", "value": 1},
-            {"id": "immortal_spark", "name": "Etincelle Immortelle", "description": "{value}% chance de survivre a la mort", "value": 5},
-            {"id": "spirit_shield", "name": "Bouclier Spirituel", "description": "Ignore {value}% des degats d'ame", "value": 50},
-            {"id": "transcend_death", "name": "Transcender la Mort", "description": "Peut ressusciter {value} fois", "value": 1}
+            {"id": "soul_binding", "name": "Soul Binding", "description": "Lie l'essence a jamais", "value": 1},
+            {"id": "immortal_spark", "name": "Immortal Spark", "description": "{value}% chance de survivre a la mort", "value": 5},
+            {"id": "spirit_shield", "name": "Spirit Shield", "description": "Ignore {value}% des degats d'ame", "value": 50},
+            {"id": "transcend_death", "name": "Transcend Death", "description": "Peut ressusciter {value} fois", "value": 1}
         ],
         "lore": "Forgee dans les flammes du purgatoire, cette ancre fut trempe dans les larmes d'un dieu dechu."
     },
     "divine_seal": {
-        "name": "Sceau Divin",
+        "name": "Divine Seal",
         "description": "Embleme celeste confere par les Anciens, il accorde l'autorite divine.",
         "rarity": EvolutionArtifactRarity.TRANSCENDENT.value,
         "evolution_stage": "divine",
@@ -163,15 +163,15 @@ EVOLUTION_ARTIFACT_DEFINITIONS = {
         "color_secondary": "#ffdd88",
         "glow_intensity": 2.5,
         "abilities": [
-            {"id": "divine_authority", "name": "Autorite Divine", "description": "Commande aux etres inferieurs", "value": 100},
-            {"id": "celestial_judgment", "name": "Jugement Celeste", "description": "Inflige {value}% degats sacres supplementaires", "value": 75},
-            {"id": "holy_protection", "name": "Protection Sacree", "description": "Immunite aux effets negatifs pendant {value}s", "value": 10},
-            {"id": "divine_blessing", "name": "Benediction Divine", "description": "Augmente les stats des allies de {value}%", "value": 25}
+            {"id": "divine_authority", "name": "Divine Authority", "description": "Commande aux etres inferieurs", "value": 100},
+            {"id": "celestial_judgment", "name": "Celestial Judgment", "description": "Inflige {value}% degats sacres supplementaires", "value": 75},
+            {"id": "holy_protection", "name": "Holy Protection", "description": "Immunite aux effets negatifs pendant {value}s", "value": 10},
+            {"id": "divine_blessing", "name": "Divine Blessing", "description": "Augmente les stats des allies de {value}%", "value": 25}
         ],
         "lore": "Seuls les elus peuvent porter ce sceau. Les Anciens l'ont cree pour distinguer ceux dignes de l'ascension."
     },
     "origin_key": {
-        "name": "Cle de l'Origine",
+        "name": "Origin Key",
         "description": "Artefact primordial qui deverrouille les secrets de la creation elle-meme.",
         "rarity": EvolutionArtifactRarity.PRIMORDIAL.value,
         "evolution_stage": "primordial",
@@ -183,11 +183,11 @@ EVOLUTION_ARTIFACT_DEFINITIONS = {
         "color_secondary": "#aa00aa",
         "glow_intensity": 3.5,
         "abilities": [
-            {"id": "genesis_power", "name": "Pouvoir de Genese", "description": "Cree de la matiere a partir du neant", "value": 1},
-            {"id": "reality_shaping", "name": "Faconner la Realite", "description": "Modifie les lois de la physique dans un rayon de {value}m", "value": 50},
-            {"id": "cosmic_dominion", "name": "Domination Cosmique", "description": "Controle {value} dimensions simultanement", "value": 7},
-            {"id": "eternal_existence", "name": "Existence Eternelle", "description": "Immunite totale a la mort", "value": 1},
-            {"id": "origin_command", "name": "Commandement de l'Origine", "description": "Tous les artefacts obeissent", "value": 100}
+            {"id": "genesis_power", "name": "Genesis Power", "description": "Cree de la matiere a partir du neant", "value": 1},
+            {"id": "reality_shaping", "name": "Reality Shaping", "description": "Modifie les lois de la physique dans un rayon de {value}m", "value": 50},
+            {"id": "cosmic_dominion", "name": "Cosmic Dominion", "description": "Controle {value} dimensions simultanement", "value": 7},
+            {"id": "eternal_existence", "name": "Eternal Existence", "description": "Immunite totale a la mort", "value": 1},
+            {"id": "origin_command", "name": "Origin Command", "description": "Tous les artefacts obeissent", "value": 100}
         ],
         "lore": "Nul ne sait qui a forge cette cle, ni quand. Elle existait avant le Nexus, avant le temps lui-meme."
     }
@@ -195,7 +195,7 @@ EVOLUTION_ARTIFACT_DEFINITIONS = {
 
 
 class EvolutionArtifactSystem:
-    """Systeme de gestion des artefacts d'evolution"""
+    """System de gestion des evolution artifacts"""
     
     # Probabilites de distribution par tier de vault
     DISTRIBUTION_RATES = {
@@ -247,7 +247,7 @@ class EvolutionArtifactSystem:
         self._load_existing_artifacts()
     
     def _load_existing_artifacts(self):
-        """Charge les artefacts existants"""
+        """Loads the artefacts existants"""
         self.artifacts: Dict[str, EvolutionArtifact] = {}
         for file in self.storage_path.glob("*.json"):
             try:
@@ -272,12 +272,12 @@ class EvolutionArtifactSystem:
             return "standard"
     
     def _generate_artifact_id(self, artifact_type: str, vault_id: str) -> str:
-        """Genere un ID unique pour l'artefact"""
+        """Generates un ID unique pour l'artefact"""
         seed = f"{artifact_type}_{vault_id}_{datetime.now().isoformat()}_{secrets.token_hex(8)}"
         return hashlib.sha256(seed.encode()).hexdigest()[:16]
     
     def create_artifact(self, artifact_type: str, vault_id: str, vault_number: int) -> Optional[EvolutionArtifact]:
-        """Cree un artefact d'evolution"""
+        """Cree un evolution artifact"""
         if artifact_type not in EVOLUTION_ARTIFACT_DEFINITIONS:
             return None
         
@@ -321,7 +321,7 @@ class EvolutionArtifactSystem:
         return artifact
     
     def _save_artifact(self, artifact: EvolutionArtifact):
-        """Sauvegarde un artefact"""
+        """Saves un artefact"""
         file_path = self.storage_path / f"{artifact.artifact_id}.json"
         with open(file_path, 'w', encoding='utf-8') as f:
             json.dump(artifact.to_dict(), f, indent=2, ensure_ascii=False)
@@ -353,26 +353,26 @@ class EvolutionArtifactSystem:
         return distributed
     
     def get_vault_artifacts(self, vault_id: str) -> List[EvolutionArtifact]:
-        """Recupere tous les artefacts d'un vault par vault_id"""
+        """Retrieves tous les artefacts d'un vault par vault_id"""
         return [a for a in self.artifacts.values() if a.vault_id == vault_id]
     
     def get_vault_artifacts_by_number(self, vault_number: int) -> List[EvolutionArtifact]:
-        """Recupere tous les artefacts d'un vault par numero"""
+        """Retrieves tous les artefacts d'un vault par numero"""
         return [a for a in self.artifacts.values() 
                 if a.current_vault == vault_number or a.origin_vault == vault_number]
     
     def get_artifact(self, artifact_id: str) -> Optional[EvolutionArtifact]:
-        """Recupere un artefact par son ID"""
+        """Retrieves un artefact par son ID"""
         return self.artifacts.get(artifact_id)
     
     def bind_to_avatar(self, artifact_id: str, avatar_id: str) -> Dict:
-        """Lie un artefact a un avatar"""
+        """Binds un artefact a un avatar"""
         artifact = self.artifacts.get(artifact_id)
         if not artifact:
-            return {"success": False, "error": "Artefact non trouve"}
+            return {"success": False, "error": "Artifact not found"}
         
         if artifact.is_bound:
-            return {"success": False, "error": "Artefact deja lie"}
+            return {"success": False, "error": "Artifact already bound"}
         
         artifact.bound_to_avatar = avatar_id
         artifact.is_bound = True
@@ -387,14 +387,14 @@ class EvolutionArtifactSystem:
         }
     
     def get_artifact_for_evolution_stage(self, stage: str) -> Optional[dict]:
-        """Retourne la definition de l'artefact requis pour un stade"""
+        """Returns la definition de l'artefact requis pour un stade"""
         for artifact_type, definition in EVOLUTION_ARTIFACT_DEFINITIONS.items():
             if definition["evolution_stage"] == stage:
                 return {"type": artifact_type, **definition}
         return None
     
     def check_artifact_requirement(self, vault_artifacts: List[str], required_stage: str) -> bool:
-        """Verifie si le vault possede l'artefact requis pour un stade"""
+        """Verifies si le vault possede l'artefact requis pour un stade"""
         required = self.get_artifact_for_evolution_stage(required_stage)
         if not required:
             return True  # Pas de requirement

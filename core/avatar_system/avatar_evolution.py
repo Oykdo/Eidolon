@@ -87,31 +87,31 @@ class AvatarEvolutionState:
 
 
 class AvatarEvolutionSystem:
-    """Systeme de gestion de l'evolution des avatars"""
+    """System de gestion de l'evolution des avatars"""
     
     # === MATERIAUX D'EVOLUTION ===
     EVOLUTION_MATERIALS = {
         # Poussieres (communes)
         "quantum_dust": EvolutionMaterial(
             id="quantum_dust",
-            name="Poussiere Quantique",
-            description="Residus d'operations quantiques",
+            name="Quantum Dust",
+            description="Residue from quantum operations",
             rarity="common",
             xp_value=50,
             category="dust"
         ),
         "entropy_dust": EvolutionMaterial(
             id="entropy_dust",
-            name="Poussiere d'Entropie",
-            description="Particules de chaos ordonne",
+            name="Entropy Dust",
+            description="Particles of ordered chaos",
             rarity="common",
             xp_value=50,
             category="dust"
         ),
         "nexus_dust": EvolutionMaterial(
             id="nexus_dust",
-            name="Poussiere de Nexus",
-            description="Essence de connexions brisees",
+            name="Nexus Dust",
+            description="Essence from broken connections",
             rarity="uncommon",
             xp_value=75,
             category="dust"
@@ -120,24 +120,24 @@ class AvatarEvolutionSystem:
         # Eclats (peu communs)
         "crystal_shard": EvolutionMaterial(
             id="crystal_shard",
-            name="Eclat Cristallin",
-            description="Fragment de cristal dimensionnel",
+            name="Crystal Shard",
+            description="Dimensional crystal fragment",
             rarity="uncommon",
             xp_value=100,
             category="shard"
         ),
         "void_shard": EvolutionMaterial(
             id="void_shard",
-            name="Eclat du Vide",
-            description="Morceau de neant solidifie",
+            name="Void Shard",
+            description="Piece of solidified nothingness",
             rarity="rare",
             xp_value=200,
             category="shard"
         ),
         "stellar_shard": EvolutionMaterial(
             id="stellar_shard",
-            name="Eclat Stellaire",
-            description="Fragment d'etoile morte",
+            name="Stellar Shard",
+            description="Fragment from a dead star",
             rarity="rare",
             xp_value=250,
             category="shard"
@@ -146,8 +146,8 @@ class AvatarEvolutionSystem:
         # Essences (rares)
         "primordial_essence": EvolutionMaterial(
             id="primordial_essence",
-            name="Essence Primordiale",
-            description="Energie pure de la creation",
+            name="Primordial Essence",
+            description="Pure energy of creation",
             rarity="epic",
             xp_value=500,
             category="essence",
@@ -155,8 +155,8 @@ class AvatarEvolutionSystem:
         ),
         "divine_essence": EvolutionMaterial(
             id="divine_essence",
-            name="Essence Divine",
-            description="Souffle des anciens",
+            name="Divine Essence",
+            description="Breath of the ancients",
             rarity="legendary",
             xp_value=1000,
             category="essence",
@@ -164,8 +164,8 @@ class AvatarEvolutionSystem:
         ),
         "origin_essence": EvolutionMaterial(
             id="origin_essence",
-            name="Essence de l'Origine",
-            description="La premiere etincelle",
+            name="Origin Essence",
+            description="The first spark",
             rarity="mythical",
             xp_value=2500,
             category="essence",
@@ -176,16 +176,16 @@ class AvatarEvolutionSystem:
         # Coeurs (epiques)
         "nexus_core": EvolutionMaterial(
             id="nexus_core",
-            name="Coeur de Nexus",
-            description="Noyau d'un nexus dimensionnel",
+            name="Nexus Core",
+            description="Core of a dimensional nexus",
             rarity="epic",
             xp_value=750,
             category="core"
         ),
         "stellar_core": EvolutionMaterial(
             id="stellar_core",
-            name="Coeur Stellaire",
-            description="Noyau d'une etoile effondree",
+            name="Stellar Core",
+            description="Core of a collapsed star",
             rarity="legendary",
             xp_value=1500,
             category="core",
@@ -193,8 +193,8 @@ class AvatarEvolutionSystem:
         ),
         "void_core": EvolutionMaterial(
             id="void_core",
-            name="Coeur du Vide",
-            description="Centre du neant absolu",
+            name="Void Core",
+            description="Center of absolute nothingness",
             rarity="mythical",
             xp_value=3000,
             category="core",
@@ -206,37 +206,37 @@ class AvatarEvolutionSystem:
     # === ARTEFACTS REQUIS POUR EVOLUTION ===
     EVOLUTION_ARTIFACTS = {
         "genesis_glyph": {
-            "name": "Glyphe de Genese",
+            "name": "Genesis Glyph",
             "required_for": EvolutionStage.AWAKENED,
             "category": "glyph",
             "bonus": {"power": 1.1}
         },
         "cosmic_lens": {
-            "name": "Lentille Cosmique",
+            "name": "Cosmic Lens",
             "required_for": EvolutionStage.EVOLVED,
             "category": "lens",
             "bonus": {"perception": 25, "power": 1.15}
         },
         "infinity_fragment": {
-            "name": "Fragment d'Infini",
+            "name": "Infinity Fragment",
             "required_for": EvolutionStage.ASCENDED,
             "category": "fragment",
             "bonus": {"all_stats": 1.2}
         },
         "soul_anchor": {
-            "name": "Ancre d'Ame",
+            "name": "Soul Anchor",
             "required_for": EvolutionStage.TRANSCENDENT,
             "category": "anchor",
             "bonus": {"immortality": 0.05, "power": 1.35}
         },
         "divine_seal": {
-            "name": "Sceau Divin",
+            "name": "Divine Seal",
             "required_for": EvolutionStage.DIVINE,
             "category": "seal",
             "bonus": {"divine_power": 1.5, "all_stats": 1.4}
         },
         "origin_key": {
-            "name": "Cle de l'Origine",
+            "name": "Origin Key",
             "required_for": EvolutionStage.PRIMORDIAL,
             "category": "key",
             "bonus": {"primordial_power": 2.0, "all_stats": 1.75}
@@ -279,7 +279,7 @@ class AvatarEvolutionSystem:
             stat_bonuses={"power": 1.15, "vitality": 1.1},
             visual_unlocks=["soft_glow", "pulse_aura"],
             ability_unlocks=["energy_shield"],
-            title="L'Eveille"
+            title="The Awakened"
         ),
         "awakened_to_evolved": EvolutionPath(
             from_stage=EvolutionStage.AWAKENED,
@@ -294,7 +294,7 @@ class AvatarEvolutionSystem:
             stat_bonuses={"power": 1.25, "vitality": 1.15, "wisdom": 1.1},
             visual_unlocks=["particle_orbit", "energy_core", "enhanced_glow"],
             ability_unlocks=["phase_shift", "energy_burst"],
-            title="L'Evolue"
+            title="The Evolved"
         ),
         "evolved_to_ascended": EvolutionPath(
             from_stage=EvolutionStage.EVOLVED,
@@ -305,12 +305,12 @@ class AvatarEvolutionSystem:
                 EvolutionRequirement(type="material", target_id="primordial_essence", quantity=3),
                 EvolutionRequirement(type="artifact", target_id="infinity_fragment"),
                 EvolutionRequirement(type="fragment", target_category="any", quantity=5,
-                                    description="5 fragments alchimiques differents"),
+                                    description="5 different alchemical fragments"),
             ],
             stat_bonuses={"power": 1.4, "vitality": 1.25, "wisdom": 1.2, "luck": 1.15},
             visual_unlocks=["cosmic_particles", "stellar_aura", "energy_wings_small"],
             ability_unlocks=["dimension_walk", "stellar_strike", "cosmic_shield"],
-            title="L'Ascensionne"
+            title="The Ascended"
         ),
         "ascended_to_transcendent": EvolutionPath(
             from_stage=EvolutionStage.ASCENDED,
@@ -320,13 +320,13 @@ class AvatarEvolutionSystem:
                 EvolutionRequirement(type="material", target_id="nexus_core", quantity=3),
                 EvolutionRequirement(type="material", target_id="divine_essence", quantity=2),
                 EvolutionRequirement(type="artifact", target_id="soul_anchor"),
-                EvolutionRequirement(type="stone", description="Posseder une Pierre Philosophale"),
+                EvolutionRequirement(type="stone", description="Own a Philosopher Stone"),
                 EvolutionRequirement(type="gem", target_category="divine_gem", quantity=1),
             ],
             stat_bonuses={"power": 1.6, "vitality": 1.4, "wisdom": 1.35, "luck": 1.25, "divine": 1.2},
             visual_unlocks=["transcendent_aura", "reality_ripples", "energy_wings_medium", "halo_ring"],
             ability_unlocks=["time_slow", "reality_anchor", "transcendent_form"],
-            title="Le Transcendant"
+            title="The Transcendent"
         ),
         "transcendent_to_divine": EvolutionPath(
             from_stage=EvolutionStage.TRANSCENDENT,
@@ -337,12 +337,12 @@ class AvatarEvolutionSystem:
                 EvolutionRequirement(type="material", target_id="origin_essence", quantity=1),
                 EvolutionRequirement(type="artifact", target_id="divine_seal"),
                 EvolutionRequirement(type="fragment", target_category="all",
-                                    description="Tous les 10 fragments alchimiques"),
+                                    description="All 10 alchemical fragments"),
             ],
             stat_bonuses={"power": 2.0, "vitality": 1.6, "wisdom": 1.5, "luck": 1.4, "divine": 1.75},
             visual_unlocks=["divine_wings", "holy_halo", "celestial_aura", "star_field", "divine_crown"],
             ability_unlocks=["divine_judgment", "celestial_rain", "resurrection", "divine_shield"],
-            title="Le Divin"
+            title="The Divine"
         ),
         "divine_to_primordial": EvolutionPath(
             from_stage=EvolutionStage.DIVINE,
@@ -360,7 +360,7 @@ class AvatarEvolutionSystem:
                            "origin_crown", "universe_projection", "eternal_wings"],
             ability_unlocks=["genesis_power", "reality_shaping", "eternal_existence", 
                             "cosmic_dominion", "origin_command"],
-            title="Le Primordial"
+            title="The Primordial"
         ),
     }
     
@@ -380,7 +380,7 @@ class AvatarEvolutionSystem:
         self.storage_path.mkdir(parents=True, exist_ok=True)
     
     def get_evolution_state(self, avatar_id: str, vault_id: str = "") -> AvatarEvolutionState:
-        """Recupere ou cree l'etat d'evolution d'un avatar"""
+        """Retrieves ou cree l'etat d'evolution d'un avatar"""
         state_file = self.storage_path / f"{avatar_id[:32]}_evolution.json"
         
         if state_file.exists():
@@ -393,7 +393,7 @@ class AvatarEvolutionSystem:
         return state
     
     def _save_state(self, state: AvatarEvolutionState):
-        """Sauvegarde l'etat d'evolution"""
+        """Saves l'etat d'evolution"""
         state_file = self.storage_path / f"{state.avatar_id[:32]}_evolution.json"
         with open(state_file, 'w', encoding='utf-8') as f:
             json.dump(asdict(state), f, indent=2, ensure_ascii=False)
@@ -401,7 +401,7 @@ class AvatarEvolutionSystem:
     def consume_material(self, avatar_id: str, material_id: str, quantity: int = 1) -> Dict:
         """Consomme un materiau pour gagner de l'XP"""
         if material_id not in self.EVOLUTION_MATERIALS:
-            return {"success": False, "error": f"Materiau inconnu: {material_id}"}
+            return {"success": False, "error": f"Unknown material: {material_id}"}
         
         material = self.EVOLUTION_MATERIALS[material_id]
         state = self.get_evolution_state(avatar_id)
@@ -412,7 +412,7 @@ class AvatarEvolutionSystem:
             if list(EvolutionStage).index(current) < list(EvolutionStage).index(material.required_stage):
                 return {
                     "success": False, 
-                    "error": f"Stade {material.required_stage.value} requis pour ce materiau"
+                    "error": f"Stade {material.required_stage.value} required for this material"
                 }
         
         # Consommer
@@ -440,44 +440,44 @@ class AvatarEvolutionSystem:
         }
     
     def _apply_special_effect(self, state: AvatarEvolutionState, effect: str) -> str:
-        """Applique un effet special de materiau"""
+        """Applies un effet special de materiau"""
         if effect == "boost_all_stats_5%":
             if "all_stats_boost" not in state.stat_modifiers:
                 state.stat_modifiers["all_stats_boost"] = 1.0
             state.stat_modifiers["all_stats_boost"] *= 1.05
-            return "Stats globales +5%"
+            return "All stats +5%"
         
         elif effect == "unlock_divine_visual":
             if "divine_glow" not in state.unlocked_visuals:
                 state.unlocked_visuals.append("divine_glow")
-            return "Lueur divine debloquee"
+            return "Divine glow unlocked"
         
         elif effect == "unlock_primordial_form":
             if "primordial_shimmer" not in state.unlocked_visuals:
                 state.unlocked_visuals.append("primordial_shimmer")
-            return "Forme primordiale activee"
+            return "Primordial form activated"
         
         elif effect == "cosmic_aura":
             if "cosmic_aura" not in state.unlocked_visuals:
                 state.unlocked_visuals.append("cosmic_aura")
-            return "Aura cosmique debloquee"
+            return "Cosmic aura unlocked"
         
         elif effect == "reality_distortion":
             if "reality_distortion" not in state.unlocked_visuals:
                 state.unlocked_visuals.append("reality_distortion")
-            return "Distorsion de realite activee"
+            return "Reality distortion activated"
         
         return None
     
     def bind_artifact(self, avatar_id: str, artifact_id: str) -> Dict:
-        """Lie un artefact a l'avatar pour l'evolution"""
+        """Binds un artefact a l'avatar pour l'evolution"""
         if artifact_id not in self.EVOLUTION_ARTIFACTS:
-            return {"success": False, "error": "Artefact non reconnu pour evolution"}
+            return {"success": False, "error": "Artifact not recognized for evolution"}
         
         state = self.get_evolution_state(avatar_id)
         
         if artifact_id in state.artifacts_bound:
-            return {"success": False, "error": "Artefact deja lie"}
+            return {"success": False, "error": "Artifact already bound"}
         
         artifact = self.EVOLUTION_ARTIFACTS[artifact_id]
         state.artifacts_bound.append(artifact_id)
@@ -497,11 +497,11 @@ class AvatarEvolutionSystem:
             "success": True,
             "artifact": artifact["name"],
             "bonuses": artifact.get("bonus", {}),
-            "message": f"{artifact['name']} lie avec succes"
+            "message": f"{artifact['name']} bound successfully"
         }
     
     def fuse_gem(self, avatar_id: str, gem_type: str, gem_rarity: str, gem_power: int) -> Dict:
-        """Fusionne une gem avec l'avatar"""
+        """Fuses une gem avec l'avatar"""
         state = self.get_evolution_state(avatar_id)
         
         gem_id = f"{gem_type}_{gem_rarity}_{gem_power}"
@@ -521,9 +521,9 @@ class AvatarEvolutionSystem:
         }
     
     def absorb_fragment(self, avatar_id: str, fragment_type: str, quantity: int = 1) -> Dict:
-        """Absorbe des fragments alchimiques"""
+        """Absorbs des fragments alchimiques"""
         if fragment_type not in self.ALCHEMY_FRAGMENTS:
-            return {"success": False, "error": f"Fragment inconnu: {fragment_type}"}
+            return {"success": False, "error": f"Unknown fragment: {fragment_type}"}
         
         fragment = self.ALCHEMY_FRAGMENTS[fragment_type]
         state = self.get_evolution_state(avatar_id)
@@ -550,7 +550,7 @@ class AvatarEvolutionSystem:
         }
     
     def infuse_stone_essence(self, avatar_id: str, stone_power: int, is_rule_of_1000: bool = False) -> Dict:
-        """Infuse l'essence d'une Pierre Philosophale"""
+        """Infuses l'essence d'une Pierre Philosophale"""
         state = self.get_evolution_state(avatar_id)
         
         essence_value = int(stone_power * 0.05)
@@ -573,14 +573,14 @@ class AvatarEvolutionSystem:
             "essence_gained": essence_value,
             "total_essence": state.stone_essence,
             "xp_gained": essence_value * 10,
-            "special": "Rule of 1000 bonus applique!" if is_rule_of_1000 else None
+            "special": "Rule of 1000 bonus applied!" if is_rule_of_1000 else None
         }
     
     def check_evolution(self, avatar_id: str, vault_number: int = None,
                         owned_artifacts: List[str] = None,
                         owned_stones: List[Dict] = None,
                         owned_gems: List[Dict] = None) -> Dict:
-        """Verifie si l'avatar peut evoluer"""
+        """Verifies si l'avatar peut evoluer"""
         state = self.get_evolution_state(avatar_id)
         current_stage = EvolutionStage(state.current_stage)
         
@@ -591,7 +591,7 @@ class AvatarEvolutionSystem:
         if current_idx >= len(stage_order) - 1:
             return {
                 "can_evolve": False,
-                "reason": "Stade maximum atteint (PRIMORDIAL)",
+                "reason": "Maximum stage reached (PRIMORDIAL)",
                 "current_stage": current_stage.value
             }
         
@@ -599,7 +599,7 @@ class AvatarEvolutionSystem:
         path_key = f"{current_stage.value}_to_{next_stage.value}"
         
         if path_key not in self.EVOLUTION_PATHS:
-            return {"can_evolve": False, "reason": "Chemin d'evolution non defini"}
+            return {"can_evolve": False, "reason": "Evolution path not defined"}
         
         path = self.EVOLUTION_PATHS[path_key]
         requirements_status = []
@@ -688,14 +688,14 @@ class AvatarEvolutionSystem:
         }
     
     def evolve(self, avatar_id: str, **kwargs) -> Dict:
-        """Execute l'evolution de l'avatar"""
+        """Executes l'evolution de l'avatar"""
         check = self.check_evolution(avatar_id, **kwargs)
         
         if not check["can_evolve"]:
             missing = [r for r in check.get("requirements", []) if not r["met"]]
             return {
                 "success": False,
-                "reason": "Prerequis manquants",
+                "reason": "Missing prerequisites",
                 "missing": missing
             }
         
@@ -752,7 +752,7 @@ class AvatarEvolutionSystem:
         }
     
     def get_visual_config(self, avatar_id: str) -> Dict:
-        """Retourne la configuration visuelle pour le rendu 3D"""
+        """Returns la configuration visuelle pour le rendu 3D"""
         state = self.get_evolution_state(avatar_id)
         current_stage = EvolutionStage(state.current_stage)
         base = self.STAGE_BASE_BONUSES[current_stage]
