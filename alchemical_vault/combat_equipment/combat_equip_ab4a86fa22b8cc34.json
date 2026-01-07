@@ -1,0 +1,55 @@
+{
+  "item_id": "ab4a86fa22b8cc34",
+  "name": "Fine Spinorblade",
+  "equipment_class": "spinorblade",
+  "slot": "main_hand",
+  "rarity": "superior",
+  "item_level": 300,
+  "base_stats": {
+    "phys_damage": 7.920000000000001,
+    "mag_damage": 2.16
+  },
+  "mods": [
+    {
+      "mod_id": "windrunner",
+      "name": "Divine Windrunner",
+      "stat": "movement_speed",
+      "value": 81.39,
+      "tier": "divine",
+      "is_percent": true
+    },
+    {
+      "mod_id": "deadly_precision",
+      "name": "Deadly Precision",
+      "stat": "crit_chance",
+      "value": 20.96,
+      "tier": "standard",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 79.2,
+  "magical_damage": 21.6,
+  "defense": 0,
+  "health": 0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 6,
+  "current_vault": 6,
+  "pioneer_tier": "genesis",
+  "chest_origin": "1a7e86b4d23bd300",
+  "created_at": "2026-01-07T06:16:26.819088",
+  "is_equipped": false
+}

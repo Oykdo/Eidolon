@@ -1,0 +1,55 @@
+{
+  "item_id": "0d51d1b2d8356b9d",
+  "name": "Voidblade",
+  "equipment_class": "voidblade",
+  "slot": "main_hand",
+  "rarity": "common",
+  "item_level": 300,
+  "base_stats": {
+    "phys_damage": 4.0,
+    "attack_speed": 4.0
+  },
+  "mods": [
+    {
+      "mod_id": "brutal_force",
+      "name": "Lesser Brutal Force",
+      "stat": "phys_damage",
+      "value": 67.9,
+      "tier": "lesser",
+      "is_percent": false
+    },
+    {
+      "mod_id": "armor_crusher",
+      "name": "Minor Armor Crusher",
+      "stat": "armor_pen",
+      "value": 5.24,
+      "tier": "minor",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 40.0,
+  "magical_damage": 0,
+  "defense": 0,
+  "health": 0,
+  "mana": 0,
+  "attack_speed": 4.0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 3,
+  "current_vault": 3,
+  "pioneer_tier": "genesis",
+  "chest_origin": "9e58bfa63c7a2c70",
+  "created_at": "2026-01-07T06:16:26.894332",
+  "is_equipped": false
+}

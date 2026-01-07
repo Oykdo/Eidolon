@@ -1,0 +1,63 @@
+{
+  "item_id": "c7ad6259a0fda65a",
+  "name": "Glorious Spinorblade of the Guardian",
+  "equipment_class": "spinorblade",
+  "slot": "main_hand",
+  "rarity": "legendary",
+  "item_level": 300,
+  "base_stats": {
+    "phys_damage": 13.200000000000001,
+    "mag_damage": 3.5999999999999996
+  },
+  "mods": [
+    {
+      "mod_id": "swift_strikes",
+      "name": "Lesser Swift Strikes",
+      "stat": "attack_speed",
+      "value": 10.4,
+      "tier": "lesser",
+      "is_percent": true
+    },
+    {
+      "mod_id": "arcane_ward",
+      "name": "Minor Arcane Ward",
+      "stat": "magic_resist",
+      "value": 75.24,
+      "tier": "minor",
+      "is_percent": false
+    },
+    {
+      "mod_id": "deadly_precision",
+      "name": "Greater Deadly Precision",
+      "stat": "crit_chance",
+      "value": 9.71,
+      "tier": "greater",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 132.0,
+  "magical_damage": 36.0,
+  "defense": 0,
+  "health": 0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 5,
+  "current_vault": 5,
+  "pioneer_tier": "genesis",
+  "chest_origin": "345fd0cc65a1b2f4",
+  "created_at": "2026-01-07T06:16:26.851347",
+  "is_equipped": false
+}

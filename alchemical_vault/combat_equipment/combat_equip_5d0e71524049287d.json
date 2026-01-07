@@ -1,0 +1,56 @@
+{
+  "item_id": "5d0e71524049287d",
+  "name": "Aetherbuckler",
+  "equipment_class": "aetherbuckler",
+  "slot": "off_hand",
+  "rarity": "enhanced",
+  "item_level": 300,
+  "base_stats": {
+    "defense": 3.36,
+    "block_chance": 0.6719999999999999,
+    "evasion": 0.27999999999999997
+  },
+  "mods": [
+    {
+      "mod_id": "deadly_precision",
+      "name": "Minor Deadly Precision",
+      "stat": "crit_chance",
+      "value": 2.21,
+      "tier": "minor",
+      "is_percent": true
+    },
+    {
+      "mod_id": "vitality_surge",
+      "name": "Lesser Vitality Surge",
+      "stat": "health",
+      "value": 400.09,
+      "tier": "lesser",
+      "is_percent": false
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 0,
+  "defense": 33.6,
+  "health": 0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0.27999999999999997,
+  "block_chance": 0.6719999999999999,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 6,
+  "current_vault": 6,
+  "pioneer_tier": "genesis",
+  "chest_origin": "1a7e86b4d23bd300",
+  "created_at": "2026-01-07T06:16:26.819088",
+  "is_equipped": false
+}

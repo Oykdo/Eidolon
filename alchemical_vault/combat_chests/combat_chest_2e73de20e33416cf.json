@@ -3,8 +3,15 @@
   "chest_type": "armory",
   "vault_number": 6,
   "pioneer_tier": "genesis",
-  "items": [],
-  "is_opened": false,
+  "items": [
+    "89387109bac0f471",
+    "65e0fa5f9b75fbc7",
+    "9d0d5a0b38f25027",
+    "32c89b65a01e7138",
+    "654ab4f967ff5b8c",
+    "e89cb93d89f59cf7"
+  ],
+  "is_opened": true,
   "created_at": "2026-01-07T06:09:35.370961",
-  "opened_at": ""
+  "opened_at": "2026-01-07T06:16:26.849780"
 }

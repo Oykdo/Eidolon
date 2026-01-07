@@ -1,0 +1,55 @@
+{
+  "item_id": "a98c0174a7ed0b7b",
+  "name": "Voidplate Helm",
+  "equipment_class": "voidplate_helm",
+  "slot": "head",
+  "rarity": "common",
+  "item_level": 300,
+  "base_stats": {
+    "defense": 4.8,
+    "health": 200.0
+  },
+  "mods": [
+    {
+      "mod_id": "soul_siphon",
+      "name": "Minor Soul Siphon",
+      "stat": "mana_steal",
+      "value": 2.01,
+      "tier": "minor",
+      "is_percent": true
+    },
+    {
+      "mod_id": "arcane_power",
+      "name": "Minor Arcane Power",
+      "stat": "mag_damage",
+      "value": 68.08,
+      "tier": "minor",
+      "is_percent": false
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 0,
+  "defense": 48.0,
+  "health": 200.0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 5,
+  "current_vault": 5,
+  "pioneer_tier": "genesis",
+  "chest_origin": "3acf61596032775b",
+  "created_at": "2026-01-07T06:16:26.861836",
+  "is_equipped": false
+}

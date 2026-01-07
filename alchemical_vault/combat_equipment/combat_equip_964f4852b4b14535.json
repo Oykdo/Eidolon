@@ -1,0 +1,55 @@
+{
+  "item_id": "964f4852b4b14535",
+  "name": "Spinorblade",
+  "equipment_class": "spinorblade",
+  "slot": "main_hand",
+  "rarity": "enhanced",
+  "item_level": 300,
+  "base_stats": {
+    "phys_damage": 6.16,
+    "mag_damage": 1.68
+  },
+  "mods": [
+    {
+      "mod_id": "rapid_casting",
+      "name": "Rapid Casting",
+      "stat": "cast_speed",
+      "value": 24.37,
+      "tier": "standard",
+      "is_percent": true
+    },
+    {
+      "mod_id": "savage_blows",
+      "name": "Greater Savage Blows",
+      "stat": "crit_damage",
+      "value": 80.64,
+      "tier": "greater",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 61.6,
+  "magical_damage": 16.8,
+  "defense": 0,
+  "health": 0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 5,
+  "current_vault": 5,
+  "pioneer_tier": "genesis",
+  "chest_origin": "345fd0cc65a1b2f4",
+  "created_at": "2026-01-07T06:16:26.857805",
+  "is_equipped": false
+}

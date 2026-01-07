@@ -1,0 +1,48 @@
+{
+  "item_id": "101b4fc3b4289797",
+  "name": "Aethersilk Cowl",
+  "equipment_class": "aethersilk_cowl",
+  "slot": "head",
+  "rarity": "enhanced",
+  "item_level": 300,
+  "base_stats": {
+    "defense": 2.2399999999999998,
+    "mana": 168.0,
+    "cast_speed": 0.27999999999999997
+  },
+  "mods": [
+    {
+      "mod_id": "rapid_casting",
+      "name": "Rapid Casting",
+      "stat": "cast_speed",
+      "value": 23.97,
+      "tier": "standard",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 0,
+  "defense": 22.4,
+  "health": 0,
+  "mana": 168.0,
+  "attack_speed": 0,
+  "cast_speed": 0.27999999999999997,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 5,
+  "current_vault": 5,
+  "pioneer_tier": "genesis",
+  "chest_origin": "3acf61596032775b",
+  "created_at": "2026-01-07T06:16:26.864405",
+  "is_equipped": false
+}

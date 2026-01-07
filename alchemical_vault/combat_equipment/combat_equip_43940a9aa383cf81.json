@@ -1,0 +1,63 @@
+{
+  "item_id": "43940a9aa383cf81",
+  "name": "Veteran's Voidplate Greaves",
+  "equipment_class": "voidplate_greaves",
+  "slot": "legs",
+  "rarity": "elite",
+  "item_level": 300,
+  "base_stats": {
+    "defense": 12.879999999999999,
+    "health": 552.0
+  },
+  "mods": [
+    {
+      "mod_id": "stalwart_guard",
+      "name": "Lesser Stalwart Guard",
+      "stat": "block_chance",
+      "value": 22.01,
+      "tier": "lesser",
+      "is_percent": true
+    },
+    {
+      "mod_id": "fire_attunement",
+      "name": "Lesser Fire Attunement",
+      "stat": "fire_resist",
+      "value": 53.93,
+      "tier": "lesser",
+      "is_percent": true
+    },
+    {
+      "mod_id": "armor_crusher",
+      "name": "Superior Armor Crusher",
+      "stat": "armor_pen",
+      "value": 46.82,
+      "tier": "superior",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 0,
+  "defense": 128.79999999999998,
+  "health": 552.0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 3,
+  "current_vault": 3,
+  "pioneer_tier": "genesis",
+  "chest_origin": "02bfc92c93939e79",
+  "created_at": "2026-01-07T06:16:26.793718",
+  "is_equipped": false
+}

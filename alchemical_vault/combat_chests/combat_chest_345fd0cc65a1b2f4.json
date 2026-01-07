@@ -3,8 +3,15 @@
   "chest_type": "arsenal",
   "vault_number": 5,
   "pioneer_tier": "genesis",
-  "items": [],
-  "is_opened": false,
+  "items": [
+    "c7ad6259a0fda65a",
+    "4f2c42379e1aafda",
+    "e9fdaa46e39f5c32",
+    "a796b6be9c2522b6",
+    "f5ec25e17d618d32",
+    "964f4852b4b14535"
+  ],
+  "is_opened": true,
   "created_at": "2026-01-07T06:09:35.330179",
-  "opened_at": ""
+  "opened_at": "2026-01-07T06:16:26.859586"
 }

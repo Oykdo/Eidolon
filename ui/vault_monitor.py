@@ -1296,8 +1296,8 @@ class VaultMonitorGUI:
         self._create_artifacts_tab(artifacts_frame, vault_artifacts, vault_evo_artifacts)
     
     def _create_items_tab(self, parent, items, rarity_colors):
-        """Creates the'onglet des equipements alchimiques"""
-        # Canvas scrollable
+        """Creates combat equipment tab"""
+        # Scrollable canvas
         canvas = tk.Canvas(parent, bg=CypherpunkTheme.BG_SECONDARY, highlightthickness=0)
         scrollbar = ttk.Scrollbar(parent, orient="vertical", command=canvas.yview)
         content = tk.Frame(canvas, bg=CypherpunkTheme.BG_SECONDARY)
@@ -1308,93 +1308,138 @@ class VaultMonitorGUI:
         canvas.create_window((0, 0), window=content, anchor="nw")
         content.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
         
-        # Grouper par categorie
-        categories = {}
-        for item in items:
-            cat = item.get('category', 'misc').upper()
-            if cat not in categories:
-                categories[cat] = []
-            categories[cat].append(item)
-        
-        # Icones par categorie
-        cat_icons = {
-            'POTION': '🧪', 'ELIXIR': '⚗', 'SCROLL': '📜', 'RUNE': 'ᚱ',
-            'TALISMAN': '🔮', 'ESSENCE': '✨', 'REAGENT': '🌿', 'CATALYST': '⚡',
-            'ARTIFACT_COMPONENT': '🔧', 'MISC': '📦'
+        # Combat rarity colors
+        combat_rarity_colors = {
+            'genesis': '#ffd700', 'primordial': '#ff00ff', 'ascendant': '#00ffff',
+            'mythic': '#e6cc80', 'legendary': '#ff8000', 'elite': '#a335ee',
+            'superior': '#0070dd', 'enhanced': '#1eff00', 'common': '#9d9d9d',
+            'fractured': '#666666'
         }
         
-        for cat_name, cat_items in sorted(categories.items()):
-            icon = cat_icons.get(cat_name, '📦')
+        # Slot icons
+        slot_icons = {
+            'head': '🎭', 'chest': '🎽', 'hands': '🧤', 'legs': '👖',
+            'feet': '👢', 'back': '🧥', 'main_hand': '⚔️', 'off_hand': '🛡️',
+            'two_hand': '⚔️', 'neck': '📿', 'ring_1': '💍', 'ring_2': '💍',
+            'trinket': '🔮'
+        }
+        
+        if not items:
+            # No equipment message
+            tk.Label(content, text="\n⚠ No combat equipment found\n\nOpen your combat chests to get equipment!",
+                    bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.TEXT_SECONDARY,
+                    font=("Consolas", 12)).pack(pady=50)
+            return
+        
+        # Group by slot
+        slots = {}
+        for item in items:
+            slot = item.get('slot', 'misc')
+            if slot not in slots:
+                slots[slot] = []
+            slots[slot].append(item)
+        
+        # Slot order
+        slot_order = ['main_hand', 'off_hand', 'head', 'chest', 'hands', 'legs', 'feet', 'back', 'neck', 'ring_1', 'ring_2', 'trinket']
+        
+        for slot in slot_order:
+            if slot not in slots:
+                continue
             
-            # Header categorie
-            cat_header = tk.Frame(content, bg=CypherpunkTheme.BG_PANEL)
-            cat_header.pack(fill=tk.X, padx=5, pady=(10, 5))
-            tk.Label(cat_header, text=f" {icon} {cat_name} ({len(cat_items)})",
+            slot_items = slots[slot]
+            icon = slot_icons.get(slot, '📦')
+            slot_name = slot.replace('_', ' ').upper()
+            
+            # Slot header
+            slot_header = tk.Frame(content, bg=CypherpunkTheme.BG_PANEL)
+            slot_header.pack(fill=tk.X, padx=5, pady=(10, 5))
+            tk.Label(slot_header, text=f" {icon} {slot_name} ({len(slot_items)})",
                     bg=CypherpunkTheme.BG_PANEL, fg="#FFD700",
                     font=("Consolas", 11, "bold")).pack(side=tk.LEFT, padx=5, pady=3)
             
-            # Items de cette categorie
-            for item_data in sorted(cat_items, key=lambda x: x.get('rarity', 'common')):
+            # Equipment in this slot
+            for equip in slot_items:
                 item_frame = tk.Frame(content, bg=CypherpunkTheme.BG_DARK, padx=10, pady=5)
                 item_frame.pack(fill=tk.X, padx=10, pady=2)
                 
-                rarity = item_data.get('rarity', 'common')
-                color = rarity_colors.get(rarity, '#ffffff')
-                item_type = item_data.get('item_type', 'unknown').replace('_', ' ').title()
-                mods = item_data.get('mods', [])
-                value = item_data.get('value', 0)
-                stat_power = item_data.get('stat_power', 0)
-                stats = item_data.get('stats', {})
+                rarity = equip.get('rarity', 'common')
+                color = combat_rarity_colors.get(rarity, '#ffffff')
+                name = equip.get('name', 'Unknown')
+                item_level = equip.get('item_level', 1)
+                pioneer_tier = equip.get('pioneer_tier', '')
                 
-                # Ligne principale
+                # Main line: rarity + name
                 main_line = tk.Frame(item_frame, bg=CypherpunkTheme.BG_DARK)
                 main_line.pack(fill=tk.X)
                 
-                tk.Label(main_line, text=f"[{rarity.upper()[:3]}]", bg=CypherpunkTheme.BG_DARK,
+                tk.Label(main_line, text=f"[{rarity.upper()[:4]}]", bg=CypherpunkTheme.BG_DARK,
                         fg=color, font=("Consolas", 9, "bold")).pack(side=tk.LEFT)
-                tk.Label(main_line, text=f" {item_type}", bg=CypherpunkTheme.BG_DARK,
+                tk.Label(main_line, text=f" {name}", bg=CypherpunkTheme.BG_DARK,
                         fg=CypherpunkTheme.TEXT_PRIMARY, font=("Consolas", 10)).pack(side=tk.LEFT)
                 
-                # Puissance et valeur
-                power_color = "#ffd700" if stat_power > 5000 else "#00ff00" if stat_power > 2000 else "#ffffff"
-                tk.Label(main_line, text=f"  PWR:{stat_power:.0f}", bg=CypherpunkTheme.BG_DARK,
-                        fg=power_color, font=("Consolas", 8, "bold")).pack(side=tk.RIGHT)
-                tk.Label(main_line, text=f"  V:{value:.0f}", bg=CypherpunkTheme.BG_DARK,
-                        fg=CypherpunkTheme.TEXT_SECONDARY, font=("Consolas", 8)).pack(side=tk.RIGHT)
+                # Item level and pioneer tier
+                tk.Label(main_line, text=f"iLvl:{item_level}", bg=CypherpunkTheme.BG_DARK,
+                        fg="#ffd700", font=("Consolas", 8, "bold")).pack(side=tk.RIGHT)
+                if pioneer_tier:
+                    tk.Label(main_line, text=f"[{pioneer_tier.upper()}]", bg=CypherpunkTheme.BG_DARK,
+                            fg="#00ffff", font=("Consolas", 8)).pack(side=tk.RIGHT, padx=5)
                 
-                # Stats primaires (si presentes)
-                if stats:
-                    stats_line = tk.Frame(item_frame, bg=CypherpunkTheme.BG_DARK)
-                    stats_line.pack(fill=tk.X)
-                    
-                    stat_abbrevs = [
-                        ("STR", stats.get('strength', 0), "#ff6666"),
-                        ("AGI", stats.get('agility', 0), "#66ff66"),
-                        ("INT", stats.get('intelligence', 0), "#6666ff"),
-                        ("VIT", stats.get('vitality', 0), "#ff66ff"),
-                        ("SAG", stats.get('wisdom', 0), "#ffff66"),
-                        ("LCK", stats.get('luck', 0), "#66ffff"),
-                    ]
-                    
-                    stat_parts = []
-                    for abbr, val, _ in stat_abbrevs:
-                        if val > 0:
-                            stat_parts.append(f"{abbr}:{val}")
-                    
-                    if stat_parts:
-                        stats_text = "  " + " ".join(stat_parts[:4])  # Max 4 stats affichees
-                        tk.Label(stats_line, text=stats_text, bg=CypherpunkTheme.BG_DARK,
-                                fg="#888888", font=("Consolas", 8)).pack(side=tk.LEFT)
+                # Stats line
+                stats_line = tk.Frame(item_frame, bg=CypherpunkTheme.BG_DARK)
+                stats_line.pack(fill=tk.X)
+                
+                stat_parts = []
+                phys_dmg = equip.get('physical_damage', 0)
+                mag_dmg = equip.get('magical_damage', 0)
+                defense = equip.get('defense', 0)
+                health = equip.get('health', 0)
+                
+                if phys_dmg > 0:
+                    stat_parts.append(f"DMG:{phys_dmg:.0f}")
+                if mag_dmg > 0:
+                    stat_parts.append(f"MAG:{mag_dmg:.0f}")
+                if defense > 0:
+                    stat_parts.append(f"DEF:{defense:.0f}")
+                if health > 0:
+                    stat_parts.append(f"HP:{health:.0f}")
+                
+                # Secondary stats
+                crit = equip.get('crit_chance', 0)
+                atk_spd = equip.get('attack_speed', 0)
+                life_steal = equip.get('life_steal', 0)
+                evasion = equip.get('evasion', 0)
+                
+                if crit > 0:
+                    stat_parts.append(f"CRT:{crit:.0%}")
+                if atk_spd != 0:
+                    stat_parts.append(f"SPD:{atk_spd:+.0%}")
+                if life_steal > 0:
+                    stat_parts.append(f"LS:{life_steal:.0%}")
+                if evasion > 0:
+                    stat_parts.append(f"EVA:{evasion:.0%}")
+                
+                if stat_parts:
+                    stats_text = "  " + " | ".join(stat_parts[:5])
+                    tk.Label(stats_line, text=stats_text, bg=CypherpunkTheme.BG_DARK,
+                            fg="#00ff88", font=("Consolas", 8)).pack(side=tk.LEFT)
                 
                 # Mods
+                mods = equip.get('mods', [])
                 if mods:
-                    for mod in mods[:2]:
-                        mod_name = mod.get('mod_id', '').replace('mod_', '').replace('_', ' ').title()
-                        roll_pct = mod.get('roll_percent', 50)
-                        quality = "$" if roll_pct >= 95 else "@" if roll_pct >= 80 else "#" if roll_pct >= 60 else "o"
-                        mod_text = f"  {quality} {mod_name}: {mod.get('rolled_value', 0):.0f}"
-                        tk.Label(item_frame, text=mod_text, bg=CypherpunkTheme.BG_DARK,
-                                fg=CypherpunkTheme.NEON_CYAN, font=("Consolas", 8)).pack(anchor=tk.W)
+                    mods_line = tk.Frame(item_frame, bg=CypherpunkTheme.BG_DARK)
+                    mods_line.pack(fill=tk.X)
+                    
+                    for mod in mods[:3]:
+                        mod_name = mod.get('name', mod.get('mod_id', 'Unknown'))
+                        mod_value = mod.get('value', 0)
+                        is_pct = mod.get('is_percent', False)
+                        tier = mod.get('tier', 'standard')
+                        
+                        tier_color = '#ffd700' if tier in ['divine', 'prime'] else '#a335ee' if tier in ['superior', 'greater'] else '#00ffff'
+                        value_str = f"+{mod_value:.1f}%" if is_pct else f"+{mod_value:.0f}"
+                        
+                        tk.Label(mods_line, text=f"  • {mod_name}: {value_str}", bg=CypherpunkTheme.BG_DARK,
+                                fg=tier_color, font=("Consolas", 8)).pack(anchor=tk.W)
     
     def _create_gems_tab(self, parent, gems, rarity_colors):
         """Creates the'onglet des gems"""
@@ -2418,28 +2463,50 @@ class VaultMonitorGUI:
         return chests
     
     def _load_vault_items(self, vault_num: int) -> list:
-        """Loads the items d'un vault"""
+        """Loads combat equipment from vault"""
         items = []
-        items_dir = Path(self.base_path) / "alchemical_vault" / "items"
         
-        if not items_dir.exists():
-            return items
+        # Load combat equipment (new system)
+        combat_dir = Path(self.base_path) / "alchemical_vault" / "combat_equipment"
+        if combat_dir.exists():
+            for f in combat_dir.glob("combat_equip_*.json"):
+                try:
+                    with open(f, 'r', encoding='utf-8') as file:
+                        data = json.load(file)
+                    if data.get('current_vault') == vault_num or data.get('origin_vault') == vault_num:
+                        data['_source'] = 'combat'
+                        items.append(data)
+                except:
+                    pass
         
-        for f in items_dir.glob("item_*.json"):
+        # Sort by rarity (combat system rarities)
+        rarity_order = {
+            'genesis': 0, 'primordial': 1, 'ascendant': 2, 'mythic': 3,
+            'legendary': 4, 'elite': 5, 'superior': 6, 'enhanced': 7,
+            'common': 8, 'fractured': 9
+        }
+        items.sort(key=lambda x: rarity_order.get(x.get('rarity', 'common'), 10))
+        
+        return items
+    
+    def _load_vault_combat_chests(self, vault_num: int) -> list:
+        """Load combat chests for a vault"""
+        chests = []
+        chests_dir = Path(self.base_path) / "alchemical_vault" / "combat_chests"
+        
+        if not chests_dir.exists():
+            return chests
+        
+        for f in chests_dir.glob("combat_chest_*.json"):
             try:
                 with open(f, 'r', encoding='utf-8') as file:
-                    data = json.load(file)
-                if data.get('origin_vault') == vault_num:
-                    items.append(data)
+                    data = json.load(f)
+                if data.get('vault_number') == vault_num:
+                    chests.append(data)
             except:
                 pass
         
-        # Trier par rarete
-        rarity_order = {'primordial': 0, 'mythical': 1, 'legendary': 2, 'masterwork': 3, 
-                       'exquisite': 4, 'superior': 5, 'refined': 6, 'common': 7, 'crude': 8}
-        items.sort(key=lambda x: rarity_order.get(x.get('rarity', 'common'), 9))
-        
-        return items
+        return chests
     
     def _export_runes(self):
         """Exporte le portfolio de runes"""

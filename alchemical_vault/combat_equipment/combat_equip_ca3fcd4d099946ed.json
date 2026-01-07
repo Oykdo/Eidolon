@@ -1,0 +1,48 @@
+{
+  "item_id": "ca3fcd4d099946ed",
+  "name": "Aetherbuckler",
+  "equipment_class": "aetherbuckler",
+  "slot": "off_hand",
+  "rarity": "common",
+  "item_level": 300,
+  "base_stats": {
+    "defense": 2.4,
+    "block_chance": 0.48,
+    "evasion": 0.2
+  },
+  "mods": [
+    {
+      "mod_id": "windrunner",
+      "name": "Greater Windrunner",
+      "stat": "movement_speed",
+      "value": 20.3,
+      "tier": "greater",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 0,
+  "defense": 24.0,
+  "health": 0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0.2,
+  "block_chance": 0.48,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 4,
+  "current_vault": 4,
+  "pioneer_tier": "genesis",
+  "chest_origin": "e1986b90227b7b04",
+  "created_at": "2026-01-07T06:16:26.917215",
+  "is_equipped": false
+}
