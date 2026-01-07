@@ -1207,6 +1207,7 @@ class VaultMonitorGUI:
         vault_gems = self._load_vault_gems(vault_num)
         vault_stones = self._load_vault_stones(vault_num)
         vault_artifacts = self._load_vault_artifacts(vault_num)
+        vault_evo_artifacts = self._load_evolution_artifacts(vault_num)
         
         # Fenetre d'inventaire - taille adaptee
         dialog = tk.Toplevel(self.root)
@@ -1238,12 +1239,13 @@ class VaultMonitorGUI:
         stats_frame = tk.Frame(dialog, bg=CypherpunkTheme.BG_PANEL)
         stats_frame.pack(fill=tk.X, padx=15, pady=(0, 10))
         
+        total_artifacts = len(vault_artifacts) + len(vault_evo_artifacts)
         stats = [
             ("📦 Equipements", len(vault_items), "#00ff41"),
             ("💎 Gems", len(vault_gems), "#00ffff"),
             ("🔮 Fragments", len(vault_fragments), "#aa00ff"),
             ("⚗ Pierres", len(vault_stones), "#ffd700"),
-            ("🏛 Artifacts", len(vault_artifacts), "#ff8000"),
+            ("🏛 Artefacts", total_artifacts, "#ff8000"),
         ]
         
         for label, count, color in stats:
@@ -1288,10 +1290,10 @@ class VaultMonitorGUI:
         notebook.add(stones_frame, text=f" ⚗ PIERRES ({len(vault_stones)}) ")
         self._create_stones_tab(stones_frame, vault_stones)
         
-        # === ONGLET ARTIFACTS ===
+        # === ONGLET ARTEFACTS ===
         artifacts_frame = tk.Frame(notebook, bg=CypherpunkTheme.BG_SECONDARY)
-        notebook.add(artifacts_frame, text=f" 🏛 ARTIFACTS ({len(vault_artifacts)}) ")
-        self._create_artifacts_tab(artifacts_frame, vault_artifacts)
+        notebook.add(artifacts_frame, text=f" 🏛 ARTEFACTS ({total_artifacts}) ")
+        self._create_artifacts_tab(artifacts_frame, vault_artifacts, vault_evo_artifacts)
     
     def _create_items_tab(self, parent, items, rarity_colors):
         """Cree l'onglet des equipements alchimiques"""
@@ -1614,7 +1616,7 @@ class VaultMonitorGUI:
                         bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.NEON_PURPLE,
                         font=("Consolas", 9)).pack(anchor=tk.W)
     
-    def _create_artifacts_tab(self, parent, artifacts):
+    def _create_artifacts_tab(self, parent, artifacts, evolution_artifacts=None):
         """Cree l'onglet des artifacts avec artefacts d'evolution"""
         canvas = tk.Canvas(parent, bg=CypherpunkTheme.BG_SECONDARY, highlightthickness=0)
         scrollbar = ttk.Scrollbar(parent, orient="vertical", command=canvas.yview)
@@ -1626,8 +1628,9 @@ class VaultMonitorGUI:
         canvas.create_window((0, 0), window=content, anchor="nw")
         content.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
         
-        # Charger aussi les artefacts d'evolution
-        evolution_artifacts = self._load_evolution_artifacts()
+        # Charger les artefacts d'evolution si non fournis
+        if evolution_artifacts is None:
+            evolution_artifacts = self._load_evolution_artifacts()
         
         # Section Artefacts d'Evolution
         if evolution_artifacts or EVOLUTION_ARTIFACTS_AVAILABLE:
