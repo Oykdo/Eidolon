@@ -150,6 +150,79 @@ RARITY_STAT_MULTIPLIER = {
     "primordial": 2.5,
 }
 
+# ============================================================================
+# BASE STAT ROLL RANGES BY RARITY
+# ============================================================================
+# Each stat is rolled within a range based on avatar rarity
+# Format: (min, max) - determines the base stat before multipliers
+
+RARITY_STAT_RANGES = {
+    # Common: Low base stats (5-15)
+    "common": {
+        "min": 5,
+        "max": 15,
+        "variance": 5,      # Random variance
+        "guaranteed_high": 0,  # Number of stats guaranteed to be high
+    },
+    # Uncommon: Slightly better (8-20)
+    "uncommon": {
+        "min": 8,
+        "max": 20,
+        "variance": 6,
+        "guaranteed_high": 1,
+    },
+    # Rare: Good base stats (12-25)
+    "rare": {
+        "min": 12,
+        "max": 25,
+        "variance": 7,
+        "guaranteed_high": 1,
+    },
+    # Epic: High base stats (18-35)
+    "epic": {
+        "min": 18,
+        "max": 35,
+        "variance": 8,
+        "guaranteed_high": 2,
+    },
+    # Legendary: Very high (25-50)
+    "legendary": {
+        "min": 25,
+        "max": 50,
+        "variance": 10,
+        "guaranteed_high": 2,
+    },
+    # Mythical: Exceptional (35-70)
+    "mythical": {
+        "min": 35,
+        "max": 70,
+        "variance": 15,
+        "guaranteed_high": 3,
+    },
+    # Primordial: Maximum potential (50-100)
+    "primordial": {
+        "min": 50,
+        "max": 100,
+        "variance": 20,
+        "guaranteed_high": 4,
+    },
+}
+
+# Stat affinities by geometric type (which stats are naturally higher)
+GEOMETRIC_STAT_AFFINITY = {
+    "quantum_sphere": ["intelligence", "luck"],
+    "spinor_torus": ["agility", "charisma"],
+    "bell_polyhedron": ["vitality", "strength"],
+    "clifford_lattice": ["intelligence", "vitality"],
+    "entropy_fractal": ["luck", "agility"],
+    "7d_projection": ["intelligence", "charisma", "luck"],
+    "hybrid_form": ["strength", "agility", "vitality"],
+    "nexus_crystal": ["intelligence", "luck", "charisma"],
+}
+
+# Bonus for affine stats
+AFFINITY_BONUS = 0.25  # +25% to affine stats
+
 # Bonus de stats par tier pionnier
 PIONEER_STAT_BONUS = {
     "supreme": {"base": 20, "multiplier": 1.5},     # +20 base, x1.5
@@ -819,46 +892,97 @@ class QuantumAvatarGenerator:
         """
         Genere les stats de combat du personnage basees sur:
         - L'ADN du vault (seed_values)
-        - La rarete de l'avatar
-        - Le tier pionnier
+        - La rarete de l'avatar (determine les plages de roll)
+        - Le type geometrique (affinites de stats)
+        - Le tier pionnier (bonus)
+        
+        Systeme de roll:
+        1. Chaque rarete a une plage de stats (min-max)
+        2. Les stats affines au type geometrique recoivent +25% 
+        3. Un nombre de stats sont garanties "high roll" selon la rarete
+        4. Bonus pioneer applique en dernier
         """
         dna = self.dna
         seed = dna.seed_values
+        rarity = dna.rarity_tier.lower()
+        geometric_type = dna.geometric_name
         
-        # Multiplicateur de rarete
-        rarity_mult = RARITY_STAT_MULTIPLIER.get(dna.rarity_tier, 1.0)
+        # Get stat ranges for this rarity
+        ranges = RARITY_STAT_RANGES.get(rarity, RARITY_STAT_RANGES["common"])
+        stat_min = ranges["min"]
+        stat_max = ranges["max"]
+        variance = ranges["variance"]
+        guaranteed_high = ranges["guaranteed_high"]
+        
+        # Get affine stats for this geometric type
+        affine_stats = GEOMETRIC_STAT_AFFINITY.get(geometric_type, [])
         
         # Bonus pionnier
         pioneer_bonus = PIONEER_STAT_BONUS.get(self.pioneer_tier, {"base": 0, "multiplier": 1.0})
         base_bonus = pioneer_bonus["base"]
         pioneer_mult = pioneer_bonus["multiplier"]
         
-        # Multiplicateur total
-        total_mult = rarity_mult * pioneer_mult
-        
-        # Generer les stats primaires a partir du seed
-        # Chaque stat utilise differents bytes du seed pour la variete
-        def calc_stat(seed_idx: int, base: int = 10) -> int:
+        # Roll a stat using DNA seed
+        def roll_stat(seed_idx: int, stat_name: str, force_high: bool = False) -> int:
             raw = seed[seed_idx % len(seed)]
-            # Normalise entre 5 et 25, puis applique les bonus
-            normalized = 5 + (raw / 255) * 20
-            boosted = (normalized + base_bonus) * total_mult
-            return int(min(100, max(1, boosted)))
+            
+            if force_high:
+                # High roll: upper 30% of range
+                range_size = stat_max - stat_min
+                high_min = stat_min + int(range_size * 0.7)
+                roll_range = stat_max - high_min
+                base_value = high_min + int((raw / 255) * roll_range)
+            else:
+                # Normal roll within variance
+                midpoint = (stat_min + stat_max) // 2
+                offset = int((raw / 255 - 0.5) * variance * 2)
+                base_value = midpoint + offset
+                base_value = max(stat_min, min(stat_max, base_value))
+            
+            # Apply affinity bonus
+            if stat_name in affine_stats:
+                base_value = int(base_value * (1 + AFFINITY_BONUS))
+            
+            # Apply pioneer bonus
+            final_value = int((base_value + base_bonus) * pioneer_mult)
+            
+            return max(1, min(100, final_value))
         
-        strength = calc_stat(0)
-        agility = calc_stat(1)
-        intelligence = calc_stat(2)
-        vitality = calc_stat(3)
-        luck = calc_stat(4)
-        charisma = calc_stat(5)
+        # Determine which stats get high rolls
+        all_stats = ["strength", "agility", "intelligence", "vitality", "luck", "charisma"]
         
-        # Stats quantiques basees sur les attributs DNA
+        # Prioritize affine stats for high rolls
+        high_roll_stats = set()
+        for stat in affine_stats:
+            if stat in all_stats and len(high_roll_stats) < guaranteed_high:
+                high_roll_stats.add(stat)
+        
+        # Fill remaining high rolls with random stats based on seed
+        remaining_stats = [s for s in all_stats if s not in high_roll_stats]
+        for i, stat in enumerate(remaining_stats):
+            if len(high_roll_stats) >= guaranteed_high:
+                break
+            # Use seed to determine if this stat gets high roll
+            if seed[(i + 10) % len(seed)] > 128:
+                high_roll_stats.add(stat)
+        
+        # Roll each stat
+        strength = roll_stat(0, "strength", "strength" in high_roll_stats)
+        agility = roll_stat(1, "agility", "agility" in high_roll_stats)
+        intelligence = roll_stat(2, "intelligence", "intelligence" in high_roll_stats)
+        vitality = roll_stat(3, "vitality", "vitality" in high_roll_stats)
+        luck = roll_stat(4, "luck", "luck" in high_roll_stats)
+        charisma = roll_stat(5, "charisma", "charisma" in high_roll_stats)
+        
+        # Stats quantiques basees sur les attributs DNA et rarete
         attrs = dna.attributes
-        quantum_power = int(attrs.get('quantum_entropy', 50) * total_mult)
-        dimensional_sync = round(attrs.get('dimensional_depth', 3.5) / 7 * 100 * total_mult, 1)
-        entropy_resistance = round(attrs.get('cryptographic_strength', 50) * total_mult / 2, 1)
-        temporal_flux = round(attrs.get('temporal_stability', 50) * total_mult / 3, 1)
-        nexus_affinity = round(attrs.get('energy_resonance', 50) * total_mult / 2, 1)
+        quantum_mult = RARITY_STAT_MULTIPLIER.get(rarity, 1.0) * pioneer_mult
+        
+        quantum_power = int(attrs.get('quantum_entropy', 50) * quantum_mult)
+        dimensional_sync = round(attrs.get('dimensional_depth', 3.5) / 7 * 100 * quantum_mult, 1)
+        entropy_resistance = round(attrs.get('cryptographic_strength', 50) * quantum_mult / 2, 1)
+        temporal_flux = round(attrs.get('temporal_stability', 50) * quantum_mult / 3, 1)
+        nexus_affinity = round(attrs.get('energy_resonance', 50) * quantum_mult / 2, 1)
         
         # Creer l'objet stats
         stats = AvatarStats(
@@ -878,6 +1002,11 @@ class QuantumAvatarGenerator:
             nexus_affinity=min(100, nexus_affinity),
             stat_points=0
         )
+        
+        # Store roll info for display
+        stats._high_roll_stats = list(high_roll_stats)
+        stats._affine_stats = affine_stats
+        stats._rarity = rarity
         
         # Calculer les stats secondaires
         stats.recalculate_secondary()
