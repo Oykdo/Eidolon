@@ -514,9 +514,16 @@
   "origin_vault_number": 3,
   "origin_tier": "quantum_pioneer",
   "created_at": "2026-01-06T21:10:29.753622",
-  "current_owner_vault": 3,
+  "current_owner_vault": 1,
   "status": "attached",
-  "transfer_history": [],
+  "transfer_history": [
+    {
+      "from_vault": 3,
+      "to_vault": 1,
+      "timestamp": "2026-01-07T05:41:14.811954",
+      "reason": "Consolidation to main vault"
+    }
+  ],
   "detached_at": null,
   "is_founder_artifact": true,
   "founder_bonus_applied": true

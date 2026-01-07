@@ -39,5 +39,15 @@
   },
   "origin_vault": 3,
   "created_at": "2026-01-06T22:47:42.668176",
-  "usage_history": []
+  "usage_history": [],
+  "transfer_history": [
+    {
+      "from_vault": 3,
+      "to_vault": 1,
+      "timestamp": "2026-01-07T05:41:14.794985",
+      "reason": "Consolidation to main vault"
+    }
+  ],
+  "owner_vault": 1,
+  "current_vault": 1
 }
