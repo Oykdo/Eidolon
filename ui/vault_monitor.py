@@ -469,9 +469,16 @@ class VaultMonitorGUI:
             try:
                 from core.vault_identity import VaultIdentityManager
                 identity_mgr = VaultIdentityManager()
+                
+                # Try by key first
                 vault_identity = identity_mgr.get_vault_by_key(vault_key)
                 if vault_identity:
                     vault_number = vault_identity.vault_number
+                else:
+                    # Try by name
+                    vault_identity = identity_mgr.get_vault_by_name(vault_name)
+                    if vault_identity:
+                        vault_number = vault_identity.vault_number
             except Exception:
                 pass
         
@@ -1741,10 +1748,18 @@ class VaultMonitorGUI:
         try:
             from core.vault_identity import VaultIdentityManager
             identity_mgr = VaultIdentityManager()
+            
+            # Try by key first
             vault_identity = identity_mgr.get_vault_by_key(self.vault_key)
             if vault_identity:
                 vault_id = vault_identity.vault_id
                 vault_number = vault_identity.vault_number
+            else:
+                # Try by name
+                vault_identity = identity_mgr.get_vault_by_name(self.vault_name)
+                if vault_identity:
+                    vault_id = vault_identity.vault_id
+                    vault_number = vault_identity.vault_number
         except Exception:
             pass
         

@@ -159,9 +159,16 @@ def launch_vault(vault_key: bytes, vault_name: str, vault_number: int = None):
             try:
                 from core.vault_identity import VaultIdentityManager
                 identity_mgr = VaultIdentityManager()
+                
+                # Try by key first
                 vault_identity = identity_mgr.get_vault_by_key(vault_key)
                 if vault_identity:
                     vault_number = vault_identity.vault_number
+                else:
+                    # Try by name
+                    vault_identity = identity_mgr.get_vault_by_name(vault_name)
+                    if vault_identity:
+                        vault_number = vault_identity.vault_number
             except Exception:
                 pass
         
