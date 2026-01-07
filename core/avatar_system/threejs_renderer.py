@@ -589,13 +589,7 @@ class ThreeJSAvatarRenderer:
             }}
             crystalPoints.push(new THREE.Vector3(0, -1.0, 0));
             
-            const crystalGeom = new THREE.ConvexGeometry ? 
-                new THREE.ConvexGeometry(crystalPoints) : 
-                new THREE.OctahedronGeometry(1, 0);
-            
-            if (!THREE.ConvexGeometry) {{
-                crystalGeom.scale(1, 1.5, 1);
-            }}
+            const crystalGeom = new ConvexGeometry(crystalPoints);
             
             const crystalMat = new THREE.MeshPhysicalMaterial({{
                 color: '{self.primary_color}',
@@ -1439,6 +1433,7 @@ class ThreeJSAvatarRenderer:
     <script type="module">
         import * as THREE from 'three';
         import {{ OrbitControls }} from 'three/addons/controls/OrbitControls.js';
+        import {{ ConvexGeometry }} from 'three/addons/geometries/ConvexGeometry.js';
         
         let scene, camera, renderer, controls;
         let autoRotate = true;

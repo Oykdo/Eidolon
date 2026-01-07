@@ -43,7 +43,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .info-label { color: #666; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; }
-        .info-value { color: #da9a89; font-weight: 600; font-size: 1.05em; }
+        .info-value { color: #d96cbd; font-weight: 600; font-size: 1.05em; }
         .rarity-badge {
             display: inline-block;
             padding: 5px 14px;
@@ -59,7 +59,7 @@
         .dna-code {
             font-family: 'Consolas', monospace;
             font-size: 0.7em;
-            color: #97e13a;
+            color: #aeffcf;
             word-break: break-all;
             padding: 10px;
             background: rgba(0,0,0,0.4);
@@ -133,21 +133,21 @@
             bottom: 90px;
             right: 20px;
             background: linear-gradient(135deg, rgba(10,10,30,0.9) 0%, rgba(15,10,35,0.85) 100%);
-            border: 1px solid #97e13a44;
+            border: 1px solid #aeffcf44;
             border-radius: 12px;
             padding: 16px;
             font-size: 0.8em;
             backdrop-filter: blur(10px);
         }
         #unique-params h3 {
-            color: #97e13a;
+            color: #aeffcf;
             margin-bottom: 12px;
             font-size: 0.95em;
             letter-spacing: 1px;
         }
         .param-row { display: flex; justify-content: space-between; margin: 5px 0; gap: 20px; }
         .param-name { color: #555; }
-        .param-val { color: #fbf017; font-family: 'Consolas', monospace; font-weight: 600; }
+        .param-val { color: #93a079; font-family: 'Consolas', monospace; font-weight: 600; }
         
         #loading {
             position: absolute;
@@ -188,7 +188,7 @@
                 <span class="info-label">Puissance</span>
                 <span class="info-value">25,000</span>
             </div>
-            <div class="dna-code">DNA: test_nexus_crystal_v2_premium...</div>
+            <div class="dna-code">DNA: test_nexus_crystal...</div>
         </div>
         
         <div id="power-indicator">
@@ -198,10 +198,10 @@
         
         <div id="unique-params">
             <h3>⚙ PARAMETRES</h3>
-            <div class="param-row"><span class="param-name">Scale</span><span class="param-val">0.85×1.13×0.83</span></div>
-            <div class="param-row"><span class="param-name">Metalness</span><span class="param-val">0.36</span></div>
-            <div class="param-row"><span class="param-name">IOR</span><span class="param-val">1.84</span></div>
-            <div class="param-row"><span class="param-name">Iridescence</span><span class="param-val">0.73</span></div>
+            <div class="param-row"><span class="param-name">Scale</span><span class="param-val">0.91×1.10×1.04</span></div>
+            <div class="param-row"><span class="param-name">Metalness</span><span class="param-val">0.55</span></div>
+            <div class="param-row"><span class="param-name">IOR</span><span class="param-val">2.46</span></div>
+            <div class="param-row"><span class="param-name">Iridescence</span><span class="param-val">0.82</span></div>
             <div class="param-row"><span class="param-name">Complexity</span><span class="param-val">2.8×</span></div>
         </div>
         
@@ -227,6 +227,7 @@
     <script type="module">
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { ConvexGeometry } from 'three/addons/geometries/ConvexGeometry.js';
         
         let scene, camera, renderer, controls;
         let autoRotate = true;
@@ -285,12 +286,12 @@
             scene.add(fillLight);
             
             // Back light (accent)
-            const backLight = new THREE.DirectionalLight('#da9a89', 0.5);
+            const backLight = new THREE.DirectionalLight('#d96cbd', 0.5);
             backLight.position.set(0, -3, -5);
             scene.add(backLight);
             
             // Rim light
-            const rimLight = new THREE.DirectionalLight('#97e13a', 0.4);
+            const rimLight = new THREE.DirectionalLight('#aeffcf', 0.4);
             rimLight.position.set(4, 0, -4);
             scene.add(rimLight);
             
@@ -318,7 +319,7 @@
             
             // === NEXUS CRYSTAL - Cristal Unique ===
             const mainGroup = new THREE.Group();
-            mainGroup.scale.set(0.853, 1.803, 0.833);
+            mainGroup.scale.set(0.905, 1.767, 1.035);
             scene.add(mainGroup);
             
             // Cristal principal avec facettes
@@ -326,23 +327,17 @@
             crystalPoints.push(new THREE.Vector3(0, 1.2, 0));
             for (let i = 0; i < 6; i++) {
                 const angle = (i / 6) * Math.PI * 2;
-                const r = 0.6 + 0.129 * Math.sin(i * 2);
+                const r = 0.6 + 0.002 * Math.sin(i * 2);
                 crystalPoints.push(new THREE.Vector3(Math.cos(angle) * r, 0.3, Math.sin(angle) * r));
             }
             for (let i = 0; i < 6; i++) {
                 const angle = (i / 6) * Math.PI * 2 + Math.PI / 6;
-                const r = 0.8 + -0.105 * Math.cos(i * 3);
+                const r = 0.8 + 0.101 * Math.cos(i * 3);
                 crystalPoints.push(new THREE.Vector3(Math.cos(angle) * r, -0.2, Math.sin(angle) * r));
             }
             crystalPoints.push(new THREE.Vector3(0, -1.0, 0));
             
-            const crystalGeom = new THREE.ConvexGeometry ? 
-                new THREE.ConvexGeometry(crystalPoints) : 
-                new THREE.OctahedronGeometry(1, 0);
-            
-            if (!THREE.ConvexGeometry) {
-                crystalGeom.scale(1, 1.5, 1);
-            }
+            const crystalGeom = new ConvexGeometry(crystalPoints);
             
             const crystalMat = new THREE.MeshPhysicalMaterial({
                 color: '#ff00ff',
@@ -351,10 +346,10 @@
                 transparent: true,
                 opacity: 0.85,
                 emissive: '#ff66ff',
-                emissiveIntensity: 0.774,
+                emissiveIntensity: 0.724,
                 clearcoat: 1.0,
                 clearcoatRoughness: 0.0,
-                ior: 1.841,
+                ior: 2.465,
                 transmission: 0.5,
                 thickness: 0.5,
                 iridescence: 1.0,
@@ -365,17 +360,17 @@
             mainGroup.add(crystal);
             
             // Cristaux satellites
-            for (let i = 0; i < 27; i++) {
-                const angle = (i / 27) * Math.PI * 2;
+            for (let i = 0; i < 9; i++) {
+                const angle = (i / 9) * Math.PI * 2;
                 const satGeom = new THREE.OctahedronGeometry(0.15 + Math.random() * 0.1, 0);
                 satGeom.scale(1, 1.4, 1);
                 const satMat = new THREE.MeshPhysicalMaterial({
-                    color: i % 2 === 0 ? '#da9a89' : '#97e13a',
+                    color: i % 2 === 0 ? '#d96cbd' : '#aeffcf',
                     metalness: 0.0,
                     roughness: 0.0,
                     transparent: true,
                     opacity: 0.8,
-                    emissive: i % 2 === 0 ? '#da9a89' : '#97e13a',
+                    emissive: i % 2 === 0 ? '#d96cbd' : '#aeffcf',
                     emissiveIntensity: 0.4,
                     transmission: 0.3
                 });
@@ -386,8 +381,8 @@
                 mainGroup.add(sat);
                 
                 animationCallbacks.push((time) => {
-                    sat.position.y = sat.userData.baseY + Math.sin(time * 2.36 + i) * 0.2;
-                    sat.rotation.y = time * 0.852 * 0.5;
+                    sat.position.y = sat.userData.baseY + Math.sin(time * 0.86 + i) * 0.2;
+                    sat.rotation.y = time * 0.921 * 0.5;
                     sat.rotation.x = Math.sin(time + i) * 0.3;
                 });
             }
@@ -396,14 +391,14 @@
             const innerLight = new THREE.PointLight('#ff00ff', 4, 6);
             mainGroup.add(innerLight);
             
-            const accentLight = new THREE.PointLight('#d645e9', 2, 4);
+            const accentLight = new THREE.PointLight('#43e385', 2, 4);
             accentLight.position.y = 0.5;
             mainGroup.add(accentLight);
             
             animationCallbacks.push((time) => {
-                crystal.rotation.y = time * 0.852 * 0.25;
-                crystal.position.y = Math.sin(time * 2.36) * 0.05;
-                innerLight.intensity = 3 + Math.sin(time * 2.36) * 1.5;
+                crystal.rotation.y = time * 0.921 * 0.25;
+                crystal.position.y = Math.sin(time * 0.86) * 0.05;
+                innerLight.intensity = 3 + Math.sin(time * 0.86) * 1.5;
             });
         
             // === AURA ENERGETIQUE ===
@@ -416,7 +411,7 @@
                 uniforms: {
                     time: { value: 0 },
                     color1: { value: new THREE.Color('#ff00ff') },
-                    color2: { value: new THREE.Color('#d645e9') },
+                    color2: { value: new THREE.Color('#43e385') },
                     opacity: { value: 0.15 }
                 },
                 vertexShader: `
@@ -440,7 +435,7 @@
                     varying vec2 vUv;
                     
                     void main() {
-                        float pulse = sin(time * 2.36) * 0.5 + 0.5;
+                        float pulse = sin(time * 0.86) * 0.5 + 0.5;
                         float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.5);
                         float wave = sin(vPosition.y * 8.0 + time * 3.0) * 0.5 + 0.5;
                         vec3 color = mix(color1, color2, wave * pulse);
@@ -460,7 +455,7 @@
             for (let i = 0; i < 3; i++) {
                 const ringGeom = new THREE.TorusGeometry(1.8 + i * 0.3, 0.02, 16, 100);
                 const ringMat = new THREE.MeshBasicMaterial({
-                    color: '#4f3f66',
+                    color: '#d24612',
                     transparent: true,
                     opacity: 0.4 - i * 0.1,
                     blending: THREE.AdditiveBlending
@@ -482,7 +477,7 @@
             });
         
             // === PARTICULES ORBITALES DYNAMIQUES ===
-            const particleCount = 61;
+            const particleCount = 252;
             const particlesGeom = new THREE.BufferGeometry();
             const positions = new Float32Array(particleCount * 3);
             const colors = new Float32Array(particleCount * 3);
@@ -491,9 +486,9 @@
             
             const colorPalette = [
                 new THREE.Color('#ff00ff'),
-                new THREE.Color('#da9a89'),
-                new THREE.Color('#97e13a'),
-                new THREE.Color('#fbf017')
+                new THREE.Color('#d96cbd'),
+                new THREE.Color('#aeffcf'),
+                new THREE.Color('#93a079')
             ];
             
             for (let i = 0; i < particleCount; i++) {
@@ -514,7 +509,7 @@
                 phases[i * 4] = r;
                 phases[i * 4 + 1] = theta;
                 phases[i * 4 + 2] = phi;
-                phases[i * 4 + 3] = 0.2 + Math.random() * 0.32;
+                phases[i * 4 + 3] = 0.2 + Math.random() * 0.46;
             }
             
             particlesGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -560,7 +555,7 @@
             // Noyau central
             const coreGeom = new THREE.IcosahedronGeometry(0.2, 3);
             const coreMat = new THREE.MeshPhysicalMaterial({
-                color: '#d645e9',
+                color: '#43e385',
                 emissive: '#ff00ff',
                 emissiveIntensity: 1.5,
                 metalness: 0.0,
@@ -585,11 +580,11 @@
             coreGroup.add(halo);
             
             // Rayons d'energie
-            for (let i = 0; i < 16; i++) {
-                const angle = (i / 16) * Math.PI * 2;
+            for (let i = 0; i < 17; i++) {
+                const angle = (i / 17) * Math.PI * 2;
                 const rayGeom = new THREE.CylinderGeometry(0.008, 0.002, 2.5, 8);
                 const rayMat = new THREE.MeshBasicMaterial({
-                    color: '#fbf017',
+                    color: '#93a079',
                     transparent: true,
                     opacity: 0.6,
                     blending: THREE.AdditiveBlending
@@ -611,10 +606,10 @@
             coreGroup.add(coreLight);
             
             animationCallbacks.push((time) => {
-                const pulse = 1 + Math.sin(time * 2.36) * 0.3;
+                const pulse = 1 + Math.sin(time * 0.86) * 0.3;
                 core.scale.setScalar(pulse);
                 halo.scale.setScalar(pulse * 1.2);
-                coreLight.intensity = 2 + Math.sin(time * 2.36) * 1.5;
+                coreLight.intensity = 2 + Math.sin(time * 0.86) * 1.5;
                 core.rotation.x = time * 0.5;
                 core.rotation.y = time * 0.7;
             });
@@ -643,7 +638,7 @@
             const hexRadius = 2.5;
             const hexGeom = new THREE.CircleGeometry(hexRadius, 6);
             const hexMat = new THREE.MeshBasicMaterial({
-                color: '#97e13a',
+                color: '#aeffcf',
                 transparent: true,
                 opacity: 0.05,
                 wireframe: true,
@@ -663,7 +658,7 @@
                 const angle = (i / 8) * Math.PI * 2;
                 const streamGeom = new THREE.BoxGeometry(0.02, 3, 0.02);
                 const streamMat = new THREE.MeshBasicMaterial({
-                    color: '#fbf017',
+                    color: '#93a079',
                     transparent: true,
                     opacity: 0.2,
                     blending: THREE.AdditiveBlending

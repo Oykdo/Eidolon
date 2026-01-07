@@ -43,7 +43,7 @@
             border-bottom: 1px solid rgba(255,255,255,0.06);
         }
         .info-label { color: #666; font-size: 0.9em; text-transform: uppercase; letter-spacing: 1px; }
-        .info-value { color: #d926ae; font-weight: 600; font-size: 1.05em; }
+        .info-value { color: #0b863f; font-weight: 600; font-size: 1.05em; }
         .rarity-badge {
             display: inline-block;
             padding: 5px 14px;
@@ -59,7 +59,7 @@
         .dna-code {
             font-family: 'Consolas', monospace;
             font-size: 0.7em;
-            color: #6a0e41;
+            color: #babcc4;
             word-break: break-all;
             padding: 10px;
             background: rgba(0,0,0,0.4);
@@ -133,21 +133,21 @@
             bottom: 90px;
             right: 20px;
             background: linear-gradient(135deg, rgba(10,10,30,0.9) 0%, rgba(15,10,35,0.85) 100%);
-            border: 1px solid #6a0e4144;
+            border: 1px solid #babcc444;
             border-radius: 12px;
             padding: 16px;
             font-size: 0.8em;
             backdrop-filter: blur(10px);
         }
         #unique-params h3 {
-            color: #6a0e41;
+            color: #babcc4;
             margin-bottom: 12px;
             font-size: 0.95em;
             letter-spacing: 1px;
         }
         .param-row { display: flex; justify-content: space-between; margin: 5px 0; gap: 20px; }
         .param-name { color: #555; }
-        .param-val { color: #43dfd0; font-family: 'Consolas', monospace; font-weight: 600; }
+        .param-val { color: #f031e1; font-family: 'Consolas', monospace; font-weight: 600; }
         
         #loading {
             position: absolute;
@@ -188,7 +188,7 @@
                 <span class="info-label">Puissance</span>
                 <span class="info-value">25,000</span>
             </div>
-            <div class="dna-code">DNA: test_bell_polyhedron_v2_premium...</div>
+            <div class="dna-code">DNA: test_bell_polyhedron...</div>
         </div>
         
         <div id="power-indicator">
@@ -198,10 +198,10 @@
         
         <div id="unique-params">
             <h3>⚙ PARAMETRES</h3>
-            <div class="param-row"><span class="param-name">Scale</span><span class="param-val">1.16×0.93×0.85</span></div>
-            <div class="param-row"><span class="param-name">Metalness</span><span class="param-val">0.80</span></div>
-            <div class="param-row"><span class="param-name">IOR</span><span class="param-val">1.65</span></div>
-            <div class="param-row"><span class="param-name">Iridescence</span><span class="param-val">0.06</span></div>
+            <div class="param-row"><span class="param-name">Scale</span><span class="param-val">0.97×1.12×1.19</span></div>
+            <div class="param-row"><span class="param-name">Metalness</span><span class="param-val">0.70</span></div>
+            <div class="param-row"><span class="param-name">IOR</span><span class="param-val">2.76</span></div>
+            <div class="param-row"><span class="param-name">Iridescence</span><span class="param-val">0.50</span></div>
             <div class="param-row"><span class="param-name">Complexity</span><span class="param-val">2.8×</span></div>
         </div>
         
@@ -227,6 +227,7 @@
     <script type="module">
         import * as THREE from 'three';
         import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        import { ConvexGeometry } from 'three/addons/geometries/ConvexGeometry.js';
         
         let scene, camera, renderer, controls;
         let autoRotate = true;
@@ -285,12 +286,12 @@
             scene.add(fillLight);
             
             // Back light (accent)
-            const backLight = new THREE.DirectionalLight('#d926ae', 0.5);
+            const backLight = new THREE.DirectionalLight('#0b863f', 0.5);
             backLight.position.set(0, -3, -5);
             scene.add(backLight);
             
             // Rim light
-            const rimLight = new THREE.DirectionalLight('#6a0e41', 0.4);
+            const rimLight = new THREE.DirectionalLight('#babcc4', 0.4);
             rimLight.position.set(4, 0, -4);
             scene.add(rimLight);
             
@@ -318,7 +319,7 @@
             
             // === BELL POLYHEDRON - Polyedre Quantique ===
             const mainGroup = new THREE.Group();
-            mainGroup.scale.set(1.158, 0.928, 0.847);
+            mainGroup.scale.set(0.967, 1.124, 1.194);
             scene.add(mainGroup);
             
             // Polyedre principal
@@ -329,19 +330,19 @@
                 const x = polyPos.getX(i);
                 const y = polyPos.getY(i);
                 const z = polyPos.getZ(i);
-                const noise = 0.072 * Math.sin(x * y * 2.01);
+                const noise = -0.033 * Math.sin(x * y * 2.01);
                 polyPos.setXYZ(i, x * (1 + noise), y * (1 + noise), z * (1 + noise));
             }
             polyGeom.computeVertexNormals();
             
             const polyMat = new THREE.MeshPhysicalMaterial({
                 color: '#ff00ff',
-                metalness: 0.804,
-                roughness: 0.262,
+                metalness: 0.704,
+                roughness: 0.020,
                 transparent: true,
                 opacity: 0.7,
                 emissive: '#ff66ff',
-                emissiveIntensity: 0.242,
+                emissiveIntensity: 0.448,
                 wireframe: false
             });
             const poly = new THREE.Mesh(polyGeom, polyMat);
@@ -350,7 +351,7 @@
             // Wireframe externe
             const wireGeom = new THREE.IcosahedronGeometry(1.05, 1);
             const wireMat = new THREE.MeshBasicMaterial({
-                color: '#d926ae',
+                color: '#0b863f',
                 wireframe: true,
                 transparent: true,
                 opacity: 0.5
@@ -366,7 +367,7 @@
             for (let i = 0; i < 12; i++) {
                 const nodeGeom = new THREE.SphereGeometry(0.07, 16, 16);
                 const nodeMat = new THREE.MeshBasicMaterial({
-                    color: ['#d926ae', '#6a0e41', '#43dfd0'][i % 3]
+                    color: ['#0b863f', '#babcc4', '#f031e1'][i % 3]
                 });
                 const node = new THREE.Mesh(nodeGeom, nodeMat);
                 
@@ -381,13 +382,13 @@
                 vertices.push(node.position.clone());
                 
                 animationCallbacks.push((time) => {
-                    node.scale.setScalar(1 + Math.sin(time * 1.84 + i) * 0.3);
+                    node.scale.setScalar(1 + Math.sin(time * 1.90 + i) * 0.3);
                 });
             }
             
             // Connexions quantiques
             const lineMat = new THREE.LineBasicMaterial({
-                color: '#030c11',
+                color: '#25307e',
                 transparent: true,
                 opacity: 0.3
             });
@@ -404,10 +405,10 @@
             }
             
             animationCallbacks.push((time) => {
-                poly.rotation.x = time * 0.926 * 0.2;
-                poly.rotation.y = time * 0.926 * 0.3;
-                wire.rotation.x = time * 0.926 * 0.2;
-                wire.rotation.y = time * 0.926 * 0.3;
+                poly.rotation.x = time * 0.633 * 0.2;
+                poly.rotation.y = time * 0.633 * 0.3;
+                wire.rotation.x = time * 0.633 * 0.2;
+                wire.rotation.y = time * 0.633 * 0.3;
             });
         
             // === AURA ENERGETIQUE ===
@@ -420,7 +421,7 @@
                 uniforms: {
                     time: { value: 0 },
                     color1: { value: new THREE.Color('#ff00ff') },
-                    color2: { value: new THREE.Color('#030c11') },
+                    color2: { value: new THREE.Color('#25307e') },
                     opacity: { value: 0.15 }
                 },
                 vertexShader: `
@@ -444,7 +445,7 @@
                     varying vec2 vUv;
                     
                     void main() {
-                        float pulse = sin(time * 1.84) * 0.5 + 0.5;
+                        float pulse = sin(time * 1.90) * 0.5 + 0.5;
                         float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 2.5);
                         float wave = sin(vPosition.y * 8.0 + time * 3.0) * 0.5 + 0.5;
                         vec3 color = mix(color1, color2, wave * pulse);
@@ -464,7 +465,7 @@
             for (let i = 0; i < 3; i++) {
                 const ringGeom = new THREE.TorusGeometry(1.8 + i * 0.3, 0.02, 16, 100);
                 const ringMat = new THREE.MeshBasicMaterial({
-                    color: '#35f38b',
+                    color: '#988ca2',
                     transparent: true,
                     opacity: 0.4 - i * 0.1,
                     blending: THREE.AdditiveBlending
@@ -486,7 +487,7 @@
             });
         
             // === PARTICULES ORBITALES DYNAMIQUES ===
-            const particleCount = 96;
+            const particleCount = 145;
             const particlesGeom = new THREE.BufferGeometry();
             const positions = new Float32Array(particleCount * 3);
             const colors = new Float32Array(particleCount * 3);
@@ -495,9 +496,9 @@
             
             const colorPalette = [
                 new THREE.Color('#ff00ff'),
-                new THREE.Color('#d926ae'),
-                new THREE.Color('#6a0e41'),
-                new THREE.Color('#43dfd0')
+                new THREE.Color('#0b863f'),
+                new THREE.Color('#babcc4'),
+                new THREE.Color('#f031e1')
             ];
             
             for (let i = 0; i < particleCount; i++) {
@@ -518,7 +519,7 @@
                 phases[i * 4] = r;
                 phases[i * 4 + 1] = theta;
                 phases[i * 4 + 2] = phi;
-                phases[i * 4 + 3] = 0.2 + Math.random() * 0.64;
+                phases[i * 4 + 3] = 0.2 + Math.random() * 0.80;
             }
             
             particlesGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
@@ -564,7 +565,7 @@
             // Noyau central
             const coreGeom = new THREE.IcosahedronGeometry(0.2, 3);
             const coreMat = new THREE.MeshPhysicalMaterial({
-                color: '#030c11',
+                color: '#25307e',
                 emissive: '#ff00ff',
                 emissiveIntensity: 1.5,
                 metalness: 0.0,
@@ -589,11 +590,11 @@
             coreGroup.add(halo);
             
             // Rayons d'energie
-            for (let i = 0; i < 20; i++) {
-                const angle = (i / 20) * Math.PI * 2;
+            for (let i = 0; i < 12; i++) {
+                const angle = (i / 12) * Math.PI * 2;
                 const rayGeom = new THREE.CylinderGeometry(0.008, 0.002, 2.5, 8);
                 const rayMat = new THREE.MeshBasicMaterial({
-                    color: '#43dfd0',
+                    color: '#f031e1',
                     transparent: true,
                     opacity: 0.6,
                     blending: THREE.AdditiveBlending
@@ -615,10 +616,10 @@
             coreGroup.add(coreLight);
             
             animationCallbacks.push((time) => {
-                const pulse = 1 + Math.sin(time * 1.84) * 0.3;
+                const pulse = 1 + Math.sin(time * 1.90) * 0.3;
                 core.scale.setScalar(pulse);
                 halo.scale.setScalar(pulse * 1.2);
-                coreLight.intensity = 2 + Math.sin(time * 1.84) * 1.5;
+                coreLight.intensity = 2 + Math.sin(time * 1.90) * 1.5;
                 core.rotation.x = time * 0.5;
                 core.rotation.y = time * 0.7;
             });
@@ -647,7 +648,7 @@
             const hexRadius = 2.5;
             const hexGeom = new THREE.CircleGeometry(hexRadius, 6);
             const hexMat = new THREE.MeshBasicMaterial({
-                color: '#6a0e41',
+                color: '#babcc4',
                 transparent: true,
                 opacity: 0.05,
                 wireframe: true,
@@ -667,7 +668,7 @@
                 const angle = (i / 8) * Math.PI * 2;
                 const streamGeom = new THREE.BoxGeometry(0.02, 3, 0.02);
                 const streamMat = new THREE.MeshBasicMaterial({
-                    color: '#43dfd0',
+                    color: '#f031e1',
                     transparent: true,
                     opacity: 0.2,
                     blending: THREE.AdditiveBlending
