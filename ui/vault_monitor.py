@@ -828,12 +828,38 @@ class VaultMonitorGUI:
         return frame
     
     def _create_tokens_tab(self) -> ttk.Frame:
-        """Créer l'onglet des tokens"""
+        """Créer l'onglet des tokens avec scroll"""
         frame = ttk.Frame(self.notebook)
         
+        # === SCROLLABLE CONTAINER ===
+        canvas = tk.Canvas(frame, bg=CypherpunkTheme.BG_DARK, highlightthickness=0)
+        scrollbar = ttk.Scrollbar(frame, orient="vertical", command=canvas.yview)
+        scrollable_frame = ttk.Frame(canvas)
+        
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+        
+        # Mouse wheel scroll
+        def _on_mousewheel_tokens(event):
+            canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+        canvas.bind("<MouseWheel>", _on_mousewheel_tokens)
+        
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        
+        # Bind canvas width
+        def _configure_tokens_canvas(event):
+            canvas.itemconfig(canvas.find_all()[0], width=event.width)
+        canvas.bind("<Configure>", _configure_tokens_canvas)
+        
         # Balance totale
-        balance_frame = ttk.LabelFrame(frame, text="Balance", padding=10)
-        balance_frame.pack(fill=tk.X, pady=(0, 10))
+        balance_frame = ttk.LabelFrame(scrollable_frame, text="Balance", padding=10)
+        balance_frame.pack(fill=tk.X, pady=(0, 10), padx=5)
         
         ttk.Label(balance_frame, text="Balance Totale:", font=('Arial', 12, 'bold')).pack(anchor=tk.W)
         self.total_balance_var = tk.StringVar(value="0.00 ETH")
@@ -841,8 +867,8 @@ class VaultMonitorGUI:
                   font=('Arial', 24, 'bold'), foreground="#00ff00").pack(anchor=tk.W)
         
         # Liste des tokens
-        list_frame = ttk.LabelFrame(frame, text="Tokens", padding=10)
-        list_frame.pack(fill=tk.BOTH, expand=True, pady=(0, 10))
+        list_frame = ttk.LabelFrame(scrollable_frame, text="Tokens", padding=10)
+        list_frame.pack(fill=tk.X, pady=(0, 10), padx=5)
         
         columns = ('Symbole', 'Nom', 'Balance', 'Contrat', 'Chaîne')
         self.tokens_tree = ttk.Treeview(list_frame, columns=columns, show='headings', height=8)
@@ -851,15 +877,15 @@ class VaultMonitorGUI:
             self.tokens_tree.heading(col, text=col)
             self.tokens_tree.column(col, width=120)
         
-        scrollbar = ttk.Scrollbar(list_frame, orient=tk.VERTICAL, command=self.tokens_tree.yview)
-        self.tokens_tree.configure(yscrollcommand=scrollbar.set)
+        tree_scrollbar = ttk.Scrollbar(list_frame, orient=tk.VERTICAL, command=self.tokens_tree.yview)
+        self.tokens_tree.configure(yscrollcommand=tree_scrollbar.set)
         
         self.tokens_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        tree_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         
         # Frame pour dépôt
-        deposit_frame = ttk.LabelFrame(frame, text="Dépôt de Token", padding=10)
-        deposit_frame.pack(fill=tk.X, pady=10)
+        deposit_frame = ttk.LabelFrame(scrollable_frame, text="Dépôt de Token", padding=10)
+        deposit_frame.pack(fill=tk.X, pady=10, padx=5)
         
         ttk.Label(deposit_frame, text="Adresse du contrat:").grid(row=0, column=0, sticky=tk.W, pady=5)
         self.token_contract_entry = ttk.Entry(deposit_frame, width=50)
@@ -875,6 +901,10 @@ class VaultMonitorGUI:
         
         ttk.Button(deposit_frame, text="Enregistrer Token", 
                    command=self.deposit_token_action).grid(row=3, column=0, columnspan=2, pady=10)
+        
+        # Spacer for future content
+        spacer = ttk.Frame(scrollable_frame, height=200)
+        spacer.pack(fill=tk.X, pady=20, padx=5)
         
         return frame
     
