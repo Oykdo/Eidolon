@@ -173,3 +173,11 @@ tmp/
 
 node_modules/
 vault_storage/
+
+
+# -----------------------------------------------------------------------------
+# ADMIN SCRIPTS - SECURITY CRITICAL
+# Contient les algorithmes RNG, seeds et mecaniques de distribution
+# Ne pas exposer pour eviter la triche sur la generation des items/avatars
+# -----------------------------------------------------------------------------
+scripts/
