@@ -148,10 +148,12 @@ class VaultRegistry:
         vaults = []
         for name, data in self.registry["vaults"].items():
             vaults.append({
-                "name": name,
+                "name": data.get("display_name", name),
                 "created_at": data.get("created_at"),
                 "last_login": data.get("last_login"),
-                "vault_number": data.get("vault_number")
+                "vault_number": data.get("vault_number"),
+                "auth_method": data.get("auth_method", "password"),
+                "login_count": data.get("login_count", 0)
             })
         return sorted(vaults, key=lambda x: x.get("last_login") or "", reverse=True)
     
@@ -221,6 +223,94 @@ class VaultRegistry:
         self._save_registry()
         
         return True, vault_key, "Authentication successful"
+    
+    def register_vault_with_key(self, vault_name: str, password: str, 
+                                 vault_key: bytes, vault_number: int = None) -> Tuple[bool, str]:
+        """
+        Register a vault with an externally-provided key (from key files).
+        The password is used for future logins via quick connect.
+        
+        Args:
+            vault_name: Name of the vault
+            password: Password for future logins
+            vault_key: The actual vault key (from .psnx/.blend_data auth)
+            vault_number: Optional vault number
+            
+        Returns:
+            (success, message)
+        """
+        vault_name_lower = vault_name.lower()
+        
+        if self.vault_exists(vault_name):
+            return False, f"Vault '{vault_name}' already registered. Use Login instead."
+        
+        if len(password) < 8:
+            return False, "Password must be at least 8 characters"
+        
+        # Generate salt and hash password
+        salt = secrets.token_bytes(32)
+        password_hash, salt_hex = self._hash_password(password, salt)
+        
+        # Store vault key hash for verification (not the key itself!)
+        vault_key_verification = hashlib.sha256(vault_key + salt).hexdigest()
+        
+        # Store in registry
+        self.registry["vaults"][vault_name_lower] = {
+            "display_name": vault_name,
+            "password_hash": password_hash,
+            "salt": salt_hex,
+            "vault_key_verification": vault_key_verification,
+            "auth_method": "key_files",
+            "created_at": datetime.now().isoformat(),
+            "last_login": datetime.now().isoformat(),
+            "vault_number": vault_number,
+            "login_count": 1
+        }
+        
+        self._save_registry()
+        
+        return True, f"Vault '{vault_name}' registered for quick connect"
+    
+    def authenticate_with_stored_key(self, vault_name: str, password: str, 
+                                      vault_key: bytes) -> Tuple[bool, str]:
+        """
+        Authenticate using password and verify against stored vault key.
+        Used for vaults registered via key files.
+        
+        Returns:
+            (success, message)
+        """
+        vault_name_lower = vault_name.lower()
+        
+        if not self.vault_exists(vault_name):
+            return False, f"Vault '{vault_name}' not found on this device"
+        
+        vault_data = self.registry["vaults"][vault_name_lower]
+        
+        # Verify password
+        if not self._verify_password(password, vault_data["password_hash"], vault_data["salt"]):
+            return False, "Invalid password"
+        
+        # Verify vault key if we have verification hash
+        if "vault_key_verification" in vault_data:
+            salt = bytes.fromhex(vault_data["salt"])
+            expected_hash = hashlib.sha256(vault_key + salt).hexdigest()
+            if expected_hash != vault_data["vault_key_verification"]:
+                return False, "Vault key mismatch - use original key files"
+        
+        # Update login stats
+        vault_data["last_login"] = datetime.now().isoformat()
+        vault_data["login_count"] = vault_data.get("login_count", 0) + 1
+        self._save_registry()
+        
+        return True, "Authentication successful"
+    
+    def get_vault_auth_method(self, vault_name: str) -> Optional[str]:
+        """Get the authentication method used to register a vault"""
+        vault_name_lower = vault_name.lower()
+        if vault_name_lower in self.registry["vaults"]:
+            return self.registry["vaults"][vault_name_lower].get("auth_method", "password")
+        return None
     
     def delete_vault(self, vault_name: str, password: str) -> Tuple[bool, str]:
         """

@@ -173,10 +173,15 @@ def login_vault(registry: VaultRegistry):
         input(f"    {Colors.DIM}Press Enter to continue...{Colors.RESET}")
         return
     
-    # Show registered vaults
+    # Show registered vaults with auth method
     print(f"    {Colors.DIM}Registered vaults:{Colors.RESET}")
     for vault in vaults:
-        print(f"    {Colors.DIM}  • {vault['name']}{Colors.RESET}")
+        auth_method = vault.get('auth_method', 'password')
+        if auth_method == 'key_files':
+            method_tag = f"{Colors.YELLOW}[key files]{Colors.RESET}"
+        else:
+            method_tag = f"{Colors.GREEN}[password]{Colors.RESET}"
+        print(f"    {Colors.DIM}  • {vault['name']}{Colors.RESET} {method_tag}")
     print()
     
     # Get vault name
@@ -191,9 +196,29 @@ def login_vault(registry: VaultRegistry):
         print_status("Use 'Genesis' to create a new vault", "info")
         return
     
+    # Check auth method
+    auth_method = registry.get_vault_auth_method(vault_name)
+    
+    if auth_method == 'key_files':
+        print()
+        print_status("This vault was registered with key files", "info")
+        print_status("You need to re-authenticate with your .psnx + .blend_data files", "warn")
+        print()
+        
+        use_key_files = input(f"    {Colors.CYAN}Use key files now? (y/n):{Colors.RESET} ").strip().lower()
+        
+        if use_key_files in ('y', 'yes', 'o', 'oui'):
+            # Redirect to key files authentication
+            print()
+            key_files_connect(registry)
+            return
+        else:
+            print_status("Cannot login without key files", "error")
+            return
+    
     print()
     
-    # Get password
+    # Get password (for password-based vaults)
     password = get_input("Password", hidden=True)
     
     if not password:
@@ -283,9 +308,12 @@ def genesis_vault(registry: VaultRegistry):
     launch_vault(vault_key, vault_name)
 
 
-def key_files_connect():
+def key_files_connect(registry: VaultRegistry = None):
     """Connect with key files"""
     print_section("KEY FILES AUTHENTICATION")
+    
+    if registry is None:
+        registry = VaultRegistry()
     
     # PSNX file
     psnx_path = get_input("Path to .psnx file")
@@ -340,14 +368,79 @@ def key_files_connect():
         
         print_status("Authentication successful", "ok")
         
-        # Vault name
+        # Get vault name from file
+        default_name = os.path.splitext(os.path.basename(psnx_path))[0]
+        
+        # Check if already registered
+        if registry.vault_exists(default_name):
+            print()
+            print_status(f"Vault '{default_name}' already registered!", "info")
+            print_status("Connecting with existing credentials...", "wait")
+            launch_vault(auth.vault_key, default_name)
+            return
+        
+        # Offer to register for quick connect
         print()
-        vault_name = get_input("Vault Name (optional)")
+        print(f"    {Colors.YELLOW}Register for Quick Connect?{Colors.RESET}")
+        print(f"    {Colors.DIM}This allows password-based login in the future.{Colors.RESET}")
+        print()
         
-        if not vault_name:
-            vault_name = os.path.splitext(os.path.basename(psnx_path))[0]
+        register_choice = input(f"    {Colors.CYAN}Register vault? (y/n):{Colors.RESET} ").strip().lower()
         
-        launch_vault(auth.vault_key, vault_name)
+        if register_choice in ('y', 'yes', 'o', 'oui'):
+            print()
+            
+            # Vault name
+            vault_name = get_input(f"Vault Name [{default_name}]")
+            if not vault_name:
+                vault_name = default_name
+            
+            # Check again after user input
+            if registry.vault_exists(vault_name):
+                print_status(f"Vault '{vault_name}' already exists", "error")
+                print_status("Connecting without registration...", "info")
+                launch_vault(auth.vault_key, vault_name)
+                return
+            
+            # Get password
+            print()
+            password = get_input("Create Password (min 8 chars)", hidden=True)
+            
+            if len(password) < 8:
+                print_status("Password too short (min 8 characters)", "error")
+                print_status("Connecting without registration...", "info")
+                launch_vault(auth.vault_key, vault_name)
+                return
+            
+            # Confirm password
+            password_confirm = get_input("Confirm Password", hidden=True)
+            
+            if password != password_confirm:
+                print_status("Passwords do not match", "error")
+                print_status("Connecting without registration...", "info")
+                launch_vault(auth.vault_key, vault_name)
+                return
+            
+            # Register vault
+            loading_animation("Registering vault", 0.5)
+            
+            success, msg = registry.register_vault_with_key(
+                vault_name, password, auth.vault_key
+            )
+            
+            if success:
+                print_status(msg, "ok")
+                print_status("You can now use Login with password next time", "info")
+            else:
+                print_status(msg, "error")
+            
+            launch_vault(auth.vault_key, vault_name)
+        else:
+            # Connect without registration
+            vault_name = get_input(f"Vault Name [{default_name}]")
+            if not vault_name:
+                vault_name = default_name
+            launch_vault(auth.vault_key, vault_name)
         
     except ImportError as e:
         print_status(f"Authentication module not available:", "error")
@@ -418,7 +511,7 @@ def main():
         elif choice == '3':
             clear_screen()
             print_header()
-            key_files_connect()
+            key_files_connect(registry)
             break
             
         elif choice == '4':
