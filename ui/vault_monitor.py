@@ -883,27 +883,159 @@ class VaultMonitorGUI:
         self.tokens_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         tree_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         
-        # Frame pour dépôt
-        deposit_frame = ttk.LabelFrame(scrollable_frame, text="Dépôt de Token", padding=10)
-        deposit_frame.pack(fill=tk.X, pady=10, padx=5)
+        # === WEB3 ERC20 INTEGRATION ===
+        web3_frame = tk.LabelFrame(scrollable_frame, text="⛓ WEB3 ERC20 INTEGRATION", 
+                                   bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.NEON_CYAN,
+                                   font=CypherpunkTheme.FONT_TITLE, padx=10, pady=10)
+        web3_frame.pack(fill=tk.X, pady=10, padx=5)
         
-        ttk.Label(deposit_frame, text="Adresse du contrat:").grid(row=0, column=0, sticky=tk.W, pady=5)
-        self.token_contract_entry = ttk.Entry(deposit_frame, width=50)
-        self.token_contract_entry.grid(row=0, column=1, padx=5)
+        # Wallet Address Display
+        wallet_row = tk.Frame(web3_frame, bg=CypherpunkTheme.BG_PANEL)
+        wallet_row.pack(fill=tk.X, pady=5)
         
-        ttk.Label(deposit_frame, text="Montant:").grid(row=1, column=0, sticky=tk.W, pady=5)
-        self.token_amount_entry = ttk.Entry(deposit_frame, width=20)
-        self.token_amount_entry.grid(row=1, column=1, padx=5, sticky=tk.W)
+        tk.Label(wallet_row, text="Wallet Address:", bg=CypherpunkTheme.BG_PANEL,
+                fg=CypherpunkTheme.TEXT_PRIMARY, font=CypherpunkTheme.FONT_NORMAL).pack(side=tk.LEFT)
         
-        ttk.Label(deposit_frame, text="Symbole:").grid(row=2, column=0, sticky=tk.W, pady=5)
-        self.token_symbol_entry = ttk.Entry(deposit_frame, width=10)
-        self.token_symbol_entry.grid(row=2, column=1, padx=5, sticky=tk.W)
+        self.wallet_address_var = tk.StringVar(value="Not connected")
+        tk.Label(wallet_row, textvariable=self.wallet_address_var, bg=CypherpunkTheme.BG_PANEL,
+                fg=CypherpunkTheme.NEON_GREEN, font=CypherpunkTheme.FONT_MONO).pack(side=tk.LEFT, padx=10)
         
-        ttk.Button(deposit_frame, text="Enregistrer Token", 
-                   command=self.deposit_token_action).grid(row=3, column=0, columnspan=2, pady=10)
+        copy_btn = tk.Button(wallet_row, text="📋 Copy", bg=CypherpunkTheme.BG_TERTIARY,
+                            fg=CypherpunkTheme.NEON_CYAN, command=self._copy_wallet_address)
+        copy_btn.pack(side=tk.LEFT)
+        
+        # Chain Selection
+        chain_row = tk.Frame(web3_frame, bg=CypherpunkTheme.BG_PANEL)
+        chain_row.pack(fill=tk.X, pady=5)
+        
+        tk.Label(chain_row, text="Network:", bg=CypherpunkTheme.BG_PANEL,
+                fg=CypherpunkTheme.TEXT_PRIMARY).pack(side=tk.LEFT)
+        
+        self.chain_var = tk.StringVar(value="ethereum")
+        chains = ["ethereum", "sepolia", "polygon", "arbitrum", "optimism", "base", "bsc"]
+        chain_menu = ttk.Combobox(chain_row, textvariable=self.chain_var, values=chains, width=15)
+        chain_menu.pack(side=tk.LEFT, padx=10)
+        
+        refresh_btn = tk.Button(chain_row, text="🔄 Refresh Balance", bg=CypherpunkTheme.BG_TERTIARY,
+                               fg=CypherpunkTheme.NEON_GREEN, command=self._refresh_web3_balance)
+        refresh_btn.pack(side=tk.LEFT, padx=5)
+        
+        # === RECEIVE SECTION ===
+        receive_frame = tk.LabelFrame(scrollable_frame, text="📥 RECEIVE ERC20", 
+                                      bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.NEON_GREEN,
+                                      font=CypherpunkTheme.FONT_TITLE, padx=10, pady=10)
+        receive_frame.pack(fill=tk.X, pady=10, padx=5)
+        
+        tk.Label(receive_frame, text="To receive tokens, share your wallet address above.",
+                bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.TEXT_SECONDARY).pack(anchor=tk.W)
+        
+        tk.Label(receive_frame, text="Track incoming token:", bg=CypherpunkTheme.BG_SECONDARY,
+                fg=CypherpunkTheme.TEXT_PRIMARY).pack(anchor=tk.W, pady=(10, 5))
+        
+        track_row = tk.Frame(receive_frame, bg=CypherpunkTheme.BG_SECONDARY)
+        track_row.pack(fill=tk.X, pady=5)
+        
+        tk.Label(track_row, text="Contract:", bg=CypherpunkTheme.BG_SECONDARY,
+                fg=CypherpunkTheme.TEXT_PRIMARY).pack(side=tk.LEFT)
+        self.track_contract_entry = tk.Entry(track_row, width=45, bg=CypherpunkTheme.BG_DARK,
+                                             fg=CypherpunkTheme.NEON_GREEN)
+        self.track_contract_entry.pack(side=tk.LEFT, padx=5)
+        
+        track_btn = tk.Button(track_row, text="Track Token", bg=CypherpunkTheme.BG_TERTIARY,
+                             fg=CypherpunkTheme.NEON_CYAN, command=self._track_erc20_token)
+        track_btn.pack(side=tk.LEFT, padx=5)
+        
+        # === SEND SECTION ===
+        send_frame = tk.LabelFrame(scrollable_frame, text="📤 SEND ERC20", 
+                                   bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.NEON_PINK,
+                                   font=CypherpunkTheme.FONT_TITLE, padx=10, pady=10)
+        send_frame.pack(fill=tk.X, pady=10, padx=5)
+        
+        # Token Contract
+        send_row1 = tk.Frame(send_frame, bg=CypherpunkTheme.BG_SECONDARY)
+        send_row1.pack(fill=tk.X, pady=5)
+        
+        tk.Label(send_row1, text="Token Contract:", bg=CypherpunkTheme.BG_SECONDARY,
+                fg=CypherpunkTheme.TEXT_PRIMARY, width=15, anchor='w').pack(side=tk.LEFT)
+        self.send_token_contract = tk.Entry(send_row1, width=45, bg=CypherpunkTheme.BG_DARK,
+                                            fg=CypherpunkTheme.NEON_GREEN)
+        self.send_token_contract.pack(side=tk.LEFT, padx=5)
+        
+        # Recipient
+        send_row2 = tk.Frame(send_frame, bg=CypherpunkTheme.BG_SECONDARY)
+        send_row2.pack(fill=tk.X, pady=5)
+        
+        tk.Label(send_row2, text="Recipient:", bg=CypherpunkTheme.BG_SECONDARY,
+                fg=CypherpunkTheme.TEXT_PRIMARY, width=15, anchor='w').pack(side=tk.LEFT)
+        self.send_recipient = tk.Entry(send_row2, width=45, bg=CypherpunkTheme.BG_DARK,
+                                       fg=CypherpunkTheme.NEON_GREEN)
+        self.send_recipient.pack(side=tk.LEFT, padx=5)
+        
+        # Amount
+        send_row3 = tk.Frame(send_frame, bg=CypherpunkTheme.BG_SECONDARY)
+        send_row3.pack(fill=tk.X, pady=5)
+        
+        tk.Label(send_row3, text="Amount:", bg=CypherpunkTheme.BG_SECONDARY,
+                fg=CypherpunkTheme.TEXT_PRIMARY, width=15, anchor='w').pack(side=tk.LEFT)
+        self.send_amount = tk.Entry(send_row3, width=20, bg=CypherpunkTheme.BG_DARK,
+                                    fg=CypherpunkTheme.NEON_GREEN)
+        self.send_amount.pack(side=tk.LEFT, padx=5)
+        
+        self.send_token_symbol = tk.Label(send_row3, text="", bg=CypherpunkTheme.BG_SECONDARY,
+                                          fg=CypherpunkTheme.NEON_CYAN)
+        self.send_token_symbol.pack(side=tk.LEFT, padx=5)
+        
+        # Gas Settings
+        send_row4 = tk.Frame(send_frame, bg=CypherpunkTheme.BG_SECONDARY)
+        send_row4.pack(fill=tk.X, pady=5)
+        
+        tk.Label(send_row4, text="Max Gas (Gwei):", bg=CypherpunkTheme.BG_SECONDARY,
+                fg=CypherpunkTheme.TEXT_PRIMARY, width=15, anchor='w').pack(side=tk.LEFT)
+        self.send_gas = tk.Entry(send_row4, width=10, bg=CypherpunkTheme.BG_DARK,
+                                 fg=CypherpunkTheme.NEON_GREEN)
+        self.send_gas.insert(0, "50")
+        self.send_gas.pack(side=tk.LEFT, padx=5)
+        
+        # Send Button
+        send_btn_row = tk.Frame(send_frame, bg=CypherpunkTheme.BG_SECONDARY)
+        send_btn_row.pack(fill=tk.X, pady=10)
+        
+        check_btn = tk.Button(send_btn_row, text="🔍 Check Token Info", bg=CypherpunkTheme.BG_TERTIARY,
+                             fg=CypherpunkTheme.NEON_CYAN, command=self._check_token_info)
+        check_btn.pack(side=tk.LEFT, padx=5)
+        
+        send_btn = tk.Button(send_btn_row, text="📤 SEND TOKENS", bg=CypherpunkTheme.BG_PANEL,
+                            fg=CypherpunkTheme.NEON_PINK, font=CypherpunkTheme.FONT_TITLE,
+                            command=self._send_erc20_tokens)
+        send_btn.pack(side=tk.LEFT, padx=10)
+        
+        # Warning
+        tk.Label(send_frame, text="⚠ Transactions are irreversible. Double-check addresses!",
+                bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.TEXT_WARNING,
+                font=CypherpunkTheme.FONT_SMALL).pack(anchor=tk.W, pady=5)
+        
+        # === TRANSACTION HISTORY ===
+        history_frame = tk.LabelFrame(scrollable_frame, text="📜 TRANSACTION HISTORY", 
+                                      bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.NEON_CYAN,
+                                      font=CypherpunkTheme.FONT_TITLE, padx=10, pady=10)
+        history_frame.pack(fill=tk.X, pady=10, padx=5)
+        
+        tx_columns = ('Time', 'Type', 'Token', 'Amount', 'To/From', 'TxHash', 'Status')
+        self.tx_history_tree = ttk.Treeview(history_frame, columns=tx_columns, show='headings', height=5)
+        
+        for col in tx_columns:
+            self.tx_history_tree.heading(col, text=col)
+            width = 150 if col in ['To/From', 'TxHash'] else 80
+            self.tx_history_tree.column(col, width=width)
+        
+        tx_scrollbar = ttk.Scrollbar(history_frame, orient=tk.VERTICAL, command=self.tx_history_tree.yview)
+        self.tx_history_tree.configure(yscrollcommand=tx_scrollbar.set)
+        
+        self.tx_history_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        tx_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         
         # Spacer for future content
-        spacer = ttk.Frame(scrollable_frame, height=200)
+        spacer = ttk.Frame(scrollable_frame, height=100)
         spacer.pack(fill=tk.X, pady=20, padx=5)
         
         return frame
@@ -6047,6 +6179,226 @@ Pour exécuter ce transfert:
         
         self._save_vault_state()
         self._log_activity(f"Token enregistré: {amount} {symbol}")
+    
+    # ========================================================================
+    # WEB3 ERC20 INTEGRATION
+    # ========================================================================
+    
+    def _get_evm_wallet(self):
+        """Get or create EVM wallet from vault key"""
+        try:
+            from core.evm_wallet import VaultHDWallet, EVMChain, WEB3_AVAILABLE
+            
+            if not WEB3_AVAILABLE:
+                messagebox.showerror("Error", "web3 not installed. Run: pip install web3 eth-account")
+                return None
+            
+            if not hasattr(self, '_evm_wallet') or self._evm_wallet is None:
+                # Derive wallet from vault key
+                vault_key = hashlib.sha256(self.vault_name.encode()).digest()
+                self._evm_wallet = VaultHDWallet(vault_key, self.vault_name)
+                self.wallet_address_var.set(self._evm_wallet.address)
+            
+            return self._evm_wallet
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to initialize wallet: {e}")
+            return None
+    
+    def _get_chain_enum(self, chain_name: str):
+        """Convert chain name to EVMChain enum"""
+        from core.evm_wallet import EVMChain
+        
+        chain_map = {
+            "ethereum": EVMChain.ETHEREUM_MAINNET,
+            "sepolia": EVMChain.ETHEREUM_SEPOLIA,
+            "polygon": EVMChain.POLYGON_MAINNET,
+            "arbitrum": EVMChain.ARBITRUM_ONE,
+            "optimism": EVMChain.OPTIMISM,
+            "base": EVMChain.BASE_MAINNET,
+            "bsc": EVMChain.BSC_MAINNET,
+        }
+        return chain_map.get(chain_name, EVMChain.ETHEREUM_MAINNET)
+    
+    def _copy_wallet_address(self):
+        """Copy wallet address to clipboard"""
+        wallet = self._get_evm_wallet()
+        if wallet:
+            self.root.clipboard_clear()
+            self.root.clipboard_append(wallet.address)
+            self._log_activity(f"Wallet address copied: {wallet.address[:10]}...")
+            messagebox.showinfo("Copied", "Wallet address copied to clipboard!")
+    
+    def _refresh_web3_balance(self):
+        """Refresh balance from blockchain"""
+        wallet = self._get_evm_wallet()
+        if not wallet:
+            return
+        
+        try:
+            chain = self._get_chain_enum(self.chain_var.get())
+            
+            # Get native balance
+            native_info = wallet.get_native_balance(chain)
+            balance_eth = float(native_info.formatted_balance())
+            self.total_balance_var.set(f"{balance_eth:.6f} {native_info.symbol}")
+            
+            self._log_activity(f"Balance refreshed on {chain._name}: {balance_eth:.6f} {native_info.symbol}")
+            
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to fetch balance: {e}")
+    
+    def _track_erc20_token(self):
+        """Track an ERC20 token balance"""
+        wallet = self._get_evm_wallet()
+        if not wallet:
+            return
+        
+        contract = self.track_contract_entry.get().strip()
+        if not contract or len(contract) != 42:
+            messagebox.showerror("Error", "Invalid contract address (must be 42 chars)")
+            return
+        
+        try:
+            chain = self._get_chain_enum(self.chain_var.get())
+            token_info = wallet.get_erc20_balance(chain, contract)
+            
+            # Add to tokens tree
+            self.tokens_tree.insert('', tk.END, values=(
+                token_info.symbol,
+                token_info.name,
+                token_info.formatted_balance(),
+                contract[:20] + '...',
+                chain._name
+            ))
+            
+            # Save to vault
+            token_data = {
+                'id': self._generate_id(),
+                'contract': contract,
+                'symbol': token_info.symbol,
+                'name': token_info.name,
+                'balance': token_info.formatted_balance(),
+                'decimals': token_info.decimals,
+                'chain': chain._name,
+                'tracked_at': datetime.now().isoformat()
+            }
+            self.vault_data['tokens'].append(token_data)
+            self._save_vault_state()
+            
+            self._log_activity(f"Tracking {token_info.symbol}: {token_info.formatted_balance()}")
+            self.track_contract_entry.delete(0, tk.END)
+            
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to track token: {e}")
+    
+    def _check_token_info(self):
+        """Check token info before sending"""
+        wallet = self._get_evm_wallet()
+        if not wallet:
+            return
+        
+        contract = self.send_token_contract.get().strip()
+        if not contract or len(contract) != 42:
+            messagebox.showerror("Error", "Invalid contract address")
+            return
+        
+        try:
+            chain = self._get_chain_enum(self.chain_var.get())
+            token_info = wallet.get_erc20_balance(chain, contract)
+            
+            self.send_token_symbol.config(text=f"{token_info.symbol} (Balance: {token_info.formatted_balance()})")
+            self._log_activity(f"Token info: {token_info.symbol} - {token_info.name}")
+            
+        except Exception as e:
+            messagebox.showerror("Error", f"Failed to get token info: {e}")
+    
+    def _send_erc20_tokens(self):
+        """Send ERC20 tokens"""
+        wallet = self._get_evm_wallet()
+        if not wallet:
+            return
+        
+        contract = self.send_token_contract.get().strip()
+        recipient = self.send_recipient.get().strip()
+        amount_str = self.send_amount.get().strip()
+        gas_gwei = self.send_gas.get().strip()
+        
+        # Validation
+        if not contract or len(contract) != 42:
+            messagebox.showerror("Error", "Invalid token contract address")
+            return
+        if not recipient or len(recipient) != 42:
+            messagebox.showerror("Error", "Invalid recipient address")
+            return
+        if not amount_str:
+            messagebox.showerror("Error", "Amount required")
+            return
+        
+        try:
+            amount = float(amount_str)
+            max_fee = float(gas_gwei) if gas_gwei else 50.0
+        except ValueError:
+            messagebox.showerror("Error", "Invalid amount or gas value")
+            return
+        
+        # Confirmation
+        chain = self._get_chain_enum(self.chain_var.get())
+        
+        try:
+            token_info = wallet.get_erc20_balance(chain, contract)
+        except:
+            token_info = None
+        
+        symbol = token_info.symbol if token_info else "TOKEN"
+        
+        confirm = messagebox.askyesno(
+            "Confirm Transaction",
+            f"Send {amount} {symbol} to:\n{recipient}\n\nNetwork: {chain._name}\nMax Gas: {max_fee} Gwei\n\nProceed?"
+        )
+        
+        if not confirm:
+            return
+        
+        try:
+            # Convert amount to wei (with decimals)
+            decimals = token_info.decimals if token_info else 18
+            amount_wei = int(amount * (10 ** decimals))
+            
+            # Send transaction
+            result = wallet.send_erc20(chain, contract, recipient, amount_wei, max_fee_gwei=max_fee)
+            
+            if result.success:
+                # Add to history
+                self.tx_history_tree.insert('', 0, values=(
+                    datetime.now().strftime("%H:%M:%S"),
+                    "SEND",
+                    symbol,
+                    amount_str,
+                    recipient[:15] + '...',
+                    result.tx_hash[:15] + '...',
+                    "✓ Success"
+                ))
+                
+                self._log_activity(f"Sent {amount} {symbol} to {recipient[:10]}... TX: {result.tx_hash[:10]}...")
+                messagebox.showinfo("Success", f"Transaction successful!\n\nTX Hash: {result.tx_hash}")
+                
+                # Clear inputs
+                self.send_recipient.delete(0, tk.END)
+                self.send_amount.delete(0, tk.END)
+            else:
+                self.tx_history_tree.insert('', 0, values=(
+                    datetime.now().strftime("%H:%M:%S"),
+                    "SEND",
+                    symbol,
+                    amount_str,
+                    recipient[:15] + '...',
+                    "-",
+                    f"✗ {result.error[:20]}"
+                ))
+                messagebox.showerror("Error", f"Transaction failed: {result.error}")
+                
+        except Exception as e:
+            messagebox.showerror("Error", f"Transaction error: {e}")
     
     # ========================================================================
     # ACTIONS DOCUMENT
