@@ -46,9 +46,11 @@ class CypherpunkTheme:
     NEON_GREEN = "#00ff88"
     NEON_CYAN = "#00ffff"
     NEON_PURPLE = "#bf00ff"
+    NEON_MAGENTA = "#ff00ff"
     NEON_PINK = "#ff0080"
     NEON_ORANGE = "#ff6600"
     NEON_BLUE = "#0066ff"
+    NEON_YELLOW = "#ffff00"
     
     # Couleurs de texte
     TEXT_PRIMARY = "#e0e0e0"
