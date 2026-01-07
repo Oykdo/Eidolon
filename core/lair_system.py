@@ -44,7 +44,7 @@ if sys.platform == 'win32':
 
 MAX_LAIR_DEPTH = 100
 BOSS_INTERVAL = 10
-MAX_LAIRS_PER_VAULT = 3
+MAX_LAIRS_PER_VAULT = 18
 LAIRS_PER_VAULT = 3  # Fixed number of lairs per vault
 
 

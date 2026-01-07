@@ -1,7 +1,7 @@
 {
   "chest_id": "02bfc92c93939e79",
   "chest_type": "armory",
-  "vault_number": 3,
+  "vault_number": 1,
   "pioneer_tier": "genesis",
   "items": [
     "327f931d5839ce35",
@@ -13,5 +13,7 @@
   ],
   "is_opened": true,
   "created_at": "2026-01-07T06:09:35.277028",
-  "opened_at": "2026-01-07T06:16:26.800814"
+  "opened_at": "2026-01-07T06:16:26.800814",
+  "original_vault": 3,
+  "consolidated_at": "2026-01-07T09:14:22.613471"
 }
