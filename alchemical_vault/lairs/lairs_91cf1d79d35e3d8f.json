@@ -1,0 +1,385 @@
+{
+  "vault_id": "91cf1d79d35e3d8f25af3c013d1654c554200d9473f40e4577740dd74d59b0cf",
+  "vault_number": 2,
+  "lairs": {
+    "96cf1594a8022647": {
+      "lair_id": "96cf1594a8022647",
+      "name": "Shadowed Vault",
+      "lair_type": "cryptic_sanctum",
+      "rarity": "primordial",
+      "vault_id": "91cf1d79d35e3d8f25af3c013d1654c554200d9473f40e4577740dd74d59b0cf",
+      "vault_number": 2,
+      "origin_genesis_block": "54d5a16aba7abae109a9e393bc82e03653773a1d2d02d2641d723e2d848c96f6",
+      "depth": 100,
+      "current_depth": 0,
+      "power_level": 100000,
+      "discovery_rate": 1.0353782917537626,
+      "corruption_level": 10.96631913956549,
+      "affinity": "puzzle",
+      "affinity_bonus": {
+        "puzzle": 0.6328511627543956,
+        "chaos": 0.03145731446866753,
+        "dimensional": 0.06677004465217239,
+        "time": 0.14869335486958427,
+        "ancient": 0.05237414811382729,
+        "celestial": 0.06058435312499495
+      },
+      "status": "discovered",
+      "sealed_until": null,
+      "levels": {},
+      "cleared_levels": 0,
+      "total_runs": 0,
+      "best_run_depth": 0,
+      "total_loot_value": 0,
+      "legendary_drops": 0,
+      "boss_kills": 0,
+      "created_at": "2026-01-07T08:20:35.113818",
+      "last_explored": null,
+      "special_modifiers": [
+        "Dimensional Bleed",
+        "Time Dilation"
+      ],
+      "boss_guardian": {
+        "guardian_id": "boss_cryptic_sanctum_100",
+        "name": "The Omniscient Cipher",
+        "level": 100,
+        "health": 200000,
+        "attack": 10000,
+        "defense": 4000,
+        "abilities": [
+          "Ultimate Attack",
+          "Phase Shift",
+          "Summon Minions",
+          "Enrage",
+          "Reality Warp",
+          "Time Stop",
+          "Soul Drain"
+        ],
+        "is_boss": true,
+        "element": "cryptic",
+        "loot_table": [
+          "legendary_artifact",
+          "mythic_essence",
+          "boss_trophy"
+        ]
+      }
+    },
+    "b92ee92a9d9d8936": {
+      "lair_id": "b92ee92a9d9d8936",
+      "name": "Forgotten Library",
+      "lair_type": "cryptic_sanctum",
+      "rarity": "mythic",
+      "vault_id": "91cf1d79d35e3d8f25af3c013d1654c554200d9473f40e4577740dd74d59b0cf",
+      "vault_number": 2,
+      "origin_genesis_block": "1d4339eaa0b3d8b7558664ff4ed9a75c5377cc625c1499d6f1c9c2f27f004abd",
+      "depth": 90,
+      "current_depth": 0,
+      "power_level": 45000,
+      "discovery_rate": 1.245467593774883,
+      "corruption_level": 10.316647929286887,
+      "affinity": "puzzle",
+      "affinity_bonus": {
+        "puzzle": 0.7066541729525915,
+        "chaos": 0.1932406157223697,
+        "dimensional": 0.10352333006613113,
+        "time": 0.08794674775001908,
+        "ancient": 0.045123947619052585,
+        "celestial": 0.08901953654783756
+      },
+      "status": "discovered",
+      "sealed_until": null,
+      "levels": {},
+      "cleared_levels": 0,
+      "total_runs": 0,
+      "best_run_depth": 0,
+      "total_loot_value": 0,
+      "legendary_drops": 0,
+      "boss_kills": 0,
+      "created_at": "2026-01-07T08:20:35.116588",
+      "last_explored": null,
+      "special_modifiers": [
+        "Time Dilation",
+        "Void Touched",
+        "Primordial Essence"
+      ],
+      "boss_guardian": {
+        "guardian_id": "boss_cryptic_sanctum_90",
+        "name": "The Omniscient Cipher",
+        "level": 90,
+        "health": 95000,
+        "attack": 4750,
+        "defense": 1900,
+        "abilities": [
+          "Ultimate Attack",
+          "Phase Shift",
+          "Summon Minions",
+          "Enrage",
+          "Reality Warp",
+          "Time Stop",
+          "Soul Drain"
+        ],
+        "is_boss": true,
+        "element": "cryptic",
+        "loot_table": [
+          "legendary_artifact",
+          "mythic_essence",
+          "boss_trophy"
+        ]
+      }
+    },
+    "7df83f926454f373": {
+      "lair_id": "7df83f926454f373",
+      "name": "Ancient Chasm",
+      "lair_type": "primordial_abyss",
+      "rarity": "primordial",
+      "vault_id": "91cf1d79d35e3d8f25af3c013d1654c554200d9473f40e4577740dd74d59b0cf",
+      "vault_number": 2,
+      "origin_genesis_block": "0e90d9567ae77bc4547d6ea95cfea79e03a1e8985d7935c16902c0762942fe83",
+      "depth": 100,
+      "current_depth": 0,
+      "power_level": 100000,
+      "discovery_rate": 1.3722437659149263,
+      "corruption_level": 14.082100481764462,
+      "affinity": "ancient",
+      "affinity_bonus": {
+        "puzzle": 0.1487520211137608,
+        "chaos": 0.14715969131661563,
+        "dimensional": 0.14176052126184133,
+        "time": 0.07874398747400567,
+        "ancient": 0.6027308710863492,
+        "celestial": 0.18919171438980464
+      },
+      "status": "discovered",
+      "sealed_until": null,
+      "levels": {},
+      "cleared_levels": 0,
+      "total_runs": 0,
+      "best_run_depth": 0,
+      "total_loot_value": 0,
+      "legendary_drops": 0,
+      "boss_kills": 0,
+      "created_at": "2026-01-07T08:20:35.118700",
+      "last_explored": null,
+      "special_modifiers": [
+        "Primordial Essence",
+        "Dimensional Bleed"
+      ],
+      "boss_guardian": {
+        "guardian_id": "boss_primordial_abyss_100",
+        "name": "The First Darkness",
+        "level": 100,
+        "health": 200000,
+        "attack": 10000,
+        "defense": 4000,
+        "abilities": [
+          "Ultimate Attack",
+          "Phase Shift",
+          "Summon Minions",
+          "Enrage",
+          "Reality Warp",
+          "Time Stop",
+          "Soul Drain"
+        ],
+        "is_boss": true,
+        "element": "primordial",
+        "loot_table": [
+          "legendary_artifact",
+          "mythic_essence",
+          "boss_trophy"
+        ]
+      }
+    },
+    "97ca396c889020a9": {
+      "lair_id": "97ca396c889020a9",
+      "name": "Eternal Spire",
+      "lair_type": "ethereal_citadel",
+      "rarity": "mythic",
+      "vault_id": "91cf1d79d35e3d8f25af3c013d1654c554200d9473f40e4577740dd74d59b0cf",
+      "vault_number": 2,
+      "origin_genesis_block": "6af583d22ea6ad06e673e5d025e87efbc6ed9eef455732eff36f5bf3cfc22952",
+      "depth": 90,
+      "current_depth": 0,
+      "power_level": 45000,
+      "discovery_rate": 1.38764287945239,
+      "corruption_level": 15.688668999675972,
+      "affinity": "celestial",
+      "affinity_bonus": {
+        "puzzle": 0.03344781633161372,
+        "chaos": 0.016709229171606353,
+        "dimensional": 0.1144812047083309,
+        "time": 0.0027822624904952306,
+        "ancient": 0.07242459853758319,
+        "celestial": 0.7503208534095067
+      },
+      "status": "discovered",
+      "sealed_until": null,
+      "levels": {},
+      "cleared_levels": 0,
+      "total_runs": 0,
+      "best_run_depth": 0,
+      "total_loot_value": 0,
+      "legendary_drops": 0,
+      "boss_kills": 0,
+      "created_at": "2026-01-07T08:20:35.120721",
+      "last_explored": null,
+      "special_modifiers": [
+        "Temporal Lock",
+        "Void Touched"
+      ],
+      "boss_guardian": {
+        "guardian_id": "boss_ethereal_citadel_90",
+        "name": "Celestial Archon",
+        "level": 90,
+        "health": 95000,
+        "attack": 4750,
+        "defense": 1900,
+        "abilities": [
+          "Ultimate Attack",
+          "Phase Shift",
+          "Summon Minions",
+          "Enrage",
+          "Reality Warp",
+          "Time Stop",
+          "Soul Drain"
+        ],
+        "is_boss": true,
+        "element": "ethereal",
+        "loot_table": [
+          "legendary_artifact",
+          "mythic_essence",
+          "boss_trophy"
+        ]
+      }
+    },
+    "f8d5bba5e2abea1d": {
+      "lair_id": "f8d5bba5e2abea1d",
+      "name": "Twisted Library",
+      "lair_type": "cryptic_sanctum",
+      "rarity": "primordial",
+      "vault_id": "91cf1d79d35e3d8f25af3c013d1654c554200d9473f40e4577740dd74d59b0cf",
+      "vault_number": 2,
+      "origin_genesis_block": "065d8a2f99525da59607706c13c54825f068ae5aeb814dbc1d8bc107d8b2461c",
+      "depth": 100,
+      "current_depth": 0,
+      "power_level": 100000,
+      "discovery_rate": 1.217891028718041,
+      "corruption_level": 13.085091222582895,
+      "affinity": "puzzle",
+      "affinity_bonus": {
+        "puzzle": 0.7018223811415129,
+        "chaos": 0.11210154318814239,
+        "dimensional": 0.03853718221119474,
+        "time": 0.04959446939155202,
+        "ancient": 0.015779847752200368,
+        "celestial": 0.15022453803113875
+      },
+      "status": "discovered",
+      "sealed_until": null,
+      "levels": {},
+      "cleared_levels": 0,
+      "total_runs": 0,
+      "best_run_depth": 0,
+      "total_loot_value": 0,
+      "legendary_drops": 0,
+      "boss_kills": 0,
+      "created_at": "2026-01-07T08:20:35.124057",
+      "last_explored": null,
+      "special_modifiers": [
+        "Unstable Reality",
+        "Corrupted Core",
+        "Ancient Blessing"
+      ],
+      "boss_guardian": {
+        "guardian_id": "boss_cryptic_sanctum_100",
+        "name": "The Omniscient Cipher",
+        "level": 100,
+        "health": 200000,
+        "attack": 10000,
+        "defense": 4000,
+        "abilities": [
+          "Ultimate Attack",
+          "Phase Shift",
+          "Summon Minions",
+          "Enrage",
+          "Reality Warp",
+          "Time Stop",
+          "Soul Drain"
+        ],
+        "is_boss": true,
+        "element": "cryptic",
+        "loot_table": [
+          "legendary_artifact",
+          "mythic_essence",
+          "boss_trophy"
+        ]
+      }
+    },
+    "d4e2559105930f22": {
+      "lair_id": "d4e2559105930f22",
+      "name": "Eternal Rift",
+      "lair_type": "quantum_void",
+      "rarity": "mythic",
+      "vault_id": "91cf1d79d35e3d8f25af3c013d1654c554200d9473f40e4577740dd74d59b0cf",
+      "vault_number": 2,
+      "origin_genesis_block": "c5df80e328c09e2c1de07650001843783273b17ef37f3d63bcc8fe07af7ce6ee",
+      "depth": 90,
+      "current_depth": 0,
+      "power_level": 45000,
+      "discovery_rate": 1.0574952641304094,
+      "corruption_level": 18.146664843962835,
+      "affinity": "chaos",
+      "affinity_bonus": {
+        "puzzle": 0.1386856674862493,
+        "chaos": 0.7717053277751922,
+        "dimensional": 0.06281247849707142,
+        "time": 0.1654770513835722,
+        "ancient": 0.014388648613537034,
+        "celestial": 0.09259356516068502
+      },
+      "status": "discovered",
+      "sealed_until": null,
+      "levels": {},
+      "cleared_levels": 0,
+      "total_runs": 0,
+      "best_run_depth": 0,
+      "total_loot_value": 0,
+      "legendary_drops": 0,
+      "boss_kills": 0,
+      "created_at": "2026-01-07T08:20:35.128354",
+      "last_explored": null,
+      "special_modifiers": [
+        "Corrupted Core",
+        "Temporal Lock",
+        "Dimensional Bleed"
+      ],
+      "boss_guardian": {
+        "guardian_id": "boss_quantum_void_90",
+        "name": "Harbinger of Entropy",
+        "level": 90,
+        "health": 95000,
+        "attack": 4750,
+        "defense": 1900,
+        "abilities": [
+          "Ultimate Attack",
+          "Phase Shift",
+          "Summon Minions",
+          "Enrage",
+          "Reality Warp",
+          "Time Stop",
+          "Soul Drain"
+        ],
+        "is_boss": true,
+        "element": "quantum",
+        "loot_table": [
+          "legendary_artifact",
+          "mythic_essence",
+          "boss_trophy"
+        ]
+      }
+    }
+  },
+  "active_lair_id": "96cf1594a8022647",
+  "total_runs": 0,
+  "best_depth_ever": 0,
+  "updated_at": "2026-01-07T08:20:35.129352"
+}
