@@ -1,0 +1,87 @@
+{
+  "item_id": "a1962493c0271d0f",
+  "name": "Ancient Voidloop of the Void",
+  "equipment_class": "voidloop",
+  "slot": "ring_2",
+  "rarity": "mythic",
+  "item_level": 300,
+  "base_stats": {
+    "evasion": 0.8,
+    "movement_speed": 0.8
+  },
+  "mods": [
+    {
+      "mod_id": "deadly_precision",
+      "name": "Greater Deadly Precision",
+      "stat": "crit_chance",
+      "value": 35.67,
+      "tier": "greater",
+      "is_percent": true
+    },
+    {
+      "mod_id": "stalwart_guard",
+      "name": "Stalwart Guard",
+      "stat": "block_chance",
+      "value": 8.93,
+      "tier": "standard",
+      "is_percent": true
+    },
+    {
+      "mod_id": "arcane_ward",
+      "name": "Greater Arcane Ward",
+      "stat": "magic_resist",
+      "value": 69.53,
+      "tier": "greater",
+      "is_percent": false
+    },
+    {
+      "mod_id": "vampiric_touch",
+      "name": "Greater Vampiric Touch",
+      "stat": "life_steal",
+      "value": 31.57,
+      "tier": "greater",
+      "is_percent": true
+    },
+    {
+      "mod_id": "armor_crusher",
+      "name": "Lesser Armor Crusher",
+      "stat": "armor_pen",
+      "value": 24.07,
+      "tier": "lesser",
+      "is_percent": true
+    },
+    {
+      "mod_id": "void_attunement",
+      "name": "Void Attunement",
+      "stat": "void_resist",
+      "value": 12.76,
+      "tier": "standard",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 0,
+  "defense": 0,
+  "health": 0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0.8,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0.8,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 6,
+  "current_vault": 6,
+  "pioneer_tier": "genesis",
+  "chest_origin": "d3e50f77835c7b05",
+  "created_at": "2026-01-07T06:53:43.906373",
+  "is_equipped": false
+}

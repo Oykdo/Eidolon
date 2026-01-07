@@ -1,0 +1,56 @@
+{
+  "item_id": "d8225cd32b1a4050",
+  "name": "Nexusweave Pants",
+  "equipment_class": "nexusweave_pants",
+  "slot": "legs",
+  "rarity": "enhanced",
+  "item_level": 300,
+  "base_stats": {
+    "defense": 5.6,
+    "health": 224.0,
+    "evasion": 0.22399999999999998
+  },
+  "mods": [
+    {
+      "mod_id": "fire_attunement",
+      "name": "Lesser Fire Attunement",
+      "stat": "fire_resist",
+      "value": 57.52,
+      "tier": "lesser",
+      "is_percent": true
+    },
+    {
+      "mod_id": "brutal_force",
+      "name": "Brutal Force",
+      "stat": "phys_damage",
+      "value": 59.98,
+      "tier": "standard",
+      "is_percent": false
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 0,
+  "defense": 56.0,
+  "health": 224.0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0.22399999999999998,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 2,
+  "current_vault": 2,
+  "pioneer_tier": "genesis",
+  "chest_origin": "38c38566fe15130b",
+  "created_at": "2026-01-07T06:53:43.731274",
+  "is_equipped": false
+}

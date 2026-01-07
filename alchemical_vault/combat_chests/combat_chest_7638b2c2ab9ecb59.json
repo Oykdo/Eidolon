@@ -1,0 +1,20 @@
+{
+  "chest_id": "7638b2c2ab9ecb59",
+  "chest_type": "sanctum",
+  "vault_number": 1,
+  "pioneer_tier": "Genesis Pioneer",
+  "loot_multiplier": 3.0,
+  "created_at": "2026-01-07T06:52:33.716786",
+  "is_opened": true,
+  "items": [
+    "5065f58591f3e220",
+    "a74742440d81bd8e",
+    "a6a38f59083ac5af",
+    "06503ec81d46782c",
+    "533f86a60a33f760",
+    "e74805205dc1a7b9",
+    "ec48cda5e495d71b",
+    "c06cab7fd1431cbf"
+  ],
+  "opened_at": "2026-01-07T06:53:43.838973"
+}

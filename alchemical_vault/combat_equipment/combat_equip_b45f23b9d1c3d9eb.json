@@ -1,0 +1,88 @@
+{
+  "item_id": "b45f23b9d1c3d9eb",
+  "name": "Divine Nexusweave Vest of Devastation",
+  "equipment_class": "nexusweave_vest",
+  "slot": "chest",
+  "rarity": "ascendant",
+  "item_level": 300,
+  "base_stats": {
+    "defense": 26.4,
+    "health": 1100.0,
+    "evasion": 1.1
+  },
+  "mods": [
+    {
+      "mod_id": "void_attunement",
+      "name": "Greater Void Attunement",
+      "stat": "void_resist",
+      "value": 20.19,
+      "tier": "greater",
+      "is_percent": true
+    },
+    {
+      "mod_id": "vital_regeneration",
+      "name": "Superior Vital Regeneration",
+      "stat": "health_regen",
+      "value": 9.0,
+      "tier": "superior",
+      "is_percent": true
+    },
+    {
+      "mod_id": "swift_strikes",
+      "name": "Minor Swift Strikes",
+      "stat": "attack_speed",
+      "value": 14.8,
+      "tier": "minor",
+      "is_percent": true
+    },
+    {
+      "mod_id": "iron_skin",
+      "name": "Greater Iron Skin",
+      "stat": "defense",
+      "value": 91.49,
+      "tier": "greater",
+      "is_percent": false
+    },
+    {
+      "mod_id": "mana_well",
+      "name": "Greater Mana Well",
+      "stat": "mana",
+      "value": 351.86,
+      "tier": "greater",
+      "is_percent": false
+    },
+    {
+      "mod_id": "chrono_flux",
+      "name": "Lesser Chrono Flux",
+      "stat": "cooldown_reduction",
+      "value": 16.5,
+      "tier": "lesser",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 0,
+  "defense": 264.0,
+  "health": 1100.0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 1.1,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 2,
+  "current_vault": 2,
+  "pioneer_tier": "genesis",
+  "chest_origin": "38c38566fe15130b",
+  "created_at": "2026-01-07T06:53:43.721009",
+  "is_equipped": false
+}

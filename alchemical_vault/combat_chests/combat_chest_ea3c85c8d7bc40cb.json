@@ -1,0 +1,20 @@
+{
+  "chest_id": "ea3c85c8d7bc40cb",
+  "chest_type": "reliquary",
+  "vault_number": 4,
+  "pioneer_tier": "Genesis Pioneer",
+  "loot_multiplier": 3.0,
+  "created_at": "2026-01-07T06:52:33.847958",
+  "is_opened": true,
+  "items": [
+    "e8a568ca28c1fc37",
+    "2237ca6584d5a1f2",
+    "d5b81e3a22720dd8",
+    "5691e77518483d5a",
+    "ee64a10f1906fcf0",
+    "582ca3da5f1e1eae",
+    "b34205435f090aba",
+    "96d3a7f86717a41d"
+  ],
+  "opened_at": "2026-01-07T06:53:43.974313"
+}

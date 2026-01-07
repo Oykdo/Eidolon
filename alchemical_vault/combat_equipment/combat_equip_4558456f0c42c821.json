@@ -1,0 +1,80 @@
+{
+  "item_id": "4558456f0c42c821",
+  "name": "Valiant Nexusweave Vest of the Ancients",
+  "equipment_class": "nexusweave_vest",
+  "slot": "chest",
+  "rarity": "legendary",
+  "item_level": 300,
+  "base_stats": {
+    "defense": 14.399999999999999,
+    "health": 600.0,
+    "evasion": 0.6000000000000001
+  },
+  "mods": [
+    {
+      "mod_id": "armor_crusher",
+      "name": "Greater Armor Crusher",
+      "stat": "armor_pen",
+      "value": 22.68,
+      "tier": "greater",
+      "is_percent": true
+    },
+    {
+      "mod_id": "soul_siphon",
+      "name": "Greater Soul Siphon",
+      "stat": "mana_steal",
+      "value": 20.62,
+      "tier": "greater",
+      "is_percent": true
+    },
+    {
+      "mod_id": "savage_blows",
+      "name": "Greater Savage Blows",
+      "stat": "crit_damage",
+      "value": 172.55,
+      "tier": "greater",
+      "is_percent": true
+    },
+    {
+      "mod_id": "void_attunement",
+      "name": "Lesser Void Attunement",
+      "stat": "void_resist",
+      "value": 32.36,
+      "tier": "lesser",
+      "is_percent": true
+    },
+    {
+      "mod_id": "windrunner",
+      "name": "Windrunner",
+      "stat": "movement_speed",
+      "value": 10.19,
+      "tier": "standard",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 0,
+  "defense": 144.0,
+  "health": 600.0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0.6000000000000001,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 3,
+  "current_vault": 3,
+  "pioneer_tier": "genesis",
+  "chest_origin": "a784d49a3f8e0415",
+  "created_at": "2026-01-07T06:53:43.894659",
+  "is_equipped": false
+}

@@ -1,0 +1,47 @@
+{
+  "item_id": "5b15ebf37a0abbff",
+  "name": "Spinorblade",
+  "equipment_class": "spinorblade",
+  "slot": "main_hand",
+  "rarity": "common",
+  "item_level": 300,
+  "base_stats": {
+    "phys_damage": 4.4,
+    "mag_damage": 1.2
+  },
+  "mods": [
+    {
+      "mod_id": "chrono_flux",
+      "name": "Superior Chrono Flux",
+      "stat": "cooldown_reduction",
+      "value": 45.76,
+      "tier": "superior",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 44.0,
+  "magical_damage": 12.0,
+  "defense": 0,
+  "health": 0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 4,
+  "current_vault": 4,
+  "pioneer_tier": "genesis",
+  "chest_origin": "4cf8b2512b689e3a",
+  "created_at": "2026-01-07T06:53:43.781146",
+  "is_equipped": false
+}

@@ -1,0 +1,64 @@
+{
+  "item_id": "9ecc65e4f6f8583f",
+  "name": "Glorious Ancient Grimoire of the Aether",
+  "equipment_class": "grimoire",
+  "slot": "off_hand",
+  "rarity": "legendary",
+  "item_level": 300,
+  "base_stats": {
+    "mag_damage": 3.5999999999999996,
+    "mana": 480.0,
+    "cooldown_reduction": 1.7999999999999998
+  },
+  "mods": [
+    {
+      "mod_id": "chrono_flux",
+      "name": "Greater Chrono Flux",
+      "stat": "cooldown_reduction",
+      "value": 36.58,
+      "tier": "greater",
+      "is_percent": true
+    },
+    {
+      "mod_id": "shadow_dance",
+      "name": "Shadow Dance",
+      "stat": "evasion",
+      "value": 24.06,
+      "tier": "standard",
+      "is_percent": true
+    },
+    {
+      "mod_id": "savage_blows",
+      "name": "Savage Blows",
+      "stat": "crit_damage",
+      "value": 135.48,
+      "tier": "standard",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 36.0,
+  "defense": 0,
+  "health": 0,
+  "mana": 480.0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 1.7999999999999998,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 3,
+  "current_vault": 3,
+  "pioneer_tier": "genesis",
+  "chest_origin": "3c95b9ed7fdb68c1",
+  "created_at": "2026-01-07T06:53:43.756524",
+  "is_equipped": false
+}

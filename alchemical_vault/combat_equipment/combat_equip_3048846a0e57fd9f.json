@@ -1,0 +1,47 @@
+{
+  "item_id": "3048846a0e57fd9f",
+  "name": "Nexus Pendant",
+  "equipment_class": "nexus_pendant",
+  "slot": "neck",
+  "rarity": "common",
+  "item_level": 300,
+  "base_stats": {
+    "health": 160.0,
+    "mana": 120.0
+  },
+  "mods": [
+    {
+      "mod_id": "windrunner",
+      "name": "Greater Windrunner",
+      "stat": "movement_speed",
+      "value": 25.36,
+      "tier": "greater",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 0,
+  "defense": 0,
+  "health": 160.0,
+  "mana": 120.0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 6,
+  "current_vault": 6,
+  "pioneer_tier": "genesis",
+  "chest_origin": "d3e50f77835c7b05",
+  "created_at": "2026-01-07T06:53:43.920769",
+  "is_equipped": false
+}

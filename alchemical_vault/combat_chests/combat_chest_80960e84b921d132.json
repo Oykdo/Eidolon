@@ -1,0 +1,20 @@
+{
+  "chest_id": "80960e84b921d132",
+  "chest_type": "vanguard",
+  "vault_number": 1,
+  "pioneer_tier": "Genesis Pioneer",
+  "loot_multiplier": 3.0,
+  "created_at": "2026-01-07T06:52:33.714450",
+  "is_opened": true,
+  "items": [
+    "0d7043d7a9ad7708",
+    "b1c28b1f0e7d295d",
+    "553178f18ac1e771",
+    "5045d6d141669c3a",
+    "70a26e07a0ada40a",
+    "65e9568dd6e3d737",
+    "84011d2db5c935ae",
+    "5ae2e7c61b293524"
+  ],
+  "opened_at": "2026-01-07T06:53:43.857843"
+}

@@ -196,12 +196,21 @@ class PioneerTier(Enum):
 # ============================================================================
 
 class CombatChestType(Enum):
-    """Types of combat chests distributed to vaults"""
+    """Types of combat chests distributed to vaults - 5 per vault"""
     ARMORY = ("armory", "Armory Chest", "armor", {
         "head": 0.2, "chest": 0.25, "hands": 0.15, "legs": 0.2, "feet": 0.15, "back": 0.05
     })
     ARSENAL = ("arsenal", "Arsenal Chest", "weapons", {
         "main_hand": 0.45, "two_hand": 0.35, "off_hand": 0.20
+    })
+    RELIQUARY = ("reliquary", "Reliquary Chest", "accessories", {
+        "neck": 0.35, "ring": 0.45, "trinket": 0.20
+    })
+    VANGUARD = ("vanguard", "Vanguard Cache", "mixed_offense", {
+        "main_hand": 0.30, "two_hand": 0.25, "off_hand": 0.15, "hands": 0.15, "back": 0.15
+    })
+    SANCTUM = ("sanctum", "Sanctum Vault", "mixed_defense", {
+        "head": 0.20, "chest": 0.25, "legs": 0.20, "feet": 0.15, "neck": 0.10, "trinket": 0.10
     })
     
     def __init__(self, chest_id: str, name: str, category: str, slot_weights: dict):
@@ -497,10 +506,15 @@ class CombatEquipmentGenerator:
         return self._generate_equipment(armor_class, rarity, vault_number)
     
     def generate_accessory(self, vault_number: int, acc_class: AccessoryClass = None,
-                          rarity: CombatRarity = None) -> CombatEquipment:
+                          rarity: CombatRarity = None, slot_override: str = None) -> CombatEquipment:
         """Generate accessory"""
         if acc_class is None:
-            acc_class = self._rng.choice(list(AccessoryClass))
+            if slot_override:
+                # Filter by slot
+                matching = [a for a in AccessoryClass if a.slot == slot_override]
+                acc_class = self._rng.choice(matching) if matching else self._rng.choice(list(AccessoryClass))
+            else:
+                acc_class = self._rng.choice(list(AccessoryClass))
         if rarity is None:
             rarity = self._roll_rarity(vault_number)
         
@@ -686,9 +700,11 @@ class CombatChestSystem:
             if selected_slot is None:
                 selected_slot = list(chest_type.slot_weights.keys())[0]
             
-            # Generate equipment based on slot
-            if chest_type == CombatChestType.ARSENAL:
-                # Weapons
+            # Generate equipment based on slot and chest type
+            equip = None
+            
+            # Weapon slots
+            if selected_slot in ["main_hand", "two_hand", "off_hand"]:
                 if selected_slot == "two_hand":
                     two_hand_weapons = [w for w in WeaponClass if w.slot == "two_hand"]
                     weapon_class = random.choice(two_hand_weapons)
@@ -698,16 +714,19 @@ class CombatChestSystem:
                 else:
                     main_hand = [w for w in WeaponClass if w.slot == "main_hand"]
                     weapon_class = random.choice(main_hand)
-                
                 equip = self.generator.generate_weapon(vault_number, weapon_class)
+            
+            # Accessory slots
+            elif selected_slot in ["neck", "ring", "trinket"]:
+                equip = self.generator.generate_accessory(vault_number, slot_override=selected_slot)
+            
+            # Armor slots
             else:
-                # Armor
                 armor_for_slot = [a for a in ArmorClass if a.slot == selected_slot]
                 if armor_for_slot:
                     armor_class = random.choice(armor_for_slot)
                     equip = self.generator.generate_armor(vault_number, armor_class)
                 else:
-                    # Fallback to accessory
                     equip = self.generator.generate_accessory(vault_number)
             
             equip.chest_origin = chest_id

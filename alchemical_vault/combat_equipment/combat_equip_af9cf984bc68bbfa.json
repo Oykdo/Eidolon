@@ -1,0 +1,48 @@
+{
+  "item_id": "af9cf984bc68bbfa",
+  "name": "Nexusweave Vest",
+  "equipment_class": "nexusweave_vest",
+  "slot": "chest",
+  "rarity": "enhanced",
+  "item_level": 300,
+  "base_stats": {
+    "defense": 6.72,
+    "health": 280.0,
+    "evasion": 0.27999999999999997
+  },
+  "mods": [
+    {
+      "mod_id": "storm_attunement",
+      "name": "Lesser Storm Attunement",
+      "stat": "lightning_resist",
+      "value": 17.28,
+      "tier": "lesser",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 0,
+  "defense": 67.2,
+  "health": 280.0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0.27999999999999997,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 4,
+  "current_vault": 4,
+  "pioneer_tier": "genesis",
+  "chest_origin": "13c674fa6a5cecdf",
+  "created_at": "2026-01-07T06:53:43.689775",
+  "is_equipped": false
+}

@@ -1,0 +1,48 @@
+{
+  "item_id": "0d7043d7a9ad7708",
+  "name": "Shadowdagger",
+  "equipment_class": "shadowdagger",
+  "slot": "off_hand",
+  "rarity": "common",
+  "item_level": 300,
+  "base_stats": {
+    "phys_damage": 1.6,
+    "crit_chance": 0.24,
+    "evasion": 0.32
+  },
+  "mods": [
+    {
+      "mod_id": "iron_skin",
+      "name": "Minor Iron Skin",
+      "stat": "defense",
+      "value": 35.61,
+      "tier": "minor",
+      "is_percent": false
+    }
+  ],
+  "physical_damage": 16.0,
+  "magical_damage": 0,
+  "defense": 0,
+  "health": 0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0.24,
+  "crit_damage": 0,
+  "evasion": 0.32,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 1,
+  "current_vault": 1,
+  "pioneer_tier": "genesis",
+  "chest_origin": "80960e84b921d132",
+  "created_at": "2026-01-07T06:53:43.839939",
+  "is_equipped": false
+}

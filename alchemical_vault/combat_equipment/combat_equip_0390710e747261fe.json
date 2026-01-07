@@ -1,0 +1,55 @@
+{
+  "item_id": "0390710e747261fe",
+  "name": "Fine Voidplate Sabatons",
+  "equipment_class": "voidplate_sabatons",
+  "slot": "feet",
+  "rarity": "superior",
+  "item_level": 300,
+  "base_stats": {
+    "defense": 6.48,
+    "movement_speed": -0.36000000000000004
+  },
+  "mods": [
+    {
+      "mod_id": "mana_well",
+      "name": "Lesser Mana Well",
+      "stat": "mana",
+      "value": 194.8,
+      "tier": "lesser",
+      "is_percent": false
+    },
+    {
+      "mod_id": "fire_attunement",
+      "name": "Lesser Fire Attunement",
+      "stat": "fire_resist",
+      "value": 13.17,
+      "tier": "lesser",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 0,
+  "defense": 64.80000000000001,
+  "health": 0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": -0.36000000000000004,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 4,
+  "current_vault": 4,
+  "pioneer_tier": "genesis",
+  "chest_origin": "13c674fa6a5cecdf",
+  "created_at": "2026-01-07T06:53:43.700918",
+  "is_equipped": false
+}

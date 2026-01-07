@@ -1,0 +1,47 @@
+{
+  "item_id": "03f890733d912477",
+  "name": "Voidheart Amulet",
+  "equipment_class": "voidheart_amulet",
+  "slot": "neck",
+  "rarity": "common",
+  "item_level": 300,
+  "base_stats": {
+    "mag_damage": 0.6,
+    "void_resist": 0.4
+  },
+  "mods": [
+    {
+      "mod_id": "stalwart_guard",
+      "name": "Stalwart Guard",
+      "stat": "block_chance",
+      "value": 43.75,
+      "tier": "standard",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 6.0,
+  "defense": 0,
+  "health": 0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 6,
+  "current_vault": 6,
+  "pioneer_tier": "genesis",
+  "chest_origin": "d3e50f77835c7b05",
+  "created_at": "2026-01-07T06:53:43.912125",
+  "is_equipped": false
+}

@@ -1,0 +1,47 @@
+{
+  "item_id": "904a6313762b3720",
+  "name": "Quantummaul",
+  "equipment_class": "quantummaul",
+  "slot": "main_hand",
+  "rarity": "enhanced",
+  "item_level": 300,
+  "base_stats": {
+    "phys_damage": 11.2,
+    "armor_pen": 1.1199999999999999
+  },
+  "mods": [
+    {
+      "mod_id": "void_attunement",
+      "name": "Greater Void Attunement",
+      "stat": "void_resist",
+      "value": 46.64,
+      "tier": "greater",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 112.0,
+  "magical_damage": 0,
+  "defense": 0,
+  "health": 0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 1.1199999999999999,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 5,
+  "current_vault": 5,
+  "pioneer_tier": "genesis",
+  "chest_origin": "89012db4a65550e6",
+  "created_at": "2026-01-07T06:53:43.871003",
+  "is_equipped": false
+}

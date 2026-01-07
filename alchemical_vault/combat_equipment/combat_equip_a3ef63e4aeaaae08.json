@@ -1,0 +1,79 @@
+{
+  "item_id": "a3ef63e4aeaaae08",
+  "name": "Valiant Void Essence of Entropy",
+  "equipment_class": "void_essence",
+  "slot": "trinket",
+  "rarity": "legendary",
+  "item_level": 300,
+  "base_stats": {
+    "void_damage": 1.7999999999999998,
+    "life_steal": 0.6000000000000001
+  },
+  "mods": [
+    {
+      "mod_id": "brutal_force",
+      "name": "Greater Brutal Force",
+      "stat": "phys_damage",
+      "value": 101.72,
+      "tier": "greater",
+      "is_percent": false
+    },
+    {
+      "mod_id": "fire_attunement",
+      "name": "Superior Fire Attunement",
+      "stat": "fire_resist",
+      "value": 77.08,
+      "tier": "superior",
+      "is_percent": true
+    },
+    {
+      "mod_id": "void_attunement",
+      "name": "Minor Void Attunement",
+      "stat": "void_resist",
+      "value": 15.63,
+      "tier": "minor",
+      "is_percent": true
+    },
+    {
+      "mod_id": "savage_blows",
+      "name": "Lesser Savage Blows",
+      "stat": "crit_damage",
+      "value": 66.56,
+      "tier": "lesser",
+      "is_percent": true
+    },
+    {
+      "mod_id": "arcane_power",
+      "name": "Arcane Power",
+      "stat": "mag_damage",
+      "value": 137.85,
+      "tier": "standard",
+      "is_percent": false
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 0,
+  "defense": 0,
+  "health": 0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0,
+  "block_chance": 0,
+  "life_steal": 0.6000000000000001,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 5,
+  "current_vault": 5,
+  "pioneer_tier": "genesis",
+  "chest_origin": "3c614b083217277c",
+  "created_at": "2026-01-07T06:53:43.736789",
+  "is_equipped": false
+}

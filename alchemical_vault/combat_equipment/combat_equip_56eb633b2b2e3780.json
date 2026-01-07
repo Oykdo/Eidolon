@@ -1,0 +1,63 @@
+{
+  "item_id": "56eb633b2b2e3780",
+  "name": "Forged Aether Circle",
+  "equipment_class": "aether_circle",
+  "slot": "ring_2",
+  "rarity": "superior",
+  "item_level": 300,
+  "base_stats": {
+    "mana": 288.0,
+    "cooldown_reduction": 0.36000000000000004
+  },
+  "mods": [
+    {
+      "mod_id": "vitality_surge",
+      "name": "Vitality Surge",
+      "stat": "health",
+      "value": 416.16,
+      "tier": "standard",
+      "is_percent": false
+    },
+    {
+      "mod_id": "arcane_power",
+      "name": "Lesser Arcane Power",
+      "stat": "mag_damage",
+      "value": 70.05,
+      "tier": "lesser",
+      "is_percent": false
+    },
+    {
+      "mod_id": "storm_attunement",
+      "name": "Storm Attunement",
+      "stat": "lightning_resist",
+      "value": 25.04,
+      "tier": "standard",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 0,
+  "defense": 0,
+  "health": 0,
+  "mana": 288.0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0.36000000000000004,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 2,
+  "current_vault": 2,
+  "pioneer_tier": "genesis",
+  "chest_origin": "fe0c2aaca9d07459",
+  "created_at": "2026-01-07T06:53:43.988029",
+  "is_equipped": false
+}

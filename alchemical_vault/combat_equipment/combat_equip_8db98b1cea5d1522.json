@@ -1,0 +1,55 @@
+{
+  "item_id": "8db98b1cea5d1522",
+  "name": "Champion's Voidplate Helm",
+  "equipment_class": "voidplate_helm",
+  "slot": "head",
+  "rarity": "elite",
+  "item_level": 300,
+  "base_stats": {
+    "defense": 11.04,
+    "health": 459.99999999999994
+  },
+  "mods": [
+    {
+      "mod_id": "soul_siphon",
+      "name": "Greater Soul Siphon",
+      "stat": "mana_steal",
+      "value": 6.42,
+      "tier": "greater",
+      "is_percent": true
+    },
+    {
+      "mod_id": "vital_regeneration",
+      "name": "Greater Vital Regeneration",
+      "stat": "health_regen",
+      "value": 7.41,
+      "tier": "greater",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 0,
+  "defense": 110.39999999999999,
+  "health": 459.99999999999994,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 4,
+  "current_vault": 4,
+  "pioneer_tier": "genesis",
+  "chest_origin": "13c674fa6a5cecdf",
+  "created_at": "2026-01-07T06:53:43.684778",
+  "is_equipped": false
+}

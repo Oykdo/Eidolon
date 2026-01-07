@@ -1,0 +1,72 @@
+{
+  "item_id": "1c7472dd7c73cd5c",
+  "name": "Mythic Nexusweave Pants of the Nexus",
+  "equipment_class": "nexusweave_pants",
+  "slot": "legs",
+  "rarity": "mythic",
+  "item_level": 300,
+  "base_stats": {
+    "defense": 16.0,
+    "health": 640.0,
+    "evasion": 0.64
+  },
+  "mods": [
+    {
+      "mod_id": "vampiric_touch",
+      "name": "Greater Vampiric Touch",
+      "stat": "life_steal",
+      "value": 4.44,
+      "tier": "greater",
+      "is_percent": true
+    },
+    {
+      "mod_id": "vital_regeneration",
+      "name": "Minor Vital Regeneration",
+      "stat": "health_regen",
+      "value": 1.37,
+      "tier": "minor",
+      "is_percent": true
+    },
+    {
+      "mod_id": "swift_strikes",
+      "name": "Minor Swift Strikes",
+      "stat": "attack_speed",
+      "value": 7.86,
+      "tier": "minor",
+      "is_percent": true
+    },
+    {
+      "mod_id": "arcane_power",
+      "name": "Greater Arcane Power",
+      "stat": "mag_damage",
+      "value": 49.18,
+      "tier": "greater",
+      "is_percent": false
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 0,
+  "defense": 160.0,
+  "health": 640.0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0.64,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 5,
+  "current_vault": 5,
+  "pioneer_tier": "genesis",
+  "chest_origin": "3c614b083217277c",
+  "created_at": "2026-01-07T06:53:43.744797",
+  "is_equipped": false
+}

@@ -1,0 +1,47 @@
+{
+  "item_id": "5691e77518483d5a",
+  "name": "Entropy Ring",
+  "equipment_class": "entropy_ring",
+  "slot": "ring_1",
+  "rarity": "fractured",
+  "item_level": 300,
+  "base_stats": {
+    "crit_chance": 0.096,
+    "crit_damage": 0.36
+  },
+  "mods": [
+    {
+      "mod_id": "windrunner",
+      "name": "Lesser Windrunner",
+      "stat": "movement_speed",
+      "value": 5.52,
+      "tier": "lesser",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 0,
+  "defense": 0,
+  "health": 0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0.096,
+  "crit_damage": 0.36,
+  "evasion": 0,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 4,
+  "current_vault": 4,
+  "pioneer_tier": "genesis",
+  "chest_origin": "ea3c85c8d7bc40cb",
+  "created_at": "2026-01-07T06:53:43.974248",
+  "is_equipped": false
+}

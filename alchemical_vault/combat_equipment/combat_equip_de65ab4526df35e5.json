@@ -1,0 +1,63 @@
+{
+  "item_id": "de65ab4526df35e5",
+  "name": "Legendary Entropyshroud of the Nexus",
+  "equipment_class": "entropyshroud",
+  "slot": "back",
+  "rarity": "legendary",
+  "item_level": 300,
+  "base_stats": {
+    "evasion": 0.96,
+    "life_steal": 0.36
+  },
+  "mods": [
+    {
+      "mod_id": "windrunner",
+      "name": "Lesser Windrunner",
+      "stat": "movement_speed",
+      "value": 14.64,
+      "tier": "lesser",
+      "is_percent": true
+    },
+    {
+      "mod_id": "iron_skin",
+      "name": "Superior Iron Skin",
+      "stat": "defense",
+      "value": 123.49,
+      "tier": "superior",
+      "is_percent": false
+    },
+    {
+      "mod_id": "arcane_power",
+      "name": "Greater Arcane Power",
+      "stat": "mag_damage",
+      "value": 195.34,
+      "tier": "greater",
+      "is_percent": false
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 0,
+  "defense": 0,
+  "health": 0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0.96,
+  "block_chance": 0,
+  "life_steal": 0.36,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 5,
+  "current_vault": 5,
+  "pioneer_tier": "genesis",
+  "chest_origin": "89012db4a65550e6",
+  "created_at": "2026-01-07T06:53:43.868522",
+  "is_equipped": false
+}

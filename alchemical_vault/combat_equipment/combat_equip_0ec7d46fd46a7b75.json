@@ -1,0 +1,55 @@
+{
+  "item_id": "0ec7d46fd46a7b75",
+  "name": "Refined Voidcaster",
+  "equipment_class": "voidcaster",
+  "slot": "main_hand",
+  "rarity": "superior",
+  "item_level": 300,
+  "base_stats": {
+    "phys_damage": 12.24,
+    "armor_pen": 1.8
+  },
+  "mods": [
+    {
+      "mod_id": "chrono_flux",
+      "name": "Chrono Flux",
+      "stat": "cooldown_reduction",
+      "value": 42.86,
+      "tier": "standard",
+      "is_percent": true
+    },
+    {
+      "mod_id": "soul_siphon",
+      "name": "Greater Soul Siphon",
+      "stat": "mana_steal",
+      "value": 22.44,
+      "tier": "greater",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 122.4,
+  "magical_damage": 0,
+  "defense": 0,
+  "health": 0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 1.8,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 6,
+  "current_vault": 6,
+  "pioneer_tier": "genesis",
+  "chest_origin": "5a073746bb6d00bf",
+  "created_at": "2026-01-07T06:53:43.792406",
+  "is_equipped": false
+}

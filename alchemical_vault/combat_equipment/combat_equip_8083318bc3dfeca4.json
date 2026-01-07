@@ -1,0 +1,64 @@
+{
+  "item_id": "8083318bc3dfeca4",
+  "name": "Forged Nexusweave Vest",
+  "equipment_class": "nexusweave_vest",
+  "slot": "chest",
+  "rarity": "superior",
+  "item_level": 300,
+  "base_stats": {
+    "defense": 8.64,
+    "health": 360.0,
+    "evasion": 0.36000000000000004
+  },
+  "mods": [
+    {
+      "mod_id": "soul_siphon",
+      "name": "Minor Soul Siphon",
+      "stat": "mana_steal",
+      "value": 4.62,
+      "tier": "minor",
+      "is_percent": true
+    },
+    {
+      "mod_id": "void_attunement",
+      "name": "Void Attunement",
+      "stat": "void_resist",
+      "value": 59.88,
+      "tier": "standard",
+      "is_percent": true
+    },
+    {
+      "mod_id": "frost_attunement",
+      "name": "Frost Attunement",
+      "stat": "ice_resist",
+      "value": 20.33,
+      "tier": "standard",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 0,
+  "defense": 86.4,
+  "health": 360.0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0.36000000000000004,
+  "block_chance": 0,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 4,
+  "current_vault": 4,
+  "pioneer_tier": "genesis",
+  "chest_origin": "13c674fa6a5cecdf",
+  "created_at": "2026-01-07T06:53:43.693697",
+  "is_equipped": false
+}

@@ -1,0 +1,72 @@
+{
+  "item_id": "ca88a32500673f7e",
+  "name": "Timeless Aetherbuckler of Eternity",
+  "equipment_class": "aetherbuckler",
+  "slot": "off_hand",
+  "rarity": "mythic",
+  "item_level": 300,
+  "base_stats": {
+    "defense": 9.6,
+    "block_chance": 1.92,
+    "evasion": 0.8
+  },
+  "mods": [
+    {
+      "mod_id": "void_attunement",
+      "name": "Lesser Void Attunement",
+      "stat": "void_resist",
+      "value": 9.71,
+      "tier": "lesser",
+      "is_percent": true
+    },
+    {
+      "mod_id": "windrunner",
+      "name": "Windrunner",
+      "stat": "movement_speed",
+      "value": 12.46,
+      "tier": "standard",
+      "is_percent": true
+    },
+    {
+      "mod_id": "stalwart_guard",
+      "name": "Stalwart Guard",
+      "stat": "block_chance",
+      "value": 14.28,
+      "tier": "standard",
+      "is_percent": true
+    },
+    {
+      "mod_id": "savage_blows",
+      "name": "Greater Savage Blows",
+      "stat": "crit_damage",
+      "value": 77.32,
+      "tier": "greater",
+      "is_percent": true
+    }
+  ],
+  "physical_damage": 0,
+  "magical_damage": 0,
+  "defense": 96.0,
+  "health": 0,
+  "mana": 0,
+  "attack_speed": 0,
+  "cast_speed": 0,
+  "crit_chance": 0,
+  "crit_damage": 0,
+  "evasion": 0.8,
+  "block_chance": 1.92,
+  "life_steal": 0,
+  "armor_pen": 0,
+  "movement_speed": 0,
+  "cooldown_reduction": 0,
+  "fire_resist": 0.0,
+  "ice_resist": 0.0,
+  "lightning_resist": 0.0,
+  "void_resist": 0.0,
+  "origin_vault": 3,
+  "current_vault": 3,
+  "pioneer_tier": "genesis",
+  "chest_origin": "3c95b9ed7fdb68c1",
+  "created_at": "2026-01-07T06:53:43.767962",
+  "is_equipped": false
+}
