@@ -6255,14 +6255,11 @@ Pour exécuter ce transfert:
                 self.btc_address_var.set(self._btc_wallet.address)
             
             return self._btc_wallet
+        except ImportError:
+            self.btc_address_var.set("Module not available")
+            return None
         except Exception as e:
-            # Fallback: generate a deterministic address
-            vault_key = hashlib.sha256(self.vault_name.encode()).digest()
-            # Create a simulated taproot address (bc1p...)
-            addr_hash = hashlib.sha256(vault_key + b"btc_taproot").hexdigest()[:58]
-            simulated_addr = f"bc1p{addr_hash}"
-            self.btc_address_var.set(simulated_addr)
-            self._log_activity(f"BTC wallet (simulated): {simulated_addr[:15]}...")
+            self.btc_address_var.set(f"Error: {str(e)[:20]}")
             return None
     
     def _get_chain_enum(self, chain_name: str):
