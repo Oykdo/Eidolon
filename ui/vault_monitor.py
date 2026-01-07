@@ -964,13 +964,38 @@ class VaultMonitorGUI:
                                       font=CypherpunkTheme.FONT_TITLE, padx=10, pady=10)
         receive_frame.pack(fill=tk.X, pady=10, padx=5)
         
-        tk.Label(receive_frame, text="To receive tokens, share your wallet address above.",
-                bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.TEXT_SECONDARY).pack(anchor=tk.W)
+        tk.Label(receive_frame, text="Share your EVM address to receive tokens:",
+                bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.TEXT_PRIMARY).pack(anchor=tk.W, pady=(0, 5))
         
-        tk.Label(receive_frame, text="Track incoming token:", bg=CypherpunkTheme.BG_SECONDARY,
-                fg=CypherpunkTheme.TEXT_PRIMARY).pack(anchor=tk.W, pady=(10, 5))
+        # Display address with copy button
+        receive_addr_row = tk.Frame(receive_frame, bg=CypherpunkTheme.BG_SECONDARY)
+        receive_addr_row.pack(fill=tk.X, pady=5)
         
-        track_row = tk.Frame(receive_frame, bg=CypherpunkTheme.BG_SECONDARY)
+        self.receive_address_var = tk.StringVar(value="Click 'Refresh Wallets' above")
+        receive_addr_entry = tk.Entry(receive_addr_row, textvariable=self.receive_address_var,
+                                      width=50, bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.NEON_GREEN,
+                                      font=CypherpunkTheme.FONT_MONO, state='readonly')
+        receive_addr_entry.pack(side=tk.LEFT, padx=(0, 10))
+        
+        copy_receive_btn = tk.Button(receive_addr_row, text="📋 Copy Address", bg=CypherpunkTheme.NEON_GREEN,
+                                     fg=CypherpunkTheme.BG_DARK, font=CypherpunkTheme.FONT_BOLD,
+                                     command=self._copy_evm_address)
+        copy_receive_btn.pack(side=tk.LEFT)
+        
+        tk.Label(receive_frame, text="Send ERC20 tokens to this address on the selected network above.",
+                bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.TEXT_SECONDARY,
+                font=CypherpunkTheme.FONT_SMALL).pack(anchor=tk.W, pady=(5, 0))
+        
+        # === TRACK TOKENS SECTION ===
+        track_frame = tk.LabelFrame(scrollable_frame, text="🔍 TRACK TOKENS", 
+                                    bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.NEON_CYAN,
+                                    font=CypherpunkTheme.FONT_TITLE, padx=10, pady=10)
+        track_frame.pack(fill=tk.X, pady=10, padx=5)
+        
+        tk.Label(track_frame, text="Add a token contract to track its balance:",
+                bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.TEXT_PRIMARY).pack(anchor=tk.W, pady=(0, 5))
+        
+        track_row = tk.Frame(track_frame, bg=CypherpunkTheme.BG_SECONDARY)
         track_row.pack(fill=tk.X, pady=5)
         
         tk.Label(track_row, text="Contract:", bg=CypherpunkTheme.BG_SECONDARY,
@@ -979,9 +1004,13 @@ class VaultMonitorGUI:
                                              fg=CypherpunkTheme.NEON_GREEN)
         self.track_contract_entry.pack(side=tk.LEFT, padx=5)
         
-        track_btn = tk.Button(track_row, text="Track Token", bg=CypherpunkTheme.BG_TERTIARY,
+        track_btn = tk.Button(track_row, text="+ Add Token", bg=CypherpunkTheme.BG_TERTIARY,
                              fg=CypherpunkTheme.NEON_CYAN, command=self._track_erc20_token)
         track_btn.pack(side=tk.LEFT, padx=5)
+        
+        tk.Label(track_frame, text="Example: 0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48 (USDC on Ethereum)",
+                bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.TEXT_SECONDARY,
+                font=CypherpunkTheme.FONT_SMALL).pack(anchor=tk.W, pady=(5, 0))
         
         # === SEND SECTION ===
         send_frame = tk.LabelFrame(scrollable_frame, text="📤 SEND ERC20", 
@@ -6327,6 +6356,9 @@ Pour exécuter ce transfert:
             # Sync with vault info
             if hasattr(self, 'vault_info_address_var'):
                 self.vault_info_address_var.set(f"╰─▶ {wallet.address[:16]}...")
+            # Sync with receive section
+            if hasattr(self, 'receive_address_var'):
+                self.receive_address_var.set(wallet.address)
         
         # Refresh BTC
         self._get_btc_wallet()
