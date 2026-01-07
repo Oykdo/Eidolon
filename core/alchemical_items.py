@@ -1088,11 +1088,15 @@ class AlchemicalItem:
     category: str   # AlchemicalCategory
     rarity: str     # ItemRarity
     
-    # Stats
+    # Stats de base
     value: float
     duration: float
     charges: int = 1
     max_charges: int = 1
+    
+    # STATS - Statistiques de l'item (nouveau systeme)
+    stats: Dict = field(default_factory=dict)  # StatBlock serialise
+    stat_power: float = 0.0  # Puissance totale des stats
     
     # MODS - Modificateurs aleatoires
     mods: List[Dict] = field(default_factory=list)  # Liste de mods serialises
@@ -1378,6 +1382,21 @@ class AlchemicalItemManager:
                 extra_charges = int(mod.rolled_value)
                 break
         
+        # GENERER LES STATS
+        try:
+            from core.item_stats import generate_item_stats, calculate_stat_power
+            stats_block = generate_item_stats(
+                category=item_def['category'],
+                rarity=rarity.rarity_id,
+                item_value=value,
+                luck_bonus=rarity_boost
+            )
+            stats_data = stats_block.to_dict()
+            stat_power = calculate_stat_power(stats_block)
+        except ImportError:
+            stats_data = {}
+            stat_power = 0.0
+        
         item = AlchemicalItem(
             item_id=item_id,
             item_type=chosen_type,
@@ -1387,6 +1406,8 @@ class AlchemicalItemManager:
             duration=duration,
             charges=max_charges + extra_charges,
             max_charges=max_charges + extra_charges,
+            stats=stats_data,
+            stat_power=round(stat_power, 1),
             mods=mods_data,
             origin_vault=vault_number,
             current_vault=vault_number,

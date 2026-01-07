@@ -1293,6 +1293,8 @@ class VaultMonitorGUI:
                 item_type = item_data.get('item_type', 'unknown').replace('_', ' ').title()
                 mods = item_data.get('mods', [])
                 value = item_data.get('value', 0)
+                stat_power = item_data.get('stat_power', 0)
+                stats = item_data.get('stats', {})
                 
                 # Ligne principale
                 main_line = tk.Frame(item_frame, bg=CypherpunkTheme.BG_DARK)
@@ -1302,15 +1304,44 @@ class VaultMonitorGUI:
                         fg=color, font=("Consolas", 9, "bold")).pack(side=tk.LEFT)
                 tk.Label(main_line, text=f" {item_type}", bg=CypherpunkTheme.BG_DARK,
                         fg=CypherpunkTheme.TEXT_PRIMARY, font=("Consolas", 10)).pack(side=tk.LEFT)
-                tk.Label(main_line, text=f"  💰 {value:.1f}", bg=CypherpunkTheme.BG_DARK,
-                        fg=CypherpunkTheme.TEXT_SECONDARY, font=("Consolas", 9)).pack(side=tk.RIGHT)
+                
+                # Puissance et valeur
+                power_color = "#ffd700" if stat_power > 5000 else "#00ff00" if stat_power > 2000 else "#ffffff"
+                tk.Label(main_line, text=f"  PWR:{stat_power:.0f}", bg=CypherpunkTheme.BG_DARK,
+                        fg=power_color, font=("Consolas", 8, "bold")).pack(side=tk.RIGHT)
+                tk.Label(main_line, text=f"  V:{value:.0f}", bg=CypherpunkTheme.BG_DARK,
+                        fg=CypherpunkTheme.TEXT_SECONDARY, font=("Consolas", 8)).pack(side=tk.RIGHT)
+                
+                # Stats primaires (si presentes)
+                if stats:
+                    stats_line = tk.Frame(item_frame, bg=CypherpunkTheme.BG_DARK)
+                    stats_line.pack(fill=tk.X)
+                    
+                    stat_abbrevs = [
+                        ("STR", stats.get('strength', 0), "#ff6666"),
+                        ("AGI", stats.get('agility', 0), "#66ff66"),
+                        ("INT", stats.get('intelligence', 0), "#6666ff"),
+                        ("VIT", stats.get('vitality', 0), "#ff66ff"),
+                        ("SAG", stats.get('wisdom', 0), "#ffff66"),
+                        ("LCK", stats.get('luck', 0), "#66ffff"),
+                    ]
+                    
+                    stat_parts = []
+                    for abbr, val, _ in stat_abbrevs:
+                        if val > 0:
+                            stat_parts.append(f"{abbr}:{val}")
+                    
+                    if stat_parts:
+                        stats_text = "  " + " ".join(stat_parts[:4])  # Max 4 stats affichees
+                        tk.Label(stats_line, text=stats_text, bg=CypherpunkTheme.BG_DARK,
+                                fg="#888888", font=("Consolas", 8)).pack(side=tk.LEFT)
                 
                 # Mods
                 if mods:
                     for mod in mods[:2]:
                         mod_name = mod.get('mod_id', '').replace('mod_', '').replace('_', ' ').title()
                         roll_pct = mod.get('roll_percent', 50)
-                        quality = "★" if roll_pct >= 95 else "◆" if roll_pct >= 80 else "●" if roll_pct >= 60 else "○"
+                        quality = "$" if roll_pct >= 95 else "@" if roll_pct >= 80 else "#" if roll_pct >= 60 else "o"
                         mod_text = f"  {quality} {mod_name}: {mod.get('rolled_value', 0):.0f}"
                         tk.Label(item_frame, text=mod_text, bg=CypherpunkTheme.BG_DARK,
                                 fg=CypherpunkTheme.NEON_CYAN, font=("Consolas", 8)).pack(anchor=tk.W)
