@@ -3294,13 +3294,11 @@ INSTRUCTIONS:
     # ========================================================================
     
     def _create_avatar_tab(self) -> tk.Frame:
-        """Cree l'onglet de visualisation et gestion de l'avatar 3D - Version Avancee"""
+        """Cree l'onglet Avatar - Version simplifiee avec Three.js"""
         frame = tk.Frame(self.notebook, bg=CypherpunkTheme.BG_DARK)
         
         # Initialiser le manager
         self.avatar_manager = AvatarManager()
-        self.avatar_animation_running = False
-        self.avatar_current_angle = 0
         
         # === HEADER ===
         header_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
@@ -3308,7 +3306,7 @@ INSTRUCTIONS:
         
         tk.Label(
             header_frame,
-            text="🎭 AVATAR 3D - MONITOR AVANCE",
+            text="🎭 AVATAR",
             bg=CypherpunkTheme.BG_DARK,
             fg=CypherpunkTheme.NEON_MAGENTA,
             font=("Consolas", 16, "bold")
@@ -3323,177 +3321,149 @@ INSTRUCTIONS:
             text="⚡ GENERER",
             bg=CypherpunkTheme.NEON_MAGENTA,
             fg="black",
-            font=("Consolas", 9, "bold"),
+            font=("Consolas", 10, "bold"),
             command=self._generate_avatar
-        ).pack(side=tk.LEFT, padx=3)
+        ).pack(side=tk.LEFT, padx=5)
         
         tk.Button(
             btn_frame,
-            text="🔄 REFRESH",
-            bg="#333355",
-            fg="white",
-            font=("Consolas", 9),
-            command=self._refresh_avatar
-        ).pack(side=tk.LEFT, padx=3)
-        
-        self.anim_avatar_btn = tk.Button(
-            btn_frame,
-            text="▶ ANIMER",
-            bg="#00aa55",
+            text="🌐 VISUALISER 3D",
+            bg="#00ffaa",
             fg="black",
-            font=("Consolas", 9, "bold"),
-            command=self._toggle_avatar_animation
-        )
-        self.anim_avatar_btn.pack(side=tk.LEFT, padx=3)
+            font=("Consolas", 10, "bold"),
+            command=self._open_threejs_viewer
+        ).pack(side=tk.LEFT, padx=5)
         
         tk.Button(
             btn_frame,
             text="📊 STATS",
             bg="#0066ff",
             fg="white",
-            font=("Consolas", 9, "bold"),
+            font=("Consolas", 10, "bold"),
             command=self._show_avatar_stats_window
-        ).pack(side=tk.LEFT, padx=3)
+        ).pack(side=tk.LEFT, padx=5)
         
-        tk.Button(
-            btn_frame,
-            text="💾 EXPORT",
-            bg="#ff8800",
-            fg="black",
-            font=("Consolas", 9, "bold"),
-            command=self._export_avatar
-        ).pack(side=tk.LEFT, padx=3)
-        
-        tk.Button(
-            btn_frame,
-            text="🌐 3D VIEW",
-            bg="#00ffaa",
-            fg="black",
-            font=("Consolas", 9, "bold"),
-            command=self._open_threejs_viewer
-        ).pack(side=tk.LEFT, padx=3)
-        
-        # === PANNEAU PRINCIPAL (3 colonnes) ===
+        # === PANNEAU PRINCIPAL (2 colonnes) ===
         main_panel = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
         main_panel.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
         
-        # === COLONNE GAUCHE: Visualisation 3D ===
-        left_panel = tk.Frame(main_panel, bg=CypherpunkTheme.BG_PANEL, width=380)
+        # === COLONNE GAUCHE: Apercu + Actions ===
+        left_panel = tk.Frame(main_panel, bg=CypherpunkTheme.BG_PANEL, width=400)
         left_panel.pack(side=tk.LEFT, fill=tk.BOTH, padx=(0, 5), pady=5)
         left_panel.pack_propagate(False)
         
-        tk.Label(
-            left_panel,
-            text="🔮 VISUALISATION 3D",
-            bg=CypherpunkTheme.BG_PANEL,
-            fg=CypherpunkTheme.NEON_CYAN,
-            font=("Consolas", 10, "bold")
-        ).pack(pady=(10, 5))
+        # Zone d'apercu
+        preview_frame = tk.Frame(left_panel, bg=CypherpunkTheme.BG_SECONDARY)
+        preview_frame.pack(fill=tk.X, padx=10, pady=10)
         
-        # Boutons de vue
-        view_frame = tk.Frame(left_panel, bg=CypherpunkTheme.BG_PANEL)
-        view_frame.pack(fill=tk.X, padx=10)
-        
-        views = [("Front", "xy"), ("Top", "xz"), ("Side", "yz"), ("ISO", "iso")]
-        for view_name, view_type in views:
-            tk.Button(
-                view_frame,
-                text=view_name,
-                bg="#1a1a2e",
-                fg="#00ffff",
-                font=("Consolas", 8),
-                width=6,
-                command=lambda vt=view_type: self._set_avatar_view(vt)
-            ).pack(side=tk.LEFT, padx=2)
-        
-        # Canvas pour la visualisation 3D (matplotlib si disponible, sinon canvas tk)
-        self.avatar_3d_frame = tk.Frame(left_panel, bg=CypherpunkTheme.BG_SECONDARY)
-        self.avatar_3d_frame.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
-        
-        # Canvas Tkinter comme fallback
-        self.avatar_canvas = tk.Canvas(
-            self.avatar_3d_frame,
-            width=340,
-            height=280,
+        self.avatar_preview_label = tk.Label(
+            preview_frame,
+            text="Aucun avatar\n\nCliquez sur GENERER\npour creer votre avatar unique",
             bg=CypherpunkTheme.BG_SECONDARY,
-            highlightthickness=2,
-            highlightbackground=CypherpunkTheme.NEON_MAGENTA
+            fg=CypherpunkTheme.TEXT_SECONDARY,
+            font=("Consolas", 11),
+            justify=tk.CENTER,
+            height=8
         )
-        self.avatar_canvas.pack(pady=5)
+        self.avatar_preview_label.pack(fill=tk.X, pady=20)
         
-        # Message par defaut
-        self.avatar_canvas.create_text(
-            170, 140,
-            text="Aucun avatar genere\n\nCliquez sur GENERER",
-            fill=CypherpunkTheme.TEXT_SECONDARY,
-            font=("Consolas", 10),
-            justify=tk.CENTER
-        )
+        # Info rapide
+        self.avatar_quick_info = tk.Frame(left_panel, bg=CypherpunkTheme.BG_PANEL)
+        self.avatar_quick_info.pack(fill=tk.X, padx=10, pady=5)
         
-        # Etat et classe
-        state_frame = tk.Frame(left_panel, bg=CypherpunkTheme.BG_PANEL)
-        state_frame.pack(fill=tk.X, padx=10, pady=5)
+        # Type
+        row1 = tk.Frame(self.avatar_quick_info, bg=CypherpunkTheme.BG_PANEL)
+        row1.pack(fill=tk.X, pady=2)
+        tk.Label(row1, text="TYPE:", bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.TEXT_SECONDARY,
+                font=("Consolas", 10)).pack(side=tk.LEFT)
+        self.avatar_type_var = tk.StringVar(value="---")
+        tk.Label(row1, textvariable=self.avatar_type_var, bg=CypherpunkTheme.BG_PANEL,
+                fg=CypherpunkTheme.NEON_CYAN, font=("Consolas", 11, "bold")).pack(side=tk.RIGHT)
         
-        tk.Label(state_frame, text="ETAT:", bg=CypherpunkTheme.BG_PANEL,
-                fg=CypherpunkTheme.TEXT_SECONDARY, font=("Consolas", 9)).pack(side=tk.LEFT)
+        # Rarete
+        row2 = tk.Frame(self.avatar_quick_info, bg=CypherpunkTheme.BG_PANEL)
+        row2.pack(fill=tk.X, pady=2)
+        tk.Label(row2, text="RARETE:", bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.TEXT_SECONDARY,
+                font=("Consolas", 10)).pack(side=tk.LEFT)
+        self.avatar_rarity_var = tk.StringVar(value="---")
+        self.avatar_rarity_label = tk.Label(row2, textvariable=self.avatar_rarity_var, 
+                bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.NEON_GREEN, 
+                font=("Consolas", 11, "bold"))
+        self.avatar_rarity_label.pack(side=tk.RIGHT)
         
-        self.avatar_state_var = tk.StringVar(value="N/A")
-        self.avatar_state_label = tk.Label(
-            state_frame, textvariable=self.avatar_state_var,
-            bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.NEON_GREEN,
-            font=("Consolas", 10, "bold")
-        )
-        self.avatar_state_label.pack(side=tk.LEFT, padx=10)
+        # Puissance
+        row3 = tk.Frame(self.avatar_quick_info, bg=CypherpunkTheme.BG_PANEL)
+        row3.pack(fill=tk.X, pady=2)
+        tk.Label(row3, text="PUISSANCE:", bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.TEXT_SECONDARY,
+                font=("Consolas", 10)).pack(side=tk.LEFT)
+        self.avatar_power_var = tk.StringVar(value="---")
+        tk.Label(row3, textvariable=self.avatar_power_var, bg=CypherpunkTheme.BG_PANEL,
+                fg=CypherpunkTheme.NEON_YELLOW, font=("Consolas", 11, "bold")).pack(side=tk.RIGHT)
         
-        tk.Label(state_frame, text="CLASSE:", bg=CypherpunkTheme.BG_PANEL,
-                fg=CypherpunkTheme.TEXT_SECONDARY, font=("Consolas", 9)).pack(side=tk.LEFT, padx=(20, 0))
-        
+        # Classe
+        row4 = tk.Frame(self.avatar_quick_info, bg=CypherpunkTheme.BG_PANEL)
+        row4.pack(fill=tk.X, pady=2)
+        tk.Label(row4, text="CLASSE:", bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.TEXT_SECONDARY,
+                font=("Consolas", 10)).pack(side=tk.LEFT)
         self.avatar_class_var = tk.StringVar(value="---")
-        self.avatar_class_label = tk.Label(
-            state_frame, textvariable=self.avatar_class_var,
-            bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.NEON_CYAN,
-            font=("Consolas", 10, "bold")
-        )
-        self.avatar_class_label.pack(side=tk.LEFT, padx=5)
+        tk.Label(row4, textvariable=self.avatar_class_var, bg=CypherpunkTheme.BG_PANEL,
+                fg=CypherpunkTheme.NEON_PURPLE, font=("Consolas", 11, "bold")).pack(side=tk.RIGHT)
+        
+        # Etat
+        row5 = tk.Frame(self.avatar_quick_info, bg=CypherpunkTheme.BG_PANEL)
+        row5.pack(fill=tk.X, pady=2)
+        tk.Label(row5, text="ETAT:", bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.TEXT_SECONDARY,
+                font=("Consolas", 10)).pack(side=tk.LEFT)
+        self.avatar_state_var = tk.StringVar(value="---")
+        self.avatar_state_label = tk.Label(row5, textvariable=self.avatar_state_var, 
+                bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.NEON_GREEN, 
+                font=("Consolas", 11, "bold"))
+        self.avatar_state_label.pack(side=tk.RIGHT)
+        
+        # Separateur
+        tk.Frame(left_panel, bg=CypherpunkTheme.NEON_MAGENTA, height=2).pack(fill=tk.X, padx=10, pady=10)
         
         # Boutons d'action
+        action_label = tk.Label(left_panel, text="ACTIONS", bg=CypherpunkTheme.BG_PANEL,
+                               fg=CypherpunkTheme.NEON_CYAN, font=("Consolas", 10, "bold"))
+        action_label.pack(pady=(0, 5))
+        
         action_frame = tk.Frame(left_panel, bg=CypherpunkTheme.BG_PANEL)
         action_frame.pack(fill=tk.X, padx=10, pady=5)
         
         self.detach_btn = tk.Button(
             action_frame, text="🔓 DETACHER", bg="#ff6600", fg="black",
-            font=("Consolas", 8, "bold"), command=self._detach_avatar, state=tk.DISABLED
+            font=("Consolas", 9, "bold"), command=self._detach_avatar, state=tk.DISABLED, width=12
         )
-        self.detach_btn.pack(side=tk.LEFT, padx=3)
+        self.detach_btn.pack(side=tk.LEFT, padx=3, pady=2)
         
         self.transfer_avatar_btn = tk.Button(
             action_frame, text="📤 TRANSFERER", bg="#00aaff", fg="black",
-            font=("Consolas", 8, "bold"), command=self._transfer_avatar_dialog, state=tk.DISABLED
+            font=("Consolas", 9, "bold"), command=self._transfer_avatar_dialog, state=tk.DISABLED, width=12
         )
-        self.transfer_avatar_btn.pack(side=tk.LEFT, padx=3)
+        self.transfer_avatar_btn.pack(side=tk.LEFT, padx=3, pady=2)
         
         self.tokenize_btn = tk.Button(
             action_frame, text="₿ TOKENISER", bg="#f7931a", fg="black",
-            font=("Consolas", 8, "bold"), command=self._tokenize_avatar, state=tk.DISABLED
+            font=("Consolas", 9, "bold"), command=self._tokenize_avatar, state=tk.DISABLED, width=12
         )
-        self.tokenize_btn.pack(side=tk.LEFT, padx=3)
+        self.tokenize_btn.pack(side=tk.LEFT, padx=3, pady=2)
         
-        # === COLONNE CENTRE: Stats et Attributs ===
-        center_panel = tk.Frame(main_panel, bg=CypherpunkTheme.BG_PANEL, width=280)
-        center_panel.pack(side=tk.LEFT, fill=tk.BOTH, padx=5, pady=5)
-        center_panel.pack_propagate(False)
+        # === COLONNE DROITE: Stats ===
+        right_panel = tk.Frame(main_panel, bg=CypherpunkTheme.BG_PANEL)
+        right_panel.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(5, 0), pady=5)
         
         tk.Label(
-            center_panel,
+            right_panel,
             text="⚔️ STATS DE COMBAT",
             bg=CypherpunkTheme.BG_PANEL,
             fg=CypherpunkTheme.NEON_GREEN,
-            font=("Consolas", 10, "bold")
+            font=("Consolas", 11, "bold")
         ).pack(pady=(10, 5))
         
         # Frame pour les stats avec scrollbar
-        stats_container = tk.Frame(center_panel, bg=CypherpunkTheme.BG_SECONDARY)
-        stats_container.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        stats_container = tk.Frame(right_panel, bg=CypherpunkTheme.BG_SECONDARY)
+        stats_container.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
         
         stats_canvas = tk.Canvas(stats_container, bg=CypherpunkTheme.BG_SECONDARY, highlightthickness=0)
         stats_scrollbar = ttk.Scrollbar(stats_container, orient=tk.VERTICAL, command=stats_canvas.yview)
@@ -3507,39 +3477,11 @@ INSTRUCTIONS:
         self.avatar_stats_frame.bind("<Configure>", 
             lambda e: stats_canvas.configure(scrollregion=stats_canvas.bbox("all")))
         
+        # Frame info detaillees (en dessous des stats)
+        self.avatar_info_frame = tk.Frame(right_panel, bg=CypherpunkTheme.BG_SECONDARY)
+        
         # Placeholder stats
         self._display_stats_placeholder()
-        
-        # === COLONNE DROITE: Infos detaillees ===
-        right_panel = tk.Frame(main_panel, bg=CypherpunkTheme.BG_PANEL)
-        right_panel.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=(5, 0), pady=5)
-        
-        tk.Label(
-            right_panel,
-            text="📋 INFORMATIONS DETAILLEES",
-            bg=CypherpunkTheme.BG_PANEL,
-            fg=CypherpunkTheme.NEON_PURPLE,
-            font=("Consolas", 10, "bold")
-        ).pack(pady=(10, 5))
-        
-        # Zone d'info scrollable
-        info_container = tk.Frame(right_panel, bg=CypherpunkTheme.BG_SECONDARY)
-        info_container.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
-        
-        info_canvas = tk.Canvas(info_container, bg=CypherpunkTheme.BG_SECONDARY, highlightthickness=0)
-        info_scrollbar = ttk.Scrollbar(info_container, orient=tk.VERTICAL, command=info_canvas.yview)
-        self.avatar_info_frame = tk.Frame(info_canvas, bg=CypherpunkTheme.BG_SECONDARY)
-        
-        info_canvas.configure(yscrollcommand=info_scrollbar.set)
-        info_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
-        info_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
-        
-        info_canvas.create_window((0, 0), window=self.avatar_info_frame, anchor=tk.NW)
-        self.avatar_info_frame.bind("<Configure>", 
-            lambda e: info_canvas.configure(scrollregion=info_canvas.bbox("all")))
-        
-        # Infos initiales
-        self._display_avatar_placeholder()
         
         # Charger l'avatar existant
         self._refresh_avatar()
@@ -4379,12 +4321,34 @@ INSTRUCTIONS:
         if avatars:
             avatar = avatars[0]  # Premier avatar
             self._display_avatar_info(avatar)
-            self._load_avatar_preview(avatar)
             self._update_avatar_buttons(avatar)
+            
+            # Mettre a jour les infos rapides
+            self.avatar_type_var.set(avatar.geometry_type.replace("_", " ").upper())
+            self.avatar_rarity_var.set(avatar.rarity_tier.upper())
+            self.avatar_power_var.set(f"{avatar.effective_power:,.0f}")
+            
+            # Couleur de rarete
+            rarity_colors = {
+                "common": "#808080", "uncommon": "#00ff00", "rare": "#0080ff",
+                "epic": "#a020f0", "legendary": "#ffd700", "mythical": "#ff00ff",
+                "primordial": "#00ffff"
+            }
+            self.avatar_rarity_label.configure(fg=rarity_colors.get(avatar.rarity_tier.lower(), "#ffffff"))
+            
+            # Apercu texte
+            self.avatar_preview_label.configure(
+                text=f"🎭 AVATAR GENERE\n\n"
+                     f"Type: {avatar.geometry_type.replace('_', ' ').title()}\n"
+                     f"Rarete: {avatar.rarity_tier.upper()}\n"
+                     f"Puissance: {avatar.effective_power:,.0f}\n\n"
+                     f"Cliquez sur VISUALISER 3D\npour voir votre avatar unique",
+                fg=rarity_colors.get(avatar.rarity_tier.lower(), "#ffffff")
+            )
             
             # Generer et afficher les stats
             try:
-                from core.avatar_system import QuantumAvatarGenerator, AvatarStats, AvatarClass
+                from core.avatar_system import QuantumAvatarGenerator
                 gen = QuantumAvatarGenerator(avatar.avatar_id.encode(), vault_number=self.current_vault_num)
                 stats = gen.generate_stats()
                 avatar_class = gen.select_class()
@@ -4392,7 +4356,6 @@ INSTRUCTIONS:
                 if avatar_class:
                     stats = gen.apply_class_bonuses(stats, avatar_class)
                     self.avatar_class_var.set(f"{avatar_class.icon} {avatar_class.name}")
-                    self.avatar_class_label.configure(fg=avatar_class.color)
                 else:
                     self.avatar_class_var.set("---")
                 
@@ -4415,8 +4378,15 @@ INSTRUCTIONS:
         else:
             self._display_avatar_placeholder()
             self._display_stats_placeholder()
-            self.avatar_state_var.set("N/A")
+            self.avatar_type_var.set("---")
+            self.avatar_rarity_var.set("---")
+            self.avatar_power_var.set("---")
+            self.avatar_state_var.set("---")
             self.avatar_class_var.set("---")
+            self.avatar_preview_label.configure(
+                text="Aucun avatar\n\nCliquez sur GENERER\npour creer votre avatar unique",
+                fg=CypherpunkTheme.TEXT_SECONDARY
+            )
             self.detach_btn.configure(state=tk.DISABLED)
             self.transfer_avatar_btn.configure(state=tk.DISABLED)
             self.tokenize_btn.configure(state=tk.DISABLED)

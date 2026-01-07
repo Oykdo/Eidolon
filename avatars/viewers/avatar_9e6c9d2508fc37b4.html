@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Avatar 3D - Nexus Crystal | Poly-Spinor Nexus 7D</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2a 50%, #0a1a2a 100%);
+            font-family: 'Segoe UI', 'Consolas', monospace;
+            color: #e0e0e0;
+            overflow: hidden;
+        }
+        
+        #container {
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
+        
+        #canvas-container {
+            width: 100%;
+            height: 100%;
+        }
+        
+        #info-panel {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(10, 10, 30, 0.85);
+            border: 1px solid #00ffff;
+            border-radius: 10px;
+            padding: 20px;
+            min-width: 280px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px #00ffff33;
+        }
+        
+        #info-panel h1 {
+            color: #00ffff;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px #00ffff;
+        }
+        
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .info-label {
+            color: #888;
+            font-size: 0.9em;
+        }
+        
+        .info-value {
+            color: #608d7c;
+            font-weight: bold;
+        }
+        
+        .rarity-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 15px;
+            background: #00ffff33;
+            border: 1px solid #00ffff;
+            color: #00ffff;
+            font-size: 0.85em;
+            text-shadow: 0 0 5px #00ffff;
+        }
+        
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .control-btn {
+            background: rgba(10, 10, 30, 0.8);
+            border: 1px solid #00ffff;
+            color: #00ffff;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s;
+        }
+        
+        .control-btn:hover {
+            background: #00ffff33;
+            box-shadow: 0 0 15px #00ffff55;
+        }
+        
+        .control-btn.active {
+            background: #00ffff;
+            color: #000;
+        }
+        
+        #power-indicator {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: radial-gradient(circle, #00ffff55 0%, transparent 70%);
+            border: 3px solid #00ffff;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 30px #00ffff55;
+        }
+        
+        #power-indicator .power-value {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #00ffff;
+        }
+        
+        #power-indicator .power-label {
+            font-size: 0.7em;
+            color: #888;
+        }
+        
+        #loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #00ffff;
+            font-size: 1.5em;
+        }
+        
+        .glow {
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff; }
+            to { text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff; }
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+        <div id="canvas-container"></div>
+        
+        <div id="info-panel">
+            <h1 class="glow">🎭 AVATAR 3D</h1>
+            <div class="info-row">
+                <span class="info-label">Type</span>
+                <span class="info-value">Nexus Crystal</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Rareté</span>
+                <span class="rarity-badge">PRIMORDIAL</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">Score</span>
+                <span class="info-value">100.0/100</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">ID</span>
+                <span class="info-value" style="font-size:0.8em">9e6c9d2508fc37b4...</span>
+            </div>
+        </div>
+        
+        <div id="power-indicator">
+            <span class="power-value">15K</span>
+            <span class="power-label">POWER</span>
+        </div>
+        
+        <div id="controls">
+            <button class="control-btn active" onclick="toggleRotation()">⟳ Auto-Rotate</button>
+            <button class="control-btn" onclick="resetCamera()">⌖ Reset View</button>
+            <button class="control-btn" onclick="toggleWireframe()">◇ Wireframe</button>
+            <button class="control-btn" onclick="screenshot()">📷 Screenshot</button>
+        </div>
+        
+        <div id="loading">Chargement de l'avatar 3D...</div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    
+    <script>
+        let scene, camera, renderer, controls;
+        let autoRotate = true;
+        let wireframeMode = false;
+        const animationCallbacks = [];
+        
+        function init() {
+            // Scene
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0x0a0a1a);
+            scene.fog = new THREE.Fog(0x0a0a1a, 5, 15);
+            
+            // Camera
+            camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+            camera.position.set(3, 2, 3);
+            
+            // Renderer
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.2;
+            document.getElementById('canvas-container').appendChild(renderer.domElement);
+            
+            // Controls
+            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls.enableDamping = true;
+            controls.dampingFactor = 0.05;
+            controls.autoRotate = autoRotate;
+            controls.autoRotateSpeed = 1.0;
+            controls.minDistance = 2;
+            controls.maxDistance = 10;
+            
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0x404040, 0.5);
+            scene.add(ambientLight);
+            
+            const mainLight = new THREE.DirectionalLight(0xffffff, 1);
+            mainLight.position.set(5, 5, 5);
+            mainLight.castShadow = true;
+            scene.add(mainLight);
+            
+            const fillLight = new THREE.DirectionalLight('#00ffff', 0.5);
+            fillLight.position.set(-5, 0, -5);
+            scene.add(fillLight);
+            
+            const backLight = new THREE.DirectionalLight('#608d7c', 0.3);
+            backLight.position.set(0, -5, 0);
+            scene.add(backLight);
+            
+            // Grille de sol
+            const gridHelper = new THREE.GridHelper(10, 20, '#00ffff', 0x222244);
+            gridHelper.position.y = -2;
+            scene.add(gridHelper);
+            
+            // Créer la géométrie de l'avatar
+            
+            // Cristal principal (octaèdre allongé)
+            const crystalGeom = new THREE.OctahedronGeometry(1, 0);
+            crystalGeom.scale(1, 1.8, 1);
+            
+            const crystalMat = new THREE.MeshPhysicalMaterial({
+                color: '#00ffff',
+                metalness: 0.1,
+                roughness: 0.05,
+                transparent: true,
+                opacity: 0.75,
+                emissive: '#4cffff',
+                emissiveIntensity: 0.3,
+                clearcoat: 1.0,
+                clearcoatRoughness: 0.0,
+                reflectivity: 1.0,
+                ior: 2.4
+            });
+            const crystal = new THREE.Mesh(crystalGeom, crystalMat);
+            scene.add(crystal);
+            
+            // Cristaux secondaires
+            for (let i = 0; i < 6; i++) {
+                const angle = (i / 6) * Math.PI * 2;
+                const smallCrystal = new THREE.Mesh(
+                    new THREE.OctahedronGeometry(0.3, 0),
+                    new THREE.MeshPhysicalMaterial({
+                        color: i % 2 === 0 ? '#608d7c' : '#493660',
+                        metalness: 0.1,
+                        roughness: 0.1,
+                        transparent: true,
+                        opacity: 0.7,
+                        emissive: i % 2 === 0 ? '#608d7c' : '#493660',
+                        emissiveIntensity: 0.2
+                    })
+                );
+                smallCrystal.position.set(
+                    Math.cos(angle) * 1.5,
+                    Math.sin(angle) * 0.3,
+                    Math.sin(angle) * 1.5
+                );
+                smallCrystal.scale.set(1, 1.5, 1);
+                smallCrystal.rotation.z = angle;
+                scene.add(smallCrystal);
+                
+                // Animation des petits cristaux
+                animationCallbacks.push((time) => {
+                    smallCrystal.position.y = Math.sin(time * 2 + i) * 0.2;
+                    smallCrystal.rotation.y = time * 0.5;
+                });
+            }
+            
+            // Rayons de lumière
+            const rayGeom = new THREE.CylinderGeometry(0.01, 0.01, 3, 8);
+            for (let i = 0; i < 8; i++) {
+                const rayMat = new THREE.MeshBasicMaterial({
+                    color: '#00ffff',
+                    transparent: true,
+                    opacity: 0.3
+                });
+                const ray = new THREE.Mesh(rayGeom, rayMat);
+                ray.rotation.z = (i / 8) * Math.PI * 2;
+                ray.rotation.x = Math.PI / 2;
+                scene.add(ray);
+            }
+            
+            // Animation rotation principale
+            animationCallbacks.push((time) => {
+                crystal.rotation.y = time * 0.3;
+                crystal.position.y = Math.sin(time) * 0.1;
+            });
+            
+            // Lumière centrale
+            const crystalLight = new THREE.PointLight('#00ffff', 3, 8);
+            scene.add(crystalLight);
+        
+            
+            // Masquer le loading
+            document.getElementById('loading').style.display = 'none';
+            
+            // Event listeners
+            window.addEventListener('resize', onWindowResize);
+            
+            // Animation loop
+            animate();
+        }
+        
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            const time = performance.now() * 0.001;
+            
+            // Exécuter les callbacks d'animation
+            animationCallbacks.forEach(cb => cb(time));
+            
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        
+        function toggleRotation() {
+            autoRotate = !autoRotate;
+            controls.autoRotate = autoRotate;
+            document.querySelector('.control-btn').classList.toggle('active', autoRotate);
+        }
+        
+        function resetCamera() {
+            camera.position.set(3, 2, 3);
+            controls.target.set(0, 0, 0);
+            controls.update();
+        }
+        
+        function toggleWireframe() {
+            wireframeMode = !wireframeMode;
+            scene.traverse((child) => {
+                if (child.isMesh && child.material) {
+                    if (Array.isArray(child.material)) {
+                        child.material.forEach(m => m.wireframe = wireframeMode);
+                    } else {
+                        child.material.wireframe = wireframeMode;
+                    }
+                }
+            });
+        }
+        
+        function screenshot() {
+            renderer.render(scene, camera);
+            const link = document.createElement('a');
+            link.download = 'avatar_3d_9e6c9d25.png';
+            link.href = renderer.domElement.toDataURL('image/png');
+            link.click();
+        }
+        
+        // Initialisation
+        init();
+    </script>
+</body>
+</html>
