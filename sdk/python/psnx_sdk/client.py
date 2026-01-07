@@ -1,5 +1,5 @@
 """
-Client API pour le SDK Poly-Spinor Nexus 7D
+Client API pour le SDK Eidolon
 """
 
 import base64
@@ -36,7 +36,7 @@ class Session:
 
 class PSNXClient:
     """
-    Client pour l'API Poly-Spinor Nexus 7D.
+    Client pour l'API Eidolon.
     
     Usage:
         client = PSNXClient("https://api.example.com", vault_key)

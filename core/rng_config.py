@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║              CONFIGURATION RNG - Poly-Spinor Nexus 7D                        ║
+║              CONFIGURATION RNG - Eidolon                        ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
 ║                                                                              ║
 ║  Systeme centralise de configuration des probabilites et rolls.             ║

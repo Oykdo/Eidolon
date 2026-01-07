@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Poly-Spinor Nexus 7D - Registre d'Identité Décentralisé
+Eidolon - Registre d'Identité Décentralisé
 ========================================================
 
 Système de gestion d'identité locale qui garantit l'unicité des noms
@@ -370,7 +370,7 @@ class IdentityRegistry:
         
         card = f"""
 ╔══════════════════════════════════════════════════════════════╗
-║            POLY-SPINOR NEXUS 7D - IDENTITY CARD              ║
+║            EIDOLON - IDENTITY CARD              ║
 ╠══════════════════════════════════════════════════════════════╣
 ║  NAME:        {identity.name:<46} ║
 ║  FINGERPRINT: {identity.fingerprint:<46} ║

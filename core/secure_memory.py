@@ -1,6 +1,6 @@
 """
 Protection Memoire Avancee pour Cles Cryptographiques
-Poly-Spinor Nexus 7D - Security Module
+Eidolon - Security Module
 
 Features:
 - Verrouillage en RAM (anti-swap)

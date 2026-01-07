@@ -1,5 +1,5 @@
 """
-Utility modules for Poly-Spinor Nexus 7D
+Utility modules for Eidolon
 """
 
 from .quantum_math import CliffordAlgebra

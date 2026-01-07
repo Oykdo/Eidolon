@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Demo Bitcoin - Poly-Spinor Nexus 7D
+Demo Bitcoin - Eidolon
 Support BRC-20, ARC-20, Runes, Ordinals, Bitmap
 """
 
@@ -33,7 +33,7 @@ def connect_vault():
 
 def main():
     print('='*70)
-    print('  BITCOIN WALLET - POLY-SPINOR NEXUS 7D')
+    print('  BITCOIN WALLET - EIDOLON')
     print('  Support: BTC, Ordinals, BRC-20, ARC-20, Runes, Bitmap')
     print('='*70)
     

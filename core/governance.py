@@ -1,5 +1,5 @@
 """
-Governance System pour Poly-Spinor Nexus 7D
+Governance System pour Eidolon
 DAO, Token de Gouvernance, et Incentives Validateurs
 
 Features:

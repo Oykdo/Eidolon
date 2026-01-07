@@ -1,5 +1,5 @@
 """
-Intégration Alchemy API pour Poly-Spinor Nexus 7D
+Intégration Alchemy API pour Eidolon
 Composants Web3 avancés utilisant l'infrastructure Alchemy
 
 Fonctionnalités:
@@ -916,7 +916,7 @@ def get_api_key_from_env() -> Optional[str]:
 
 if __name__ == "__main__":
     print("=" * 60)
-    print("  ALCHEMY INTEGRATION - POLY-SPINOR NEXUS 7D")
+    print("  ALCHEMY INTEGRATION - EIDOLON")
     print("=" * 60)
     
     # Vérifier si une clé API est disponible

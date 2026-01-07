@@ -1,5 +1,5 @@
 """
-UI components for Poly-Spinor Nexus 7D
+UI components for Eidolon
 - vault_gui_complete.py: Interface principale du vault (tkinter)
 - vault_monitor.py: Interface de monitoring du vault (tkinter)
 - main_panel.py: Panneau Blender pour generation de cles

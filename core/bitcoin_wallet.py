@@ -1,5 +1,5 @@
 """
-Module Wallet Bitcoin pour Poly-Spinor Nexus 7D
+Module Wallet Bitcoin pour Eidolon
 Support des actifs Bitcoin: BRC-20, ARC-20, Runes, Ordinals, Bitmap
 
 Protocoles supportes:

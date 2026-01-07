@@ -1,5 +1,5 @@
 """
-Core modules for Poly-Spinor Nexus 7D
+Core modules for Eidolon
 
 Modules:
 - spatial_capture: Capture spatiale 7D avec calibration EPR

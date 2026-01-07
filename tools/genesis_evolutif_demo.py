@@ -91,7 +91,7 @@ def print_banner():
   ╚══════╝╚═╝╚═════╝  ╚═════╝ ╚══════╝ ╚═════╝ ╚═╝  ╚═══╝
 {Colors.RESET}
 {Colors.CYAN}{'='*70}{Colors.RESET}
-{Colors.YELLOW}  Systeme Genesis Evolutif - Poly-Spinor Nexus 7D{Colors.RESET}
+{Colors.YELLOW}  Systeme Genesis Evolutif - Eidolon{Colors.RESET}
 {Colors.CYAN}{'='*70}{Colors.RESET}
 """
     print(banner)

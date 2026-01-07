@@ -1,5 +1,5 @@
 """
-Module Wallet EVM pour Poly-Spinor Nexus 7D
+Module Wallet EVM pour Eidolon
 Gestion des tokens ERC20 et NFTs ERC721 sur chaines compatibles EVM
 
 Fonctionnalites:

@@ -1,5 +1,5 @@
 """
-Interoperability System pour Poly-Spinor Nexus 7D
+Interoperability System pour Eidolon
 Standard ouvert PSNX, compatibilite Keybase/Signal, plugins navigateurs
 
 Features:

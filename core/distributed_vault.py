@@ -1,5 +1,5 @@
 """
-Distributed Vault System pour Poly-Spinor Nexus 7D
+Distributed Vault System pour Eidolon
 Stockage decentralise sur IPFS/Filecoin avec recovery P2P
 
 Features:

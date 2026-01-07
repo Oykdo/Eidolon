@@ -1,4 +1,4 @@
-# 🌌 POLY-SPINOR NEXUS 7D - PHASE 1
+# 🌌 EIDOLON - PHASE 1
 
 ## L'Aube du Nexus
 
@@ -8,7 +8,7 @@
 
 ## 📜 ANNONCE OFFICIELLE
 
-La **Phase 1** du Poly-Spinor Nexus 7D est desormais **COMPLETE**.
+La **Phase 1** du Eidolon est desormais **COMPLETE**.
 
 Les 1000 premiers Vaults auront le privilege exclusif de forger leur Pierre Philosophale et de participer a la genese de cet ecosysteme unique.
 

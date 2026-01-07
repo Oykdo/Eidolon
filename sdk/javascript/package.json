@@ -1,7 +1,7 @@
 {
   "name": "@psnx/sdk",
   "version": "1.0.0",
-  "description": "Poly-Spinor Nexus 7D SDK for JavaScript/TypeScript",
+  "description": "Eidolon SDK for JavaScript/TypeScript",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",

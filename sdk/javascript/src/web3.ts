@@ -1,6 +1,6 @@
 /**
  * Web3 Integration Module
- * Decentralized backup and blockchain verification for Poly-Spinor Nexus 7D
+ * Decentralized backup and blockchain verification for Eidolon
  * 
  * Features:
  * - HD Wallet derivation from vault key

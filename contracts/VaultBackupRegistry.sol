@@ -3,7 +3,7 @@ pragma solidity ^0.8.20;
 
 /**
  * @title VaultBackupRegistry
- * @notice On-chain registry for Poly-Spinor Nexus 7D vault backups
+ * @notice On-chain registry for Eidolon vault backups
  * @dev Stores backup hashes and IPFS CIDs for verification
  * 
  * Features:

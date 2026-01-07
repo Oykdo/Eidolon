@@ -1414,7 +1414,7 @@ class QuantumAvatarGenerator:
         output_path = Path(output_path)
         
         with open(output_path, 'w') as f:
-            f.write(f"# Poly-Spinor Nexus 7D Avatar\n")
+            f.write(f"# Eidolon Avatar\n")
             f.write(f"# Vault: {avatar.vault_id}\n")
             f.write(f"# Avatar ID: {avatar.avatar_id}\n")
             f.write(f"# Type: {avatar.dna.geometric_name}\n")

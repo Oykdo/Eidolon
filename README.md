@@ -1,4 +1,4 @@
-# Poly-Spinor Nexus 7D
+# Eidolon
 
 <div align="center">
 
@@ -368,7 +368,7 @@ python tests/test_security_suite.py
 Resultat attendu:
 ```
 ======================================================================
-  TESTS SECURITY SUITE 10/10 - POLY-SPINOR NEXUS 7D
+  TESTS SECURITY SUITE 10/10 - EIDOLON
 ======================================================================
   [OK] Secure Memory
   [OK] Authenticated Files
@@ -407,7 +407,7 @@ MIT License - voir [LICENSE](LICENSE) pour details.
 
 <div align="center">
 
-**Poly-Spinor Nexus 7D** - Cryptographie Post-Quantique de Nouvelle Generation
+**Eidolon** - Cryptographie Post-Quantique de Nouvelle Generation
 
 *Protegez vos donnees contre les menaces d'aujourd'hui et de demain*
 

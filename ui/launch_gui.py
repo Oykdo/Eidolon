@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Lanceur d'Interface Graphique - Poly-Spinor Nexus 7D
+Lanceur d'Interface Graphique - Eidolon
 Connexion automatique avec votre cle vault
 """
 
@@ -10,7 +10,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
 def main():
     print("="*60)
-    print("  POLY-SPINOR NEXUS 7D - INTERFACE GRAPHIQUE")
+    print("  EIDOLON - INTERFACE GRAPHIQUE")
     print("="*60)
     
     # Fichiers de cle

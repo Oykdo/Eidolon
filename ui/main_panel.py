@@ -1,5 +1,5 @@
 """
-Panneau de Contrôle Principal Poly-Spinor Nexus 7D
+Panneau de Contrôle Principal Eidolon
 Interface utilisateur Blender pour la génération de clés et visualisation quantique
 """
 
@@ -211,7 +211,7 @@ if BLENDER_AVAILABLE:
     
     class POLYSPINOR_PT_MainPanel(bpy.types.Panel):
         """Panneau principal Poly-Spinor Nexus"""
-        bl_label = "Poly-Spinor Nexus 7D"
+        bl_label = "Eidolon"
         bl_idname = "POLYSPINOR_PT_main_panel"
         bl_space_type = 'VIEW_3D'
         bl_region_type = 'UI'

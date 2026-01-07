@@ -1,5 +1,5 @@
 """
-HSM Production Module pour Poly-Spinor Nexus 7D
+HSM Production Module pour Eidolon
 Support FIPS 140-3, AWS CloudHSM, Azure Dedicated HSM
 
 Features:
@@ -273,7 +273,7 @@ class SoftwareHSM(HSMInterface):
             "fips_mode": True,  # Simulated
             "connected": self._connected,
             "key_count": len(self._keys),
-            "manufacturer": "Poly-Spinor Nexus 7D",
+            "manufacturer": "Eidolon",
             "model": "Software HSM v1.0",
             "serial": hashlib.sha256(b"software-hsm").hexdigest()[:16],
             "firmware_version": "1.0.0"

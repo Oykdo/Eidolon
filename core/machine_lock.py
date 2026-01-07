@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Poly-Spinor Nexus 7D - Machine Lock System
+Eidolon - Machine Lock System
 ==========================================
 
 Systeme de verrouillage par machine pour garantir UN SEUL VAULT par ordinateur.

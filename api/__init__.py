@@ -1,5 +1,5 @@
 """
-Poly-Spinor Nexus 7D - REST API
+Eidolon - REST API
 Authentification JWT + Zero-Knowledge Proofs
 """
 

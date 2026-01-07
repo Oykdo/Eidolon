@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Systeme d'evolution des Avatars - Poly-Spinor Nexus 7D
+Systeme d'evolution des Avatars - Eidolon
 Les avatars commencent bruts et evoluent via materiaux, artefacts et criteres
 """
 

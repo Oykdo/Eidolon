@@ -159,7 +159,7 @@ def main():
             print(f"Commande inconnue: {cmd}")
             print("Usage: python init_storage.py [init|test|info]")
     else:
-        print("Poly-Spinor Nexus 7D - Gestion du Stockage Vault")
+        print("Eidolon - Gestion du Stockage Vault")
         print("\nCommandes:")
         print("  python init_storage.py init  - Initialiser le stockage")
         print("  python init_storage.py test  - Tester le stockage")

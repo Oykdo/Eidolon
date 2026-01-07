@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Poly-Spinor Nexus 7D - Configuration du Vault
+Eidolon - Configuration du Vault
 Gestion centralisée des paramètres et configurations
 
 Fonctionnalités:

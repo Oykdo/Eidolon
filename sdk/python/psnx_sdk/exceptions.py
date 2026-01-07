@@ -1,5 +1,5 @@
 """
-Exceptions pour le SDK Poly-Spinor Nexus 7D
+Exceptions pour le SDK Eidolon
 """
 
 

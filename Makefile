@@ -1,12 +1,12 @@
 # =============================================================================
-# Poly-Spinor Nexus 7D - Makefile
+# Eidolon - Makefile
 # =============================================================================
 
 .PHONY: help install install-dev test lint format clean docker-build docker-up docker-down
 
 # Default target
 help:
-	@echo "Poly-Spinor Nexus 7D - Available commands:"
+	@echo "Eidolon - Available commands:"
 	@echo ""
 	@echo "  install        Install production dependencies"
 	@echo "  install-dev    Install development dependencies"

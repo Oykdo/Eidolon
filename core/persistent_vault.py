@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Poly-Spinor Nexus 7D - Gestionnaire de Vault Persistant
+Eidolon - Gestionnaire de Vault Persistant
 Stockage chiffré avec gestion des transfers programmés
 
 Fonctionnalités:

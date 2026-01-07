@@ -1,5 +1,5 @@
 """
-Systeme d'Artefacts Spinoriels pour Poly-Spinor Nexus 7D
+Systeme d'Artefacts Spinoriels pour Eidolon
 ========================================================
 
 Genere des artefacts uniques avec:
@@ -823,7 +823,7 @@ def format_artifact_compact(artifact: SpinorArtifact) -> str:
 
 if __name__ == "__main__":
     print("\n" + "="*70)
-    print("  SPINOR ARTIFACT GENERATOR - Poly-Spinor Nexus 7D")
+    print("  SPINOR ARTIFACT GENERATOR - Eidolon")
     print("="*70)
     
     # Cree un generateur avec un seed aleatoire

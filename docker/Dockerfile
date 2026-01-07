@@ -1,5 +1,5 @@
 # =============================================================================
-# Poly-Spinor Nexus 7D - Production Dockerfile
+# Eidolon - Production Dockerfile
 # =============================================================================
 
 # Stage 1: Build
@@ -28,7 +28,7 @@ FROM python:3.11-slim
 
 LABEL maintainer="Poly-Spinor Team <contact@polyspinor.io>"
 LABEL version="1.0.0"
-LABEL description="Poly-Spinor Nexus 7D Vault System"
+LABEL description="Eidolon Vault System"
 
 # Create non-root user
 RUN groupadd -r vault && useradd -r -g vault vault

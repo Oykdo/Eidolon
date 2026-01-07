@@ -1,5 +1,5 @@
 """
-Poly-Spinor Nexus 7D - Systeme Cryptographique Post-Quantique
+Eidolon - Systeme Cryptographique Post-Quantique
 Vault securise avec authentification double-cle et support EVM
 
 Architecture:
@@ -16,7 +16,7 @@ __author__ = "Quantum Cryptography Lab"
 
 # Blender addon info
 bl_info = {
-    "name": "Poly-Spinor Nexus 7D",
+    "name": "Eidolon",
     "author": __author__,
     "version": (3, 0, 0),
     "blender": (3, 0, 0),
@@ -148,7 +148,7 @@ if BLENDER_AVAILABLE:
 # ============================================================================
 
 class PolySpinorNexus7D:
-    """Classe principale du systeme Poly-Spinor Nexus 7D"""
+    """Classe principale du systeme Eidolon"""
     
     def __init__(self):
         self.spatial_capture = SpatialCaptureSystem()
@@ -188,7 +188,7 @@ def register():
     poly_spinor_system = PolySpinorNexus7D()
     
     print("=" * 60)
-    print("  POLY-SPINOR NEXUS 7D v3.0.0")
+    print("  EIDOLON v3.0.0")
     print("=" * 60)
     print(f"  Blender:      {'Oui' if BLENDER_AVAILABLE else 'Non'}")
     print(f"  PQCrypto:     {'Oui' if check_pqcrypto_available() else 'Non'}")

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script de connexion au Vault avec cle Poly-Spinor Nexus 7D
+Script de connexion au Vault avec cle Eidolon
 """
 
 import sys
@@ -16,7 +16,7 @@ def main():
     blend_path = 'vault_storage/keys/vault_key_monvaultsecurise_0d3e2fa2.blend_data'
 
     print('='*60)
-    print('  CONNEXION AU VAULT POLY-SPINOR NEXUS 7D')
+    print('  CONNEXION AU VAULT EIDOLON')
     print('='*60)
 
     # === PHASE 1: Extraction de la cle ===
@@ -74,7 +74,7 @@ def main():
     print('-'*50)
     
     crypto_vault = Vault(vault_key)
-    test_data = b'Message secret protege par Poly-Spinor Nexus 7D!'
+    test_data = b'Message secret protege par Eidolon!'
     
     encrypted = crypto_vault.encrypt(test_data)
     decrypted = crypto_vault.decrypt(encrypted)

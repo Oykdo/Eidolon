@@ -1,6 +1,6 @@
 """
 Format de Fichier Authentifie HMAC-SHA256
-Poly-Spinor Nexus 7D - Security Module
+Eidolon - Security Module
 
 Features:
 - Authentification HMAC-SHA256

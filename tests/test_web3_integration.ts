@@ -1,6 +1,6 @@
 /**
  * Tests d'integration Web3 & Blockchain
- * Poly-Spinor Nexus 7D SDK
+ * Eidolon SDK
  */
 
 import {

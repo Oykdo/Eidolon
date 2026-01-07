@@ -1,5 +1,5 @@
 """
-Multi-Tenancy System pour Poly-Spinor Nexus 7D
+Multi-Tenancy System pour Eidolon
 Isolation des vaults par organisation avec roles et permissions
 
 Features:

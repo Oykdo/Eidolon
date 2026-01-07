@@ -1,5 +1,5 @@
 """
-Suite de Securite Integree Poly-Spinor Nexus 7D
+Suite de Securite Integree Eidolon
 Version 10/10 - Toutes les fonctionnalites avancees
 
 Ce module integre:
@@ -472,7 +472,7 @@ class SecureVaultManager:
         report = self.get_security_report()
         
         print("\n" + "="*60)
-        print("  STATUT SECURITE POLY-SPINOR NEXUS 7D")
+        print("  STATUT SECURITE EIDOLON")
         print("="*60)
         print(f"  Version:            {report['version']}")
         print(f"  Entropie quantique: {'OUI' if report['config']['quantum_entropy'] else 'NON'}")

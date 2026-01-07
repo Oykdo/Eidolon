@@ -1,5 +1,5 @@
 """
-Module Vault pour le SDK Poly-Spinor Nexus 7D
+Module Vault pour le SDK Eidolon
 
 Chiffrement/dechiffrement local avec AES-256-GCM.
 """

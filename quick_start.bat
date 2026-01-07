@@ -1,10 +1,10 @@
 @echo off
 chcp 65001 > nul
-title Poly-Spinor Nexus 7D - Quick Start
+title Eidolon - Quick Start
 color 0A
 
 echo.
-echo  ◈ POLY-SPINOR NEXUS 7D - QUICK START ◈
+echo  ◈ EIDOLON - QUICK START ◈
 echo  ═══════════════════════════════════════
 echo.
 

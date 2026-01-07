@@ -1,7 +1,7 @@
 """
-Poly-Spinor Nexus 7D - Python SDK
+Eidolon - Python SDK
 
-SDK officiel pour interagir avec l'API Poly-Spinor Nexus 7D.
+SDK officiel pour interagir avec l'API Eidolon.
 
 Installation:
     pip install psnx-sdk

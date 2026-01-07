@@ -1,5 +1,5 @@
 """
-Poly-Spinor Nexus 7D - Avatar System
+Eidolon - Avatar System
 Avatars 3D uniques lies aux vaults avec tokenisation Bitcoin
 
 SYSTEME PIONNIER:

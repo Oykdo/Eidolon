@@ -26,7 +26,7 @@ from core.genesis_system import (
 def print_banner():
     print("""
 ╔══════════════════════════════════════════════════════════════╗
-║     POLY-SPINOR NEXUS 7D - GENESIS SYSTEM                    ║
+║     EIDOLON - GENESIS SYSTEM                    ║
 ║     Easter Eggs + Rune Protocol Bitcoin                      ║
 ╚══════════════════════════════════════════════════════════════╝
     """)

@@ -1,5 +1,5 @@
 """
-Generateur de cles pour le SDK Poly-Spinor Nexus 7D
+Generateur de cles pour le SDK Eidolon
 """
 
 import secrets

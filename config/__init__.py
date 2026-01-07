@@ -1,5 +1,5 @@
 """
-Configuration module for Poly-Spinor Nexus 7D
+Configuration module for Eidolon
 
 Provides centralized configuration loading and management.
 """

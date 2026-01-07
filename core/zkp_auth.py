@@ -1,6 +1,6 @@
 """
 Zero-Knowledge Proof Authentication
-Poly-Spinor Nexus 7D - Security Module
+Eidolon - Security Module
 
 Protocoles ZKP pour prouver la connaissance d'un secret
 sans le reveler:

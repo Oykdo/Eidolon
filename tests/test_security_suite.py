@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Tests complets de la Security Suite 10/10
-Poly-Spinor Nexus 7D
+Eidolon
 """
 
 import sys
@@ -234,7 +234,7 @@ def test_security_suite_integration():
 def run_all_tests():
     """Execute tous les tests"""
     print("="*70)
-    print("  TESTS SECURITY SUITE 10/10 - POLY-SPINOR NEXUS 7D")
+    print("  TESTS SECURITY SUITE 10/10 - EIDOLON")
     print("="*70)
     
     tests = [

@@ -1,6 +1,6 @@
 """
 Authentification JWT + ZKP pour l'API REST
-Poly-Spinor Nexus 7D
+Eidolon
 
 Flow d'authentification:
 1. Client envoie public_key (derive de vault_key)

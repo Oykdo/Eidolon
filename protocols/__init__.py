@@ -1,5 +1,5 @@
 """
-Protocols for Poly-Spinor Nexus 7D
+Protocols for Eidolon
 
 Modules:
 - document_escrow: Entiercement de documents avec sceau spinoriel

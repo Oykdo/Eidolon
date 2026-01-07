@@ -1,5 +1,5 @@
 """
-Quantum-Ready Cryptography pour Poly-Spinor Nexus 7D
+Quantum-Ready Cryptography pour Eidolon
 Cryptographie post-quantique resistant aux attaques quantiques
 
 Features:

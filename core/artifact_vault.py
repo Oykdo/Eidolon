@@ -1,5 +1,5 @@
 """
-Systeme d'Artefacts Detachables pour Poly-Spinor Nexus 7D
+Systeme d'Artefacts Detachables pour Eidolon
 =========================================================
 
 Permet de:
@@ -474,7 +474,7 @@ if __name__ == "__main__":
     vault = ArtifactVault()
     
     print("\n" + "="*70)
-    print("  ARTIFACT VAULT - Poly-Spinor Nexus 7D")
+    print("  ARTIFACT VAULT - Eidolon")
     print("="*70 + "\n")
     
     if args.generate_all:

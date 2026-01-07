@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║         BITCOIN ASSET BRIDGE - Poly-Spinor Nexus 7D                          ║
+║         BITCOIN ASSET BRIDGE - Eidolon                          ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
 ║                                                                              ║
 ║  Pont unifie pour transferer tous les actifs du jeu sur Bitcoin:            ║

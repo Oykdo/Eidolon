@@ -1,5 +1,5 @@
 """
-Generateur de Cle Complet Poly-Spinor Nexus 7D
+Generateur de Cle Complet Eidolon
 Integration de TOUS les composants pour entropie maximale (38,460 bits)
 
 Composants integres:
@@ -1478,7 +1478,7 @@ def generate_complete_key(user_name: str,
 
 if __name__ == "__main__":
     print("=" * 70)
-    print("  TEST GENERATEUR COMPLET POLY-SPINOR NEXUS 7D")
+    print("  TEST GENERATEUR COMPLET EIDOLON")
     print("=" * 70)
     
     output_dir = os.path.join(

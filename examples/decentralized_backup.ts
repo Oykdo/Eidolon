@@ -1,6 +1,6 @@
 /**
  * Exemple: Système de Backup Décentralisé
- * Poly-Spinor Nexus 7D
+ * Eidolon
  * 
  * Démontre:
  * - Création d'un backup chiffré du vault
@@ -23,7 +23,7 @@ import {
 
 async function main() {
   console.log('='.repeat(70));
-  console.log('  SYSTEME DE BACKUP DECENTRALISE - POLY-SPINOR NEXUS 7D');
+  console.log('  SYSTEME DE BACKUP DECENTRALISE - EIDOLON');
   console.log('='.repeat(70));
 
   // =========================================================================
@@ -248,7 +248,7 @@ async function main() {
   console.log('  RESUME DU SYSTEME DE BACKUP DECENTRALISE');
   console.log('='.repeat(70));
   console.log(`
-  Le systeme de backup decentralise Poly-Spinor Nexus 7D offre:
+  Le systeme de backup decentralise Eidolon offre:
 
   [1] CHIFFREMENT LOCAL
       - AES-256-GCM pour les donnees

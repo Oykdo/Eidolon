@@ -1,6 +1,6 @@
-//! # Poly-Spinor Nexus 7D SDK
+//! # Eidolon SDK
 //!
-//! SDK officiel pour interagir avec l'API Poly-Spinor Nexus 7D.
+//! SDK officiel pour interagir avec l'API Eidolon.
 //!
 //! ## Example
 //!

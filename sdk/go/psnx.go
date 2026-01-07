@@ -1,6 +1,6 @@
-// Package psnx provides the official Go SDK for Poly-Spinor Nexus 7D.
+// Package psnx provides the official Go SDK for Eidolon.
 //
-// This SDK enables interaction with the Poly-Spinor Nexus 7D API,
+// This SDK enables interaction with the Eidolon API,
 // providing cryptographic operations, vault management, and blockchain integration.
 //
 // Example usage:

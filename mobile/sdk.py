@@ -1,5 +1,5 @@
 """
-Mobile SDK pour Poly-Spinor Nexus 7D
+Mobile SDK pour Eidolon
 Support React Native et Flutter avec Secure Enclave
 
 Features:
@@ -675,7 +675,7 @@ class QRCodeManager:
 # ============================================================================
 
 class PSNXMobileSDK:
-    """SDK Mobile complet pour Poly-Spinor Nexus 7D"""
+    """SDK Mobile complet pour Eidolon"""
     
     VERSION = "1.0.0"
     

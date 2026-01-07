@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Envoi d'ETH depuis le Vault Poly-Spinor Nexus 7D
+Envoi d'ETH depuis le Vault Eidolon
 """
 import sys
 sys.path.insert(0, '.')
@@ -14,7 +14,7 @@ AMOUNT_ETH = 3.0
 
 def main():
     print('='*60)
-    print('  ENVOI ETH - POLY-SPINOR NEXUS 7D')
+    print('  ENVOI ETH - EIDOLON')
     print('='*60)
     
     # Connexion au vault

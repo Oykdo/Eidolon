@@ -1,5 +1,5 @@
 /**
- * Poly-Spinor Nexus 7D - JavaScript/TypeScript SDK
+ * Eidolon - JavaScript/TypeScript SDK
  * 
  * @example
  * ```typescript

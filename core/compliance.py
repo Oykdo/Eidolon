@@ -1,5 +1,5 @@
 """
-Compliance Module pour Poly-Spinor Nexus 7D
+Compliance Module pour Eidolon
 GDPR Data Handling + SOC 2 Type II Audit
 
 Features:

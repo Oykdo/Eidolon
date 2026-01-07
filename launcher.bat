@@ -1,6 +1,6 @@
 @echo off
 chcp 65001 >nul 2>&1
-title Poly-Spinor Nexus 7D - Launcher
+title Eidolon - Launcher
 color 0A
 cd /d "%~dp0"
 
@@ -8,7 +8,7 @@ cd /d "%~dp0"
 cls
 echo.
 echo  ============================================================
-echo                POLY-SPINOR NEXUS 7D
+echo                EIDOLON
 echo            Quantum Vault System - Launcher
 echo  ============================================================
 echo.
@@ -166,7 +166,7 @@ goto MENU
 :EXIT
 cls
 echo.
-echo  Merci d'utiliser Poly-Spinor Nexus 7D
+echo  Merci d'utiliser Eidolon
 echo  "Quantum Security for the Future"
 echo.
 timeout /t 2 >nul

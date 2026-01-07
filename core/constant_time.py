@@ -1,6 +1,6 @@
 """
 Operations Cryptographiques en Temps Constant
-Poly-Spinor Nexus 7D - Security Module
+Eidolon - Security Module
 
 Protection contre les attaques par canal auxiliaire (side-channel):
 - Timing attacks

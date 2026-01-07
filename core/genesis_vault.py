@@ -1,5 +1,5 @@
 """
-Systeme Genesis Vault Evolutif pour Poly-Spinor Nexus 7D
+Systeme Genesis Vault Evolutif pour Eidolon
 =========================================================
 
 Chaque nouveau vault herite de la force collective de tous les vaults precedents,

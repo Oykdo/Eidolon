@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Poly-Spinor Nexus 7D Vault Configuration",
+  "title": "Eidolon Vault Configuration",
   "description": "Schema for vault configuration validation",
   "type": "object",
   "properties": {

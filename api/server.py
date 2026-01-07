@@ -1,6 +1,6 @@
 """
 Serveur API REST avec FastAPI
-Poly-Spinor Nexus 7D
+Eidolon
 
 Endpoints:
 - POST /auth/challenge     - Demander un challenge ZKP
@@ -140,7 +140,7 @@ class ErrorResponse(BaseModel):
 if FASTAPI_AVAILABLE:
     
     app = FastAPI(
-        title="Poly-Spinor Nexus 7D API",
+        title="Eidolon API",
         description="API REST securisee avec authentification JWT + ZKP",
         version="1.0.0",
         docs_url="/docs",
@@ -512,7 +512,7 @@ if FASTAPI_AVAILABLE:
     async def root():
         """API Root."""
         return {
-            "name": "Poly-Spinor Nexus 7D API",
+            "name": "Eidolon API",
             "version": "1.0.0",
             "docs": "/docs",
             "health": "/health"
@@ -532,7 +532,7 @@ def run_server(host: str = "0.0.0.0", port: int = 8000):
     import uvicorn
     
     print("="*60)
-    print("  POLY-SPINOR NEXUS 7D API SERVER")
+    print("  EIDOLON API SERVER")
     print("="*60)
     print(f"  Host: {host}")
     print(f"  Port: {port}")

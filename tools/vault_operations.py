@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Operations sur le Vault Poly-Spinor Nexus 7D
+Operations sur le Vault Eidolon
 Exemples pratiques d'utilisation
 """
 
@@ -31,7 +31,7 @@ def connect_vault():
 
 def main():
     print('='*70)
-    print('  OPERATIONS VAULT - POLY-SPINOR NEXUS 7D')
+    print('  OPERATIONS VAULT - EIDOLON')
     print('='*70)
     
     # Connexion

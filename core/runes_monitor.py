@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Poly-Spinor Nexus 7D - Runes Asset Monitor
+Eidolon - Runes Asset Monitor
 ==========================================
 
 Systeme de monitoring des actifs Runes mintes sur le vault.
@@ -280,7 +280,7 @@ class RunesMonitor:
         lines = []
         lines.append("")
         lines.append("=" * 70)
-        lines.append("  POLY-SPINOR NEXUS 7D - RUNES PORTFOLIO")
+        lines.append("  EIDOLON - RUNES PORTFOLIO")
         lines.append("=" * 70)
         lines.append("")
         lines.append(f"  Total Balance: {self.format_balance(portfolio.total_balance)} PSNX")

@@ -1,4 +1,4 @@
-//! Module Web3 pour le SDK Poly-Spinor Nexus 7D
+//! Module Web3 pour le SDK Eidolon
 //!
 //! Integration blockchain et backup decentralise.
 //!

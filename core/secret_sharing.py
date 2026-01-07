@@ -1,6 +1,6 @@
 """
 Shamir's Secret Sharing Scheme
-Poly-Spinor Nexus 7D - Security Module
+Eidolon - Security Module
 
 Implementation du partage de secret de Shamir pour:
 - Vault multi-signatures

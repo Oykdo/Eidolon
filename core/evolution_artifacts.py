@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Artefacts d'Evolution - Poly-Spinor Nexus 7D
+Artefacts d'Evolution - Eidolon
 Systeme de creation et distribution des artefacts pour l'evolution des avatars
 """
 

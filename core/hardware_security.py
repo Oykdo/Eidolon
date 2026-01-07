@@ -1,6 +1,6 @@
 """
 Integration Hardware Security Module (HSM)
-Poly-Spinor Nexus 7D - Security Module
+Eidolon - Security Module
 
 Support pour:
 - YubiHSM 2

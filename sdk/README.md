@@ -1,6 +1,6 @@
-# Poly-Spinor Nexus 7D SDKs
+# Eidolon SDKs
 
-SDKs officiels pour interagir avec le système Poly-Spinor Nexus 7D.
+SDKs officiels pour interagir avec le système Eidolon.
 
 ## Langages Supportés
 

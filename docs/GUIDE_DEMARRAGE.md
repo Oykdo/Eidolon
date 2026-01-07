@@ -1,4 +1,4 @@
-# Guide de Demarrage - Poly-Spinor Nexus 7D
+# Guide de Demarrage - Eidolon
 
 ## Introduction
 
@@ -266,4 +266,4 @@ poly_spinor_nexus_7d/
 
 ---
 
-*Poly-Spinor Nexus 7D - Cryptographie post-quantique avec verification Bell*
+*Eidolon - Cryptographie post-quantique avec verification Bell*

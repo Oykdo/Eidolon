@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║         ITEM RUNES EXCHANGE - Poly-Spinor Nexus 7D                           ║
+║         ITEM RUNES EXCHANGE - Eidolon                           ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
 ║                                                                              ║
 ║  Systeme d'echange d'items via le protocole RUNES sur Bitcoin.              ║

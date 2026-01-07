@@ -1,5 +1,5 @@
 """
-Client API REST pour Poly-Spinor Nexus 7D
+Client API REST pour Eidolon
 Exemple d'utilisation de l'API avec authentification JWT + ZKP
 
 Usage:
@@ -59,7 +59,7 @@ class APISession:
 
 class VaultAPIClient:
     """
-    Client pour l'API Poly-Spinor Nexus 7D.
+    Client pour l'API Eidolon.
     
     Gere automatiquement:
     - Authentification ZKP
@@ -305,7 +305,7 @@ def demo():
     import secrets
     
     print("="*60)
-    print("  DEMO CLIENT API POLY-SPINOR NEXUS 7D")
+    print("  DEMO CLIENT API EIDOLON")
     print("="*60)
     
     # Creer une vault_key pour la demo

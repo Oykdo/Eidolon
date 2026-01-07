@@ -1,5 +1,5 @@
 """
-Systeme de Gemmes Mobiles pour Poly-Spinor Nexus 7D
+Systeme de Gemmes Mobiles pour Eidolon
 ===================================================
 
 Gemmes detachables et transferables entre vaults et glyphes.

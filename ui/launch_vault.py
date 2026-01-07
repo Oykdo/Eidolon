@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 """
 Lanceur de l'interface graphique Vault
-Poly-Spinor Nexus 7D - Authentification Double Cle (.psnx + .blend_data)
+Eidolon - Authentification Double Cle (.psnx + .blend_data)
 
 Fonctionnalites:
 - Authentification par fichier .psnx (donnees crypto) + .blend_data (structure 3D)

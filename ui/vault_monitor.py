@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Poly-Spinor Nexus 7D - Vault Monitor GUI
+Eidolon - Vault Monitor GUI
 Système de monitoring complet avec persistance des données
 
 Fonctionnalités:
@@ -478,7 +478,7 @@ class VaultMonitorGUI:
         
         # Configuration de la fenêtre principale
         self.root = tk.Tk()
-        self.root.title(f"Poly-Spinor Nexus 7D - Vault Monitor: {vault_name}")
+        self.root.title(f"Eidolon - Vault Monitor: {vault_name}")
         
         # Adapter la taille a l'ecran
         screen_w = self.root.winfo_screenwidth()
@@ -572,7 +572,7 @@ class VaultMonitorGUI:
         
         logo_text = tk.Label(
             title_container,
-            text="◈ POLY-SPINOR NEXUS 7D",
+            text="◈ EIDOLON",
             bg=CypherpunkTheme.BG_DARK,
             fg=CypherpunkTheme.NEON_CYAN,
             font=("Consolas", 16, "bold")
@@ -6319,7 +6319,7 @@ def main():
     """Point d'entrée principal"""
     import argparse
     
-    parser = argparse.ArgumentParser(description="Poly-Spinor Nexus 7D - Vault Monitor")
+    parser = argparse.ArgumentParser(description="Eidolon - Vault Monitor")
     parser.add_argument("--vault", "-v", default="default_vault", help="Nom du vault")
     parser.add_argument("--key", "-k", help="Clé du vault (hex)")
     parser.add_argument("--auth", "-a", action="store_true", help="Utiliser l'authentification double clé")

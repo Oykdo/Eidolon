@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Poly-Spinor Nexus 7D - Guide de Démarrage Basique
+Eidolon - Guide de Démarrage Basique
 ==================================================
 
 Ce fichier montre comment utiliser les fonctionnalités de base du vault.
@@ -377,7 +377,7 @@ gui.run()
 if __name__ == "__main__":
     print("""
 ╔══════════════════════════════════════════════════════════════════╗
-║     Poly-Spinor Nexus 7D - Guide de Démarrage                    ║
+║     Eidolon - Guide de Démarrage                    ║
 ║     Exemples d'utilisation du système de vault                   ║
 ╚══════════════════════════════════════════════════════════════════╝
     """)

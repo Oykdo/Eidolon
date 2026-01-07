@@ -1,5 +1,5 @@
 """
-Shamir Secret Sharing pour le SDK Poly-Spinor Nexus 7D
+Shamir Secret Sharing pour le SDK Eidolon
 """
 
 import secrets

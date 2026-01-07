@@ -1,6 +1,6 @@
-# Contributing to Poly-Spinor Nexus 7D
+# Contributing to Eidolon
 
-Thank you for your interest in contributing to Poly-Spinor Nexus 7D!
+Thank you for your interest in contributing to Eidolon!
 
 ## Getting Started
 

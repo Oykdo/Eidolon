@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Poly-Spinor Nexus 7D - Système de Tâches Programmées
+Eidolon - Système de Tâches Programmées
 Gestion des tâches automatisées pour le vault
 
 Fonctionnalités:

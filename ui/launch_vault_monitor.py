@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Script de lancement du monitoring du vault Poly-Spinor Nexus 7D
+Script de lancement du monitoring du vault Eidolon
 
 Modes de lancement:
 - Interactif: Demande les fichiers clés en ligne de commande
@@ -28,7 +28,7 @@ def print_banner():
     """Afficher la bannière"""
     print("""
 ╔══════════════════════════════════════════════════════════════════╗
-║         Poly-Spinor Nexus 7D - Vault Monitor                     ║
+║         Eidolon - Vault Monitor                     ║
 ║         Système de monitoring sécurisé avec persistance          ║
 ╚══════════════════════════════════════════════════════════════════╝
     """)
@@ -234,7 +234,7 @@ def direct_mode(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Poly-Spinor Nexus 7D - Vault Monitor",
+        description="Eidolon - Vault Monitor",
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Exemples:

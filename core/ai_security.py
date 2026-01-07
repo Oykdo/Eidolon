@@ -1,5 +1,5 @@
 """
-AI Security System pour Poly-Spinor Nexus 7D
+AI Security System pour Eidolon
 Detection d'anomalies, analyse comportementale, et prediction de menaces
 
 Features:

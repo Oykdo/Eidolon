@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 """
-Poly-Spinor Nexus 7D - Interface Graphique Vault Complete
+Eidolon - Interface Graphique Vault Complete
 Authentification par double fichier: .psnx (donnees crypto) + .blend_data (visualisation)
 
 Les deux fichiers sont necessaires pour deverrouiller le vault:
@@ -372,7 +372,7 @@ class VaultCompleteGUI:
     
     def __init__(self, root: tk.Tk):
         self.root = root
-        self.root.title("Poly-Spinor Nexus 7D - Vault")
+        self.root.title("Eidolon - Vault")
         self.root.geometry("1000x700")
         self.root.minsize(800, 600)
         
@@ -416,7 +416,7 @@ class VaultCompleteGUI:
         
         ttk.Label(
             title_frame,
-            text="POLY-SPINOR NEXUS 7D",
+            text="EIDOLON",
             style='Title.TLabel'
         ).pack()
         

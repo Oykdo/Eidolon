@@ -1,5 +1,5 @@
 """
-Galerie d'Artefacts Interactive pour Poly-Spinor Nexus 7D
+Galerie d'Artefacts Interactive pour Eidolon
 =========================================================
 
 Interface de visualisation des artefacts avec:

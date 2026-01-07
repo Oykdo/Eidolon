@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Interface CLI Interactive - Poly-Spinor Nexus 7D
+Interface CLI Interactive - Eidolon
 Navigation et gestion du vault en ligne de commande
 """
 
@@ -490,7 +490,7 @@ class VaultCLI:
     def run(self):
         """Lance l'interface"""
         clear_screen()
-        print_header("POLY-SPINOR NEXUS 7D")
+        print_header("EIDOLON")
         
         if not self.connect():
             return

@@ -1,5 +1,5 @@
 """
-Zero-Knowledge Proofs pour le SDK Poly-Spinor Nexus 7D
+Zero-Knowledge Proofs pour le SDK Eidolon
 
 Protocole de Schnorr pour prouver la possession d'une cle
 sans la reveler.

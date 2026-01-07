@@ -1,6 +1,6 @@
 """
 Sources d'Entropie Quantique Reelles
-Poly-Spinor Nexus 7D - Security Module
+Eidolon - Security Module
 
 Sources supportees:
 - ANU QRNG API (Australian National University)

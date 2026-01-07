@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║              SYSTEME DE STATS - Poly-Spinor Nexus 7D                         ║
+║              SYSTEME DE STATS - Eidolon                         ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
 ║                                                                              ║
 ║  Stats primaires et secondaires pour les items et personnages.              ║

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Transfer USDC depuis le Vault Poly-Spinor Nexus 7D
+Transfer USDC depuis le Vault Eidolon
 """
 
 import sys
@@ -31,7 +31,7 @@ def connect_vault():
 
 def main():
     print('='*70)
-    print('  TRANSFER USDC - POLY-SPINOR NEXUS 7D')
+    print('  TRANSFER USDC - EIDOLON')
     print('='*70)
     
     # === PARAMETRES DU TRANSFER ===

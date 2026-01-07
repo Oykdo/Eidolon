@@ -1,6 +1,6 @@
 """
 ╔══════════════════════════════════════════════════════════════════════════════╗
-║              SYSTEME D'OBJETS ALCHIMIQUES - Poly-Spinor Nexus 7D             ║
+║              SYSTEME D'OBJETS ALCHIMIQUES - Eidolon             ║
 ╠══════════════════════════════════════════════════════════════════════════════╣
 ║                                                                              ║
 ║  10 Categories d'Objets Alchimiques:                                         ║

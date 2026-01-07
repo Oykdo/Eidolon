@@ -1,5 +1,5 @@
 # =============================================================================
-# Poly-Spinor Nexus 7D - Development Requirements
+# Eidolon - Development Requirements
 # =============================================================================
 
 # Include base requirements
