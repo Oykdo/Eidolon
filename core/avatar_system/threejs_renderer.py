@@ -468,10 +468,12 @@ class ThreeJSAvatarRenderer:
     
     def _generate_nexus_crystal(self) -> str:
         """Cristal nexus avec facettes uniques"""
+        scale_y_stretched = self.scale_y * 1.5
+        emission_boosted = self.emission_intensity * 1.5
         return f'''
             // === NEXUS CRYSTAL UNIQUE ===
             const mainGroup = new THREE.Group();
-            mainGroup.scale.set({self.scale_x:.3f}, {self.scale_y:.3f * 1.5:.3f}, {self.scale_z:.3f});
+            mainGroup.scale.set({self.scale_x:.3f}, {scale_y_stretched:.3f}, {self.scale_z:.3f});
             scene.add(mainGroup);
             
             // Cristal principal (octaedre deforme)
@@ -491,7 +493,7 @@ class ThreeJSAvatarRenderer:
                 transparent: true,
                 opacity: 0.8,
                 emissive: '{self.emission_color}',
-                emissiveIntensity: {self.emission_intensity * 1.5:.3f},
+                emissiveIntensity: {emission_boosted:.3f},
                 clearcoat: 1.0,
                 clearcoatRoughness: 0.0,
                 reflectivity: 1.0,
