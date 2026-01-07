@@ -1735,6 +1735,9 @@ class VaultMonitorGUI:
             return
         
         # Get vault identity
+        vault_id = None
+        vault_number = getattr(self, 'current_vault_num', 1)
+        
         try:
             from core.vault_identity import VaultIdentityManager
             identity_mgr = VaultIdentityManager()
@@ -1742,12 +1745,23 @@ class VaultMonitorGUI:
             if vault_identity:
                 vault_id = vault_identity.vault_id
                 vault_number = vault_identity.vault_number
-            else:
-                vault_id = hashlib.sha256(self.vault_key).hexdigest()[:32]
-                vault_number = self.current_vault_num
         except Exception:
-            vault_id = hashlib.sha256(self.vault_key).hexdigest()[:32]
-            vault_number = getattr(self, 'current_vault_num', 1)
+            pass
+        
+        # Fallback: try to find by vault number
+        if not vault_id:
+            try:
+                from core.vault_identity import VaultIdentityManager
+                identity_mgr = VaultIdentityManager()
+                vault_identity = identity_mgr.get_vault_by_number(vault_number)
+                if vault_identity:
+                    vault_id = vault_identity.vault_id
+            except Exception:
+                pass
+        
+        # Last fallback: generate from key
+        if not vault_id:
+            vault_id = hashlib.sha256(self.vault_key).hexdigest()
         
         # Load lair collection
         collection = LairCollection(vault_id, vault_number)

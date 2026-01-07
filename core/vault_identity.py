@@ -279,8 +279,18 @@ class VaultIdentityManager:
     
     def get_vault_by_key(self, vault_key: bytes) -> Optional[VaultIdentity]:
         """Get vault by vault key"""
+        # First try direct vault_id match
         vault_id = self._derive_vault_id(vault_key)
-        return self.vaults.get(vault_id)
+        if vault_id in self.vaults:
+            return self.vaults.get(vault_id)
+        
+        # Fallback: search by vault_key_hash
+        vault_key_hash = hashlib.sha256(vault_key).hexdigest()
+        for vault in self.vaults.values():
+            if vault.vault_key_hash == vault_key_hash:
+                return vault
+        
+        return None
     
     def list_vaults(self, active_only: bool = True) -> List[VaultIdentity]:
         """List all registered vaults"""
