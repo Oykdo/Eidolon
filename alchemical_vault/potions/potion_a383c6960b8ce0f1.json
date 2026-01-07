@@ -1,0 +1,21 @@
+{
+  "potion_id": "a383c6960b8ce0f1",
+  "potion_type": "mana",
+  "quality": "minor",
+  "name": "Minor Mana Potion",
+  "effects": {
+    "restore_mana": 0.5,
+    "mana_regen": 0.0
+  },
+  "duration": 0,
+  "power": 25.0,
+  "stack_size": 1,
+  "max_stack": 20,
+  "category": "restoration",
+  "color": "#808080",
+  "description": "A weak concoction. Restores magical energy.",
+  "origin_vault": 1,
+  "origin_chest": "5d382c40180aa3d1",
+  "pioneer_tier": "genesis",
+  "created_at": "2026-01-07T07:48:33.235004"
+}

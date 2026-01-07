@@ -1,0 +1,20 @@
+{
+  "potion_id": "2b8311fcb28e2747",
+  "potion_type": "power",
+  "quality": "superior",
+  "name": "Superior Power Elixir",
+  "effects": {
+    "phys_damage_boost": 2.0
+  },
+  "duration": 120,
+  "power": 400.0,
+  "stack_size": 1,
+  "max_stack": 20,
+  "category": "offensive",
+  "color": "#ff8000",
+  "description": "A powerful concoction. Increases physical damage temporarily.",
+  "origin_vault": 6,
+  "origin_chest": "5b3d25c6329509f9",
+  "pioneer_tier": "genesis",
+  "created_at": "2026-01-07T07:48:33.432524"
+}

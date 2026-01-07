@@ -1,0 +1,21 @@
+{
+  "potion_id": "0300c1ade283b64d",
+  "potion_type": "ironhide",
+  "quality": "supreme",
+  "name": "Supreme Ironhide Potion",
+  "effects": {
+    "damage_reduction": 2.0999999999999996,
+    "health_boost": 0.8999999999999999
+  },
+  "duration": 135,
+  "power": 899.9999999999998,
+  "stack_size": 1,
+  "max_stack": 20,
+  "category": "defensive",
+  "color": "#e6cc80",
+  "description": "An extraordinary concoction. Reduces incoming damage.",
+  "origin_vault": 6,
+  "origin_chest": "5b3d25c6329509f9",
+  "pioneer_tier": "genesis",
+  "created_at": "2026-01-07T07:48:33.436379"
+}

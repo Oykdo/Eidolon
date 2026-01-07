@@ -1,0 +1,20 @@
+{
+  "potion_id": "176109b838b2435f",
+  "potion_type": "arcane",
+  "quality": "superior",
+  "name": "Superior Arcane Draught",
+  "effects": {
+    "mag_damage_boost": 2.0
+  },
+  "duration": 120,
+  "power": 400.0,
+  "stack_size": 1,
+  "max_stack": 20,
+  "category": "offensive",
+  "color": "#ff8000",
+  "description": "A powerful concoction. Enhances magical abilities.",
+  "origin_vault": 1,
+  "origin_chest": "5d382c40180aa3d1",
+  "pioneer_tier": "genesis",
+  "created_at": "2026-01-07T07:48:33.245675"
+}

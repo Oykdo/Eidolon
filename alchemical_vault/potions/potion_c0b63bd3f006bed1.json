@@ -1,0 +1,20 @@
+{
+  "potion_id": "c0b63bd3f006bed1",
+  "potion_type": "swiftness",
+  "quality": "lesser",
+  "name": "Lesser Swiftness Serum",
+  "effects": {
+    "movement_speed": 0.75
+  },
+  "duration": 67,
+  "power": 56.25,
+  "stack_size": 1,
+  "max_stack": 20,
+  "category": "utility",
+  "color": "#1eff00",
+  "description": "A modest concoction. Increases movement speed.",
+  "origin_vault": 2,
+  "origin_chest": "da3f69cc1a5d254b",
+  "pioneer_tier": "genesis",
+  "created_at": "2026-01-07T07:48:33.310113"
+}

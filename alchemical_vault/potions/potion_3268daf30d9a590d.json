@@ -1,0 +1,21 @@
+{
+  "potion_id": "3268daf30d9a590d",
+  "potion_type": "fury",
+  "quality": "supreme",
+  "name": "Supreme Fury Tonic",
+  "effects": {
+    "attack_speed_boost": 1.5,
+    "crit_chance_boost": 1.5
+  },
+  "duration": 135,
+  "power": 900.0,
+  "stack_size": 1,
+  "max_stack": 20,
+  "category": "offensive",
+  "color": "#e6cc80",
+  "description": "An extraordinary concoction. Increases attack speed and critical chance.",
+  "origin_vault": 6,
+  "origin_chest": "5b3d25c6329509f9",
+  "pioneer_tier": "genesis",
+  "created_at": "2026-01-07T07:48:33.423444"
+}

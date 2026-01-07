@@ -1,0 +1,20 @@
+{
+  "potion_id": "74aa82e902f14533",
+  "potion_type": "nexus_catalyst",
+  "quality": "minor",
+  "name": "Minor Nexus Catalyst",
+  "effects": {
+    "all_stats_boost": 0.5
+  },
+  "duration": 15,
+  "power": 25.0,
+  "stack_size": 1,
+  "max_stack": 20,
+  "category": "special",
+  "color": "#808080",
+  "description": "A weak concoction. Boosts all stats temporarily.",
+  "origin_vault": 6,
+  "origin_chest": "5b3d25c6329509f9",
+  "pioneer_tier": "genesis",
+  "created_at": "2026-01-07T07:48:33.427629"
+}

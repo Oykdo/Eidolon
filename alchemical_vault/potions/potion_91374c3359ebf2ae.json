@@ -1,0 +1,20 @@
+{
+  "potion_id": "91374c3359ebf2ae",
+  "potion_type": "swiftness",
+  "quality": "greater",
+  "name": "Greater Swiftness Serum",
+  "effects": {
+    "movement_speed": 1.5
+  },
+  "duration": 135,
+  "power": 225.0,
+  "stack_size": 1,
+  "max_stack": 20,
+  "category": "utility",
+  "color": "#a335ee",
+  "description": "A potent concoction. Increases movement speed.",
+  "origin_vault": 5,
+  "origin_chest": "195d1ff14d853588",
+  "pioneer_tier": "genesis",
+  "created_at": "2026-01-07T07:48:33.380475"
+}

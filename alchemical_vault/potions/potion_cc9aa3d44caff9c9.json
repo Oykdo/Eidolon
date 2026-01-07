@@ -1,0 +1,21 @@
+{
+  "potion_id": "cc9aa3d44caff9c9",
+  "potion_type": "rejuvenation",
+  "quality": "standard",
+  "name": "Rejuvenation Elixir",
+  "effects": {
+    "restore_health": 0.5,
+    "restore_mana": 0.5
+  },
+  "duration": 0,
+  "power": 100.0,
+  "stack_size": 1,
+  "max_stack": 20,
+  "category": "restoration",
+  "color": "#0070dd",
+  "description": "A standard concoction. Restores both health and mana.",
+  "origin_vault": 6,
+  "origin_chest": "5b3d25c6329509f9",
+  "pioneer_tier": "genesis",
+  "created_at": "2026-01-07T07:48:33.440444"
+}

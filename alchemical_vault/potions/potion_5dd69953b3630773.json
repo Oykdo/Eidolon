@@ -1,0 +1,21 @@
+{
+  "potion_id": "5dd69953b3630773",
+  "potion_type": "mana",
+  "quality": "superior",
+  "name": "Superior Mana Potion",
+  "effects": {
+    "restore_mana": 2.0,
+    "mana_regen": 0.0
+  },
+  "duration": 0,
+  "power": 400.0,
+  "stack_size": 1,
+  "max_stack": 20,
+  "category": "restoration",
+  "color": "#ff8000",
+  "description": "A powerful concoction. Restores magical energy.",
+  "origin_vault": 5,
+  "origin_chest": "195d1ff14d853588",
+  "pioneer_tier": "genesis",
+  "created_at": "2026-01-07T07:48:33.392888"
+}
