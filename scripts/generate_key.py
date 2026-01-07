@@ -303,6 +303,27 @@ def verify_key_files(psnx_path: str, blend_path: str = None):
     return True
 
 
+def check_machine_lock():
+    """Verifie si cette machine peut creer un nouveau vault."""
+    try:
+        from core.machine_lock import MachineLock, get_machine_info
+        
+        lock = MachineLock()
+        can_create, message = lock.can_create_vault()
+        
+        if not can_create:
+            print("\n" + "=" * 60)
+            print("  ERREUR: MACHINE DEJA ENREGISTREE")
+            print("=" * 60)
+            print(f"\n{message}")
+            return False, lock
+        
+        return True, lock
+    except ImportError:
+        # Module non disponible, continuer sans verification
+        return True, None
+
+
 def main():
     parser = argparse.ArgumentParser(
         description="Générateur de clé Poly-Spinor Nexus 7D",
@@ -314,6 +335,7 @@ Exemples:
   %(prog)s --simple                     # Mode simplifié (rapide)
   %(prog)s --output ./mes_cles          # Répertoire personnalisé
   %(prog)s --list                       # Lister les identités existantes
+  %(prog)s --machine-info               # Afficher les infos machine
         """
     )
     
@@ -351,8 +373,50 @@ Exemples:
         action="store_true",
         help="Ne pas enregistrer dans le registre d'identités"
     )
+    parser.add_argument(
+        "--machine-info",
+        action="store_true",
+        help="Afficher les informations de la machine"
+    )
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Forcer la creation (ignorer le verrouillage machine - ADMIN ONLY)"
+    )
     
     args = parser.parse_args()
+    
+    # Mode info machine
+    if args.machine_info:
+        try:
+            from core.machine_lock import MachineLock, get_machine_info
+            
+            print("\n" + "=" * 60)
+            print("  INFORMATIONS MACHINE")
+            print("=" * 60)
+            
+            info = get_machine_info()
+            print(f"\n  Machine Hash: {info['machine_hash'][:32]}...")
+            print(f"  Short ID: {info['short_id']}")
+            print(f"  Platform: {info['platform']}")
+            print(f"  Node: {info['node']}")
+            
+            lock = MachineLock()
+            existing = lock.get_registered_vault()
+            
+            if existing:
+                print(f"\n  [VAULT ENREGISTRE SUR CETTE MACHINE]")
+                print(f"  Nom: {existing.get('vault_name')}")
+                print(f"  Numero: #{existing.get('vault_number')}")
+                print(f"  Cree le: {existing.get('created_at', '')[:19]}")
+            else:
+                print(f"\n  Aucun vault enregistre sur cette machine.")
+                print(f"  Vous pouvez creer un nouveau vault.")
+            
+            print()
+        except ImportError as e:
+            print(f"\n[ERREUR] Module machine_lock non disponible: {e}")
+        return
     
     # Initialiser le registre d'identités
     registry = IdentityRegistry()
@@ -380,6 +444,17 @@ Exemples:
     
     if not args.quiet:
         print_banner()
+    
+    # === VERIFICATION VERROUILLAGE MACHINE ===
+    machine_lock = None
+    if not args.force:
+        can_create, machine_lock = check_machine_lock()
+        if not can_create:
+            print("\n[INFO] Utilisez --machine-info pour voir les details")
+            print("[INFO] Si vous etes administrateur, utilisez --force\n")
+            sys.exit(1)
+    else:
+        print("\n[WARN] Mode force active - verification machine ignoree!")
     
     # Obtenir le nom avec vérification d'unicité
     if args.name:
@@ -440,6 +515,30 @@ Exemples:
                 print(f"\n  Votre identité unique: {identity.name}_{identity.fingerprint}")
             else:
                 print(f"\n  [WARN] Impossible d'enregistrer l'identité: {error}")
+        
+        # === VERROUILLAGE MACHINE ===
+        if machine_lock and not args.force:
+            print("\n" + "="*60)
+            print("  VERROUILLAGE MACHINE")
+            print("="*60)
+            
+            import hashlib
+            vault_key_hash = hashlib.sha256(vault_key).hexdigest()
+            vault_number = genesis_block.inscription_number if genesis_block else 0
+            
+            lock_success, lock_msg = machine_lock.register_vault(
+                vault_name=name,
+                vault_number=vault_number,
+                vault_key_hash=vault_key_hash,
+                psnx_path=psnx_path
+            )
+            
+            if lock_success:
+                print(f"\n  [OK] Machine verrouillée!")
+                print(f"  Cette machine est maintenant liée à ce vault.")
+                print(f"  Aucun autre vault ne pourra être créé sur cet ordinateur.")
+            else:
+                print(f"\n  [WARN] {lock_msg}")
         
         # Resume
         print("\n" + "="*60)
