@@ -978,7 +978,7 @@ class VaultMonitorGUI:
         receive_addr_entry.pack(side=tk.LEFT, padx=(0, 10))
         
         copy_receive_btn = tk.Button(receive_addr_row, text="📋 Copy Address", bg=CypherpunkTheme.NEON_GREEN,
-                                     fg=CypherpunkTheme.BG_DARK, font=CypherpunkTheme.FONT_BOLD,
+                                     fg=CypherpunkTheme.BG_DARK, font=CypherpunkTheme.FONT_TITLE,
                                      command=self._copy_evm_address)
         copy_receive_btn.pack(side=tk.LEFT)
         
