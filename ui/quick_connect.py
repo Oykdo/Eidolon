@@ -294,6 +294,14 @@ def key_files_connect():
         print_status("PSNX file path required", "error")
         return
     
+    # Remove quotes if present (from drag & drop)
+    psnx_path = psnx_path.strip('"\'')
+    
+    if not os.path.exists(psnx_path):
+        print_status(f"File not found: {psnx_path}", "error")
+        return
+    
+    print_status(f"PSNX file: {os.path.basename(psnx_path)}", "ok")
     print()
     
     # Blend data file
@@ -303,7 +311,16 @@ def key_files_connect():
         print_status("Blend data file path required", "error")
         return
     
+    # Remove quotes if present
+    blend_path = blend_path.strip('"\'')
+    
+    if not os.path.exists(blend_path):
+        print_status(f"File not found: {blend_path}", "error")
+        return
+    
+    print_status(f"Blend file: {os.path.basename(blend_path)}", "ok")
     print()
+    
     loading_animation("Reading key files", 1.0)
     loading_animation("Verifying signatures", 1.2)
     loading_animation("Deriving vault key", 0.8)
@@ -311,20 +328,14 @@ def key_files_connect():
     try:
         from ui.vault_gui_complete import DualKeyAuthenticator
         
-        if not os.path.exists(psnx_path):
-            print_status(f"File not found: {psnx_path}", "error")
-            return
-        if not os.path.exists(blend_path):
-            print_status(f"File not found: {blend_path}", "error")
-            return
-        
         auth = DualKeyAuthenticator()
         success, msg = auth.authenticate(psnx_path, blend_path)
         
         print()
         
         if not success:
-            print_status(f"Authentication failed: {msg}", "error")
+            print_status(f"Authentication failed:", "error")
+            print(f"    {Colors.DIM}{msg}{Colors.RESET}")
             return
         
         print_status("Authentication successful", "ok")
@@ -339,7 +350,11 @@ def key_files_connect():
         launch_vault(auth.vault_key, vault_name)
         
     except ImportError as e:
-        print_status(f"Authentication module not available: {e}", "error")
+        print_status(f"Authentication module not available:", "error")
+        print(f"    {Colors.DIM}{e}{Colors.RESET}")
+    except Exception as e:
+        print_status(f"Error during authentication:", "error")
+        print(f"    {Colors.DIM}{e}{Colors.RESET}")
 
 
 def demo_mode():
