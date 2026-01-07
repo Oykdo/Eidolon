@@ -1,0 +1,71 @@
+{
+  "vault_id": "vault_00005",
+  "vault_number": 5,
+  "owner_address": "bc1q2580b0b9eb4b7d1cb07a43e6388decb66c6c50",
+  "active_avatar_id": "89c51bc695b7797366916ce35d57fc14",
+  "genesis_avatar_id": "89c51bc695b7797366916ce35d57fc14",
+  "avatars": {
+    "89c51bc695b7797366916ce35d57fc14": {
+      "nft_id": "89c51bc695b7797366916ce35d57fc14",
+      "avatar_id": "dbe025a31433b7a5",
+      "vault_id": "vault_00005",
+      "token_id": null,
+      "contract_address": null,
+      "chain": "ethereum",
+      "network": "mainnet",
+      "chain_id": 1,
+      "status": "draft",
+      "owner_address": "bc1q2580b0b9eb4b7d1cb07a43e6388decb66c6c50",
+      "origin_vault": 5,
+      "is_genesis_avatar": true,
+      "metadata_uri": null,
+      "metadata": {
+        "avatar_id": "dbe025a31433b7a5",
+        "dna": {
+          "geometric_type": "nexus_crystal",
+          "complexity": 0.5412,
+          "symmetry": 1.0,
+          "colors": {
+            "primary": "#ebc774",
+            "secondary": "#714513"
+          }
+        },
+        "rarity": {
+          "tier": "mythical",
+          "score": 0.91
+        },
+        "generation": 1,
+        "origin_vault": 5,
+        "effective_power": 13650.0,
+        "attributes": {
+          "quantum_entropy": 100,
+          "spinor_complexity": 54.12,
+          "bell_verification": 14.9,
+          "polyhedral_symmetry": 100,
+          "cryptographic_strength": 78.43,
+          "temporal_stability": 100,
+          "spatial_coherence": 18.04,
+          "dimensional_depth": 7.0,
+          "fractal_dimension": 4.871,
+          "energy_resonance": 98.82,
+          "pioneer_blessing": 100.0
+        },
+        "obj_path": "C:\\Users\\jerem\\Desktop\\scrt\\Enoptron\\poly_spinor_nexus_7d\\avatars\\models\\avatar_dbe025a31433b7a5.obj",
+        "texture_path": "C:\\Users\\jerem\\Desktop\\scrt\\Enoptron\\poly_spinor_nexus_7d\\avatars\\textures\\texture_dbe025a31433b7a5.png",
+        "preview_path": "C:\\Users\\jerem\\Desktop\\scrt\\Enoptron\\poly_spinor_nexus_7d\\avatars\\previews\\preview_dbe025a31433b7a5.png"
+      },
+      "mint_txid": null,
+      "mint_block": null,
+      "minted_at": null,
+      "bridge_status": null,
+      "bridge_txid": null,
+      "source_chain": null,
+      "locked_at": null,
+      "created_at": "2026-01-07T07:44:49.186947",
+      "updated_at": "2026-01-07T07:44:49.186947",
+      "transfer_history": []
+    }
+  },
+  "bridge_transfers": [],
+  "updated_at": "2026-01-07T07:44:49.187495"
+}
