@@ -378,11 +378,8 @@ Exemples:
         action="store_true",
         help="Afficher les informations de la machine"
     )
-    parser.add_argument(
-        "--force",
-        action="store_true",
-        help="Forcer la creation (ignorer le verrouillage machine - ADMIN ONLY)"
-    )
+    # --force desactive pour securite
+    # Un seul vault par machine, sans exception
     
     args = parser.parse_args()
     
@@ -446,15 +443,12 @@ Exemples:
         print_banner()
     
     # === VERIFICATION VERROUILLAGE MACHINE ===
-    machine_lock = None
-    if not args.force:
-        can_create, machine_lock = check_machine_lock()
-        if not can_create:
-            print("\n[INFO] Utilisez --machine-info pour voir les details")
-            print("[INFO] Si vous etes administrateur, utilisez --force\n")
-            sys.exit(1)
-    else:
-        print("\n[WARN] Mode force active - verification machine ignoree!")
+    # Un seul vault par machine - AUCUNE EXCEPTION
+    can_create, machine_lock = check_machine_lock()
+    if not can_create:
+        print("\n[INFO] Utilisez --machine-info pour voir les details")
+        print("[INFO] Un seul vault est autorise par machine.\n")
+        sys.exit(1)
     
     # Obtenir le nom avec vérification d'unicité
     if args.name:
@@ -517,7 +511,7 @@ Exemples:
                 print(f"\n  [WARN] Impossible d'enregistrer l'identité: {error}")
         
         # === VERROUILLAGE MACHINE ===
-        if machine_lock and not args.force:
+        if machine_lock:
             print("\n" + "="*60)
             print("  VERROUILLAGE MACHINE")
             print("="*60)
