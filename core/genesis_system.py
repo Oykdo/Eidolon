@@ -18,11 +18,15 @@ from cryptography.fernet import Fernet
 
 class GenesisTier(Enum):
     """Niveaux d'easter eggs selon le rang d'inscription"""
-    FOUNDER_1 = 1        # 1-100
+    SUPREME = 0          # 1-33 (Les Supremes - rang le plus eleve)
+    FOUNDER_1 = 1        # 34-100
     FOUNDER_10 = 2       # 101-1,000
     FOUNDER_100 = 3      # 1,001-10,000
     FOUNDER_1000 = 4     # 10,001-100,000
     STANDARD = 5         # Apres 100,000
+
+# Nombre de Supremes (rang le plus eleve)
+SUPREME_COUNT = 33
 
 
 @dataclass
@@ -87,9 +91,35 @@ class EasterEggGenerator:
     """Generateur d'easter eggs pour les early adopters"""
     
     EASTER_EGGS = {
+        GenesisTier.SUPREME: {
+            "name": "Supreme Architect",
+            "description": "Genesis Supreme #1-33 - Les Architectes Supremes",
+            "attributes": {
+                "rarity": "Primordial",
+                "color": "#FF00FF",  # Magenta divin
+                "glow": True,
+                "animation": "supreme_aura",
+                "particle_effect": "divine_sparks",
+                "crown": True
+            },
+            "rewards": {
+                "rune_multiplier": 33.0,
+                "future_airdrop": True,
+                "governance_power": 333,
+                "veto_power": True,
+                "exclusive_items": True,
+                "priority_access": True
+            },
+            "special_abilities": [
+                "supreme_transmutation",
+                "eternal_protection", 
+                "dimensional_mastery",
+                "prophecy_reading"
+            ]
+        },
         GenesisTier.FOUNDER_1: {
             "name": "Quantum Pioneer",
-            "description": "Genesis Founder #1-100",
+            "description": "Genesis Founder #34-100",
             "attributes": {
                 "rarity": "Mythic",
                 "color": "#FFD700",
@@ -152,7 +182,9 @@ class EasterEggGenerator:
     @staticmethod
     def get_tier(inscription_number: int) -> GenesisTier:
         """Obtenir le tier selon le numero d'inscription"""
-        if inscription_number <= 100:
+        if inscription_number <= SUPREME_COUNT:  # 1-33 = Supremes
+            return GenesisTier.SUPREME
+        elif inscription_number <= 100:  # 34-100
             return GenesisTier.FOUNDER_1
         elif inscription_number <= 1000:
             return GenesisTier.FOUNDER_10
@@ -191,6 +223,7 @@ class RuneSymbolGenerator:
     
     # Prefixes par tier
     TIER_PREFIXES = {
+        GenesisTier.SUPREME: "ᛊᚢᛈ",      # SUP (Supreme) - Les 33 premiers
         GenesisTier.FOUNDER_1: "ᛏᚨᛚ",    # TAL (Tres Ancien Legacy)
         GenesisTier.FOUNDER_10: "ᚨᚾᚲ",   # ANK (Ancien)
         GenesisTier.FOUNDER_100: "ᚠᛟᚱ",  # FOR (Fondateur)
@@ -223,7 +256,9 @@ class RuneSymbolGenerator:
         """Calculer le montant de rune selon le tier"""
         base_amount = 1_000_000  # 1 million d'unites
         
-        if inscription_number <= 100:
+        if inscription_number <= SUPREME_COUNT:  # Supremes (1-33)
+            return base_amount * 3300  # 3.3 milliards (33x plus que Quantum Pioneer)
+        elif inscription_number <= 100:
             return base_amount * 1000  # 1 milliard
         elif inscription_number <= 1000:
             return base_amount * 100   # 100 millions

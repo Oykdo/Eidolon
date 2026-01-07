@@ -863,6 +863,189 @@ class ItemRunesExchange:
         with open(history_file, 'w', encoding='utf-8') as f:
             json.dump(history, f, indent=2, ensure_ascii=False)
     
+    # ========================================================================
+    # TRANSFERT PAR ADRESSE BITCOIN
+    # ========================================================================
+    
+    def transfer_to_address(self, inscription_id: str, 
+                           from_address: str, to_address: str,
+                           from_vault: int = None) -> Dict:
+        """
+        Transfert un item directement vers une adresse Bitcoin.
+        
+        Permet l'echange d'items entre n'importe quelles adresses Bitcoin,
+        meme si le destinataire n'a pas encore de vault.
+        
+        Args:
+            inscription_id: ID de l'inscription a transferer
+            from_address: Adresse Bitcoin source
+            to_address: Adresse Bitcoin destination
+            from_vault: Vault source (optionnel si l'adresse est connue)
+        
+        Returns:
+            Donnees pour la transaction Bitcoin
+        """
+        inscription = self.get_inscription(inscription_id)
+        if not inscription:
+            return {"error": "Inscription not found"}
+        
+        # Verifier la propriete
+        if from_vault and inscription.owner_vault != from_vault:
+            return {"error": "Not owner of this item"}
+        if inscription.owner_address and inscription.owner_address != from_address:
+            return {"error": "Address does not match owner"}
+        
+        if inscription.status != "inscribed":
+            return {"error": f"Cannot transfer: status is {inscription.status}"}
+        
+        # Valider les adresses Bitcoin
+        if not self._is_valid_btc_address(from_address):
+            return {"error": "Invalid source Bitcoin address"}
+        if not self._is_valid_btc_address(to_address):
+            return {"error": "Invalid destination Bitcoin address"}
+        
+        # Marquer en transfert
+        inscription.status = "transferring"
+        
+        # Ajouter a l'historique
+        transfer_record = {
+            "type": "address_transfer",
+            "from_address": from_address,
+            "to_address": to_address,
+            "from_vault": from_vault,
+            "to_vault": None,  # Sera mis a jour si le destinataire a un vault
+            "initiated_at": datetime.now().isoformat(),
+            "status": "pending"
+        }
+        inscription.transfer_history.append(transfer_record)
+        
+        self._save_inscription(inscription)
+        
+        # Generer les donnees pour la transaction Bitcoin
+        transfer_data = {
+            "inscription_id": inscription_id,
+            "rune_id": inscription.rune_id,
+            "item_type": inscription.item_type,
+            "rarity": inscription.rarity,
+            "stat_power": inscription.stat_power,
+            "from_address": from_address,
+            "to_address": to_address,
+            "op_return_data": self._generate_address_transfer_op_return(
+                inscription.rune_id, to_address
+            ),
+            "estimated_fee": MIN_TRANSFER_FEE,
+            "instructions": [
+                "1. Creer une transaction Bitcoin depuis from_address",
+                "2. Ajouter OP_RETURN avec les donnees fournies",
+                "3. Envoyer un dust output (546 sats) a to_address",
+                "4. Broadcaster la transaction",
+                "5. Appeler confirm_address_transfer avec le txid"
+            ]
+        }
+        
+        return transfer_data
+    
+    def confirm_address_transfer(self, inscription_id: str, txid: str,
+                                 new_owner_address: str, 
+                                 new_owner_vault: int = None) -> bool:
+        """
+        Confirme un transfert par adresse apres broadcast sur Bitcoin.
+        
+        Args:
+            inscription_id: ID de l'inscription
+            txid: Transaction ID Bitcoin
+            new_owner_address: Nouvelle adresse proprietaire
+            new_owner_vault: Nouveau vault proprietaire (optionnel)
+        """
+        inscription = self.get_inscription(inscription_id)
+        if not inscription:
+            return False
+        
+        # Mettre a jour le proprietaire
+        inscription.owner_address = new_owner_address
+        inscription.owner_vault = new_owner_vault if new_owner_vault else 0
+        inscription.status = "inscribed"
+        
+        # Mettre a jour l'historique
+        if inscription.transfer_history:
+            inscription.transfer_history[-1]["status"] = "confirmed"
+            inscription.transfer_history[-1]["txid"] = txid
+            inscription.transfer_history[-1]["to_vault"] = new_owner_vault
+            inscription.transfer_history[-1]["confirmed_at"] = datetime.now().isoformat()
+        
+        self._save_inscription(inscription)
+        return True
+    
+    def get_items_by_address(self, btc_address: str) -> List[RuneItemInscription]:
+        """
+        Recupere tous les items appartenant a une adresse Bitcoin.
+        
+        Args:
+            btc_address: Adresse Bitcoin
+        
+        Returns:
+            Liste des inscriptions possedees par cette adresse
+        """
+        inscriptions = []
+        for file in self.inscriptions_dir.glob("*.json"):
+            with open(file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            if data.get('owner_address') == btc_address:
+                inscriptions.append(RuneItemInscription.from_dict(data))
+        return inscriptions
+    
+    def link_address_to_vault(self, btc_address: str, vault_number: int) -> int:
+        """
+        Lie une adresse Bitcoin a un vault, mettant a jour tous les items.
+        
+        Utile quand un utilisateur recoit des items sur son adresse
+        avant d'avoir cree son vault.
+        
+        Args:
+            btc_address: Adresse Bitcoin a lier
+            vault_number: Numero du vault
+        
+        Returns:
+            Nombre d'items mis a jour
+        """
+        updated = 0
+        for file in self.inscriptions_dir.glob("*.json"):
+            with open(file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            if data.get('owner_address') == btc_address:
+                data['owner_vault'] = vault_number
+                with open(file, 'w', encoding='utf-8') as f:
+                    json.dump(data, f, indent=2, ensure_ascii=False)
+                updated += 1
+        return updated
+    
+    def _generate_address_transfer_op_return(self, rune_id: str, 
+                                              to_address: str) -> bytes:
+        """Genere les donnees OP_RETURN pour un transfert par adresse."""
+        # Format: RUNE_MAGIC | RUNE_ID | ADDRESS_HASH
+        data = struct.pack('>I', RUNE_MAGIC_NUMBER)  # Magic number
+        data += rune_id.encode('utf-8')[:32].ljust(32, b'\x00')  # Rune ID
+        # Hash de l'adresse destination (20 bytes)
+        addr_hash = hashlib.sha256(to_address.encode()).digest()[:20]
+        data += addr_hash
+        return data
+    
+    def _is_valid_btc_address(self, address: str) -> bool:
+        """Valide une adresse Bitcoin (format basique)."""
+        if not address:
+            return False
+        # P2PKH (Legacy): commence par 1
+        # P2SH: commence par 3
+        # Bech32 (SegWit): commence par bc1
+        # Taproot: commence par bc1p
+        if address.startswith('1') and 26 <= len(address) <= 35:
+            return True
+        if address.startswith('3') and 26 <= len(address) <= 35:
+            return True
+        if address.startswith('bc1') and 42 <= len(address) <= 62:
+            return True
+        return False
+    
     def get_market_stats(self) -> Dict:
         """Calcule les statistiques du marche."""
         total_listings = 0
