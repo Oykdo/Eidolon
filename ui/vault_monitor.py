@@ -1509,7 +1509,7 @@ class VaultMonitorGUI:
         content.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
         
         if not stones:
-            tk.Label(content, text="\n\n  ⚗ Aucune Pierre Philosophale dans ce vault\n\n"
+            tk.Label(content, text="\n\n  ☿ Aucune Pierre Philosophale dans ce vault\n\n"
                     "  Les Pierres Philosophales sont des objets extremement rares\n"
                     "  reserves aux 1000 premiers vaults.",
                     bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.TEXT_SECONDARY,
@@ -1520,29 +1520,75 @@ class VaultMonitorGUI:
             stone_frame = tk.Frame(content, bg=CypherpunkTheme.BG_DARK, padx=15, pady=10)
             stone_frame.pack(fill=tk.X, padx=10, pady=5)
             
-            stone_type = stone.get('stone_type', 'Unknown').replace('_', ' ').title()
-            transmutation = stone.get('transmutation_power', 0)
-            purity = stone.get('purity', 0)
-            abilities = stone.get('abilities', [])
+            # Extraire les donnees de la pierre
+            stone_id = stone.get('stone_id', 'Unknown')[:12]
+            state = stone.get('state', 'dormant').upper()
+            max_energy = stone.get('max_energy', 1000)
+            current_energy = stone.get('current_energy', 0)
+            regen_rate = stone.get('energy_regen_rate', 1.0)
+            origin_vault = stone.get('origin_vault', 0)
+            transmutations = stone.get('transmutations_performed', 0)
+            souls = stone.get('souls_resurrected', 0)
+            portals = stone.get('portals_opened', 0)
+            corruption = stone.get('corruption_level', 0)
+            recipes = stone.get('recipes_unlocked', [])
             
-            # Header
-            tk.Label(stone_frame, text=f"⚗ {stone_type}",
+            # Couleur selon l'etat
+            state_colors = {
+                'DORMANT': '#888888',
+                'AWAKENED': '#00ff00',
+                'TRANSCENDENT': '#ff00ff',
+                'CORRUPTED': '#ff0000',
+                'CHARGING': '#ffff00',
+                'DEPLETED': '#ff8800'
+            }
+            state_color = state_colors.get(state, '#ffffff')
+            
+            # Header avec icone et etat
+            header_frame = tk.Frame(stone_frame, bg=CypherpunkTheme.BG_DARK)
+            header_frame.pack(fill=tk.X)
+            
+            tk.Label(header_frame, text=f"☿ PIERRE PHILOSOPHALE",
                     bg=CypherpunkTheme.BG_DARK, fg="#FFD700",
-                    font=("Consolas", 12, "bold")).pack(anchor=tk.W)
+                    font=("Consolas", 12, "bold")).pack(side=tk.LEFT)
             
-            # Stats
-            tk.Label(stone_frame, text=f"  🔥 Transmutation: {transmutation}  ✨ Purity: {purity}%",
-                    bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.NEON_CYAN,
+            tk.Label(header_frame, text=f"[{state}]",
+                    bg=CypherpunkTheme.BG_DARK, fg=state_color,
+                    font=("Consolas", 10, "bold")).pack(side=tk.LEFT, padx=10)
+            
+            tk.Label(header_frame, text=f"Vault #{origin_vault}",
+                    bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.TEXT_SECONDARY,
+                    font=("Consolas", 9)).pack(side=tk.RIGHT)
+            
+            # ID
+            tk.Label(stone_frame, text=f"  ID: {stone_id}...",
+                    bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.TEXT_SECONDARY,
+                    font=("Consolas", 9)).pack(anchor=tk.W)
+            
+            # Energie
+            energy_pct = (current_energy / max_energy * 100) if max_energy > 0 else 0
+            energy_color = "#00ff00" if energy_pct > 50 else "#ffff00" if energy_pct > 20 else "#ff0000"
+            tk.Label(stone_frame, text=f"  ⚡ Energie: {current_energy}/{max_energy} ({energy_pct:.0f}%)  |  Regen: {regen_rate:.1f}/h",
+                    bg=CypherpunkTheme.BG_DARK, fg=energy_color,
                     font=("Consolas", 10)).pack(anchor=tk.W)
             
-            # Abilities
-            if abilities:
-                tk.Label(stone_frame, text="  Abilities:", bg=CypherpunkTheme.BG_DARK,
-                        fg=CypherpunkTheme.TEXT_SECONDARY, font=("Consolas", 9)).pack(anchor=tk.W)
-                for ability in abilities[:5]:
-                    tk.Label(stone_frame, text=f"    ⟡ {ability}",
-                            bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.NEON_PURPLE,
-                            font=("Consolas", 9)).pack(anchor=tk.W)
+            # Stats d'utilisation
+            tk.Label(stone_frame, text=f"  🔄 Transmutations: {transmutations}  |  👻 Ames: {souls}  |  🌀 Portails: {portals}",
+                    bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.NEON_CYAN,
+                    font=("Consolas", 9)).pack(anchor=tk.W)
+            
+            # Corruption si presente
+            if corruption > 0:
+                corr_color = "#ff0000" if corruption > 50 else "#ff8800" if corruption > 20 else "#ffff00"
+                tk.Label(stone_frame, text=f"  ⚠ Corruption: {corruption:.1f}%",
+                        bg=CypherpunkTheme.BG_DARK, fg=corr_color,
+                        font=("Consolas", 9)).pack(anchor=tk.W)
+            
+            # Recettes debloquees
+            if recipes:
+                tk.Label(stone_frame, text=f"  📜 Recettes: {len(recipes)} debloquees",
+                        bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.NEON_PURPLE,
+                        font=("Consolas", 9)).pack(anchor=tk.W)
     
     def _create_artifacts_tab(self, parent, artifacts):
         """Cree l'onglet des artifacts"""
@@ -1628,7 +1674,8 @@ class VaultMonitorGUI:
     def _load_vault_stones(self, vault_num: int) -> list:
         """Charge les pierres philosophales d'un vault"""
         stones = []
-        stones_dir = Path(self.base_path) / "philosopher_stones"
+        # Chemin correct: philosopher_stones/stones/
+        stones_dir = Path(self.base_path) / "philosopher_stones" / "stones"
         if not stones_dir.exists():
             return stones
         for f in stones_dir.glob("stone_*.json"):
