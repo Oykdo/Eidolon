@@ -908,11 +908,40 @@ class VaultMonitorGUI:
         return frame
     
     def _create_monitor_tab(self) -> ttk.Frame:
-        """Créer l'onglet de monitoring - Style Cypherpunk"""
+        """Créer l'onglet de monitoring - Style Cypherpunk avec scroll"""
         frame = tk.Frame(self.notebook, bg=CypherpunkTheme.BG_DARK)
         
+        # === SCROLLABLE CONTAINER ===
+        # Canvas for scrolling
+        canvas = tk.Canvas(frame, bg=CypherpunkTheme.BG_DARK, highlightthickness=0)
+        scrollbar = ttk.Scrollbar(frame, orient="vertical", command=canvas.yview)
+        scrollable_frame = tk.Frame(canvas, bg=CypherpunkTheme.BG_DARK)
+        
+        # Configure scroll
+        scrollable_frame.bind(
+            "<Configure>",
+            lambda e: canvas.configure(scrollregion=canvas.bbox("all"))
+        )
+        
+        canvas.create_window((0, 0), window=scrollable_frame, anchor="nw")
+        canvas.configure(yscrollcommand=scrollbar.set)
+        
+        # Mouse wheel scroll
+        def _on_mousewheel(event):
+            canvas.yview_scroll(int(-1*(event.delta/120)), "units")
+        canvas.bind_all("<MouseWheel>", _on_mousewheel)
+        
+        # Pack scrollbar and canvas
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        
+        # Bind canvas width to frame width
+        def _configure_canvas(event):
+            canvas.itemconfig(canvas.find_all()[0], width=event.width)
+        canvas.bind("<Configure>", _configure_canvas)
+        
         # === DASHBOARD METRICS ===
-        metrics_container = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
+        metrics_container = tk.Frame(scrollable_frame, bg=CypherpunkTheme.BG_DARK)
         metrics_container.pack(fill=tk.X, pady=(10, 20), padx=10)
         
         # Titre section
@@ -950,12 +979,12 @@ class VaultMonitorGUI:
             metrics_grid.columnconfigure(i, weight=1)
         
         # Séparateur
-        sep = tk.Frame(frame, bg=CypherpunkTheme.BORDER_INACTIVE, height=1)
+        sep = tk.Frame(scrollable_frame, bg=CypherpunkTheme.BORDER_INACTIVE, height=1)
         sep.pack(fill=tk.X, padx=10, pady=10)
         
         # === ACTIVITY LOG ===
-        log_container = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
-        log_container.pack(fill=tk.BOTH, expand=True, padx=10, pady=(0, 10))
+        log_container = tk.Frame(scrollable_frame, bg=CypherpunkTheme.BG_DARK)
+        log_container.pack(fill=tk.X, padx=10, pady=(0, 10))
         
         # Titre avec indicateur de statut
         log_header = tk.Frame(log_container, bg=CypherpunkTheme.BG_DARK)
@@ -1007,7 +1036,7 @@ class VaultMonitorGUI:
         scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         
         # === CONTROLES ===
-        ctrl_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
+        ctrl_frame = tk.Frame(scrollable_frame, bg=CypherpunkTheme.BG_DARK)
         ctrl_frame.pack(fill=tk.X, padx=10, pady=10)
         
         clear_btn = CypherpunkTheme.create_neon_button(
@@ -1025,6 +1054,14 @@ class VaultMonitorGUI:
             CypherpunkTheme.NEON_CYAN
         )
         export_btn.pack(side=tk.LEFT)
+        
+        # === SPACER FOR FUTURE CONTENT ===
+        # This space allows for additional widgets to be added below
+        future_space = tk.Frame(scrollable_frame, bg=CypherpunkTheme.BG_DARK, height=300)
+        future_space.pack(fill=tk.X, padx=10, pady=(20, 50))
+        
+        # Store reference for adding future content
+        self.monitor_scrollable_frame = scrollable_frame
         
         return frame
     
