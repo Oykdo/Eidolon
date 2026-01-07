@@ -399,6 +399,13 @@ except ImportError as e:
     EXCHANGE_AVAILABLE = False
     print(f"[INFO] Module Exchange non disponible: {e}")
 
+try:
+    from core.bitcoin_asset_bridge import BitcoinAssetBridge, AssetOnChain, AssetType
+    BRIDGE_AVAILABLE = True
+except ImportError as e:
+    BRIDGE_AVAILABLE = False
+    print(f"[INFO] Module Bitcoin Bridge non disponible: {e}")
+
 
 # ============================================================================
 # GESTIONNAIRE DE VAULT SECURISE
@@ -699,6 +706,11 @@ class VaultMonitorGUI:
         if EXCHANGE_AVAILABLE:
             self.exchange_tab = self._create_exchange_tab()
             self.notebook.add(self.exchange_tab, text="  ₿ EXCHANGE  ")
+        
+        # Onglet Bitcoin Bridge (transfert d'actifs sur blockchain)
+        if BRIDGE_AVAILABLE:
+            self.bridge_tab = self._create_bridge_tab()
+            self.notebook.add(self.bridge_tab, text="  ⛓ BRIDGE  ")
         
         # === BARRE DE STATUT CYPHERPUNK ===
         status_bar_frame = tk.Frame(self.root, bg=CypherpunkTheme.BG_TERTIARY, height=32)
@@ -2751,6 +2763,470 @@ SELLER: {item['values'][5]}
         messagebox.showinfo("Trade", 
             "Creation d'offre de trade en developpement.\n"
             "Permet d'echanger des items entre vaults.")
+    
+    # ========================================================================
+    # ONGLET BITCOIN BRIDGE
+    # ========================================================================
+    
+    def _create_bridge_tab(self) -> tk.Frame:
+        """Cree l'onglet de transfert d'actifs sur Bitcoin"""
+        frame = tk.Frame(self.notebook, bg=CypherpunkTheme.BG_DARK)
+        
+        # Initialiser le bridge
+        self.asset_bridge = BitcoinAssetBridge()
+        self.bridge_address = tk.StringVar(value="")
+        
+        # === HEADER ===
+        header_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
+        header_frame.pack(fill=tk.X, pady=(10, 15), padx=10)
+        
+        tk.Label(
+            header_frame,
+            text="BITCOIN ASSET BRIDGE",
+            bg=CypherpunkTheme.BG_DARK,
+            fg="#f7931a",
+            font=("Consolas", 16, "bold")
+        ).pack(side=tk.LEFT)
+        
+        tk.Button(
+            header_frame,
+            text="REFRESH",
+            bg="#333333",
+            fg="white",
+            command=self._refresh_bridge
+        ).pack(side=tk.RIGHT, padx=5)
+        
+        # === ADRESSE BITCOIN ===
+        addr_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_PANEL)
+        addr_frame.pack(fill=tk.X, padx=10, pady=(0, 10))
+        
+        tk.Label(addr_frame, text="Votre adresse Bitcoin:", 
+                bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.TEXT_SECONDARY
+        ).pack(side=tk.LEFT, padx=10, pady=8)
+        
+        tk.Entry(addr_frame, textvariable=self.bridge_address, width=50,
+                bg=CypherpunkTheme.BG_SECONDARY, fg="#f7931a",
+                insertbackground="white"
+        ).pack(side=tk.LEFT, padx=5, pady=8)
+        
+        tk.Button(addr_frame, text="SAUVEGARDER", bg="#00aa00", fg="white",
+                 command=self._save_bridge_address
+        ).pack(side=tk.LEFT, padx=10, pady=8)
+        
+        # === STATS ===
+        stats_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_PANEL)
+        stats_frame.pack(fill=tk.X, padx=10, pady=(0, 10))
+        
+        self.bridge_stats = {}
+        stat_items = [
+            ("total", "TOTAL ASSETS", "#ffffff"),
+            ("inscribed", "ON-CHAIN", "#00ff00"),
+            ("pending", "PENDING", "#ffaa00"),
+            ("items", "ITEMS", "#00ffff"),
+            ("gems", "GEMS", "#ff00ff"),
+            ("stones", "STONES", "#ffd700"),
+        ]
+        
+        for stat_id, label, color in stat_items:
+            card = tk.Frame(stats_frame, bg=CypherpunkTheme.BG_SECONDARY, padx=10, pady=5)
+            card.pack(side=tk.LEFT, padx=3, pady=5, fill=tk.X, expand=True)
+            tk.Label(card, text=label, bg=CypherpunkTheme.BG_SECONDARY,
+                    fg=CypherpunkTheme.TEXT_SECONDARY, font=("Consolas", 7)).pack()
+            var = tk.StringVar(value="0")
+            tk.Label(card, textvariable=var, bg=CypherpunkTheme.BG_SECONDARY,
+                    fg=color, font=("Consolas", 12, "bold")).pack()
+            self.bridge_stats[stat_id] = var
+        
+        # === NOTEBOOK INTERNE ===
+        bridge_notebook = ttk.Notebook(frame)
+        bridge_notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=(0, 10))
+        
+        # Tab: Mes actifs on-chain
+        onchain_tab = self._create_onchain_assets_tab(bridge_notebook)
+        bridge_notebook.add(onchain_tab, text=" ON-CHAIN ")
+        
+        # Tab: Inscrire des actifs
+        inscribe_tab = self._create_inscribe_tab(bridge_notebook)
+        bridge_notebook.add(inscribe_tab, text=" INSCRIRE ")
+        
+        # Tab: Transferer
+        transfer_tab = self._create_transfer_tab(bridge_notebook)
+        bridge_notebook.add(transfer_tab, text=" TRANSFERER ")
+        
+        # Tab: Historique
+        history_tab = self._create_bridge_history_tab(bridge_notebook)
+        bridge_notebook.add(history_tab, text=" HISTORIQUE ")
+        
+        # Charger les donnees
+        self._refresh_bridge()
+        
+        return frame
+    
+    def _create_onchain_assets_tab(self, parent) -> tk.Frame:
+        """Tab affichant les actifs inscrits sur Bitcoin"""
+        frame = tk.Frame(parent, bg=CypherpunkTheme.BG_SECONDARY)
+        
+        # Liste des actifs
+        columns = ('Rune ID', 'Type', 'Nom', 'Rarete', 'Power', 'Status', 'TXID')
+        self.onchain_tree = ttk.Treeview(frame, columns=columns, show='headings', height=15)
+        
+        widths = [150, 80, 150, 80, 70, 80, 120]
+        for col, w in zip(columns, widths):
+            self.onchain_tree.heading(col, text=col)
+            self.onchain_tree.column(col, width=w)
+        
+        scrollbar = ttk.Scrollbar(frame, orient=tk.VERTICAL, command=self.onchain_tree.yview)
+        self.onchain_tree.configure(yscrollcommand=scrollbar.set)
+        
+        self.onchain_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=5, pady=5)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y, pady=5)
+        
+        return frame
+    
+    def _create_inscribe_tab(self, parent) -> tk.Frame:
+        """Tab pour inscrire de nouveaux actifs sur Bitcoin"""
+        frame = tk.Frame(parent, bg=CypherpunkTheme.BG_SECONDARY)
+        
+        # Instructions
+        tk.Label(frame, 
+            text="Selectionnez un type d'actif a inscrire sur la blockchain Bitcoin:",
+            bg=CypherpunkTheme.BG_SECONDARY, fg="white",
+            font=("Consolas", 10)
+        ).pack(pady=10)
+        
+        # Boutons par type d'actif
+        btn_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_SECONDARY)
+        btn_frame.pack(pady=10)
+        
+        asset_types = [
+            ("ITEMS", "#00ffff", self._inscribe_items_dialog),
+            ("GEMS", "#ff00ff", self._inscribe_gems_dialog),
+            ("FRAGMENTS", "#00ff00", self._inscribe_fragments_dialog),
+            ("STONES", "#ffd700", self._inscribe_stones_dialog),
+            ("ARTIFACTS", "#ff6600", self._inscribe_artifacts_dialog),
+        ]
+        
+        for name, color, cmd in asset_types:
+            tk.Button(btn_frame, text=f"INSCRIRE {name}", bg=color, fg="black",
+                     font=("Consolas", 10, "bold"), width=18, command=cmd
+            ).pack(side=tk.LEFT, padx=5, pady=5)
+        
+        # Liste des actifs non-inscrits
+        tk.Label(frame, text="Actifs disponibles pour inscription:",
+                bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.TEXT_SECONDARY
+        ).pack(anchor=tk.W, padx=10, pady=(20, 5))
+        
+        columns = ('ID', 'Type', 'Nom', 'Rarete', 'Power')
+        self.available_tree = ttk.Treeview(frame, columns=columns, show='headings', height=10)
+        
+        for col in columns:
+            self.available_tree.heading(col, text=col)
+            self.available_tree.column(col, width=120)
+        
+        self.available_tree.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
+        
+        return frame
+    
+    def _create_transfer_tab(self, parent) -> tk.Frame:
+        """Tab pour transferer des actifs"""
+        frame = tk.Frame(parent, bg=CypherpunkTheme.BG_SECONDARY)
+        
+        # Instructions
+        tk.Label(frame,
+            text="Transferer un actif vers une autre adresse Bitcoin:",
+            bg=CypherpunkTheme.BG_SECONDARY, fg="white",
+            font=("Consolas", 10)
+        ).pack(pady=10)
+        
+        # Selection de l'actif
+        select_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_PANEL)
+        select_frame.pack(fill=tk.X, padx=10, pady=5)
+        
+        tk.Label(select_frame, text="Actif:", bg=CypherpunkTheme.BG_PANEL,
+                fg=CypherpunkTheme.TEXT_SECONDARY).pack(side=tk.LEFT, padx=10, pady=8)
+        
+        self.transfer_asset_var = tk.StringVar()
+        self.transfer_asset_combo = ttk.Combobox(select_frame, 
+            textvariable=self.transfer_asset_var, width=50)
+        self.transfer_asset_combo.pack(side=tk.LEFT, padx=5, pady=8)
+        
+        # Adresse destination
+        dest_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_PANEL)
+        dest_frame.pack(fill=tk.X, padx=10, pady=5)
+        
+        tk.Label(dest_frame, text="Destination:", bg=CypherpunkTheme.BG_PANEL,
+                fg=CypherpunkTheme.TEXT_SECONDARY).pack(side=tk.LEFT, padx=10, pady=8)
+        
+        self.transfer_dest_var = tk.StringVar()
+        tk.Entry(dest_frame, textvariable=self.transfer_dest_var, width=50,
+                bg=CypherpunkTheme.BG_SECONDARY, fg="#f7931a"
+        ).pack(side=tk.LEFT, padx=5, pady=8)
+        
+        # Priorite
+        prio_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_PANEL)
+        prio_frame.pack(fill=tk.X, padx=10, pady=5)
+        
+        tk.Label(prio_frame, text="Priorite:", bg=CypherpunkTheme.BG_PANEL,
+                fg=CypherpunkTheme.TEXT_SECONDARY).pack(side=tk.LEFT, padx=10, pady=8)
+        
+        self.transfer_priority_var = tk.StringVar(value="normal")
+        for prio in ["low", "normal", "high"]:
+            tk.Radiobutton(prio_frame, text=prio.upper(), value=prio,
+                          variable=self.transfer_priority_var,
+                          bg=CypherpunkTheme.BG_PANEL, fg="white",
+                          selectcolor=CypherpunkTheme.BG_SECONDARY
+            ).pack(side=tk.LEFT, padx=10, pady=8)
+        
+        # Bouton transfert
+        tk.Button(frame, text="INITIER LE TRANSFERT", bg="#f7931a", fg="black",
+                 font=("Consolas", 12, "bold"), command=self._initiate_transfer
+        ).pack(pady=20)
+        
+        # Info transaction
+        self.transfer_info = tk.Text(frame, height=8, width=80,
+                                     bg=CypherpunkTheme.BG_DARK, fg="#00ff00",
+                                     font=("Consolas", 9))
+        self.transfer_info.pack(padx=10, pady=5)
+        self.transfer_info.insert("1.0", "Les informations de transaction apparaitront ici...")
+        
+        return frame
+    
+    def _create_bridge_history_tab(self, parent) -> tk.Frame:
+        """Tab historique des transferts"""
+        frame = tk.Frame(parent, bg=CypherpunkTheme.BG_SECONDARY)
+        
+        columns = ('Date', 'Type', 'Rune ID', 'De', 'Vers', 'Status', 'TXID')
+        self.history_tree = ttk.Treeview(frame, columns=columns, show='headings', height=15)
+        
+        for col in columns:
+            self.history_tree.heading(col, text=col)
+            self.history_tree.column(col, width=100)
+        
+        self.history_tree.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        
+        return frame
+    
+    def _refresh_bridge(self):
+        """Rafraichit les donnees du bridge"""
+        if not BRIDGE_AVAILABLE:
+            return
+        
+        # Stats
+        stats = self.asset_bridge.get_statistics()
+        self.bridge_stats["total"].set(str(stats.get("total_assets", 0)))
+        self.bridge_stats["inscribed"].set(str(stats.get("inscribed", 0)))
+        self.bridge_stats["pending"].set(str(stats.get("pending", 0)))
+        
+        by_type = stats.get("by_type", {})
+        self.bridge_stats["items"].set(str(by_type.get("item", 0)))
+        self.bridge_stats["gems"].set(str(by_type.get("gem", 0)))
+        self.bridge_stats["stones"].set(str(by_type.get("stone", 0)))
+        
+        # Liste des actifs on-chain
+        for item in self.onchain_tree.get_children():
+            self.onchain_tree.delete(item)
+        
+        assets = self.asset_bridge.get_assets_by_vault(self.current_vault_num)
+        for asset in assets:
+            txid = asset.inscription_txid[:12] + "..." if asset.inscription_txid else "-"
+            self.onchain_tree.insert('', tk.END, values=(
+                asset.rune_id,
+                asset.asset_type.upper(),
+                asset.name[:20],
+                asset.rarity.upper(),
+                f"{asset.power:.0f}",
+                asset.status.upper(),
+                txid
+            ))
+        
+        # Mettre a jour la combo de transfert
+        asset_list = [f"{a.rune_id} - {a.name}" for a in assets if a.status == "inscribed"]
+        self.transfer_asset_combo['values'] = asset_list
+    
+    def _save_bridge_address(self):
+        """Sauvegarde l'adresse Bitcoin"""
+        address = self.bridge_address.get()
+        if not address:
+            messagebox.showwarning("Attention", "Entrez une adresse Bitcoin")
+            return
+        
+        # Validation basique
+        if not (address.startswith('1') or address.startswith('3') or address.startswith('bc1')):
+            messagebox.showerror("Erreur", "Adresse Bitcoin invalide")
+            return
+        
+        messagebox.showinfo("Succes", f"Adresse sauvegardee:\n{address}")
+    
+    def _inscribe_items_dialog(self):
+        """Dialog pour inscrire des items"""
+        self._inscribe_assets_dialog("item", "Items Alchimiques")
+    
+    def _inscribe_gems_dialog(self):
+        """Dialog pour inscrire des gems"""
+        self._inscribe_assets_dialog("gem", "Gemmes")
+    
+    def _inscribe_fragments_dialog(self):
+        """Dialog pour inscrire des fragments"""
+        self._inscribe_assets_dialog("fragment", "Fragments")
+    
+    def _inscribe_stones_dialog(self):
+        """Dialog pour inscrire des pierres"""
+        self._inscribe_assets_dialog("stone", "Pierres Philosophales")
+    
+    def _inscribe_artifacts_dialog(self):
+        """Dialog pour inscrire des artefacts"""
+        self._inscribe_assets_dialog("artifact", "Artefacts")
+    
+    def _inscribe_assets_dialog(self, asset_type: str, title: str):
+        """Dialog generique pour inscrire des actifs"""
+        address = self.bridge_address.get()
+        if not address:
+            messagebox.showwarning("Attention", 
+                "Entrez d'abord votre adresse Bitcoin dans le champ en haut")
+            return
+        
+        dialog = tk.Toplevel(self.root)
+        dialog.title(f"Inscrire {title}")
+        dialog.geometry("600x500")
+        dialog.configure(bg=CypherpunkTheme.BG_DARK)
+        
+        tk.Label(dialog, text=f"Inscrire {title} sur Bitcoin",
+                bg=CypherpunkTheme.BG_DARK, fg="#f7931a",
+                font=("Consolas", 14, "bold")).pack(pady=10)
+        
+        tk.Label(dialog, text=f"Adresse: {address[:20]}...{address[-10:]}",
+                bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.TEXT_SECONDARY
+        ).pack()
+        
+        # Liste des actifs disponibles
+        list_frame = tk.Frame(dialog, bg=CypherpunkTheme.BG_SECONDARY)
+        list_frame.pack(fill=tk.BOTH, expand=True, padx=20, pady=10)
+        
+        listbox = tk.Listbox(list_frame, bg=CypherpunkTheme.BG_SECONDARY, fg="white",
+                            selectmode=tk.MULTIPLE, height=15, width=70)
+        listbox.pack(fill=tk.BOTH, expand=True)
+        
+        # Charger les actifs selon le type
+        assets_to_inscribe = []
+        
+        if asset_type == "item":
+            items = self._load_vault_items(self.current_vault_num)
+            for item in items[:50]:
+                listbox.insert(tk.END, 
+                    f"[{item.get('rarity', 'common').upper()[:4]}] {item.get('item_type', '?')} - PWR:{item.get('stat_power', 0):.0f}")
+                assets_to_inscribe.append(item)
+        elif asset_type == "stone":
+            # Charger les pierres du vault
+            try:
+                from core.philosopher_stone import PhilosopherStoneManager
+                stone_mgr = PhilosopherStoneManager()
+                stones = stone_mgr.get_vault_stones(self.current_vault_num)
+                for stone in stones:
+                    listbox.insert(tk.END,
+                        f"[{stone.state.upper()}] Pierre #{stone.stone_id[:8]} - E:{stone.max_energy}")
+                    assets_to_inscribe.append(stone.to_dict() if hasattr(stone, 'to_dict') else {"stone_id": stone.stone_id, "max_energy": stone.max_energy, "state": stone.state, "origin_vault": stone.origin_vault})
+            except Exception as e:
+                listbox.insert(tk.END, f"Erreur: {e}")
+        else:
+            listbox.insert(tk.END, f"Chargement des {title} en cours...")
+        
+        def do_inscribe():
+            selected = listbox.curselection()
+            if not selected:
+                messagebox.showwarning("Attention", "Selectionnez au moins un actif")
+                return
+            
+            count = 0
+            for idx in selected:
+                if idx < len(assets_to_inscribe):
+                    asset_data = assets_to_inscribe[idx]
+                    try:
+                        if asset_type == "item":
+                            self.asset_bridge.inscribe_item(asset_data, address, self.current_vault_num)
+                        elif asset_type == "stone":
+                            self.asset_bridge.inscribe_stone(asset_data, address, self.current_vault_num)
+                        elif asset_type == "gem":
+                            self.asset_bridge.inscribe_gem(asset_data, address, self.current_vault_num)
+                        elif asset_type == "fragment":
+                            self.asset_bridge.inscribe_fragment(asset_data, address, self.current_vault_num)
+                        elif asset_type == "artifact":
+                            self.asset_bridge.inscribe_artifact(asset_data, address, self.current_vault_num)
+                        count += 1
+                    except Exception as e:
+                        print(f"Erreur inscription: {e}")
+            
+            messagebox.showinfo("Succes", f"{count} actif(s) inscrit(s) sur Bitcoin!")
+            dialog.destroy()
+            self._refresh_bridge()
+        
+        tk.Button(dialog, text="INSCRIRE SELECTION", bg="#f7931a", fg="black",
+                 font=("Consolas", 11, "bold"), command=do_inscribe
+        ).pack(pady=15)
+    
+    def _initiate_transfer(self):
+        """Initie un transfert d'actif"""
+        asset_selection = self.transfer_asset_var.get()
+        dest_address = self.transfer_dest_var.get()
+        priority = self.transfer_priority_var.get()
+        
+        if not asset_selection:
+            messagebox.showwarning("Attention", "Selectionnez un actif")
+            return
+        
+        if not dest_address:
+            messagebox.showwarning("Attention", "Entrez une adresse destination")
+            return
+        
+        # Extraire le Rune ID
+        rune_id = asset_selection.split(" - ")[0]
+        
+        # Trouver l'actif
+        asset = self.asset_bridge.get_asset_by_rune(rune_id)
+        if not asset:
+            messagebox.showerror("Erreur", "Actif non trouve")
+            return
+        
+        from_address = self.bridge_address.get()
+        if not from_address:
+            messagebox.showerror("Erreur", "Configurez d'abord votre adresse Bitcoin")
+            return
+        
+        try:
+            transfer = self.asset_bridge.transfer_asset(
+                asset.asset_id,
+                from_address,
+                dest_address,
+                from_vault=self.current_vault_num,
+                priority=priority
+            )
+            
+            # Afficher les infos
+            info = f"""
+TRANSFERT INITIE
+================
+Transfer ID: {transfer.transfer_id}
+Rune ID: {transfer.rune_id}
+De: {transfer.from_address[:20]}...
+Vers: {transfer.to_address[:20]}...
+Frais: {transfer.fee_sats} sats
+
+INSTRUCTIONS:
+1. Creez une transaction Bitcoin depuis votre wallet
+2. Ajoutez OP_RETURN: {transfer.op_return_data.hex()[:40]}...
+3. Envoyez 546 sats a l'adresse destination
+4. Broadcastez la transaction
+5. Confirmez avec le TXID ci-dessous
+            """
+            
+            self.transfer_info.delete("1.0", tk.END)
+            self.transfer_info.insert("1.0", info)
+            
+            messagebox.showinfo("Transfert Initie", 
+                f"Transfert cree!\nID: {transfer.transfer_id}\n\n"
+                "Suivez les instructions pour completer le transfert.")
+            
+        except Exception as e:
+            messagebox.showerror("Erreur", str(e))
     
     def _create_blockchain_tab(self) -> tk.Frame:
         """Créer l'onglet Blockchain avec monitoring temps réel via Alchemy"""

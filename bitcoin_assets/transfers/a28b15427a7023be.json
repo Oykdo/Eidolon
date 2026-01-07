@@ -1,0 +1,19 @@
+{
+  "transfer_id": "a28b15427a7023be",
+  "asset_id": "test_gem_001",
+  "asset_type": "gem",
+  "rune_id": "PSNX.GEM.M.QUA.555F67B5",
+  "from_address": "bc1qar0srrr7xfkvy5l643lydnw9re59gtzzwf5mdq",
+  "to_address": "bc1qw508d6qejxtdg4y5r3zarvary0c5xw7kv8f3t4",
+  "from_vault": null,
+  "to_vault": null,
+  "fee_sats": 10000,
+  "priority": "normal",
+  "status": "pending",
+  "txid": null,
+  "created_at": "2026-01-07T02:00:53.911990",
+  "broadcast_at": null,
+  "confirmed_at": null,
+  "op_return_data": "50534e580147454d5350534e582e47454d2e4d2e5155412e35353546363742350000000000000000006cd42dab0217b54fdf5df95b892f055d2a462baa",
+  "raw_tx": null
+}
