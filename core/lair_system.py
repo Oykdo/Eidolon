@@ -44,7 +44,8 @@ if sys.platform == 'win32':
 
 MAX_LAIR_DEPTH = 100
 BOSS_INTERVAL = 10
-MAX_LAIRS_PER_VAULT = 10
+MAX_LAIRS_PER_VAULT = 3
+LAIRS_PER_VAULT = 3  # Fixed number of lairs per vault
 
 
 # ============================================================================
@@ -357,9 +358,9 @@ class LairGenerator:
         lair_types = list(LairType)
         lair_type = self._random_choice(lair_types)
         
-        # Determine rarity based on genesis tier
+        # Determine rarity based on vault number (degressive system)
         genesis_tier = genesis_block.get("tier", "standard")
-        rarity = self._determine_rarity(genesis_tier)
+        rarity = self._determine_rarity(genesis_tier, vault_number)
         
         # Generate name
         name = self._generate_lair_name(lair_type)
@@ -412,18 +413,70 @@ class LairGenerator:
         
         return lair
     
-    def _determine_rarity(self, genesis_tier: str) -> LairRarity:
-        """Determine lair rarity based on genesis tier"""
-        tier_rarity_weights = {
-            "SUPREME": [0, 0, 0, 0, 0.1, 0.3, 0.6],      # Mostly primordial/mythic
-            "FOUNDER_1": [0, 0, 0, 0.1, 0.3, 0.4, 0.2],  # Legendary/Mythic
-            "FOUNDER_10": [0, 0, 0.1, 0.3, 0.4, 0.2, 0], # Epic/Legendary
-            "FOUNDER_100": [0, 0.1, 0.3, 0.4, 0.2, 0, 0], # Rare/Epic
-            "FOUNDER_1000": [0.1, 0.3, 0.4, 0.2, 0, 0, 0], # Uncommon/Rare
-            "standard": [0.4, 0.3, 0.2, 0.1, 0, 0, 0],    # Mostly common
-        }
+    def _determine_rarity(self, genesis_tier: str, vault_number: int = 1) -> LairRarity:
+        """
+        Determine lair rarity based on genesis tier and vault number.
         
-        weights = tier_rarity_weights.get(genesis_tier, tier_rarity_weights["standard"])
+        Progressive system:
+        - Early vaults get better odds but not overwhelming
+        - Each tier has ~20-30% drop from previous
+        - Standard tier uses base rates
+        
+        Vault number affects the roll:
+        - Vault 1-10: +15% to high rarities
+        - Vault 11-33: +10%
+        - Vault 34-100: +5%
+        - Vault 101-333: +2%
+        - Vault 334+: base rates
+        """
+        # Base weights: [common, uncommon, rare, epic, legendary, mythic, primordial]
+        base_weights = [0.35, 0.25, 0.20, 0.12, 0.05, 0.025, 0.005]
+        
+        # Calculate vault bonus (degressive)
+        if vault_number <= 10:
+            # Genesis: Good bonus but not crazy
+            bonus_mult = 1.8
+            high_rarity_boost = 0.08  # +8% to legendary+
+        elif vault_number <= 33:
+            bonus_mult = 1.5
+            high_rarity_boost = 0.05
+        elif vault_number <= 100:
+            bonus_mult = 1.3
+            high_rarity_boost = 0.03
+        elif vault_number <= 333:
+            bonus_mult = 1.15
+            high_rarity_boost = 0.015
+        elif vault_number <= 1000:
+            bonus_mult = 1.08
+            high_rarity_boost = 0.008
+        elif vault_number <= 3333:
+            bonus_mult = 1.03
+            high_rarity_boost = 0.003
+        else:
+            bonus_mult = 1.0
+            high_rarity_boost = 0.0
+        
+        # Apply bonuses to weights
+        weights = base_weights.copy()
+        
+        # Boost high rarities (legendary, mythic, primordial)
+        weights[4] += high_rarity_boost * 2      # legendary
+        weights[5] += high_rarity_boost * 1.5    # mythic
+        weights[6] += high_rarity_boost          # primordial
+        
+        # Reduce common/uncommon to compensate
+        total_boost = high_rarity_boost * 4.5
+        weights[0] -= total_boost * 0.6
+        weights[1] -= total_boost * 0.4
+        
+        # Ensure no negative weights
+        weights = [max(0.01, w) for w in weights]
+        
+        # Normalize
+        total = sum(weights)
+        weights = [w / total for w in weights]
+        
+        # Roll
         roll = self._next_random()
         
         cumulative = 0
@@ -792,8 +845,16 @@ def convert_genesis_to_lairs(genesis_blocks: List[Dict], vault_id: str,
 
 
 def create_lairs_for_vault(vault_id: str, vault_number: int, 
-                           num_lairs: int = 6) -> LairCollection:
-    """Create a lair collection for a vault with generated lairs"""
+                           num_lairs: int = None) -> LairCollection:
+    """
+    Create a lair collection for a vault with generated lairs.
+    
+    All vaults get exactly 3 lairs (LAIRS_PER_VAULT).
+    Rarity is determined by vault number (degressive system).
+    """
+    if num_lairs is None:
+        num_lairs = LAIRS_PER_VAULT  # Default: 3 lairs per vault
+    
     collection = LairCollection(vault_id, vault_number)
     generator = LairGenerator(seed=vault_id.encode())
     
@@ -801,8 +862,7 @@ def create_lairs_for_vault(vault_id: str, vault_number: int,
         # Create a pseudo-genesis block for each lair
         genesis_block = {
             "block_hash": hashlib.sha256(f"{vault_id}:genesis:{i}".encode()).hexdigest(),
-            "tier": "SUPREME" if vault_number <= 10 else 
-                   "FOUNDER_1" if vault_number <= 100 else "standard",
+            "tier": "standard",  # Tier is now determined by vault_number in _determine_rarity
             "inscription_number": i + 1,
         }
         
@@ -818,16 +878,35 @@ def create_lairs_for_vault(vault_id: str, vault_number: int,
 
 if __name__ == "__main__":
     print("=" * 60)
-    print("  LAIR SYSTEM - Test")
+    print("  LAIR SYSTEM - Test (Degressive RNG)")
     print("=" * 60)
     
-    # Create lairs for a test vault
+    # Test degressive RNG for different vault numbers
+    print("\n  RNG Distribution Test (100 samples per tier):")
+    print("  " + "-" * 55)
+    
+    generator = LairGenerator()
+    test_vaults = [1, 10, 33, 100, 333, 1000, 5000]
+    
+    for vault_num in test_vaults:
+        rarities = {}
+        for i in range(100):
+            generator.rng_state = i * 12345 + vault_num
+            rarity = generator._determine_rarity("standard", vault_num)
+            rarities[rarity.rarity_id] = rarities.get(rarity.rarity_id, 0) + 1
+        
+        leg_plus = rarities.get("legendary", 0) + rarities.get("mythic", 0) + rarities.get("primordial", 0)
+        print(f"  Vault #{vault_num:5}: Leg+: {leg_plus:2}% | Epic: {rarities.get('epic', 0):2}% | Rare: {rarities.get('rare', 0):2}%")
+    
+    print()
+    
+    # Create lairs for a test vault (3 lairs)
     vault_id = "test_vault_001"
     vault_number = 1  # Genesis tier
     
-    collection = create_lairs_for_vault(vault_id, vault_number, num_lairs=6)
+    collection = create_lairs_for_vault(vault_id, vault_number)  # Uses LAIRS_PER_VAULT (3)
     
-    print(f"\n  Created {len(collection.lairs)} lairs for vault #{vault_number}")
+    print(f"  Created {len(collection.lairs)} lairs for vault #{vault_number}")
     print()
     
     for lair in collection.list_lairs():

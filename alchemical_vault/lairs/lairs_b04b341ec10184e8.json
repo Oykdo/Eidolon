@@ -6,15 +6,15 @@
       "lair_id": "b8ab4a24d922a9b8",
       "name": "Eternal Catacombs",
       "lair_type": "temporal_crypt",
-      "rarity": "primordial",
+      "rarity": "epic",
       "vault_id": "b04b341ec10184e8fa220b51f37f686414af824fee61de1b908a080683d97205",
       "vault_number": 1,
       "origin_genesis_block": "6cce028ad68efd853b01cb6a21522b2a71fec20adeb037295ee00f3fa3a9b970",
-      "depth": 100,
+      "depth": 50,
       "current_depth": 0,
-      "power_level": 100000,
-      "discovery_rate": 1.321041647028663,
-      "corruption_level": 4.442785226014808,
+      "power_level": 10000,
+      "discovery_rate": 1.0859348199264773,
+      "corruption_level": 12.841665881146522,
       "affinity": "time",
       "affinity_bonus": {
         "puzzle": 0.13997061762026075,
@@ -33,27 +33,23 @@
       "total_loot_value": 0,
       "legendary_drops": 0,
       "boss_kills": 0,
-      "created_at": "2026-01-07T08:20:35.098469",
+      "created_at": "2026-01-07T08:29:52.969238",
       "last_explored": null,
       "special_modifiers": [
-        "Primordial Essence",
-        "Time Dilation"
+        "Primordial Essence"
       ],
       "boss_guardian": {
-        "guardian_id": "boss_temporal_crypt_100",
+        "guardian_id": "boss_temporal_crypt_50",
         "name": "Chrono Tyrant",
-        "level": 100,
-        "health": 200000,
-        "attack": 10000,
-        "defense": 4000,
+        "level": 50,
+        "health": 30000,
+        "attack": 1500,
+        "defense": 600,
         "abilities": [
           "Ultimate Attack",
           "Phase Shift",
           "Summon Minions",
-          "Enrage",
-          "Reality Warp",
-          "Time Stop",
-          "Soul Drain"
+          "Enrage"
         ],
         "is_boss": true,
         "element": "temporal",
@@ -68,13 +64,13 @@
       "lair_id": "61115d2fb1de0afb",
       "name": "Profane Gateway",
       "lair_type": "spinor_nexus",
-      "rarity": "primordial",
+      "rarity": "legendary",
       "vault_id": "b04b341ec10184e8fa220b51f37f686414af824fee61de1b908a080683d97205",
       "vault_number": 1,
       "origin_genesis_block": "7dd96aa50dd5884962f597292aaa87967f0631dc6196f640d0b9c1c7887a620a",
-      "depth": 100,
+      "depth": 70,
       "current_depth": 0,
-      "power_level": 100000,
+      "power_level": 21000,
       "discovery_rate": 1.421393215852507,
       "corruption_level": 4.651244219695797,
       "affinity": "dimensional",
@@ -95,7 +91,7 @@
       "total_loot_value": 0,
       "legendary_drops": 0,
       "boss_kills": 0,
-      "created_at": "2026-01-07T08:20:35.099468",
+      "created_at": "2026-01-07T08:29:52.971727",
       "last_explored": null,
       "special_modifiers": [
         "Ancient Blessing",
@@ -103,12 +99,12 @@
         "Void Touched"
       ],
       "boss_guardian": {
-        "guardian_id": "boss_spinor_nexus_100",
+        "guardian_id": "boss_spinor_nexus_70",
         "name": "The Dimensional Apex",
-        "level": 100,
-        "health": 200000,
-        "attack": 10000,
-        "defense": 4000,
+        "level": 70,
+        "health": 51000,
+        "attack": 2550,
+        "defense": 1020,
         "abilities": [
           "Ultimate Attack",
           "Phase Shift",
@@ -131,13 +127,13 @@
       "lair_id": "d7b2327bb75172f7",
       "name": "Eternal Ossuary",
       "lair_type": "temporal_crypt",
-      "rarity": "primordial",
+      "rarity": "legendary",
       "vault_id": "b04b341ec10184e8fa220b51f37f686414af824fee61de1b908a080683d97205",
       "vault_number": 1,
       "origin_genesis_block": "9856507c6c9e34550eea81019477bc063d2bdeab92cc3cd6c077bda9c3f8e7dd",
-      "depth": 100,
+      "depth": 70,
       "current_depth": 0,
-      "power_level": 100000,
+      "power_level": 21000,
       "discovery_rate": 1.2484187317306263,
       "corruption_level": 19.226428437617805,
       "affinity": "time",
@@ -158,7 +154,7 @@
       "total_loot_value": 0,
       "legendary_drops": 0,
       "boss_kills": 0,
-      "created_at": "2026-01-07T08:20:35.100468",
+      "created_at": "2026-01-07T08:29:52.973917",
       "last_explored": null,
       "special_modifiers": [
         "Void Touched",
@@ -166,12 +162,12 @@
         "Ethereal Veil"
       ],
       "boss_guardian": {
-        "guardian_id": "boss_temporal_crypt_100",
+        "guardian_id": "boss_temporal_crypt_70",
         "name": "Chrono Tyrant",
-        "level": 100,
-        "health": 200000,
-        "attack": 10000,
-        "defense": 4000,
+        "level": 70,
+        "health": 51000,
+        "attack": 2550,
+        "defense": 1020,
         "abilities": [
           "Ultimate Attack",
           "Phase Shift",
@@ -189,196 +185,10 @@
           "boss_trophy"
         ]
       }
-    },
-    "848fd9bc3e7d5c5f": {
-      "lair_id": "848fd9bc3e7d5c5f",
-      "name": "Radiant Bastion",
-      "lair_type": "ethereal_citadel",
-      "rarity": "primordial",
-      "vault_id": "b04b341ec10184e8fa220b51f37f686414af824fee61de1b908a080683d97205",
-      "vault_number": 1,
-      "origin_genesis_block": "7aa7498f3efa96afdb1489e92f47dfbd631a7458389232fc5f8ed4ef842fcc6b",
-      "depth": 100,
-      "current_depth": 0,
-      "power_level": 100000,
-      "discovery_rate": 1.3149920542794242,
-      "corruption_level": 11.57407485487595,
-      "affinity": "celestial",
-      "affinity_bonus": {
-        "puzzle": 0.14278252755421333,
-        "chaos": 0.002337259055272331,
-        "dimensional": 0.19780743066119377,
-        "time": 0.007262712534173724,
-        "ancient": 0.19778238832847328,
-        "celestial": 0.7046897035113954
-      },
-      "status": "discovered",
-      "sealed_until": null,
-      "levels": {},
-      "cleared_levels": 0,
-      "total_runs": 0,
-      "best_run_depth": 0,
-      "total_loot_value": 0,
-      "legendary_drops": 0,
-      "boss_kills": 0,
-      "created_at": "2026-01-07T08:20:35.102468",
-      "last_explored": null,
-      "special_modifiers": [
-        "Unstable Reality",
-        "Dimensional Bleed"
-      ],
-      "boss_guardian": {
-        "guardian_id": "boss_ethereal_citadel_100",
-        "name": "Celestial Archon",
-        "level": 100,
-        "health": 200000,
-        "attack": 10000,
-        "defense": 4000,
-        "abilities": [
-          "Ultimate Attack",
-          "Phase Shift",
-          "Summon Minions",
-          "Enrage",
-          "Reality Warp",
-          "Time Stop",
-          "Soul Drain"
-        ],
-        "is_boss": true,
-        "element": "ethereal",
-        "loot_table": [
-          "legendary_artifact",
-          "mythic_essence",
-          "boss_trophy"
-        ]
-      }
-    },
-    "ea880b798f5b48d8": {
-      "lair_id": "ea880b798f5b48d8",
-      "name": "Blessed Bastion",
-      "lair_type": "ethereal_citadel",
-      "rarity": "mythic",
-      "vault_id": "b04b341ec10184e8fa220b51f37f686414af824fee61de1b908a080683d97205",
-      "vault_number": 1,
-      "origin_genesis_block": "a252b4aad0554245067433d253a9ca784b5587c3a9472382c8edd45ffa7be7be",
-      "depth": 90,
-      "current_depth": 0,
-      "power_level": 45000,
-      "discovery_rate": 1.420947052501583,
-      "corruption_level": 2.280218416024101,
-      "affinity": "celestial",
-      "affinity_bonus": {
-        "puzzle": 0.12290388714657347,
-        "chaos": 0.07284859012479362,
-        "dimensional": 0.14203307607305846,
-        "time": 0.06788015238376342,
-        "ancient": 0.15352597867768536,
-        "celestial": 0.5006574415604852
-      },
-      "status": "discovered",
-      "sealed_until": null,
-      "levels": {},
-      "cleared_levels": 0,
-      "total_runs": 0,
-      "best_run_depth": 0,
-      "total_loot_value": 0,
-      "legendary_drops": 0,
-      "boss_kills": 0,
-      "created_at": "2026-01-07T08:20:35.104472",
-      "last_explored": null,
-      "special_modifiers": [
-        "Corrupted Core",
-        "Temporal Lock"
-      ],
-      "boss_guardian": {
-        "guardian_id": "boss_ethereal_citadel_90",
-        "name": "Celestial Archon",
-        "level": 90,
-        "health": 95000,
-        "attack": 4750,
-        "defense": 1900,
-        "abilities": [
-          "Ultimate Attack",
-          "Phase Shift",
-          "Summon Minions",
-          "Enrage",
-          "Reality Warp",
-          "Time Stop",
-          "Soul Drain"
-        ],
-        "is_boss": true,
-        "element": "ethereal",
-        "loot_table": [
-          "legendary_artifact",
-          "mythic_essence",
-          "boss_trophy"
-        ]
-      }
-    },
-    "e9533ef4ee493566": {
-      "lair_id": "e9533ef4ee493566",
-      "name": "Radiant Sanctum",
-      "lair_type": "ethereal_citadel",
-      "rarity": "legendary",
-      "vault_id": "b04b341ec10184e8fa220b51f37f686414af824fee61de1b908a080683d97205",
-      "vault_number": 1,
-      "origin_genesis_block": "cf5031df7494db0883853b3481a857c2baf79b7bd27ceeee4fe7e8ea8ca77efd",
-      "depth": 70,
-      "current_depth": 0,
-      "power_level": 21000,
-      "discovery_rate": 1.3365546038078864,
-      "corruption_level": 16.15988703265781,
-      "affinity": "celestial",
-      "affinity_bonus": {
-        "puzzle": 0.0653521582788565,
-        "chaos": 0.12079011589325504,
-        "dimensional": 0.07145514919955989,
-        "time": 0.038746781572115974,
-        "ancient": 0.13960560231451208,
-        "celestial": 0.5807565730906821
-      },
-      "status": "discovered",
-      "sealed_until": null,
-      "levels": {},
-      "cleared_levels": 0,
-      "total_runs": 0,
-      "best_run_depth": 0,
-      "total_loot_value": 0,
-      "legendary_drops": 0,
-      "boss_kills": 0,
-      "created_at": "2026-01-07T08:20:35.106643",
-      "last_explored": null,
-      "special_modifiers": [
-        "Temporal Lock",
-        "Resonant Frequency"
-      ],
-      "boss_guardian": {
-        "guardian_id": "boss_ethereal_citadel_70",
-        "name": "Celestial Archon",
-        "level": 70,
-        "health": 51000,
-        "attack": 2550,
-        "defense": 1020,
-        "abilities": [
-          "Ultimate Attack",
-          "Phase Shift",
-          "Summon Minions",
-          "Enrage",
-          "Reality Warp",
-          "Time Stop",
-          "Soul Drain"
-        ],
-        "is_boss": true,
-        "element": "ethereal",
-        "loot_table": [
-          "legendary_artifact",
-          "mythic_essence",
-          "boss_trophy"
-        ]
-      }
     }
   },
   "active_lair_id": "b8ab4a24d922a9b8",
   "total_runs": 0,
   "best_depth_ever": 0,
-  "updated_at": "2026-01-07T08:20:35.106643"
+  "updated_at": "2026-01-07T08:29:52.974432"
 }
