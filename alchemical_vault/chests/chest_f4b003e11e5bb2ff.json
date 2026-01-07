@@ -1,0 +1,13 @@
+{
+  "chest_id": "f4b003e11e5bb2ff",
+  "tier": "masterwork",
+  "items": [],
+  "item_count": 6,
+  "is_opened": false,
+  "opened_at": null,
+  "opened_by_vault": null,
+  "origin_vault": 15,
+  "created_at": "2026-01-07T01:47:36.271666",
+  "bonus_rarity_boost": 0.33,
+  "guaranteed_legendary": true
+}

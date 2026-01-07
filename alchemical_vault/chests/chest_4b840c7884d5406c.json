@@ -1,0 +1,13 @@
+{
+  "chest_id": "4b840c7884d5406c",
+  "tier": "primordial",
+  "items": [],
+  "item_count": 10,
+  "is_opened": false,
+  "opened_at": null,
+  "opened_by_vault": null,
+  "origin_vault": 12,
+  "created_at": "2026-01-07T01:47:36.194693",
+  "bonus_rarity_boost": 0.33,
+  "guaranteed_legendary": true
+}
