@@ -633,20 +633,19 @@ class VaultMonitorGUI:
         )
         vault_name_lbl.pack(anchor=tk.W, pady=2)
         
-        # Adresse
-        if self.wallet:
-            addr_display = f"{self.wallet.address[:16]}..." if hasattr(self.wallet, 'address') else "N/A"
-        else:
-            addr_display = "EVM non disponible"
-        
+        # Adresse EVM (dérivée du vault)
+        self.vault_info_address_var = tk.StringVar(value="╰─▶ Loading...")
         addr_lbl = tk.Label(
             info_inner,
-            text=f"╰─▶ {addr_display}",
+            textvariable=self.vault_info_address_var,
             bg=CypherpunkTheme.BG_PANEL,
             fg=CypherpunkTheme.TEXT_SECONDARY,
             font=CypherpunkTheme.FONT_MONO_SMALL
         )
         addr_lbl.pack(anchor=tk.W, pady=2)
+        
+        # Initialiser l'adresse après le chargement de l'UI
+        self.root.after(100, self._init_vault_info_address)
         
         # Statut avec animation
         status_frame = tk.Frame(info_inner, bg=CypherpunkTheme.BG_PANEL)
@@ -6307,12 +6306,27 @@ Pour exécuter ce transfert:
         """Legacy: Copy EVM wallet address"""
         self._copy_evm_address()
     
+    def _init_vault_info_address(self):
+        """Initialize the vault info address display"""
+        try:
+            wallet = self._get_evm_wallet()
+            if wallet:
+                addr_display = f"╰─▶ {wallet.address[:16]}..."
+                self.vault_info_address_var.set(addr_display)
+            else:
+                self.vault_info_address_var.set("╰─▶ EVM not available")
+        except Exception:
+            self.vault_info_address_var.set("╰─▶ EVM not available")
+    
     def _refresh_all_wallets(self):
         """Refresh both EVM and BTC wallets"""
         # Refresh EVM
         wallet = self._get_evm_wallet()
         if wallet:
             self.wallet_address_var.set(wallet.address)
+            # Sync with vault info
+            if hasattr(self, 'vault_info_address_var'):
+                self.vault_info_address_var.set(f"╰─▶ {wallet.address[:16]}...")
         
         # Refresh BTC
         self._get_btc_wallet()
