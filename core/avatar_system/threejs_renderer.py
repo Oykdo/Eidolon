@@ -181,24 +181,29 @@ class ThreeJSAvatarRenderer:
         """Genere le code pour l'aura lumineuse"""
         if not self.has_aura:
             return ""
-        return f'''
+        
+        pulse_speed = self.pulse_speed
+        emission = self.emission_intensity
+        
+        # Shader sans f-string pour eviter les conflits
+        shader_code = '''
             // Aura lumineuse unique
             const auraGeom = new THREE.SphereGeometry(2.5, 32, 32);
-            const auraMat = new THREE.ShaderMaterial({{
-                uniforms: {{
-                    time: {{ value: 0 }},
-                    color1: {{ value: new THREE.Color('{self.primary_color}') }},
-                    color2: {{ value: new THREE.Color('{self.glow_color}') }},
-                    intensity: {{ value: {self.emission_intensity:.3f} }}
-                }},
+            const auraMat = new THREE.ShaderMaterial({
+                uniforms: {
+                    time: { value: 0 },
+                    color1: { value: new THREE.Color('%s') },
+                    color2: { value: new THREE.Color('%s') },
+                    intensity: { value: %.3f }
+                },
                 vertexShader: `
                     varying vec3 vNormal;
                     varying vec3 vPosition;
-                    void main() {{
+                    void main() {
                         vNormal = normalize(normalMatrix * normal);
                         vPosition = position;
                         gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-                    }}
+                    }
                 `,
                 fragmentShader: `
                     uniform float time;
@@ -207,41 +212,45 @@ class ThreeJSAvatarRenderer:
                     uniform float intensity;
                     varying vec3 vNormal;
                     varying vec3 vPosition;
-                    void main() {{
-                        float pulse = sin(time * {self.pulse_speed:.2f}) * 0.5 + 0.5;
+                    void main() {
+                        float pulse = sin(time * %.2f) * 0.5 + 0.5;
                         float fresnel = pow(1.0 - abs(dot(vNormal, vec3(0.0, 0.0, 1.0))), 3.0);
                         vec3 color = mix(color1, color2, pulse);
                         float alpha = fresnel * intensity * (0.5 + pulse * 0.5);
                         gl_FragColor = vec4(color, alpha * 0.3);
-                    }}
+                    }
                 `,
                 transparent: true,
                 blending: THREE.AdditiveBlending,
                 side: THREE.BackSide,
                 depthWrite: false
-            }});
+            });
             const aura = new THREE.Mesh(auraGeom, auraMat);
             scene.add(aura);
-            animationCallbacks.push((time) => {{
+            animationCallbacks.push((time) => {
                 auraMat.uniforms.time.value = time;
                 aura.rotation.y = time * 0.1;
-            }});
-        '''
+            });
+        ''' % (self.primary_color, self.glow_color, emission, pulse_speed)
+        
+        return shader_code
     
     def _get_particles_code(self) -> str:
         """Genere le code pour les particules orbitales"""
         if not self.has_particles:
             return ""
-        return f'''
+        
+        # Utiliser % formatting pour eviter conflits avec accolades JS
+        code = '''
             // Particules orbitales uniques
-            const particleCount = {self.particle_count};
+            const particleCount = %d;
             const particleGeom = new THREE.BufferGeometry();
             const positions = new Float32Array(particleCount * 3);
             const colors = new Float32Array(particleCount * 3);
             const sizes = new Float32Array(particleCount);
-            const orbits = new Float32Array(particleCount * 3); // rayon, vitesse, phase
+            const orbits = new Float32Array(particleCount * 3);
             
-            for (let i = 0; i < particleCount; i++) {{
+            for (let i = 0; i < particleCount; i++) {
                 const theta = Math.random() * Math.PI * 2;
                 const phi = Math.acos(2 * Math.random() - 1);
                 const r = 1.5 + Math.random() * 1.0;
@@ -252,9 +261,9 @@ class ThreeJSAvatarRenderer:
                 
                 const colorChoice = Math.random();
                 let color;
-                if (colorChoice < 0.33) color = new THREE.Color('{self.secondary_color}');
-                else if (colorChoice < 0.66) color = new THREE.Color('{self.tertiary_color}');
-                else color = new THREE.Color('{self.accent_color}');
+                if (colorChoice < 0.33) color = new THREE.Color('%s');
+                else if (colorChoice < 0.66) color = new THREE.Color('%s');
+                else color = new THREE.Color('%s');
                 
                 colors[i * 3] = color.r;
                 colors[i * 3 + 1] = color.g;
@@ -262,28 +271,28 @@ class ThreeJSAvatarRenderer:
                 
                 sizes[i] = 0.02 + Math.random() * 0.06;
                 orbits[i * 3] = r;
-                orbits[i * 3 + 1] = 0.2 + Math.random() * {self.orbit_speed:.2f};
+                orbits[i * 3 + 1] = 0.2 + Math.random() * %.2f;
                 orbits[i * 3 + 2] = Math.random() * Math.PI * 2;
-            }}
+            }
             
             particleGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
             particleGeom.setAttribute('color', new THREE.BufferAttribute(colors, 3));
             particleGeom.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
             
-            const particleMat = new THREE.PointsMaterial({{
+            const particleMat = new THREE.PointsMaterial({
                 size: 0.08,
                 vertexColors: true,
                 transparent: true,
                 opacity: 0.9,
                 blending: THREE.AdditiveBlending,
                 depthWrite: false
-            }});
+            });
             const particles = new THREE.Points(particleGeom, particleMat);
             scene.add(particles);
             
-            animationCallbacks.push((time) => {{
+            animationCallbacks.push((time) => {
                 const pos = particles.geometry.attributes.position.array;
-                for (let i = 0; i < particleCount; i++) {{
+                for (let i = 0; i < particleCount; i++) {
                     const r = orbits[i * 3];
                     const speed = orbits[i * 3 + 1];
                     const phase = orbits[i * 3 + 2];
@@ -292,11 +301,14 @@ class ThreeJSAvatarRenderer:
                     pos[i * 3] = r * Math.cos(angle) * Math.cos(phase);
                     pos[i * 3 + 1] = r * Math.sin(angle * 0.7) * 0.5;
                     pos[i * 3 + 2] = r * Math.sin(angle) * Math.sin(phase);
-                }}
+                }
                 particles.geometry.attributes.position.needsUpdate = true;
                 particles.rotation.y = time * 0.1;
-            }});
-        '''
+            });
+        ''' % (self.particle_count, self.secondary_color, self.tertiary_color, 
+               self.accent_color, self.orbit_speed)
+        
+        return code
     
     def _generate_quantum_sphere(self) -> str:
         """Sphere quantique avec orbitales uniques"""
