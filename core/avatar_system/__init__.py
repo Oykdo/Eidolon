@@ -45,6 +45,7 @@ from .avatar_generator import (
 )
 from .avatar_tokenizer import AvatarTokenizer, AvatarToken
 from .avatar_manager import AvatarManager
+from .threejs_renderer import ThreeJSAvatarRenderer, render_avatar_threejs
 
 __all__ = [
     # Classes principales
@@ -76,4 +77,7 @@ __all__ = [
     'AVATAR_CLASSES',
     'GEOMETRIC_CLASS_AFFINITY',
     'ITEM_CATEGORIES',
+    # Three.js Renderer
+    'ThreeJSAvatarRenderer',
+    'render_avatar_threejs',
 ]

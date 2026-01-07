@@ -3364,6 +3364,15 @@ INSTRUCTIONS:
             command=self._export_avatar
         ).pack(side=tk.LEFT, padx=3)
         
+        tk.Button(
+            btn_frame,
+            text="🌐 3D VIEW",
+            bg="#00ffaa",
+            fg="black",
+            font=("Consolas", 9, "bold"),
+            command=self._open_threejs_viewer
+        ).pack(side=tk.LEFT, padx=3)
+        
         # === PANNEAU PRINCIPAL (3 colonnes) ===
         main_panel = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
         main_panel.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
@@ -4198,6 +4207,44 @@ INSTRUCTIONS:
             
         except Exception as e:
             messagebox.showerror("Erreur", f"Erreur d'export: {e}")
+    
+    def _open_threejs_viewer(self):
+        """Ouvre la visualisation Three.js dans le navigateur"""
+        avatars = self.avatar_manager.get_avatars_owned_by_vault(self.current_vault_num)
+        if not avatars:
+            messagebox.showinfo("Info", "Aucun avatar a visualiser.\nGenerez d'abord un avatar.")
+            return
+        
+        avatar = avatars[0]
+        
+        try:
+            from core.avatar_system import render_avatar_threejs
+            
+            # Preparer les donnees de l'avatar
+            avatar_data = {
+                'avatar_id': avatar.avatar_id,
+                'geometry_type': avatar.geometry_type,
+                'rarity_tier': avatar.rarity_tier,
+                'rarity_score': avatar.rarity_score,
+                'effective_power': avatar.effective_power,
+                'attributes': avatar.attributes or {}
+            }
+            
+            # Generer et ouvrir le viewer
+            html_path = render_avatar_threejs(avatar_data, auto_open=True)
+            
+            messagebox.showinfo(
+                "Visualisation 3D",
+                f"Viewer Three.js ouvert dans le navigateur!\n\n"
+                f"Fichier: {html_path}\n\n"
+                f"Controles:\n"
+                f"- Souris: Rotation de la camera\n"
+                f"- Molette: Zoom\n"
+                f"- Boutons: Auto-rotate, Wireframe, Screenshot"
+            )
+            
+        except Exception as e:
+            messagebox.showerror("Erreur", f"Impossible d'ouvrir le viewer 3D:\n{e}")
     
     def _display_avatar_placeholder(self):
         """Affiche le placeholder quand pas d'avatar"""
