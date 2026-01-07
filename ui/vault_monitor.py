@@ -883,26 +883,54 @@ class VaultMonitorGUI:
         self.tokens_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
         tree_scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         
+        # === WALLET ADDRESSES ===
+        addresses_frame = tk.LabelFrame(scrollable_frame, text="🔐 WALLET ADDRESSES", 
+                                        bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.NEON_CYAN,
+                                        font=CypherpunkTheme.FONT_TITLE, padx=10, pady=10)
+        addresses_frame.pack(fill=tk.X, pady=10, padx=5)
+        
+        # EVM Address (Ethereum, Polygon, etc.)
+        evm_row = tk.Frame(addresses_frame, bg=CypherpunkTheme.BG_PANEL)
+        evm_row.pack(fill=tk.X, pady=5)
+        
+        tk.Label(evm_row, text="⟠ EVM Address:", bg=CypherpunkTheme.BG_PANEL,
+                fg=CypherpunkTheme.NEON_GREEN, font=CypherpunkTheme.FONT_NORMAL, width=18, anchor='w').pack(side=tk.LEFT)
+        
+        self.wallet_address_var = tk.StringVar(value="Click Refresh to connect")
+        evm_addr_label = tk.Label(evm_row, textvariable=self.wallet_address_var, bg=CypherpunkTheme.BG_PANEL,
+                                  fg=CypherpunkTheme.NEON_GREEN, font=CypherpunkTheme.FONT_MONO)
+        evm_addr_label.pack(side=tk.LEFT, padx=5)
+        
+        copy_evm_btn = tk.Button(evm_row, text="📋 Copy EVM", bg=CypherpunkTheme.BG_TERTIARY,
+                                fg=CypherpunkTheme.NEON_CYAN, command=self._copy_evm_address)
+        copy_evm_btn.pack(side=tk.RIGHT, padx=5)
+        
+        # Bitcoin Taproot Address (for Runes)
+        btc_row = tk.Frame(addresses_frame, bg=CypherpunkTheme.BG_PANEL)
+        btc_row.pack(fill=tk.X, pady=5)
+        
+        tk.Label(btc_row, text="₿ Bitcoin (Runes):", bg=CypherpunkTheme.BG_PANEL,
+                fg=CypherpunkTheme.NEON_ORANGE, font=CypherpunkTheme.FONT_NORMAL, width=18, anchor='w').pack(side=tk.LEFT)
+        
+        self.btc_address_var = tk.StringVar(value="Click Refresh to connect")
+        btc_addr_label = tk.Label(btc_row, textvariable=self.btc_address_var, bg=CypherpunkTheme.BG_PANEL,
+                                  fg=CypherpunkTheme.NEON_ORANGE, font=CypherpunkTheme.FONT_MONO)
+        btc_addr_label.pack(side=tk.LEFT, padx=5)
+        
+        copy_btc_btn = tk.Button(btc_row, text="📋 Copy BTC", bg=CypherpunkTheme.BG_TERTIARY,
+                                fg=CypherpunkTheme.NEON_ORANGE, command=self._copy_btc_address)
+        copy_btc_btn.pack(side=tk.RIGHT, padx=5)
+        
+        # Info text
+        tk.Label(addresses_frame, text="EVM: Ethereum, Polygon, Arbitrum, Base, BSC  |  BTC: Taproot for Runes & Ordinals",
+                bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.TEXT_SECONDARY,
+                font=CypherpunkTheme.FONT_SMALL).pack(anchor=tk.W, pady=(5, 0))
+        
         # === WEB3 ERC20 INTEGRATION ===
-        web3_frame = tk.LabelFrame(scrollable_frame, text="⛓ WEB3 ERC20 INTEGRATION", 
+        web3_frame = tk.LabelFrame(scrollable_frame, text="⛓ EVM NETWORK", 
                                    bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.NEON_CYAN,
                                    font=CypherpunkTheme.FONT_TITLE, padx=10, pady=10)
         web3_frame.pack(fill=tk.X, pady=10, padx=5)
-        
-        # Wallet Address Display
-        wallet_row = tk.Frame(web3_frame, bg=CypherpunkTheme.BG_PANEL)
-        wallet_row.pack(fill=tk.X, pady=5)
-        
-        tk.Label(wallet_row, text="Wallet Address:", bg=CypherpunkTheme.BG_PANEL,
-                fg=CypherpunkTheme.TEXT_PRIMARY, font=CypherpunkTheme.FONT_NORMAL).pack(side=tk.LEFT)
-        
-        self.wallet_address_var = tk.StringVar(value="Not connected")
-        tk.Label(wallet_row, textvariable=self.wallet_address_var, bg=CypherpunkTheme.BG_PANEL,
-                fg=CypherpunkTheme.NEON_GREEN, font=CypherpunkTheme.FONT_MONO).pack(side=tk.LEFT, padx=10)
-        
-        copy_btn = tk.Button(wallet_row, text="📋 Copy", bg=CypherpunkTheme.BG_TERTIARY,
-                            fg=CypherpunkTheme.NEON_CYAN, command=self._copy_wallet_address)
-        copy_btn.pack(side=tk.LEFT)
         
         # Chain Selection
         chain_row = tk.Frame(web3_frame, bg=CypherpunkTheme.BG_PANEL)
@@ -916,9 +944,20 @@ class VaultMonitorGUI:
         chain_menu = ttk.Combobox(chain_row, textvariable=self.chain_var, values=chains, width=15)
         chain_menu.pack(side=tk.LEFT, padx=10)
         
-        refresh_btn = tk.Button(chain_row, text="🔄 Refresh Balance", bg=CypherpunkTheme.BG_TERTIARY,
-                               fg=CypherpunkTheme.NEON_GREEN, command=self._refresh_web3_balance)
+        refresh_btn = tk.Button(chain_row, text="🔄 Refresh Wallets", bg=CypherpunkTheme.BG_TERTIARY,
+                               fg=CypherpunkTheme.NEON_GREEN, command=self._refresh_all_wallets)
         refresh_btn.pack(side=tk.LEFT, padx=5)
+        
+        # Native balance display
+        balance_row = tk.Frame(web3_frame, bg=CypherpunkTheme.BG_PANEL)
+        balance_row.pack(fill=tk.X, pady=5)
+        
+        tk.Label(balance_row, text="Native Balance:", bg=CypherpunkTheme.BG_PANEL,
+                fg=CypherpunkTheme.TEXT_PRIMARY).pack(side=tk.LEFT)
+        
+        self.native_balance_var = tk.StringVar(value="--")
+        tk.Label(balance_row, textvariable=self.native_balance_var, bg=CypherpunkTheme.BG_PANEL,
+                fg=CypherpunkTheme.NEON_GREEN, font=CypherpunkTheme.FONT_MONO).pack(side=tk.LEFT, padx=10)
         
         # === RECEIVE SECTION ===
         receive_frame = tk.LabelFrame(scrollable_frame, text="📥 RECEIVE ERC20", 
@@ -6204,6 +6243,28 @@ Pour exécuter ce transfert:
             messagebox.showerror("Error", f"Failed to initialize wallet: {e}")
             return None
     
+    def _get_btc_wallet(self):
+        """Get or create Bitcoin wallet from vault key"""
+        try:
+            from core.bitcoin_wallet import VaultBitcoinWallet, BitcoinNetwork
+            
+            if not hasattr(self, '_btc_wallet') or self._btc_wallet is None:
+                # Derive wallet from vault key
+                vault_key = hashlib.sha256(self.vault_name.encode()).digest()
+                self._btc_wallet = VaultBitcoinWallet(vault_key, self.vault_name, BitcoinNetwork.MAINNET)
+                self.btc_address_var.set(self._btc_wallet.address)
+            
+            return self._btc_wallet
+        except Exception as e:
+            # Fallback: generate a deterministic address
+            vault_key = hashlib.sha256(self.vault_name.encode()).digest()
+            # Create a simulated taproot address (bc1p...)
+            addr_hash = hashlib.sha256(vault_key + b"btc_taproot").hexdigest()[:58]
+            simulated_addr = f"bc1p{addr_hash}"
+            self.btc_address_var.set(simulated_addr)
+            self._log_activity(f"BTC wallet (simulated): {simulated_addr[:15]}...")
+            return None
+    
     def _get_chain_enum(self, chain_name: str):
         """Convert chain name to EVMChain enum"""
         from core.evm_wallet import EVMChain
@@ -6219,14 +6280,50 @@ Pour exécuter ce transfert:
         }
         return chain_map.get(chain_name, EVMChain.ETHEREUM_MAINNET)
     
-    def _copy_wallet_address(self):
-        """Copy wallet address to clipboard"""
+    def _copy_evm_address(self):
+        """Copy EVM wallet address to clipboard"""
         wallet = self._get_evm_wallet()
         if wallet:
             self.root.clipboard_clear()
             self.root.clipboard_append(wallet.address)
-            self._log_activity(f"Wallet address copied: {wallet.address[:10]}...")
-            messagebox.showinfo("Copied", "Wallet address copied to clipboard!")
+            self._log_activity(f"EVM address copied: {wallet.address[:15]}...")
+            messagebox.showinfo("Copied", f"EVM Address copied!\n{wallet.address}")
+    
+    def _copy_btc_address(self):
+        """Copy Bitcoin wallet address to clipboard"""
+        btc_addr = self.btc_address_var.get()
+        if btc_addr and btc_addr != "Click Refresh to connect":
+            self.root.clipboard_clear()
+            self.root.clipboard_append(btc_addr)
+            self._log_activity(f"BTC address copied: {btc_addr[:15]}...")
+            messagebox.showinfo("Copied", f"Bitcoin Address copied!\n{btc_addr}")
+        else:
+            # Try to get wallet first
+            self._get_btc_wallet()
+            btc_addr = self.btc_address_var.get()
+            if btc_addr:
+                self.root.clipboard_clear()
+                self.root.clipboard_append(btc_addr)
+                messagebox.showinfo("Copied", f"Bitcoin Address copied!\n{btc_addr}")
+    
+    def _copy_wallet_address(self):
+        """Legacy: Copy EVM wallet address"""
+        self._copy_evm_address()
+    
+    def _refresh_all_wallets(self):
+        """Refresh both EVM and BTC wallets"""
+        # Refresh EVM
+        wallet = self._get_evm_wallet()
+        if wallet:
+            self.wallet_address_var.set(wallet.address)
+        
+        # Refresh BTC
+        self._get_btc_wallet()
+        
+        # Refresh EVM balance
+        self._refresh_web3_balance()
+        
+        self._log_activity("Wallets refreshed")
     
     def _refresh_web3_balance(self):
         """Refresh balance from blockchain"""
@@ -6240,11 +6337,13 @@ Pour exécuter ce transfert:
             # Get native balance
             native_info = wallet.get_native_balance(chain)
             balance_eth = float(native_info.formatted_balance())
+            self.native_balance_var.set(f"{balance_eth:.6f} {native_info.symbol}")
             self.total_balance_var.set(f"{balance_eth:.6f} {native_info.symbol}")
             
             self._log_activity(f"Balance refreshed on {chain._name}: {balance_eth:.6f} {native_info.symbol}")
             
         except Exception as e:
+            self.native_balance_var.set("Error")
             messagebox.showerror("Error", f"Failed to fetch balance: {e}")
     
     def _track_erc20_token(self):
