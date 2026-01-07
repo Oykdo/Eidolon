@@ -3653,98 +3653,252 @@ INSTRUCTIONS:
         self.root.after(50, self._animate_avatar)
     
     def _draw_avatar_animated(self, avatar, angle):
-        """Dessine l'avatar avec rotation"""
+        """Dessine l'avatar avec rotation - Version amelioree avec effets"""
         self.avatar_canvas.delete("all")
-        color = self._get_rarity_color(avatar.rarity_tier)
-        geo_type = avatar.geometry_type
         
         import math
+        import hashlib
+        
+        # Couleurs basees sur la rarete et le DNA
+        color = self._get_rarity_color(avatar.rarity_tier)
+        
+        # Generer des couleurs secondaires depuis l'avatar ID
+        avatar_hash = hashlib.md5(avatar.avatar_id.encode()).hexdigest()
+        color2 = f"#{avatar_hash[0:6]}"
+        color3 = f"#{avatar_hash[6:12]}"
+        
+        geo_type = avatar.geometry_type
         rad = math.radians(angle)
         cos_a = math.cos(rad)
         sin_a = math.sin(rad)
         
-        cx, cy = 170, 140  # Centre
+        cx, cy = 170, 130  # Centre
+        
+        # Dessiner un fond avec effet de lueur
+        glow_color = color + "33"  # 20% opacite
+        self.avatar_canvas.create_oval(cx-90, cy-70, cx+90, cy+70, fill=glow_color, outline="")
         
         if "sphere" in geo_type:
-            # Sphere avec rotation
-            r = 60
-            for i in range(0, 360, 30):
-                a1 = math.radians(i)
-                x1 = cx + r * math.cos(a1 + rad) * 0.8
-                y1 = cy + r * math.sin(a1) * 0.4
-                self.avatar_canvas.create_oval(x1-5, y1-5, x1+5, y1+5, fill=color, outline="")
-            self.avatar_canvas.create_oval(cx-r, cy-r*0.6, cx+r, cy+r*0.6, outline=color, width=2)
+            # Sphere quantique avec particules orbitales
+            r = 55
+            # Sphere principale
+            self.avatar_canvas.create_oval(cx-r, cy-r*0.65, cx+r, cy+r*0.65, outline=color, width=3)
+            # Anneaux orbitaux
+            for ring in range(3):
+                ring_r = r + ring * 12
+                self.avatar_canvas.create_oval(cx-ring_r, cy-ring_r*0.3, cx+ring_r, cy+ring_r*0.3, 
+                                              outline=color2, width=1)
+            # Particules en orbite
+            for i in range(12):
+                a1 = math.radians(i * 30) + rad * (1 + i % 3 * 0.5)
+                orbit_r = 45 + (i % 3) * 15
+                x1 = cx + orbit_r * math.cos(a1)
+                y1 = cy + orbit_r * math.sin(a1) * 0.4
+                size = 4 + (i % 3) * 2
+                particle_color = [color, color2, color3][i % 3]
+                self.avatar_canvas.create_oval(x1-size, y1-size, x1+size, y1+size, 
+                                              fill=particle_color, outline="white", width=1)
+            # Noyau central
+            self.avatar_canvas.create_oval(cx-8, cy-8, cx+8, cy+8, fill=color, outline="white", width=2)
             
         elif "torus" in geo_type:
-            # Tore avec rotation
-            R, r = 60, 20
-            points = []
-            for i in range(0, 360, 15):
-                a1 = math.radians(i)
-                x = cx + (R + r * math.cos(a1 * 3)) * math.cos(a1 + rad)
-                y = cy + (R + r * math.cos(a1 * 3)) * math.sin(a1) * 0.5
-                points.extend([x, y])
-            if len(points) >= 6:
-                self.avatar_canvas.create_polygon(points, outline=color, fill="", width=2, smooth=True)
+            # Tore spinoriel avec flux d'energie
+            R, r = 55, 18
+            # Dessiner plusieurs couches du tore
+            for layer in range(3):
+                points = []
+                layer_offset = layer * 0.3
+                for i in range(0, 360, 10):
+                    a1 = math.radians(i)
+                    wave = math.sin(a1 * 4 + rad * 2) * 8
+                    x = cx + (R + r * math.cos(a1 * 3) + wave) * math.cos(a1 + rad + layer_offset)
+                    y = cy + (R + r * math.cos(a1 * 3) + wave) * math.sin(a1) * 0.45
+                    points.extend([x, y])
+                if len(points) >= 6:
+                    layer_color = [color, color2, color3][layer]
+                    self.avatar_canvas.create_polygon(points, outline=layer_color, fill="", 
+                                                     width=3-layer, smooth=True)
+            # Points de flux
+            for i in range(8):
+                a = math.radians(i * 45) + rad
+                x = cx + R * math.cos(a)
+                y = cy + R * math.sin(a) * 0.4
+                self.avatar_canvas.create_oval(x-4, y-4, x+4, y+4, fill=color2, outline="")
             
-        elif "crystal" in geo_type or "polyhedron" in geo_type:
-            # Cristal avec rotation
-            points = []
+        elif "crystal" in geo_type or "nexus" in geo_type:
+            # Cristal nexus avec facettes brillantes
+            # Dessiner les facettes
+            for layer in range(3):
+                points = []
+                layer_r = 55 - layer * 15
+                for i in range(8):
+                    a = math.radians(i * 45) + rad + layer * 0.2
+                    x = cx + layer_r * math.cos(a)
+                    y = cy + layer_r * math.sin(a) * 0.6
+                    points.extend([x, y])
+                layer_color = [color, color2, color3][layer]
+                self.avatar_canvas.create_polygon(points, outline=layer_color, fill="", width=2)
+            # Lignes de refraction
+            for i in range(8):
+                a = math.radians(i * 45) + rad
+                x = cx + 55 * math.cos(a)
+                y = cy + 55 * math.sin(a) * 0.6
+                self.avatar_canvas.create_line(cx, cy, x, y, fill=color, width=1, dash=(3, 3))
+            # Coeur du cristal
+            self.avatar_canvas.create_polygon([cx, cy-25, cx+15, cy, cx, cy+25, cx-15, cy],
+                                             fill=color, outline="white", width=2)
+            # Eclats
             for i in range(6):
-                a = math.radians(i * 60) + rad
-                x = cx + 60 * math.cos(a)
-                y = cy + 60 * math.sin(a) * 0.6
-                points.extend([x, y])
-            self.avatar_canvas.create_polygon(points, outline=color, fill="", width=2)
-            # Lignes vers le centre
-            for i in range(0, len(points), 2):
-                self.avatar_canvas.create_line(cx, cy, points[i], points[i+1], fill=color, width=1)
+                a = math.radians(i * 60 + angle * 0.5)
+                x = cx + 70 * math.cos(a)
+                y = cy + 50 * math.sin(a) * 0.6
+                self.avatar_canvas.create_text(x, y, text="✦", fill=color2, font=("Segoe UI", 8))
+            
+        elif "polyhedron" in geo_type or "bell" in geo_type:
+            # Polyedre de Bell avec connexions quantiques
+            vertices = []
+            for i in range(12):
+                a = math.radians(i * 30) + rad
+                r_var = 50 + math.sin(i * 1.5) * 15
+                x = cx + r_var * math.cos(a)
+                y = cy + r_var * math.sin(a) * 0.55
+                vertices.append((x, y))
+            # Dessiner les connexions
+            for i, (x1, y1) in enumerate(vertices):
+                for j in range(i + 1, len(vertices)):
+                    if (j - i) % 3 == 1:
+                        x2, y2 = vertices[j]
+                        self.avatar_canvas.create_line(x1, y1, x2, y2, fill=color2, width=1)
+            # Dessiner les sommets
+            for i, (x, y) in enumerate(vertices):
+                v_color = [color, color2, color3][i % 3]
+                self.avatar_canvas.create_oval(x-5, y-5, x+5, y+5, fill=v_color, outline="white")
+            # Centre
+            self.avatar_canvas.create_oval(cx-10, cy-10, cx+10, cy+10, fill=color, outline="white", width=2)
             
         elif "7d" in geo_type:
-            # Projection 7D avec rotation
+            # Projection 7D avec dimensions multiples
+            # Couches dimensionnelles
+            for dim in range(7):
+                dim_angle = rad + dim * 0.15
+                dim_r = 65 - dim * 5
+                points = []
+                for i in range(7):
+                    a = math.radians(i * 360 / 7) + dim_angle
+                    x = cx + dim_r * math.cos(a)
+                    y = cy + dim_r * math.sin(a) * 0.55
+                    points.extend([x, y])
+                points.extend(points[:2])  # Fermer
+                dim_color = f"#{hex(255 - dim * 30)[2:].zfill(2)}00{hex(dim * 36)[2:].zfill(2)}"
+                self.avatar_canvas.create_line(points, fill=dim_color, width=2)
+            # Noeuds principaux
             for i in range(7):
                 a = math.radians(i * 360 / 7) + rad
-                x = cx + 70 * math.cos(a)
-                y = cy + 70 * math.sin(a) * 0.6
+                x = cx + 65 * math.cos(a)
+                y = cy + 65 * math.sin(a) * 0.55
                 self.avatar_canvas.create_line(cx, cy, x, y, fill=color, width=2)
-                self.avatar_canvas.create_oval(x-6, y-6, x+6, y+6, fill=color, outline="white")
+                self.avatar_canvas.create_oval(x-7, y-7, x+7, y+7, fill=color, outline="white", width=2)
+                self.avatar_canvas.create_text(x, y, text=str(i+1), fill="white", font=("Consolas", 7, "bold"))
+            # Centre 7D
+            self.avatar_canvas.create_text(cx, cy, text="7D", fill=color, font=("Consolas", 12, "bold"))
             
-        elif "lattice" in geo_type:
-            # Lattice avec rotation
-            for i in range(-2, 3):
-                for j in range(-2, 3):
-                    x = cx + (i * 30) * cos_a - (j * 20) * sin_a
-                    y = cy + (i * 30) * sin_a * 0.4 + (j * 20) * cos_a * 0.4
-                    size = 5 + abs(i + j)
-                    self.avatar_canvas.create_rectangle(x-size, y-size, x+size, y+size, fill=color, outline="")
+        elif "lattice" in geo_type or "clifford" in geo_type:
+            # Lattice de Clifford avec structure cristalline
+            for i in range(-3, 4):
+                for j in range(-3, 4):
+                    x = cx + (i * 22) * cos_a - (j * 18) * sin_a
+                    y = cy + (i * 22) * sin_a * 0.35 + (j * 18) * cos_a * 0.35
+                    dist = math.sqrt(i*i + j*j)
+                    if dist < 4:
+                        size = max(2, 7 - dist * 1.5)
+                        # Couleur basee sur la position
+                        if (i + j) % 2 == 0:
+                            node_color = color
+                        else:
+                            node_color = color2
+                        self.avatar_canvas.create_rectangle(x-size, y-size, x+size, y+size, 
+                                                           fill=node_color, outline="white")
+                        # Connexions
+                        if i < 3 and abs(j) < 3:
+                            x2 = cx + ((i+1) * 22) * cos_a - (j * 18) * sin_a
+                            y2 = cy + ((i+1) * 22) * sin_a * 0.35 + (j * 18) * cos_a * 0.35
+                            self.avatar_canvas.create_line(x, y, x2, y2, fill=color3, width=1)
             
-        elif "fractal" in geo_type:
-            # Fractal rotatif
-            def draw_branch(x, y, length, angle_deg, depth):
-                if depth == 0 or length < 5:
+        elif "fractal" in geo_type or "entropy" in geo_type:
+            # Fractale entropique avec arbre de Pythagore
+            def draw_branch(x, y, length, angle_deg, depth, branch_color):
+                if depth == 0 or length < 4:
+                    # Feuille
+                    self.avatar_canvas.create_oval(x-3, y-3, x+3, y+3, fill=branch_color, outline="")
                     return
                 end_x = x + length * math.cos(math.radians(angle_deg))
                 end_y = y + length * math.sin(math.radians(angle_deg))
-                self.avatar_canvas.create_line(x, y, end_x, end_y, fill=color, width=depth)
-                draw_branch(end_x, end_y, length * 0.7, angle_deg - 30, depth - 1)
-                draw_branch(end_x, end_y, length * 0.7, angle_deg + 30, depth - 1)
+                self.avatar_canvas.create_line(x, y, end_x, end_y, fill=branch_color, width=depth)
+                # Branches avec variation
+                draw_branch(end_x, end_y, length * 0.7, angle_deg - 25 - depth * 2, depth - 1, color2)
+                draw_branch(end_x, end_y, length * 0.7, angle_deg + 25 + depth * 2, depth - 1, color3)
             
-            draw_branch(cx, cy + 80, 50, -90 + angle, 4)
+            # Plusieurs arbres
+            draw_branch(cx, cy + 70, 45, -90 + angle * 0.3, 5, color)
+            draw_branch(cx - 40, cy + 60, 30, -70 + angle * 0.2, 4, color2)
+            draw_branch(cx + 40, cy + 60, 30, -110 + angle * 0.2, 4, color3)
             
         else:  # hybrid ou autre
-            # Forme hybride
-            self.avatar_canvas.create_oval(cx-50, cy-50, cx+50, cy+50, outline=color, width=2)
-            for i in range(4):
-                a = math.radians(i * 90) + rad
-                x = cx + 50 * math.cos(a)
-                y = cy + 50 * math.sin(a) * 0.6
+            # Forme hybride complexe
+            # Cercles concentriques
+            for ring in range(4):
+                ring_r = 55 - ring * 12
+                self.avatar_canvas.create_oval(cx-ring_r, cy-ring_r*0.6, cx+ring_r, cy+ring_r*0.6, 
+                                              outline=[color, color2, color3, color][ring], width=2)
+            # Rayons
+            for i in range(8):
+                a = math.radians(i * 45) + rad
+                x = cx + 55 * math.cos(a)
+                y = cy + 55 * math.sin(a) * 0.6
                 self.avatar_canvas.create_line(cx, cy, x, y, fill=color, width=2)
+                # Points aux extremites
+                self.avatar_canvas.create_oval(x-4, y-4, x+4, y+4, fill=color2, outline="white")
+            # Noyau
+            self.avatar_canvas.create_oval(cx-12, cy-12, cx+12, cy+12, fill=color, outline="white", width=2)
         
-        # Afficher le type et la rarete
-        self.avatar_canvas.create_text(cx, 260, text=geo_type.replace("_", " ").upper(),
-                                       fill=color, font=("Consolas", 9, "bold"))
-        self.avatar_canvas.create_text(cx, 275, text=f"[{avatar.rarity_tier.upper()}]",
+        # ============================================================
+        # AFFICHAGE DES INFORMATIONS
+        # ============================================================
+        
+        # Cadre d'info en bas
+        self.avatar_canvas.create_rectangle(20, 245, 320, 278, fill="#0a0a1a", outline=color, width=1)
+        
+        # Type geometrique
+        type_display = geo_type.replace("_", " ").upper()
+        self.avatar_canvas.create_text(170, 255, text=type_display,
+                                       fill=color, font=("Consolas", 10, "bold"))
+        
+        # Rarete avec indicateur visuel
+        rarity_text = f"[{avatar.rarity_tier.upper()}]"
+        self.avatar_canvas.create_text(170, 268, text=rarity_text,
                                        fill=color, font=("Consolas", 8))
+        
+        # Indicateur de puissance (petit cercle en haut a droite)
+        power_level = min(avatar.effective_power / 150, 1.0)  # Normalise
+        power_color = self._get_power_color(power_level)
+        self.avatar_canvas.create_oval(300, 10, 330, 40, fill=power_color, outline="white", width=2)
+        self.avatar_canvas.create_text(315, 25, text=f"{int(avatar.effective_power/100)}K",
+                                       fill="white", font=("Consolas", 7, "bold"))
+    
+    def _get_power_color(self, power_level: float) -> str:
+        """Retourne une couleur basee sur le niveau de puissance (0-1)"""
+        if power_level >= 0.9:
+            return "#ff00ff"  # Magenta - Primordial
+        elif power_level >= 0.75:
+            return "#ffd700"  # Or - Mythical
+        elif power_level >= 0.6:
+            return "#ff6600"  # Orange - Legendary
+        elif power_level >= 0.45:
+            return "#a020f0"  # Violet - Epic
+        elif power_level >= 0.3:
+            return "#0080ff"  # Bleu - Rare
+        else:
+            return "#00ff00"  # Vert - Common
     
     def _set_avatar_view(self, view_type):
         """Change la vue de l'avatar"""
@@ -4341,7 +4495,7 @@ INSTRUCTIONS:
             self.tokenize_btn.configure(state=tk.DISABLED)
     
     def _generate_avatar(self):
-        """Genere un nouvel avatar pour le vault"""
+        """Genere un nouvel avatar UNIQUE et IMMUABLE pour le vault"""
         if not AVATAR_AVAILABLE:
             messagebox.showerror("Erreur", "Module Avatar non disponible")
             return
@@ -4351,6 +4505,31 @@ INSTRUCTIONS:
             QuantumAvatarGenerator, PIONEER_AVATAR_LIMIT,
             PIONEER_TIERS, PIONEER_RARITY_BONUS, PIONEER_MIN_RARITY
         )
+        
+        # ============================================================
+        # VERIFICATION IMMUABILITE: Un vault = Un seul avatar JAMAIS
+        # ============================================================
+        existing = self.avatar_manager.get_avatars_owned_by_vault(self.current_vault_num)
+        if not existing:
+            # Verifier aussi les avatars crees pour ce vault mais transferes
+            existing = self.avatar_manager.get_avatars_by_vault(f"vault_{self.current_vault_num:04d}")
+        
+        if existing:
+            avatar = existing[0]
+            messagebox.showwarning(
+                "⚠️ AVATAR IMMUABLE",
+                f"Ce vault possede deja un avatar UNIQUE et IMMUABLE.\n\n"
+                f"╔══════════════════════════════════════╗\n"
+                f"║  L'avatar ne peut PAS etre regenere  ║\n"
+                f"╚══════════════════════════════════════╝\n\n"
+                f"Type: {avatar.geometry_type.replace('_', ' ').title()}\n"
+                f"Rarete: {avatar.rarity_tier.upper()}\n"
+                f"Puissance: {avatar.effective_power:.0f}\n\n"
+                f"Chaque vault genere UN SEUL avatar base sur\n"
+                f"son empreinte cryptographique unique.\n"
+                f"Cette regle garantit l'authenticite et la rarete."
+            )
+            return
         
         # Verifier l'eligibilite du vault (limite 10,000)
         can_have, reason = QuantumAvatarGenerator.can_have_avatar(self.current_vault_num)
@@ -4385,29 +4564,23 @@ INSTRUCTIONS:
         else:
             bonus_info = f"Vault #{self.current_vault_num}"
         
-        # Verifier si un avatar existe deja
-        existing = self.avatar_manager.get_avatars_owned_by_vault(self.current_vault_num)
-        if existing:
-            result = messagebox.askyesno(
-                "Avatar existant",
-                f"Un avatar existe deja pour ce vault.\n\n"
-                f"Voulez-vous en generer un nouveau?\n"
-                f"(L'ancien restera dans l'historique)"
-            )
-            if not result:
-                return
-        
-        # Confirmer la generation avec les bonus
+        # Confirmer la generation avec avertissement d'immuabilite
         result = messagebox.askyesno(
-            "Generer Avatar Pionnier",
+            "⚡ Generer Avatar UNIQUE",
             f"{bonus_info}\n\n"
+            f"╔══════════════════════════════════════════╗\n"
+            f"║  ATTENTION: GENERATION IRREVERSIBLE!     ║\n"
+            f"║  L'avatar sera UNIQUE et IMMUABLE.       ║\n"
+            f"║  Vous ne pourrez JAMAIS le regenerer.    ║\n"
+            f"╚══════════════════════════════════════════╝\n\n"
             f"Voulez-vous generer votre avatar unique?"
         )
         if not result:
             return
         
-        # Generer les donnees du vault
-        vault_data = f"vault_{self.current_vault_num}_{datetime.now().isoformat()}".encode()
+        # Generer les donnees du vault de maniere DETERMINISTE
+        # L'avatar est base sur l'ID unique du vault, pas sur la date
+        vault_data = f"vault_{self.current_vault_num:04d}_immutable_avatar".encode()
         
         # Demander l'adresse Bitcoin
         address = simpledialog.askstring(
