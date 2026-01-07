@@ -574,6 +574,254 @@ class VaultHDWallet:
         message_hash = encode_defunct(text=message)
         recovered = Account.recover_message(message_hash, signature=signature)
         return recovered.lower() == address.lower()
+    
+    def sign_transaction(self, chain: EVMChain, tx_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Sign a transaction for broadcasting.
+        
+        Args:
+            chain: Target blockchain
+            tx_data: Transaction data dict with keys:
+                - to: Recipient address
+                - value: Amount in wei (optional, default 0)
+                - data: Contract call data (optional)
+                - gas: Gas limit (optional, will estimate)
+                - gasPrice or maxFeePerGas: Gas price (optional)
+                - nonce: Transaction nonce (optional, will fetch)
+        
+        Returns:
+            Dict with signed transaction and metadata
+        """
+        w3 = self.get_web3(chain)
+        
+        # Build transaction
+        tx = {
+            'from': self.address,
+            'to': Web3.to_checksum_address(tx_data['to']),
+            'value': tx_data.get('value', 0),
+            'chainId': chain.chain_id,
+        }
+        
+        # Add contract data if present
+        if 'data' in tx_data:
+            tx['data'] = tx_data['data']
+        
+        # Get nonce
+        if 'nonce' in tx_data:
+            tx['nonce'] = tx_data['nonce']
+        else:
+            tx['nonce'] = w3.eth.get_transaction_count(self.address)
+        
+        # Estimate gas if not provided
+        if 'gas' in tx_data:
+            tx['gas'] = tx_data['gas']
+        else:
+            try:
+                tx['gas'] = w3.eth.estimate_gas(tx)
+            except Exception:
+                tx['gas'] = 21000 if 'data' not in tx else 100000
+        
+        # Gas pricing (EIP-1559 or legacy)
+        if 'maxFeePerGas' in tx_data:
+            tx['maxFeePerGas'] = tx_data['maxFeePerGas']
+            tx['maxPriorityFeePerGas'] = tx_data.get('maxPriorityFeePerGas', 1000000000)
+        elif 'gasPrice' in tx_data:
+            tx['gasPrice'] = tx_data['gasPrice']
+        else:
+            try:
+                tx['gasPrice'] = w3.eth.gas_price
+            except Exception:
+                tx['gasPrice'] = 20000000000  # 20 gwei fallback
+        
+        # Sign the transaction
+        signed_tx = self._account.sign_transaction(tx)
+        
+        return {
+            'raw_transaction': signed_tx.raw_transaction.hex(),
+            'hash': signed_tx.hash.hex(),
+            'from': self.address,
+            'to': tx['to'],
+            'value': tx['value'],
+            'gas': tx['gas'],
+            'nonce': tx['nonce'],
+            'chain': chain._name,
+            'chain_id': chain.chain_id,
+        }
+    
+    def send_signed_transaction(self, chain: EVMChain, signed_tx_hex: str) -> str:
+        """
+        Broadcast a signed transaction to the network.
+        
+        Args:
+            chain: Target blockchain
+            signed_tx_hex: Hex-encoded signed transaction
+        
+        Returns:
+            Transaction hash
+        """
+        w3 = self.get_web3(chain)
+        tx_hash = w3.eth.send_raw_transaction(bytes.fromhex(signed_tx_hex.replace('0x', '')))
+        return tx_hash.hex()
+    
+    def transfer_native(self, chain: EVMChain, to_address: str, 
+                        amount_wei: int, require_signature: bool = True) -> Dict[str, Any]:
+        """
+        Transfer native token (ETH, MATIC, BNB, etc.)
+        
+        Args:
+            chain: Target blockchain
+            to_address: Recipient address
+            amount_wei: Amount in wei
+            require_signature: If True, return signed tx without broadcasting
+        
+        Returns:
+            Transaction info dict
+        """
+        tx_data = {
+            'to': to_address,
+            'value': amount_wei,
+        }
+        
+        signed = self.sign_transaction(chain, tx_data)
+        
+        if not require_signature:
+            # Broadcast immediately
+            tx_hash = self.send_signed_transaction(chain, signed['raw_transaction'])
+            signed['tx_hash'] = tx_hash
+            signed['status'] = 'broadcasted'
+        else:
+            signed['status'] = 'signed_pending_broadcast'
+        
+        return signed
+    
+    def transfer_erc20(self, chain: EVMChain, token_address: str,
+                       to_address: str, amount: int, 
+                       require_signature: bool = True) -> Dict[str, Any]:
+        """
+        Transfer ERC20 tokens.
+        
+        Args:
+            chain: Target blockchain
+            token_address: Token contract address
+            to_address: Recipient address
+            amount: Amount in token units (with decimals)
+            require_signature: If True, return signed tx without broadcasting
+        
+        Returns:
+            Transaction info dict
+        """
+        w3 = self.get_web3(chain)
+        token_address = Web3.to_checksum_address(token_address)
+        to_address = Web3.to_checksum_address(to_address)
+        
+        # ERC20 transfer function selector: transfer(address,uint256)
+        # Function signature: 0xa9059cbb
+        transfer_data = (
+            '0xa9059cbb' +
+            to_address[2:].zfill(64) +
+            hex(amount)[2:].zfill(64)
+        )
+        
+        tx_data = {
+            'to': token_address,
+            'value': 0,
+            'data': transfer_data,
+        }
+        
+        signed = self.sign_transaction(chain, tx_data)
+        signed['token_address'] = token_address
+        signed['token_recipient'] = to_address
+        signed['token_amount'] = amount
+        
+        if not require_signature:
+            tx_hash = self.send_signed_transaction(chain, signed['raw_transaction'])
+            signed['tx_hash'] = tx_hash
+            signed['status'] = 'broadcasted'
+        else:
+            signed['status'] = 'signed_pending_broadcast'
+        
+        return signed
+    
+    def sign_typed_data(self, domain: Dict, types: Dict, message: Dict) -> str:
+        """
+        Sign EIP-712 typed structured data.
+        
+        Args:
+            domain: Domain separator data
+            types: Type definitions
+            message: Message to sign
+        
+        Returns:
+            Signature hex string
+        """
+        from eth_account.messages import encode_typed_data
+        
+        signable = encode_typed_data(domain, types, message)
+        signed = self._account.sign_message(signable)
+        return signed.signature.hex()
+    
+    def create_signature_request(self, tx_type: str, tx_data: Dict, 
+                                  chain: EVMChain = None) -> Dict[str, Any]:
+        """
+        Create a signature request for UI confirmation.
+        
+        Args:
+            tx_type: Type of transaction ('transfer', 'approve', 'swap', etc.)
+            tx_data: Transaction details
+            chain: Target chain (optional)
+        
+        Returns:
+            Signature request object for UI display
+        """
+        import time
+        import secrets
+        
+        request_id = secrets.token_hex(8)
+        
+        request = {
+            'request_id': request_id,
+            'tx_type': tx_type,
+            'from_address': self.address,
+            'chain': chain._name if chain else 'unknown',
+            'chain_id': chain.chain_id if chain else 0,
+            'tx_data': tx_data,
+            'created_at': time.time(),
+            'expires_at': time.time() + 300,  # 5 min expiry
+            'status': 'pending_approval',
+            'signature': None,
+        }
+        
+        return request
+    
+    def approve_and_sign(self, request: Dict[str, Any], chain: EVMChain) -> Dict[str, Any]:
+        """
+        Approve a signature request and sign the transaction.
+        
+        Args:
+            request: Signature request from create_signature_request
+            chain: Target blockchain
+        
+        Returns:
+            Updated request with signature
+        """
+        import time
+        
+        if request.get('status') != 'pending_approval':
+            raise ValueError("Request already processed")
+        
+        if time.time() > request.get('expires_at', 0):
+            request['status'] = 'expired'
+            raise ValueError("Request has expired")
+        
+        # Sign the transaction
+        signed = self.sign_transaction(chain, request['tx_data'])
+        
+        request['signature'] = signed['raw_transaction']
+        request['tx_hash'] = signed['hash']
+        request['status'] = 'approved_signed'
+        request['signed_at'] = time.time()
+        
+        return request
 
 
 # ============================================================================
