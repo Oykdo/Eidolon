@@ -104,8 +104,45 @@ def print_section(title: str):
 def get_input(prompt: str, hidden: bool = False) -> str:
     """Get user input with styled prompt"""
     print(f"    {Colors.CYAN}{prompt}{Colors.RESET}")
+    
     if hidden:
-        return getpass.getpass(f"    {Colors.DIM}>{Colors.RESET} ")
+        # Windows-compatible password input
+        if sys.platform == 'win32':
+            try:
+                import msvcrt
+                sys.stdout.write(f"    {Colors.DIM}>{Colors.RESET} ")
+                sys.stdout.flush()
+                password = []
+                while True:
+                    char = msvcrt.getwch()
+                    if char in ('\r', '\n'):
+                        print()  # New line after enter
+                        break
+                    elif char == '\x08':  # Backspace
+                        if password:
+                            password.pop()
+                            sys.stdout.write('\b \b')
+                            sys.stdout.flush()
+                    elif char == '\x03':  # Ctrl+C
+                        raise KeyboardInterrupt
+                    else:
+                        password.append(char)
+                        sys.stdout.write('*')
+                        sys.stdout.flush()
+                return ''.join(password)
+            except ImportError:
+                pass
+        
+        # Unix/fallback: use getpass
+        try:
+            sys.stdout.write(f"    {Colors.DIM}>{Colors.RESET} ")
+            sys.stdout.flush()
+            return getpass.getpass("")
+        except Exception:
+            # Last resort: visible input
+            print(f"    {Colors.YELLOW}(Password will be visible){Colors.RESET}")
+            return input(f"    {Colors.DIM}>{Colors.RESET} ").strip()
+    
     return input(f"    {Colors.DIM}>{Colors.RESET} ").strip()
 
 
