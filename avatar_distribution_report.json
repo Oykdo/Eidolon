@@ -1,0 +1,156 @@
+{
+  "generated_at": "2026-01-07T02:40:14.587484",
+  "pioneer_limit": 10000,
+  "tiers": {
+    "supreme": [
+      1,
+      33
+    ],
+    "legendary": [
+      34,
+      100
+    ],
+    "elite": [
+      101,
+      1000
+    ],
+    "pioneer": [
+      1001,
+      10000
+    ]
+  },
+  "stats": {
+    "total_processed": 33,
+    "created": 12,
+    "skipped_existing": 21,
+    "errors": 0
+  },
+  "by_tier": {
+    "supreme": {
+      "count": 12,
+      "rarities": {
+        "mythical": 7,
+        "primordial": 5
+      }
+    },
+    "legendary": {
+      "count": 0,
+      "rarities": {}
+    },
+    "elite": {
+      "count": 0,
+      "rarities": {}
+    },
+    "pioneer": {
+      "count": 0,
+      "rarities": {}
+    }
+  },
+  "by_rarity": {
+    "mythical": 7,
+    "primordial": 5
+  },
+  "by_type": {
+    "nexus_crystal": 7,
+    "7d_projection": 3,
+    "hybrid_form": 2
+  },
+  "avatars": [
+    {
+      "vault_num": 22,
+      "tier": "supreme",
+      "avatar_id": "56d178f314fa7fe9",
+      "rarity": "mythical",
+      "type": "nexus_crystal",
+      "power": 13650.0
+    },
+    {
+      "vault_num": 23,
+      "tier": "supreme",
+      "avatar_id": "95891047edbd9f93",
+      "rarity": "primordial",
+      "type": "7d_projection",
+      "power": 15000.0
+    },
+    {
+      "vault_num": 24,
+      "tier": "supreme",
+      "avatar_id": "4713ef9c776d616f",
+      "rarity": "mythical",
+      "type": "nexus_crystal",
+      "power": 13650.0
+    },
+    {
+      "vault_num": 25,
+      "tier": "supreme",
+      "avatar_id": "8374654f9fc47df8",
+      "rarity": "primordial",
+      "type": "nexus_crystal",
+      "power": 15000.0
+    },
+    {
+      "vault_num": 26,
+      "tier": "supreme",
+      "avatar_id": "957b6f36daac5b5f",
+      "rarity": "mythical",
+      "type": "hybrid_form",
+      "power": 13650.0
+    },
+    {
+      "vault_num": 27,
+      "tier": "supreme",
+      "avatar_id": "8b99fc635b7bb75b",
+      "rarity": "mythical",
+      "type": "nexus_crystal",
+      "power": 14367.0
+    },
+    {
+      "vault_num": 28,
+      "tier": "supreme",
+      "avatar_id": "7dc6c46f82e441a3",
+      "rarity": "primordial",
+      "type": "nexus_crystal",
+      "power": 15000.0
+    },
+    {
+      "vault_num": 29,
+      "tier": "supreme",
+      "avatar_id": "d846165f07453858",
+      "rarity": "mythical",
+      "type": "7d_projection",
+      "power": 14091.0
+    },
+    {
+      "vault_num": 30,
+      "tier": "supreme",
+      "avatar_id": "190563700e3e1e47",
+      "rarity": "mythical",
+      "type": "nexus_crystal",
+      "power": 13650.0
+    },
+    {
+      "vault_num": 31,
+      "tier": "supreme",
+      "avatar_id": "b192e605f20aae87",
+      "rarity": "primordial",
+      "type": "nexus_crystal",
+      "power": 15000.0
+    },
+    {
+      "vault_num": 32,
+      "tier": "supreme",
+      "avatar_id": "e74d45c958f5031c",
+      "rarity": "mythical",
+      "type": "7d_projection",
+      "power": 14329.5
+    },
+    {
+      "vault_num": 33,
+      "tier": "supreme",
+      "avatar_id": "e11a8152908c0826",
+      "rarity": "primordial",
+      "type": "hybrid_form",
+      "power": 15000.0
+    }
+  ]
+}

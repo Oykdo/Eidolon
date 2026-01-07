@@ -1,0 +1,100 @@
+{
+  "avatar_id": "e74d45c958f5031c",
+  "vault_id": "vault_00032",
+  "dna": {
+    "vault_hash": "f1f052aa84e7db340970cafab3537e918acdef466b51ff27cc3e65f8558867b1",
+    "seed_values": [
+      241,
+      240,
+      82,
+      170,
+      132,
+      231,
+      219,
+      52,
+      9,
+      112,
+      202,
+      250,
+      179,
+      83,
+      126,
+      145
+    ],
+    "geometric_type": 5,
+    "geometric_name": "7d_projection",
+    "color_palette": [
+      "#f1f052",
+      "#aa84e7",
+      "#db3409",
+      "#0e0fad",
+      "#713012"
+    ],
+    "attributes": {
+      "quantum_entropy": 100,
+      "spinor_complexity": 100,
+      "bell_verification": 100,
+      "polyhedral_symmetry": 100,
+      "cryptographic_strength": 40.78,
+      "temporal_stability": 7.06,
+      "spatial_coherence": 87.84,
+      "dimensional_depth": 7.0,
+      "fractal_dimension": 5.922,
+      "energy_resonance": 100,
+      "pioneer_blessing": 100.0
+    },
+    "rarity_score": 95.53,
+    "rarity_tier": "mythical",
+    "generation": 1
+  },
+  "geometry_type": "7d_projection",
+  "rarity_tier": "mythical",
+  "rarity_score": 95.53,
+  "obj_path": "C:\\Users\\jerem\\Desktop\\scrt\\Enoptron\\poly_spinor_nexus_7d\\avatars\\models\\avatar_e74d45c958f5031c.obj",
+  "texture_path": "C:\\Users\\jerem\\Desktop\\scrt\\Enoptron\\poly_spinor_nexus_7d\\avatars\\textures\\texture_e74d45c958f5031c.png",
+  "preview_path": "C:\\Users\\jerem\\Desktop\\scrt\\Enoptron\\poly_spinor_nexus_7d\\avatars\\previews\\preview_e74d45c958f5031c.png",
+  "binding": {
+    "avatar_id": "e74d45c958f5031c",
+    "origin_vault_id": "vault_00032",
+    "origin_vault_number": 32,
+    "origin_address": "bc1q7fce959109a9ce7c416a745136a543d543aef1",
+    "created_at": "2026-01-07T02:40:12.437181",
+    "state": "attached",
+    "current_owner_address": "bc1q7fce959109a9ce7c416a745136a543d543aef1",
+    "current_owner_vault": 32,
+    "ownership_type": "origin",
+    "detached_at": null,
+    "detach_txid": null,
+    "detach_reason": null,
+    "power_multiplier": 1.5,
+    "ownership_history": [
+      {
+        "type": "creation",
+        "vault_id": "vault_00032",
+        "vault_number": 32,
+        "address": "bc1q7fce959109a9ce7c416a745136a543d543aef1",
+        "timestamp": "2026-01-07T02:40:12.437181",
+        "state": "attached"
+      }
+    ]
+  },
+  "token": null,
+  "is_tokenized": false,
+  "effective_power": 14329.5,
+  "attributes": {
+    "quantum_entropy": 100,
+    "spinor_complexity": 100,
+    "bell_verification": 100,
+    "polyhedral_symmetry": 100,
+    "cryptographic_strength": 40.78,
+    "temporal_stability": 7.06,
+    "spatial_coherence": 87.84,
+    "dimensional_depth": 7.0,
+    "fractal_dimension": 5.922,
+    "energy_resonance": 100,
+    "pioneer_blessing": 100.0
+  },
+  "created_at": "2026-01-07T02:40:12.437181",
+  "last_updated": "2026-01-07T02:40:12.437181",
+  "version": 1
+}
