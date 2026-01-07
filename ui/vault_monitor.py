@@ -691,6 +691,9 @@ class VaultMonitorGUI:
         )
         self.status_label.pack(side=tk.LEFT)
         
+        # === PIONEER SLOTS PANEL ===
+        self._create_slots_panel(sidebar_inner)
+        
         # === ACTIONS PANEL ===
         actions_outer, actions_inner = CypherpunkTheme.create_card_frame(sidebar_inner, "⚡ ACTIONS")
         actions_outer.pack(fill=tk.X, pady=(0, 15))
@@ -6606,6 +6609,119 @@ Pour exécuter ce transfert:
     def _copy_wallet_address(self):
         """Legacy: Copy EVM wallet address"""
         self._copy_evm_address()
+    
+    def _create_slots_panel(self, parent):
+        """Create the Pioneer Slots panel showing 6 consolidated identities"""
+        try:
+            slots_file = os.path.join(self.base_path, "vault_storage", "consolidated_slots.json")
+            if not os.path.exists(slots_file):
+                return  # No slots system, skip
+            
+            with open(slots_file, 'r', encoding='utf-8') as f:
+                slots_data = json.load(f)
+            
+            slots = slots_data.get('slots', [])
+            if not slots:
+                return
+            
+            # Create slots card
+            slots_outer, slots_inner = CypherpunkTheme.create_card_frame(parent, "🏆 PIONEER SLOTS")
+            slots_outer.pack(fill=tk.X, pady=(0, 15))
+            
+            # Tier colors
+            tier_colors = {
+                'genesis': '#FF00FF',      # Magenta
+                'founder': '#FFD700',      # Gold
+                'pioneer': '#00FFFF',      # Cyan
+                'standard': '#808080',     # Gray
+            }
+            
+            for slot in slots:
+                slot_num = slot.get('slot_number', 0)
+                slot_name = slot.get('name', 'Unknown')
+                tier = slot.get('pioneer_tier', 'standard')
+                is_primary = slot.get('is_primary', False)
+                
+                tier_color = tier_colors.get(tier, '#808080')
+                
+                # Slot row
+                slot_frame = tk.Frame(slots_inner, bg=CypherpunkTheme.BG_PANEL)
+                slot_frame.pack(fill=tk.X, pady=1)
+                
+                # Slot number
+                num_label = tk.Label(
+                    slot_frame,
+                    text=f"#{slot_num}",
+                    bg=CypherpunkTheme.BG_PANEL,
+                    fg=tier_color,
+                    font=("Consolas", 9, "bold"),
+                    width=3
+                )
+                num_label.pack(side=tk.LEFT, padx=(0, 5))
+                
+                # Slot name
+                name_text = slot_name
+                if is_primary:
+                    name_text = f"★ {slot_name}"
+                
+                name_label = tk.Label(
+                    slot_frame,
+                    text=name_text,
+                    bg=CypherpunkTheme.BG_PANEL,
+                    fg=CypherpunkTheme.NEON_GREEN if is_primary else CypherpunkTheme.TEXT_PRIMARY,
+                    font=("Consolas", 9, "bold" if is_primary else "normal"),
+                    anchor=tk.W
+                )
+                name_label.pack(side=tk.LEFT, fill=tk.X, expand=True)
+                
+                # Tier badge
+                tier_label = tk.Label(
+                    slot_frame,
+                    text=tier.upper()[:3],
+                    bg=tier_color,
+                    fg="black",
+                    font=("Consolas", 7, "bold"),
+                    padx=3
+                )
+                tier_label.pack(side=tk.RIGHT)
+            
+            # Total lairs info
+            try:
+                from core.lair_system import LairCollection
+                from core.vault_identity import VaultIdentityManager
+                
+                identity_mgr = VaultIdentityManager()
+                primary_vault = identity_mgr.get_vault_by_number(slots_data.get('primary_vault', 1))
+                
+                if primary_vault:
+                    collection = LairCollection(primary_vault.vault_id, primary_vault.vault_number)
+                    total_lairs = len(collection.list_lairs())
+                    
+                    # Summary line
+                    summary_frame = tk.Frame(slots_inner, bg=CypherpunkTheme.BG_PANEL)
+                    summary_frame.pack(fill=tk.X, pady=(5, 0))
+                    
+                    tk.Label(
+                        summary_frame,
+                        text=f"🏰 {total_lairs} Lairs",
+                        bg=CypherpunkTheme.BG_PANEL,
+                        fg="#9400D3",
+                        font=("Consolas", 9)
+                    ).pack(side=tk.LEFT)
+                    
+                    tk.Label(
+                        summary_frame,
+                        text=f"| 🎭 {len(slots)} Avatars",
+                        bg=CypherpunkTheme.BG_PANEL,
+                        fg="#00FFFF",
+                        font=("Consolas", 9)
+                    ).pack(side=tk.LEFT, padx=(10, 0))
+                    
+            except Exception:
+                pass
+                
+        except Exception:
+            pass  # Silently skip if slots not available
     
     def _init_vault_info_address(self):
         """Initialize the vault info address display"""
