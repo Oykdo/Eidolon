@@ -216,25 +216,40 @@ class AvatarManager:
         """
         Cree un nouvel avatar LIE au vault.
         
+        IMPORTANT: Seuls les 10,000 premiers vaults peuvent avoir un avatar.
+        Les vaults #1-33 (Supreme) ont des bonus maximaux.
+        Les vaults #34-100 (Legendary) ont de tres hauts bonus.
+        Les vaults #101-1000 (Elite) ont des bonus eleves.
+        Les vaults #1001-10000 (Pioneer) ont des bonus standards.
+        
         L'avatar est automatiquement attache au vault de creation.
         Il peut etre detache plus tard (sauf si soul_bound=True).
         
         Args:
             vault_data: Donnees brutes du vault pour generer l'ADN
             vault_id: ID du vault
-            vault_number: Numero du vault
+            vault_number: Numero du vault (DOIT etre <= 10000)
             owner_address: Adresse Bitcoin du proprietaire
             generation: Generation de l'avatar
             soul_bound: Si True, l'avatar ne pourra JAMAIS etre detache
         
         Returns:
             ManagedAvatar lie au vault
+            
+        Raises:
+            ValueError: Si le vault n'est pas eligible (numero > 10000)
         """
-        # Generer l'avatar 3D
+        # Verifier l'eligibilite du vault
+        can_have, reason = QuantumAvatarGenerator.can_have_avatar(vault_number)
+        if not can_have:
+            raise ValueError(f"Ce vault ne peut pas avoir d'avatar: {reason}")
+        
+        # Generer l'avatar 3D avec le numero de vault pour les bonus pionniers
         generator = QuantumAvatarGenerator(
             vault_data=vault_data,
             vault_id=vault_id,
-            generation=generation
+            generation=generation,
+            vault_number=vault_number  # IMPORTANT: pour les bonus RNG
         )
         
         avatar_3d = generator.generate_avatar()

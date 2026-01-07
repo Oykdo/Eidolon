@@ -406,6 +406,13 @@ except ImportError as e:
     BRIDGE_AVAILABLE = False
     print(f"[INFO] Module Bitcoin Bridge non disponible: {e}")
 
+try:
+    from core.avatar_system import AvatarManager, QuantumAvatarGenerator
+    AVATAR_AVAILABLE = True
+except ImportError as e:
+    AVATAR_AVAILABLE = False
+    print(f"[INFO] Module Avatar non disponible: {e}")
+
 
 # ============================================================================
 # GESTIONNAIRE DE VAULT SECURISE
@@ -711,6 +718,11 @@ class VaultMonitorGUI:
         if BRIDGE_AVAILABLE:
             self.bridge_tab = self._create_bridge_tab()
             self.notebook.add(self.bridge_tab, text="  ⛓ BRIDGE  ")
+        
+        # Onglet Avatar 3D
+        if AVATAR_AVAILABLE:
+            self.avatar_tab = self._create_avatar_tab()
+            self.notebook.add(self.avatar_tab, text="  🎭 AVATAR  ")
         
         # === BARRE DE STATUT CYPHERPUNK ===
         status_bar_frame = tk.Frame(self.root, bg=CypherpunkTheme.BG_TERTIARY, height=32)
@@ -3271,6 +3283,761 @@ INSTRUCTIONS:
             messagebox.showinfo("Transfert Initie", 
                 f"Transfert cree!\nID: {transfer.transfer_id}\n\n"
                 "Suivez les instructions pour completer le transfert.")
+            
+        except Exception as e:
+            messagebox.showerror("Erreur", str(e))
+    
+    # ========================================================================
+    # ONGLET AVATAR 3D
+    # ========================================================================
+    
+    def _create_avatar_tab(self) -> tk.Frame:
+        """Cree l'onglet de visualisation et gestion de l'avatar 3D"""
+        frame = tk.Frame(self.notebook, bg=CypherpunkTheme.BG_DARK)
+        
+        # Initialiser le manager
+        self.avatar_manager = AvatarManager()
+        
+        # === HEADER ===
+        header_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
+        header_frame.pack(fill=tk.X, pady=(10, 15), padx=10)
+        
+        tk.Label(
+            header_frame,
+            text="AVATAR 3D DU VAULT",
+            bg=CypherpunkTheme.BG_DARK,
+            fg=CypherpunkTheme.NEON_MAGENTA,
+            font=("Consolas", 16, "bold")
+        ).pack(side=tk.LEFT)
+        
+        btn_frame = tk.Frame(header_frame, bg=CypherpunkTheme.BG_DARK)
+        btn_frame.pack(side=tk.RIGHT)
+        
+        tk.Button(
+            btn_frame,
+            text="GENERER AVATAR",
+            bg=CypherpunkTheme.NEON_MAGENTA,
+            fg="black",
+            font=("Consolas", 9, "bold"),
+            command=self._generate_avatar
+        ).pack(side=tk.LEFT, padx=5)
+        
+        tk.Button(
+            btn_frame,
+            text="REFRESH",
+            bg="#333333",
+            fg="white",
+            command=self._refresh_avatar
+        ).pack(side=tk.LEFT, padx=5)
+        
+        # === PANNEAU PRINCIPAL (2 colonnes) ===
+        main_panel = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
+        main_panel.pack(fill=tk.BOTH, expand=True, padx=10, pady=5)
+        
+        # Colonne gauche: Preview de l'avatar
+        left_panel = tk.Frame(main_panel, bg=CypherpunkTheme.BG_PANEL, width=350)
+        left_panel.pack(side=tk.LEFT, fill=tk.BOTH, padx=(0, 10), pady=5)
+        left_panel.pack_propagate(False)
+        
+        tk.Label(
+            left_panel,
+            text="PREVIEW",
+            bg=CypherpunkTheme.BG_PANEL,
+            fg=CypherpunkTheme.TEXT_SECONDARY,
+            font=("Consolas", 10, "bold")
+        ).pack(pady=(10, 5))
+        
+        # Canvas pour l'image de preview
+        self.avatar_canvas = tk.Canvas(
+            left_panel,
+            width=300,
+            height=300,
+            bg=CypherpunkTheme.BG_SECONDARY,
+            highlightthickness=2,
+            highlightbackground=CypherpunkTheme.NEON_MAGENTA
+        )
+        self.avatar_canvas.pack(pady=10)
+        
+        # Message par defaut
+        self.avatar_canvas.create_text(
+            150, 150,
+            text="Aucun avatar genere\n\nCliquez sur GENERER AVATAR",
+            fill=CypherpunkTheme.TEXT_SECONDARY,
+            font=("Consolas", 10),
+            justify=tk.CENTER
+        )
+        
+        # Etat de liaison
+        self.avatar_state_var = tk.StringVar(value="N/A")
+        state_frame = tk.Frame(left_panel, bg=CypherpunkTheme.BG_PANEL)
+        state_frame.pack(fill=tk.X, padx=10, pady=5)
+        
+        tk.Label(
+            state_frame, text="ETAT:",
+            bg=CypherpunkTheme.BG_PANEL,
+            fg=CypherpunkTheme.TEXT_SECONDARY
+        ).pack(side=tk.LEFT)
+        
+        self.avatar_state_label = tk.Label(
+            state_frame,
+            textvariable=self.avatar_state_var,
+            bg=CypherpunkTheme.BG_PANEL,
+            fg=CypherpunkTheme.NEON_GREEN,
+            font=("Consolas", 10, "bold")
+        )
+        self.avatar_state_label.pack(side=tk.LEFT, padx=10)
+        
+        # Boutons d'action
+        action_frame = tk.Frame(left_panel, bg=CypherpunkTheme.BG_PANEL)
+        action_frame.pack(fill=tk.X, padx=10, pady=10)
+        
+        self.detach_btn = tk.Button(
+            action_frame,
+            text="DETACHER",
+            bg="#ff6600",
+            fg="black",
+            font=("Consolas", 9, "bold"),
+            command=self._detach_avatar,
+            state=tk.DISABLED
+        )
+        self.detach_btn.pack(side=tk.LEFT, padx=5)
+        
+        self.transfer_avatar_btn = tk.Button(
+            action_frame,
+            text="TRANSFERER",
+            bg="#00aaff",
+            fg="black",
+            font=("Consolas", 9, "bold"),
+            command=self._transfer_avatar_dialog,
+            state=tk.DISABLED
+        )
+        self.transfer_avatar_btn.pack(side=tk.LEFT, padx=5)
+        
+        self.tokenize_btn = tk.Button(
+            action_frame,
+            text="TOKENISER",
+            bg="#f7931a",
+            fg="black",
+            font=("Consolas", 9, "bold"),
+            command=self._tokenize_avatar,
+            state=tk.DISABLED
+        )
+        self.tokenize_btn.pack(side=tk.LEFT, padx=5)
+        
+        # Colonne droite: Infos de l'avatar
+        right_panel = tk.Frame(main_panel, bg=CypherpunkTheme.BG_PANEL)
+        right_panel.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, pady=5)
+        
+        tk.Label(
+            right_panel,
+            text="INFORMATIONS",
+            bg=CypherpunkTheme.BG_PANEL,
+            fg=CypherpunkTheme.TEXT_SECONDARY,
+            font=("Consolas", 10, "bold")
+        ).pack(pady=(10, 5))
+        
+        # Zone d'info scrollable
+        info_canvas = tk.Canvas(right_panel, bg=CypherpunkTheme.BG_SECONDARY, highlightthickness=0)
+        info_scrollbar = ttk.Scrollbar(right_panel, orient=tk.VERTICAL, command=info_canvas.yview)
+        self.avatar_info_frame = tk.Frame(info_canvas, bg=CypherpunkTheme.BG_SECONDARY)
+        
+        info_canvas.configure(yscrollcommand=info_scrollbar.set)
+        info_scrollbar.pack(side=tk.RIGHT, fill=tk.Y, pady=5)
+        info_canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=5, pady=5)
+        
+        info_canvas.create_window((0, 0), window=self.avatar_info_frame, anchor=tk.NW)
+        self.avatar_info_frame.bind("<Configure>", 
+            lambda e: info_canvas.configure(scrollregion=info_canvas.bbox("all")))
+        
+        # Infos initiales
+        self._display_avatar_placeholder()
+        
+        # Charger l'avatar existant
+        self._refresh_avatar()
+        
+        return frame
+    
+    def _display_avatar_placeholder(self):
+        """Affiche le placeholder quand pas d'avatar"""
+        for widget in self.avatar_info_frame.winfo_children():
+            widget.destroy()
+        
+        tk.Label(
+            self.avatar_info_frame,
+            text="Aucun avatar pour ce vault.\n\n"
+                 "Cliquez sur GENERER AVATAR pour creer\n"
+                 "un avatar 3D unique base sur les\n"
+                 "donnees cryptographiques de votre vault.",
+            bg=CypherpunkTheme.BG_SECONDARY,
+            fg=CypherpunkTheme.TEXT_SECONDARY,
+            font=("Consolas", 10),
+            justify=tk.CENTER
+        ).pack(pady=50, padx=20)
+    
+    def _display_avatar_info(self, avatar):
+        """Affiche les informations detaillees de l'avatar"""
+        for widget in self.avatar_info_frame.winfo_children():
+            widget.destroy()
+        
+        def add_info(label, value, color=CypherpunkTheme.TEXT_PRIMARY):
+            row = tk.Frame(self.avatar_info_frame, bg=CypherpunkTheme.BG_SECONDARY)
+            row.pack(fill=tk.X, pady=2, padx=10)
+            tk.Label(row, text=f"{label}:", bg=CypherpunkTheme.BG_SECONDARY,
+                    fg=CypherpunkTheme.TEXT_SECONDARY, font=("Consolas", 9), width=18, anchor=tk.W
+            ).pack(side=tk.LEFT)
+            tk.Label(row, text=str(value), bg=CypherpunkTheme.BG_SECONDARY,
+                    fg=color, font=("Consolas", 9, "bold"), anchor=tk.W
+            ).pack(side=tk.LEFT, fill=tk.X)
+        
+        # Section Identite
+        tk.Label(self.avatar_info_frame, text="IDENTITE",
+                bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.NEON_MAGENTA,
+                font=("Consolas", 10, "bold")).pack(anchor=tk.W, pady=(10, 5), padx=10)
+        
+        add_info("Avatar ID", avatar.avatar_id[:16] + "...", CypherpunkTheme.NEON_CYAN)
+        add_info("Type", avatar.geometry_type.replace("_", " ").title(), CypherpunkTheme.NEON_MAGENTA)
+        add_info("Rarete", avatar.rarity_tier.upper(), self._get_rarity_color(avatar.rarity_tier))
+        add_info("Score", f"{avatar.rarity_score:.1f}/100")
+        
+        # Section Puissance
+        tk.Label(self.avatar_info_frame, text="PUISSANCE",
+                bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.NEON_GREEN,
+                font=("Consolas", 10, "bold")).pack(anchor=tk.W, pady=(15, 5), padx=10)
+        
+        base_power = avatar.rarity_score * 100
+        multiplier = avatar.binding.power_multiplier if avatar.binding else 1.0
+        
+        add_info("Puissance base", f"{base_power:.0f}")
+        add_info("Multiplicateur", f"x{multiplier:.2f}", 
+                CypherpunkTheme.NEON_GREEN if multiplier > 1 else CypherpunkTheme.TEXT_SECONDARY)
+        add_info("Puissance totale", f"{avatar.effective_power:.0f}", CypherpunkTheme.NEON_YELLOW)
+        
+        # Section Liaison
+        tk.Label(self.avatar_info_frame, text="LIAISON",
+                bg=CypherpunkTheme.BG_SECONDARY, fg="#ff6600",
+                font=("Consolas", 10, "bold")).pack(anchor=tk.W, pady=(15, 5), padx=10)
+        
+        if avatar.binding:
+            binding = avatar.binding
+            state_color = {
+                "attached": CypherpunkTheme.NEON_GREEN,
+                "detached": "#ff6600",
+                "soul_bound": CypherpunkTheme.NEON_MAGENTA
+            }.get(binding.state, "white")
+            
+            add_info("Etat", binding.state.upper(), state_color)
+            add_info("Vault origine", f"#{binding.origin_vault_number}")
+            add_info("Proprietaire", f"#{binding.current_owner_vault}" if binding.current_owner_vault else "N/A")
+            
+            if binding.state == "attached":
+                add_info("Bonus", "+50% puissance", CypherpunkTheme.NEON_GREEN)
+                add_info("Transferable", "NON", "#ff0000")
+            elif binding.state == "detached":
+                add_info("Bonus", "Aucun", CypherpunkTheme.TEXT_SECONDARY)
+                add_info("Transferable", "OUI", CypherpunkTheme.NEON_GREEN)
+                if binding.detached_at:
+                    add_info("Detache le", binding.detached_at[:10])
+            else:  # soul_bound
+                add_info("Bonus", "+50% puissance", CypherpunkTheme.NEON_GREEN)
+                add_info("Transferable", "JAMAIS", CypherpunkTheme.NEON_MAGENTA)
+        
+        # Section Attributs
+        tk.Label(self.avatar_info_frame, text="ATTRIBUTS DNA",
+                bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.NEON_CYAN,
+                font=("Consolas", 10, "bold")).pack(anchor=tk.W, pady=(15, 5), padx=10)
+        
+        if avatar.attributes:
+            for attr, value in list(avatar.attributes.items())[:6]:
+                attr_name = attr.replace("_", " ").title()
+                add_info(attr_name[:16], f"{value:.1f}")
+        
+        # Section Token
+        if avatar.is_tokenized and avatar.token:
+            tk.Label(self.avatar_info_frame, text="TOKENISATION",
+                    bg=CypherpunkTheme.BG_SECONDARY, fg="#f7931a",
+                    font=("Consolas", 10, "bold")).pack(anchor=tk.W, pady=(15, 5), padx=10)
+            
+            add_info("Rune ID", avatar.token.rune_id, "#f7931a")
+            add_info("Status", avatar.token.status.upper())
+            if avatar.token.inscription_txid:
+                add_info("TXID", avatar.token.inscription_txid[:20] + "...")
+    
+    def _get_rarity_color(self, rarity: str) -> str:
+        """Retourne la couleur selon la rarete"""
+        colors = {
+            "common": "#808080",
+            "uncommon": "#00ff00",
+            "rare": "#0080ff",
+            "epic": "#a020f0",
+            "legendary": "#ffd700",
+            "mythical": "#ff00ff",
+            "primordial": "#ff4500"
+        }
+        return colors.get(rarity.lower(), "white")
+    
+    def _refresh_avatar(self):
+        """Rafraichit l'affichage de l'avatar"""
+        if not AVATAR_AVAILABLE:
+            return
+        
+        # Chercher l'avatar du vault courant
+        avatars = self.avatar_manager.get_avatars_owned_by_vault(self.current_vault_num)
+        
+        if not avatars:
+            # Verifier si cree mais transfere
+            avatars = self.avatar_manager.get_avatars_by_vault(f"vault_{self.current_vault_num:04d}")
+        
+        if avatars:
+            avatar = avatars[0]  # Premier avatar
+            self._display_avatar_info(avatar)
+            self._load_avatar_preview(avatar)
+            self._update_avatar_buttons(avatar)
+            
+            # Mettre a jour l'etat
+            if avatar.binding:
+                state_text = avatar.binding.state.upper()
+                state_color = {
+                    "attached": CypherpunkTheme.NEON_GREEN,
+                    "detached": "#ff6600",
+                    "soul_bound": CypherpunkTheme.NEON_MAGENTA
+                }.get(avatar.binding.state, "white")
+                
+                self.avatar_state_var.set(state_text)
+                self.avatar_state_label.configure(fg=state_color)
+        else:
+            self._display_avatar_placeholder()
+            self.avatar_state_var.set("N/A")
+            self.detach_btn.configure(state=tk.DISABLED)
+            self.transfer_avatar_btn.configure(state=tk.DISABLED)
+            self.tokenize_btn.configure(state=tk.DISABLED)
+    
+    def _load_avatar_preview(self, avatar):
+        """Charge et affiche l'image preview de l'avatar"""
+        self.avatar_canvas.delete("all")
+        
+        preview_path = avatar.preview_path
+        if preview_path and Path(preview_path).exists():
+            try:
+                from PIL import Image, ImageTk
+                img = Image.open(preview_path)
+                img = img.resize((290, 290), Image.Resampling.LANCZOS)
+                self.avatar_photo = ImageTk.PhotoImage(img)
+                self.avatar_canvas.create_image(150, 150, image=self.avatar_photo)
+                
+                # Ajouter le type en overlay
+                self.avatar_canvas.create_text(
+                    150, 280,
+                    text=avatar.geometry_type.replace("_", " ").upper(),
+                    fill=CypherpunkTheme.NEON_MAGENTA,
+                    font=("Consolas", 10, "bold")
+                )
+                return
+            except Exception as e:
+                print(f"[WARN] Cannot load preview: {e}")
+        
+        # Fallback: dessiner une representation simple
+        self._draw_avatar_placeholder(avatar)
+    
+    def _draw_avatar_placeholder(self, avatar):
+        """Dessine une representation placeholder de l'avatar"""
+        # Couleur basee sur la rarete
+        color = self._get_rarity_color(avatar.rarity_tier)
+        
+        # Forme basee sur le type
+        geo_type = avatar.geometry_type
+        
+        if "sphere" in geo_type:
+            self.avatar_canvas.create_oval(75, 75, 225, 225, outline=color, width=3)
+            self.avatar_canvas.create_oval(100, 100, 200, 200, outline=color, width=2)
+        elif "torus" in geo_type:
+            self.avatar_canvas.create_oval(50, 100, 250, 200, outline=color, width=3)
+            self.avatar_canvas.create_oval(100, 120, 200, 180, fill=CypherpunkTheme.BG_SECONDARY, outline=color, width=2)
+        elif "polyhedron" in geo_type or "crystal" in geo_type:
+            points = [150, 50, 250, 130, 220, 250, 80, 250, 50, 130]
+            self.avatar_canvas.create_polygon(points, outline=color, width=3, fill="")
+        elif "lattice" in geo_type:
+            for i in range(5):
+                for j in range(5):
+                    x = 60 + i * 45
+                    y = 60 + j * 45
+                    self.avatar_canvas.create_rectangle(x, y, x+10, y+10, fill=color)
+        elif "fractal" in geo_type:
+            self._draw_fractal_triangle(75, 225, 225, 225, 150, 75, 3, color)
+        elif "7d" in geo_type:
+            for i in range(7):
+                angle = i * 3.14159 * 2 / 7
+                x1 = 150 + 80 * __import__('math').cos(angle)
+                y1 = 150 + 80 * __import__('math').sin(angle)
+                self.avatar_canvas.create_line(150, 150, x1, y1, fill=color, width=2)
+                self.avatar_canvas.create_oval(x1-5, y1-5, x1+5, y1+5, fill=color)
+        else:  # hybrid ou autre
+            self.avatar_canvas.create_oval(75, 75, 225, 225, outline=color, width=2)
+            points = [150, 80, 200, 150, 150, 220, 100, 150]
+            self.avatar_canvas.create_polygon(points, outline=color, width=2, fill="")
+        
+        # Nom du type
+        self.avatar_canvas.create_text(
+            150, 270,
+            text=geo_type.replace("_", " ").upper(),
+            fill=color,
+            font=("Consolas", 9, "bold")
+        )
+        
+        # Rarete
+        self.avatar_canvas.create_text(
+            150, 285,
+            text=avatar.rarity_tier.upper(),
+            fill=color,
+            font=("Consolas", 8)
+        )
+    
+    def _draw_fractal_triangle(self, x1, y1, x2, y2, x3, y3, depth, color):
+        """Dessine un triangle de Sierpinski"""
+        if depth == 0:
+            self.avatar_canvas.create_polygon(x1, y1, x2, y2, x3, y3, outline=color, width=1, fill="")
+        else:
+            mx1 = (x1 + x2) / 2
+            my1 = (y1 + y2) / 2
+            mx2 = (x2 + x3) / 2
+            my2 = (y2 + y3) / 2
+            mx3 = (x3 + x1) / 2
+            my3 = (y3 + y1) / 2
+            
+            self._draw_fractal_triangle(x1, y1, mx1, my1, mx3, my3, depth-1, color)
+            self._draw_fractal_triangle(mx1, my1, x2, y2, mx2, my2, depth-1, color)
+            self._draw_fractal_triangle(mx3, my3, mx2, my2, x3, y3, depth-1, color)
+    
+    def _update_avatar_buttons(self, avatar):
+        """Met a jour l'etat des boutons selon l'avatar"""
+        if not avatar.binding:
+            self.detach_btn.configure(state=tk.DISABLED)
+            self.transfer_avatar_btn.configure(state=tk.DISABLED)
+            self.tokenize_btn.configure(state=tk.DISABLED)
+            return
+        
+        state = avatar.binding.state
+        
+        # Detacher: seulement si attache
+        if state == "attached":
+            self.detach_btn.configure(state=tk.NORMAL)
+        else:
+            self.detach_btn.configure(state=tk.DISABLED)
+        
+        # Transferer: seulement si detache
+        if state == "detached":
+            self.transfer_avatar_btn.configure(state=tk.NORMAL)
+            self.tokenize_btn.configure(state=tk.NORMAL if not avatar.is_tokenized else tk.DISABLED)
+        else:
+            self.transfer_avatar_btn.configure(state=tk.DISABLED)
+            self.tokenize_btn.configure(state=tk.DISABLED)
+    
+    def _generate_avatar(self):
+        """Genere un nouvel avatar pour le vault"""
+        if not AVATAR_AVAILABLE:
+            messagebox.showerror("Erreur", "Module Avatar non disponible")
+            return
+        
+        # Importer les constantes pionniers
+        from core.avatar_system import (
+            QuantumAvatarGenerator, PIONEER_AVATAR_LIMIT,
+            PIONEER_TIERS, PIONEER_RARITY_BONUS, PIONEER_MIN_RARITY
+        )
+        
+        # Verifier l'eligibilite du vault (limite 10,000)
+        can_have, reason = QuantumAvatarGenerator.can_have_avatar(self.current_vault_num)
+        if not can_have:
+            messagebox.showerror(
+                "Vault Non Eligible",
+                f"Ce vault ne peut pas avoir d'avatar.\n\n"
+                f"Raison: {reason}\n\n"
+                f"Seuls les {PIONEER_AVATAR_LIMIT:,} premiers vaults\n"
+                f"peuvent obtenir un avatar unique."
+            )
+            return
+        
+        # Determiner le tier pionnier
+        pioneer_tier = None
+        for tier, (min_num, max_num) in PIONEER_TIERS.items():
+            if min_num <= self.current_vault_num <= max_num:
+                pioneer_tier = tier
+                break
+        
+        # Afficher les bonus du tier
+        if pioneer_tier:
+            bonus_info = (
+                f"Vault #{self.current_vault_num} - Tier: {pioneer_tier.upper()}\n\n"
+                f"BONUS PIONNIER:\n"
+                f"- Rarete minimum: {PIONEER_MIN_RARITY.get(pioneer_tier, 'common').upper()}\n"
+                f"- Bonus rarete: +{PIONEER_RARITY_BONUS.get(pioneer_tier, 0)} points\n"
+            )
+            
+            if pioneer_tier == "supreme":
+                bonus_info += "\nBONUS SUPREME EXCLUSIF:\n- Types: Nexus Crystal, 7D Projection, Hybrid Form\n- Attribut 'Pioneer Blessing' a 100%\n- Profondeur dimensionnelle maximale"
+        else:
+            bonus_info = f"Vault #{self.current_vault_num}"
+        
+        # Verifier si un avatar existe deja
+        existing = self.avatar_manager.get_avatars_owned_by_vault(self.current_vault_num)
+        if existing:
+            result = messagebox.askyesno(
+                "Avatar existant",
+                f"Un avatar existe deja pour ce vault.\n\n"
+                f"Voulez-vous en generer un nouveau?\n"
+                f"(L'ancien restera dans l'historique)"
+            )
+            if not result:
+                return
+        
+        # Confirmer la generation avec les bonus
+        result = messagebox.askyesno(
+            "Generer Avatar Pionnier",
+            f"{bonus_info}\n\n"
+            f"Voulez-vous generer votre avatar unique?"
+        )
+        if not result:
+            return
+        
+        # Generer les donnees du vault
+        vault_data = f"vault_{self.current_vault_num}_{datetime.now().isoformat()}".encode()
+        
+        # Demander l'adresse Bitcoin
+        address = simpledialog.askstring(
+            "Adresse Bitcoin",
+            "Entrez votre adresse Bitcoin pour l'avatar:",
+            initialvalue="bc1q..."
+        )
+        
+        if not address or len(address) < 20:
+            messagebox.showwarning("Attention", "Adresse Bitcoin invalide")
+            return
+        
+        try:
+            avatar = self.avatar_manager.create_avatar(
+                vault_data=vault_data,
+                vault_id=f"vault_{self.current_vault_num:04d}",
+                vault_number=self.current_vault_num,
+                owner_address=address,
+                generation=1,
+                soul_bound=False
+            )
+            
+            # Message de succes avec les infos du tier
+            tier_msg = f"\nTier Pionnier: {pioneer_tier.upper()}" if pioneer_tier else ""
+            
+            messagebox.showinfo(
+                "Avatar Pionnier Genere!",
+                f"Avatar cree avec succes!{tier_msg}\n\n"
+                f"Type: {avatar.geometry_type.replace('_', ' ').title()}\n"
+                f"Rarete: {avatar.rarity_tier.upper()}\n"
+                f"Puissance: {avatar.effective_power:.0f}\n\n"
+                f"L'avatar est LIE a votre vault (+50% puissance).\n"
+                f"Vous pouvez le DETACHER pour le transferer."
+            )
+            
+            self._refresh_avatar()
+            
+        except Exception as e:
+            messagebox.showerror("Erreur", f"Impossible de generer l'avatar:\n{e}")
+    
+    def _detach_avatar(self):
+        """Detache l'avatar du vault"""
+        avatars = self.avatar_manager.get_avatars_owned_by_vault(self.current_vault_num)
+        if not avatars:
+            return
+        
+        avatar = avatars[0]
+        
+        result = messagebox.askyesno(
+            "ATTENTION - Detachement Irreversible",
+            "Etes-vous sur de vouloir DETACHER cet avatar?\n\n"
+            "CONSEQUENCES:\n"
+            "- Perte du bonus de +50% de puissance\n"
+            "- Le detachement est IRREVERSIBLE\n"
+            "- Frais: 50,000 sats\n\n"
+            "AVANTAGES:\n"
+            "- L'avatar devient TRANSFERABLE\n"
+            "- Peut etre vendu ou echange\n"
+            "- Peut etre tokenise sur Bitcoin\n\n"
+            "Continuer?",
+            icon=messagebox.WARNING
+        )
+        
+        if not result:
+            return
+        
+        try:
+            # Obtenir l'adresse
+            address = avatar.binding.current_owner_address or ""
+            
+            result = self.avatar_manager.detach_avatar(
+                avatar.avatar_id,
+                requester_address=address,
+                requester_vault=self.current_vault_num,
+                reason="Owner requested via UI"
+            )
+            
+            messagebox.showinfo(
+                "Avatar Detache",
+                f"Avatar detache avec succes!\n\n"
+                f"Puissance avant: {result['power_before']:.0f}\n"
+                f"Puissance apres: {result['power_after']:.0f}\n"
+                f"Perte: {result['power_loss']}\n\n"
+                "L'avatar peut maintenant etre transfere."
+            )
+            
+            self._refresh_avatar()
+            
+        except Exception as e:
+            messagebox.showerror("Erreur", str(e))
+    
+    def _transfer_avatar_dialog(self):
+        """Ouvre le dialog de transfert d'avatar"""
+        avatars = self.avatar_manager.get_avatars_owned_by_vault(self.current_vault_num)
+        if not avatars:
+            return
+        
+        avatar = avatars[0]
+        
+        if avatar.binding and avatar.binding.state != "detached":
+            messagebox.showwarning("Attention", "L'avatar doit etre DETACHE pour etre transfere")
+            return
+        
+        # Dialog de transfert
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Transferer Avatar")
+        dialog.geometry("500x300")
+        dialog.configure(bg=CypherpunkTheme.BG_DARK)
+        
+        tk.Label(
+            dialog,
+            text="TRANSFERER AVATAR",
+            bg=CypherpunkTheme.BG_DARK,
+            fg=CypherpunkTheme.NEON_MAGENTA,
+            font=("Consolas", 14, "bold")
+        ).pack(pady=15)
+        
+        tk.Label(
+            dialog,
+            text=f"Type: {avatar.geometry_type} | Rarete: {avatar.rarity_tier.upper()}",
+            bg=CypherpunkTheme.BG_DARK,
+            fg=CypherpunkTheme.TEXT_SECONDARY
+        ).pack()
+        
+        # Adresse destination
+        tk.Label(
+            dialog,
+            text="Adresse Bitcoin destination:",
+            bg=CypherpunkTheme.BG_DARK,
+            fg="white"
+        ).pack(pady=(20, 5))
+        
+        dest_var = tk.StringVar()
+        tk.Entry(
+            dialog,
+            textvariable=dest_var,
+            width=50,
+            bg=CypherpunkTheme.BG_SECONDARY,
+            fg="#f7931a",
+            insertbackground="white"
+        ).pack(pady=5)
+        
+        # Vault destination (optionnel)
+        tk.Label(
+            dialog,
+            text="Vault destination (optionnel):",
+            bg=CypherpunkTheme.BG_DARK,
+            fg="white"
+        ).pack(pady=(10, 5))
+        
+        vault_var = tk.StringVar()
+        tk.Entry(
+            dialog,
+            textvariable=vault_var,
+            width=20,
+            bg=CypherpunkTheme.BG_SECONDARY,
+            fg="white"
+        ).pack(pady=5)
+        
+        def do_transfer():
+            dest = dest_var.get()
+            if not dest or len(dest) < 20:
+                messagebox.showwarning("Attention", "Adresse invalide")
+                return
+            
+            to_vault = None
+            if vault_var.get():
+                try:
+                    to_vault = int(vault_var.get())
+                except:
+                    pass
+            
+            from_addr = avatar.binding.current_owner_address if avatar.binding else ""
+            
+            try:
+                result = self.avatar_manager.transfer_avatar(
+                    avatar.avatar_id,
+                    from_address=from_addr,
+                    to_address=dest,
+                    from_vault=self.current_vault_num,
+                    to_vault=to_vault
+                )
+                
+                messagebox.showinfo("Succes", "Avatar transfere avec succes!")
+                dialog.destroy()
+                self._refresh_avatar()
+                
+            except Exception as e:
+                messagebox.showerror("Erreur", str(e))
+        
+        tk.Button(
+            dialog,
+            text="TRANSFERER",
+            bg="#00aaff",
+            fg="black",
+            font=("Consolas", 11, "bold"),
+            command=do_transfer
+        ).pack(pady=20)
+    
+    def _tokenize_avatar(self):
+        """Tokenise l'avatar sur Bitcoin"""
+        avatars = self.avatar_manager.get_avatars_owned_by_vault(self.current_vault_num)
+        if not avatars:
+            return
+        
+        avatar = avatars[0]
+        
+        if avatar.is_tokenized:
+            messagebox.showinfo("Info", "L'avatar est deja tokenise")
+            return
+        
+        if avatar.binding and avatar.binding.state != "detached":
+            messagebox.showwarning("Attention", "L'avatar doit etre DETACHE pour etre tokenise")
+            return
+        
+        result = messagebox.askyesno(
+            "Tokeniser Avatar",
+            "Voulez-vous inscrire cet avatar sur la blockchain Bitcoin?\n\n"
+            "Cela creera un token Rune unique representant votre avatar.\n"
+            "Frais d'inscription: ~15,000 sats"
+        )
+        
+        if not result:
+            return
+        
+        address = avatar.binding.current_owner_address if avatar.binding else ""
+        
+        try:
+            token = self.avatar_manager.tokenize_avatar(avatar.avatar_id, address)
+            
+            messagebox.showinfo(
+                "Avatar Tokenise!",
+                f"Token cree avec succes!\n\n"
+                f"Rune ID: {token.rune_id}\n"
+                f"Token ID: {token.token_id}\n\n"
+                "Utilisez le Bridge pour finaliser l'inscription."
+            )
+            
+            self._refresh_avatar()
             
         except Exception as e:
             messagebox.showerror("Erreur", str(e))

@@ -36,6 +36,34 @@ except ImportError:
 # ============================================================================
 
 AVATAR_VERSION = 1
+
+# Limite des vaults pionniers pouvant obtenir un avatar
+PIONEER_AVATAR_LIMIT = 10000  # Seuls les 10,000 premiers vaults peuvent avoir un avatar
+
+# Tiers de pionniers avec bonus RNG
+PIONEER_TIERS = {
+    "supreme": (1, 33),        # Supreme Architects - RNG maximal
+    "legendary": (34, 100),    # Legendary Pioneers - Tres haut RNG
+    "elite": (101, 1000),      # Elite Pioneers - Haut RNG
+    "pioneer": (1001, 10000),  # Standard Pioneers - RNG normal ameliore
+}
+
+# Bonus de rarete par tier de pionnier
+PIONEER_RARITY_BONUS = {
+    "supreme": 50.0,     # +50 points de rarete (garantit mythical/primordial)
+    "legendary": 35.0,   # +35 points (garantit legendary+)
+    "elite": 20.0,       # +20 points (garantit epic+)
+    "pioneer": 10.0,     # +10 points (ameliore les chances)
+}
+
+# Multiplicateurs d'attributs par tier
+PIONEER_ATTRIBUTE_MULTIPLIER = {
+    "supreme": 2.0,      # x2 sur tous les attributs
+    "legendary": 1.75,   # x1.75
+    "elite": 1.5,        # x1.5
+    "pioneer": 1.25,     # x1.25
+}
+
 GEOMETRIC_TYPES = [
     "quantum_sphere",
     "spinor_torus", 
@@ -47,6 +75,14 @@ GEOMETRIC_TYPES = [
     "nexus_crystal"
 ]
 
+# Types geometriques exclusifs par tier
+EXCLUSIVE_GEOMETRIC_TYPES = {
+    "supreme": ["nexus_crystal", "7d_projection", "hybrid_form"],  # Types les plus rares
+    "legendary": ["nexus_crystal", "7d_projection", "hybrid_form", "entropy_fractal"],
+    "elite": GEOMETRIC_TYPES,  # Tous les types
+    "pioneer": GEOMETRIC_TYPES,
+}
+
 RARITY_TIERS = {
     "common": (0, 20),
     "uncommon": (20, 40),
@@ -55,6 +91,14 @@ RARITY_TIERS = {
     "legendary": (75, 90),
     "mythical": (90, 97),
     "primordial": (97, 100)
+}
+
+# Rarete minimum garantie par tier
+PIONEER_MIN_RARITY = {
+    "supreme": "mythical",    # Au minimum mythical
+    "legendary": "legendary", # Au minimum legendary
+    "elite": "epic",          # Au minimum epic
+    "pioneer": "rare",        # Au minimum rare
 }
 
 
@@ -119,7 +163,8 @@ class QuantumAvatarGenerator:
     """Generateur d'avatars 3D base sur l'entropie quantique du vault"""
     
     def __init__(self, vault_data: bytes = None, vault_id: str = None, 
-                 vault_path: str = None, generation: int = 1):
+                 vault_path: str = None, generation: int = 1,
+                 vault_number: int = None):
         """
         Initialise le generateur d'avatar.
         
@@ -128,9 +173,14 @@ class QuantumAvatarGenerator:
             vault_id: ID du vault
             vault_path: Chemin vers le fichier .blend_data
             generation: Generation de l'avatar
+            vault_number: Numero du vault (1-10000 pour les pionniers)
         """
         self.generation = generation
         self.vault_id = vault_id or secrets.token_hex(8)
+        self.vault_number = vault_number
+        
+        # Determiner le tier du pionnier
+        self.pioneer_tier = self._get_pioneer_tier(vault_number)
         
         # Charger les donnees
         if vault_data:
@@ -146,8 +196,39 @@ class QuantumAvatarGenerator:
         self.dna = self._extract_dna()
         self.avatar: Optional[Avatar3D] = None
     
+    @staticmethod
+    def can_have_avatar(vault_number: int) -> Tuple[bool, str]:
+        """
+        Verifie si un vault peut avoir un avatar.
+        Seuls les 10,000 premiers vaults peuvent en avoir un.
+        
+        Returns:
+            (can_have, reason)
+        """
+        if vault_number is None:
+            return False, "Numero de vault requis"
+        
+        if vault_number < 1:
+            return False, "Numero de vault invalide"
+        
+        if vault_number > PIONEER_AVATAR_LIMIT:
+            return False, f"Seuls les {PIONEER_AVATAR_LIMIT:,} premiers vaults peuvent avoir un avatar"
+        
+        return True, "OK"
+    
+    def _get_pioneer_tier(self, vault_number: int) -> Optional[str]:
+        """Determine le tier du pionnier selon son numero de vault"""
+        if vault_number is None:
+            return None
+        
+        for tier, (min_num, max_num) in PIONEER_TIERS.items():
+            if min_num <= vault_number <= max_num:
+                return tier
+        
+        return None
+    
     def _extract_dna(self) -> AvatarDNA:
-        """Extrait l'ADN cryptographique des donnees du vault"""
+        """Extrait l'ADN cryptographique des donnees du vault avec bonus pionnier"""
         # Hash principal
         vault_hash = hashlib.sha256(self.raw_data).hexdigest()
         
@@ -155,17 +236,17 @@ class QuantumAvatarGenerator:
         seed_bytes = bytes.fromhex(vault_hash[:32])
         seed_values = [int(b) for b in seed_bytes[:16]]
         
-        # Type geometrique
-        geometric_type = sum(seed_values[:4]) % len(GEOMETRIC_TYPES)
-        geometric_name = GEOMETRIC_TYPES[geometric_type]
+        # Type geometrique (avec restriction pour certains tiers)
+        geometric_name = self._select_geometric_type(seed_values)
+        geometric_type = GEOMETRIC_TYPES.index(geometric_name)
         
-        # Palette de couleurs
+        # Palette de couleurs (amelioree pour pionniers)
         color_palette = self._generate_color_palette(vault_hash)
         
-        # Attributs
+        # Attributs (avec multiplicateur pionnier)
         attributes = self._calculate_attributes(seed_values)
         
-        # Rarete
+        # Rarete (avec bonus pionnier)
         rarity_score = self._calculate_rarity(seed_values, vault_hash)
         rarity_tier = self._get_rarity_tier(rarity_score)
         
@@ -180,6 +261,17 @@ class QuantumAvatarGenerator:
             rarity_tier=rarity_tier,
             generation=self.generation
         )
+    
+    def _select_geometric_type(self, seed_values: List[int]) -> str:
+        """Selectionne le type geometrique selon le tier"""
+        if self.pioneer_tier and self.pioneer_tier in EXCLUSIVE_GEOMETRIC_TYPES:
+            available_types = EXCLUSIVE_GEOMETRIC_TYPES[self.pioneer_tier]
+        else:
+            available_types = GEOMETRIC_TYPES
+        
+        # Selection basee sur le seed
+        type_index = sum(seed_values[:4]) % len(available_types)
+        return available_types[type_index]
     
     def _generate_color_palette(self, vault_hash: str) -> List[str]:
         """Genere une palette de couleurs unique"""
@@ -209,22 +301,44 @@ class QuantumAvatarGenerator:
         return colors[:5]
     
     def _calculate_attributes(self, seed_values: List[int]) -> Dict[str, float]:
-        """Calcule les attributs de l'avatar"""
-        return {
-            'quantum_entropy': round((sum(seed_values[:4]) / 1024) * 100, 2),
-            'spinor_complexity': round((seed_values[4] / 255) * 100, 2),
-            'bell_verification': round((seed_values[5] / 255) * 100, 2),
-            'polyhedral_symmetry': round((seed_values[6] / 255) * 100, 2),
-            'cryptographic_strength': round((seed_values[7] / 255) * 100, 2),
-            'temporal_stability': round((seed_values[8] / 255) * 100, 2),
-            'spatial_coherence': round((seed_values[9] / 255) * 100, 2),
-            'dimensional_depth': round((seed_values[10] / 255) * 7, 2),
-            'fractal_dimension': round(1.0 + (seed_values[11] / 255) * 2, 3),
-            'energy_resonance': round((seed_values[12] / 255) * 100, 2)
+        """Calcule les attributs de l'avatar avec multiplicateur pionnier"""
+        # Multiplicateur selon le tier
+        multiplier = 1.0
+        if self.pioneer_tier and self.pioneer_tier in PIONEER_ATTRIBUTE_MULTIPLIER:
+            multiplier = PIONEER_ATTRIBUTE_MULTIPLIER[self.pioneer_tier]
+        
+        # Attributs de base
+        base_attrs = {
+            'quantum_entropy': (sum(seed_values[:4]) / 1024) * 100,
+            'spinor_complexity': (seed_values[4] / 255) * 100,
+            'bell_verification': (seed_values[5] / 255) * 100,
+            'polyhedral_symmetry': (seed_values[6] / 255) * 100,
+            'cryptographic_strength': (seed_values[7] / 255) * 100,
+            'temporal_stability': (seed_values[8] / 255) * 100,
+            'spatial_coherence': (seed_values[9] / 255) * 100,
+            'dimensional_depth': (seed_values[10] / 255) * 7,
+            'fractal_dimension': 1.0 + (seed_values[11] / 255) * 2,
+            'energy_resonance': (seed_values[12] / 255) * 100
         }
+        
+        # Appliquer le multiplicateur (cap a 100 sauf pour certains attributs)
+        result = {}
+        for attr, value in base_attrs.items():
+            boosted = value * multiplier
+            if attr in ['dimensional_depth', 'fractal_dimension']:
+                result[attr] = round(boosted, 3)
+            else:
+                result[attr] = round(min(100, boosted), 2)
+        
+        # Bonus special pour les Supreme (1-33)
+        if self.pioneer_tier == "supreme":
+            result['pioneer_blessing'] = 100.0  # Attribut exclusif
+            result['dimensional_depth'] = 7.0   # Maximum
+        
+        return result
     
     def _calculate_rarity(self, seed_values: List[int], vault_hash: str) -> float:
-        """Calcule le score de rarete (0-100)"""
+        """Calcule le score de rarete (0-100) avec bonus pionnier"""
         # Base sur les valeurs extremes
         extreme_count = sum(1 for v in seed_values if v < 10 or v > 245)
         extreme_bonus = extreme_count * 5
@@ -236,9 +350,20 @@ class QuantumAvatarGenerator:
         # Base sur l'entropie
         entropy_score = (seed_values[13] / 255) * 30
         
-        # Score final
+        # Score final de base
         base_score = (seed_values[14] / 255) * 40
         total = base_score + extreme_bonus + pattern_bonus + entropy_score
+        
+        # Appliquer le bonus pionnier
+        if self.pioneer_tier and self.pioneer_tier in PIONEER_RARITY_BONUS:
+            pioneer_bonus = PIONEER_RARITY_BONUS[self.pioneer_tier]
+            total += pioneer_bonus
+        
+        # S'assurer que le score respecte le minimum garanti du tier
+        if self.pioneer_tier and self.pioneer_tier in PIONEER_MIN_RARITY:
+            min_rarity = PIONEER_MIN_RARITY[self.pioneer_tier]
+            min_score = RARITY_TIERS.get(min_rarity, (0, 0))[0]
+            total = max(total, min_score + 1)  # +1 pour etre dans le tier
         
         return min(100, max(0, round(total, 2)))
     
@@ -248,6 +373,20 @@ class QuantumAvatarGenerator:
             if min_val <= score < max_val:
                 return tier
         return "primordial"
+    
+    def get_pioneer_info(self) -> Optional[Dict]:
+        """Retourne les informations du tier pionnier"""
+        if not self.pioneer_tier:
+            return None
+        
+        return {
+            'tier': self.pioneer_tier,
+            'vault_number': self.vault_number,
+            'rarity_bonus': PIONEER_RARITY_BONUS.get(self.pioneer_tier, 0),
+            'attribute_multiplier': PIONEER_ATTRIBUTE_MULTIPLIER.get(self.pioneer_tier, 1.0),
+            'min_rarity': PIONEER_MIN_RARITY.get(self.pioneer_tier, 'common'),
+            'exclusive_types': EXCLUSIVE_GEOMETRIC_TYPES.get(self.pioneer_tier, [])
+        }
     
     def generate_geometry(self) -> Dict:
         """Genere la geometrie 3D de l'avatar"""
