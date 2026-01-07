@@ -1422,6 +1422,10 @@ class VaultMonitorGUI:
                   font=("Consolas", 10, "bold"), command=self._show_vault_inventory
         ).pack(side=tk.LEFT, padx=5, pady=10)
         
+        tk.Button(actions_frame, text="🏰 LAIRS", bg="#9400D3", fg="white",
+                  font=("Consolas", 10, "bold"), command=self._show_lairs_menu
+        ).pack(side=tk.LEFT, padx=5, pady=10)
+        
         tk.Button(actions_frame, text="↓ EXPORT", bg="#444444", fg="white",
                   font=("Consolas", 10, "bold"), command=self._export_runes
         ).pack(side=tk.RIGHT, padx=(5, 10), pady=10)
@@ -1721,6 +1725,230 @@ class VaultMonitorGUI:
                         
                         tk.Label(mods_line, text=f"  • {mod_name}: {value_str}", bg=CypherpunkTheme.BG_DARK,
                                 fg=tier_color, font=("Consolas", 8)).pack(anchor=tk.W)
+    
+    def _show_lairs_menu(self):
+        """Display the Lairs menu - RPG dungeons linked to the vault"""
+        try:
+            from core.lair_system import LairCollection, LairGenerator, LairType, LairRarity
+        except ImportError:
+            messagebox.showerror("Error", "Lair system not available")
+            return
+        
+        # Get vault identity
+        try:
+            from core.vault_identity import VaultIdentityManager
+            identity_mgr = VaultIdentityManager()
+            vault_identity = identity_mgr.get_vault_by_key(self.vault_key)
+            if vault_identity:
+                vault_id = vault_identity.vault_id
+                vault_number = vault_identity.vault_number
+            else:
+                vault_id = hashlib.sha256(self.vault_key).hexdigest()[:32]
+                vault_number = self.current_vault_num
+        except Exception:
+            vault_id = hashlib.sha256(self.vault_key).hexdigest()[:32]
+            vault_number = getattr(self, 'current_vault_num', 1)
+        
+        # Load lair collection
+        collection = LairCollection(vault_id, vault_number)
+        lairs = collection.list_lairs()
+        
+        # Create window
+        dialog = tk.Toplevel(self.root)
+        dialog.title(f"🏰 LAIRS - Vault #{vault_number}")
+        
+        screen_w = dialog.winfo_screenwidth()
+        screen_h = dialog.winfo_screenheight()
+        win_w = min(1100, int(screen_w * 0.85))
+        win_h = min(750, int(screen_h * 0.85))
+        pos_x = (screen_w - win_w) // 2
+        pos_y = (screen_h - win_h) // 2
+        dialog.geometry(f"{win_w}x{win_h}+{pos_x}+{pos_y}")
+        dialog.configure(bg=CypherpunkTheme.BG_DARK)
+        
+        # === HEADER ===
+        header_frame = tk.Frame(dialog, bg=CypherpunkTheme.BG_DARK)
+        header_frame.pack(fill=tk.X, padx=15, pady=10)
+        
+        tk.Label(
+            header_frame,
+            text=f"🏰 LAIR COLLECTION",
+            bg=CypherpunkTheme.BG_DARK,
+            fg="#9400D3",
+            font=("Consolas", 18, "bold")
+        ).pack(side=tk.LEFT)
+        
+        tk.Label(
+            header_frame,
+            text=f"Vault #{vault_number}",
+            bg=CypherpunkTheme.BG_DARK,
+            fg=CypherpunkTheme.TEXT_SECONDARY,
+            font=("Consolas", 12)
+        ).pack(side=tk.LEFT, padx=20)
+        
+        # === STATS BAR ===
+        stats_frame = tk.Frame(dialog, bg=CypherpunkTheme.BG_PANEL)
+        stats_frame.pack(fill=tk.X, padx=15, pady=(0, 10))
+        
+        total_power = sum(l.power_level for l in lairs)
+        total_depth = sum(l.depth for l in lairs)
+        
+        stats = [
+            ("🏰 Lairs", len(lairs), "#9400D3"),
+            ("⚡ Total Power", f"{total_power:,}", "#FFD700"),
+            ("📊 Total Depth", total_depth, "#00FFFF"),
+            ("🎯 Best Rarity", max([l.rarity for l in lairs], default="none").upper() if lairs else "N/A", "#FF8000"),
+        ]
+        
+        for label, value, color in stats:
+            card = tk.Frame(stats_frame, bg=CypherpunkTheme.BG_SECONDARY, padx=15, pady=8)
+            card.pack(side=tk.LEFT, padx=5, pady=5, fill=tk.X, expand=True)
+            tk.Label(card, text=label, bg=CypherpunkTheme.BG_SECONDARY, 
+                    fg=CypherpunkTheme.TEXT_SECONDARY, font=("Consolas", 9)).pack()
+            tk.Label(card, text=str(value), bg=CypherpunkTheme.BG_SECONDARY, 
+                    fg=color, font=("Consolas", 14, "bold")).pack()
+        
+        # === LAIRS LIST ===
+        list_frame = tk.Frame(dialog, bg=CypherpunkTheme.BG_DARK)
+        list_frame.pack(fill=tk.BOTH, expand=True, padx=15, pady=(0, 10))
+        
+        # Scrollable canvas
+        canvas = tk.Canvas(list_frame, bg=CypherpunkTheme.BG_DARK, highlightthickness=0)
+        scrollbar = ttk.Scrollbar(list_frame, orient="vertical", command=canvas.yview)
+        content = tk.Frame(canvas, bg=CypherpunkTheme.BG_DARK)
+        
+        canvas.configure(yscrollcommand=scrollbar.set)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        canvas.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        canvas_window = canvas.create_window((0, 0), window=content, anchor="nw")
+        
+        def on_configure(event):
+            canvas.configure(scrollregion=canvas.bbox("all"))
+            canvas.itemconfig(canvas_window, width=event.width)
+        content.bind("<Configure>", on_configure)
+        canvas.bind("<Configure>", lambda e: canvas.itemconfig(canvas_window, width=e.width))
+        
+        # Mouse wheel scroll
+        def on_mousewheel(event):
+            canvas.yview_scroll(int(-1 * (event.delta / 120)), "units")
+        canvas.bind_all("<MouseWheel>", on_mousewheel)
+        
+        # Rarity colors
+        rarity_colors = {
+            'common': '#808080', 'uncommon': '#1EFF00', 'rare': '#0070DD',
+            'epic': '#A335EE', 'legendary': '#FF8000', 'mythic': '#E6CC80', 'primordial': '#FF00FF'
+        }
+        
+        # Type icons
+        type_icons = {
+            'cryptic_sanctum': '📜', 'quantum_void': '🌀', 'spinor_nexus': '🔮',
+            'temporal_crypt': '⏳', 'primordial_abyss': '🕳️', 'ethereal_citadel': '✨'
+        }
+        
+        if not lairs:
+            tk.Label(content, text="No lairs discovered yet.\nExplore Genesis Blocks to unlock lairs!",
+                    bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.TEXT_SECONDARY,
+                    font=("Consolas", 12), justify=tk.CENTER).pack(pady=50)
+        else:
+            for i, lair in enumerate(lairs):
+                lair_color = rarity_colors.get(lair.rarity, '#FFFFFF')
+                type_icon = type_icons.get(lair.lair_type, '🏰')
+                
+                # Lair card
+                card = tk.Frame(content, bg=CypherpunkTheme.BG_PANEL, padx=15, pady=12)
+                card.pack(fill=tk.X, padx=5, pady=5)
+                
+                # Row 1: Name and rarity
+                row1 = tk.Frame(card, bg=CypherpunkTheme.BG_PANEL)
+                row1.pack(fill=tk.X)
+                
+                tk.Label(row1, text=f"{type_icon} {lair.name}",
+                        bg=CypherpunkTheme.BG_PANEL, fg=lair_color,
+                        font=("Consolas", 14, "bold")).pack(side=tk.LEFT)
+                
+                rarity_badge = tk.Label(row1, text=f" [{lair.rarity.upper()}] ",
+                                        bg=lair_color, fg="black" if lair.rarity != 'common' else 'white',
+                                        font=("Consolas", 9, "bold"))
+                rarity_badge.pack(side=tk.RIGHT, padx=5)
+                
+                # Row 2: Type and stats
+                row2 = tk.Frame(card, bg=CypherpunkTheme.BG_PANEL)
+                row2.pack(fill=tk.X, pady=(5, 0))
+                
+                type_name = lair.lair_type.replace('_', ' ').title()
+                tk.Label(row2, text=f"Type: {type_name}",
+                        bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.TEXT_SECONDARY,
+                        font=("Consolas", 10)).pack(side=tk.LEFT)
+                
+                tk.Label(row2, text=f"Affinity: {lair.affinity.title()}",
+                        bg=CypherpunkTheme.BG_PANEL, fg="#00FFFF",
+                        font=("Consolas", 10)).pack(side=tk.LEFT, padx=20)
+                
+                # Row 3: Power, Depth, Corruption
+                row3 = tk.Frame(card, bg=CypherpunkTheme.BG_PANEL)
+                row3.pack(fill=tk.X, pady=(5, 0))
+                
+                stats_info = [
+                    (f"⚡ Power: {lair.power_level:,}", "#FFD700"),
+                    (f"📊 Depth: {lair.depth} levels", "#00FF7F"),
+                    (f"🔥 Corruption: {lair.corruption_level:.1f}%", "#FF4500"),
+                    (f"🔍 Discovery: x{lair.discovery_rate:.2f}", "#00FFFF"),
+                ]
+                
+                for stat_text, stat_color in stats_info:
+                    tk.Label(row3, text=stat_text, bg=CypherpunkTheme.BG_PANEL, fg=stat_color,
+                            font=("Consolas", 9)).pack(side=tk.LEFT, padx=(0, 15))
+                
+                # Row 4: Special modifiers
+                if lair.special_modifiers:
+                    row4 = tk.Frame(card, bg=CypherpunkTheme.BG_PANEL)
+                    row4.pack(fill=tk.X, pady=(5, 0))
+                    
+                    tk.Label(row4, text="Modifiers:", bg=CypherpunkTheme.BG_PANEL,
+                            fg=CypherpunkTheme.TEXT_SECONDARY, font=("Consolas", 9)).pack(side=tk.LEFT)
+                    
+                    for mod in lair.special_modifiers:
+                        tk.Label(row4, text=f" ◈ {mod}", bg=CypherpunkTheme.BG_PANEL,
+                                fg="#AA00FF", font=("Consolas", 9)).pack(side=tk.LEFT, padx=3)
+                
+                # Row 5: Boss info
+                if lair.boss_guardian:
+                    row5 = tk.Frame(card, bg=CypherpunkTheme.BG_PANEL)
+                    row5.pack(fill=tk.X, pady=(5, 0))
+                    
+                    boss = lair.boss_guardian
+                    boss_name = boss.get('name', 'Unknown Boss')
+                    boss_lvl = boss.get('level', 0)
+                    boss_hp = boss.get('health', 0)
+                    
+                    tk.Label(row5, text=f"👹 BOSS: {boss_name} (Lv.{boss_lvl})",
+                            bg=CypherpunkTheme.BG_PANEL, fg="#FF0000",
+                            font=("Consolas", 10, "bold")).pack(side=tk.LEFT)
+                    tk.Label(row5, text=f"  HP: {boss_hp:,}",
+                            bg=CypherpunkTheme.BG_PANEL, fg="#FF6666",
+                            font=("Consolas", 9)).pack(side=tk.LEFT)
+                
+                # Separator
+                if i < len(lairs) - 1:
+                    sep = tk.Frame(content, bg=CypherpunkTheme.BORDER_INACTIVE, height=1)
+                    sep.pack(fill=tk.X, padx=20, pady=5)
+        
+        # === FOOTER ===
+        footer = tk.Frame(dialog, bg=CypherpunkTheme.BG_DARK)
+        footer.pack(fill=tk.X, padx=15, pady=10)
+        
+        tk.Label(footer, text="Lairs are explorable dungeons generated from your vault's Genesis data.",
+                bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.TEXT_SECONDARY,
+                font=("Consolas", 9)).pack(side=tk.LEFT)
+        
+        tk.Button(footer, text="Close", bg="#444444", fg="white",
+                 font=("Consolas", 10), command=dialog.destroy).pack(side=tk.RIGHT)
+        
+        # Cleanup scroll binding on close
+        def on_close():
+            canvas.unbind_all("<MouseWheel>")
+            dialog.destroy()
+        dialog.protocol("WM_DELETE_WINDOW", on_close)
     
     def _create_gems_tab(self, parent, gems, rarity_colors):
         """Creates the'onglet des gems"""
