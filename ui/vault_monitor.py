@@ -415,6 +415,16 @@ except ImportError as e:
     AVATAR_AVAILABLE = False
     print(f"[INFO] Module Avatar non disponible: {e}")
 
+try:
+    from core.evolution_artifacts import (
+        EvolutionArtifactSystem, EvolutionArtifact, 
+        EVOLUTION_ARTIFACT_DEFINITIONS, get_evolution_artifact_system
+    )
+    EVOLUTION_ARTIFACTS_AVAILABLE = True
+except ImportError as e:
+    EVOLUTION_ARTIFACTS_AVAILABLE = False
+    print(f"[INFO] Module Evolution Artifacts non disponible: {e}")
+
 
 # ============================================================================
 # GESTIONNAIRE DE VAULT SECURISE
@@ -1605,7 +1615,7 @@ class VaultMonitorGUI:
                         font=("Consolas", 9)).pack(anchor=tk.W)
     
     def _create_artifacts_tab(self, parent, artifacts):
-        """Cree l'onglet des artifacts"""
+        """Cree l'onglet des artifacts avec artefacts d'evolution"""
         canvas = tk.Canvas(parent, bg=CypherpunkTheme.BG_SECONDARY, highlightthickness=0)
         scrollbar = ttk.Scrollbar(parent, orient="vertical", command=canvas.yview)
         content = tk.Frame(canvas, bg=CypherpunkTheme.BG_SECONDARY)
@@ -1616,38 +1626,199 @@ class VaultMonitorGUI:
         canvas.create_window((0, 0), window=content, anchor="nw")
         content.bind("<Configure>", lambda e: canvas.configure(scrollregion=canvas.bbox("all")))
         
-        if not artifacts:
-            tk.Label(content, text="\n\n  🏛 Aucun Artifact dans ce vault",
-                    bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.TEXT_SECONDARY,
-                    font=("Consolas", 11)).pack(padx=20, pady=20)
-            return
+        # Charger aussi les artefacts d'evolution
+        evolution_artifacts = self._load_evolution_artifacts()
         
-        for artifact in artifacts:
-            art_frame = tk.Frame(content, bg=CypherpunkTheme.BG_DARK, padx=15, pady=10)
-            art_frame.pack(fill=tk.X, padx=10, pady=5)
+        # Section Artefacts d'Evolution
+        if evolution_artifacts or EVOLUTION_ARTIFACTS_AVAILABLE:
+            evo_header = tk.Frame(content, bg=CypherpunkTheme.BG_PANEL, padx=10, pady=8)
+            evo_header.pack(fill=tk.X, padx=5, pady=(10, 5))
+            tk.Label(evo_header, text="⚗ ARTEFACTS D'EVOLUTION", 
+                    bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.NEON_MAGENTA,
+                    font=("Consolas", 12, "bold")).pack(side=tk.LEFT)
+            tk.Label(evo_header, text=f" ({len(evolution_artifacts)} possedes)", 
+                    bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.TEXT_SECONDARY,
+                    font=("Consolas", 10)).pack(side=tk.LEFT)
             
-            art_name = artifact.get('name', 'Unknown Artifact')
-            art_type = artifact.get('artifact_type', 'unknown').replace('_', ' ').title()
-            power = artifact.get('power', 0)
-            resonance = artifact.get('resonance', 0)
-            tier = artifact.get('tier', 'common').upper()
-            
-            tier_colors = {'PRIMORDIAL': '#ff00ff', 'LEGENDARY': '#ff8000', 'EPIC': '#aa00ff', 
-                          'RARE': '#0088ff', 'COMMON': '#ffffff'}
-            color = tier_colors.get(tier, '#ffffff')
-            
-            # Header
-            main_line = tk.Frame(art_frame, bg=CypherpunkTheme.BG_DARK)
-            main_line.pack(fill=tk.X)
-            tk.Label(main_line, text=f"🏛 [{tier}]", bg=CypherpunkTheme.BG_DARK,
-                    fg=color, font=("Consolas", 10, "bold")).pack(side=tk.LEFT)
-            tk.Label(main_line, text=f" {art_name}", bg=CypherpunkTheme.BG_DARK,
-                    fg=CypherpunkTheme.TEXT_PRIMARY, font=("Consolas", 11, "bold")).pack(side=tk.LEFT)
-            
-            # Type et stats
-            tk.Label(art_frame, text=f"  Type: {art_type}  ⚡ Power: {power:,.0f}  🔄 Resonance: {resonance:.1f}%",
-                    bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.NEON_CYAN,
+            if evolution_artifacts:
+                for evo_art in evolution_artifacts:
+                    self._render_evolution_artifact(content, evo_art)
+            else:
+                tk.Label(content, text="    Aucun artefact d'evolution obtenu",
+                        bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.TEXT_SECONDARY,
+                        font=("Consolas", 10)).pack(anchor=tk.W, padx=15, pady=5)
+        
+        # Section Artefacts Spinoriels existants
+        spinor_header = tk.Frame(content, bg=CypherpunkTheme.BG_PANEL, padx=10, pady=8)
+        spinor_header.pack(fill=tk.X, padx=5, pady=(15, 5))
+        tk.Label(spinor_header, text="🏛 ARTEFACTS SPINORIELS", 
+                bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.NEON_CYAN,
+                font=("Consolas", 12, "bold")).pack(side=tk.LEFT)
+        tk.Label(spinor_header, text=f" ({len(artifacts)} possedes)", 
+                bg=CypherpunkTheme.BG_PANEL, fg=CypherpunkTheme.TEXT_SECONDARY,
+                font=("Consolas", 10)).pack(side=tk.LEFT)
+        
+        if not artifacts:
+            tk.Label(content, text="    Aucun artefact spinoriel dans ce vault",
+                    bg=CypherpunkTheme.BG_SECONDARY, fg=CypherpunkTheme.TEXT_SECONDARY,
+                    font=("Consolas", 10)).pack(anchor=tk.W, padx=15, pady=5)
+        else:
+            for artifact in artifacts:
+                self._render_spinor_artifact(content, artifact)
+    
+    def _render_evolution_artifact(self, parent, artifact):
+        """Affiche un artefact d'evolution"""
+        rarity_colors = {
+            'rare': '#0088ff', 'epic': '#aa00ff', 'legendary': '#ff8000',
+            'mythical': '#ffaa00', 'transcendent': '#00ffff', 'primordial': '#ff00ff'
+        }
+        
+        art_frame = tk.Frame(parent, bg=CypherpunkTheme.BG_DARK, padx=15, pady=12)
+        art_frame.pack(fill=tk.X, padx=10, pady=5)
+        
+        rarity = artifact.get('rarity', 'rare')
+        color = rarity_colors.get(rarity, '#ffffff')
+        
+        # Header avec nom et rarete
+        header = tk.Frame(art_frame, bg=CypherpunkTheme.BG_DARK)
+        header.pack(fill=tk.X)
+        
+        tk.Label(header, text=f"⚗ [{rarity.upper()}]", bg=CypherpunkTheme.BG_DARK,
+                fg=color, font=("Consolas", 10, "bold")).pack(side=tk.LEFT)
+        tk.Label(header, text=f" {artifact.get('name', 'Unknown')}", bg=CypherpunkTheme.BG_DARK,
+                fg=CypherpunkTheme.TEXT_PRIMARY, font=("Consolas", 11, "bold")).pack(side=tk.LEFT)
+        
+        # Stade d'evolution
+        stage = artifact.get('evolution_stage', '?').upper()
+        tk.Label(header, text=f"  → Stade: {stage}", bg=CypherpunkTheme.BG_DARK,
+                fg=CypherpunkTheme.NEON_GREEN, font=("Consolas", 9)).pack(side=tk.RIGHT)
+        
+        # Description
+        desc = artifact.get('description', '')
+        if desc:
+            tk.Label(art_frame, text=f"  {desc}", bg=CypherpunkTheme.BG_DARK,
+                    fg=CypherpunkTheme.TEXT_SECONDARY, font=("Consolas", 9),
+                    wraplength=500, justify=tk.LEFT).pack(anchor=tk.W, pady=(5, 0))
+        
+        # Bonus de puissance
+        power_bonus = artifact.get('power_bonus', 1.0)
+        tk.Label(art_frame, text=f"  ⚡ Bonus de puissance: x{power_bonus:.2f}", 
+                bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.NEON_CYAN,
+                font=("Consolas", 9)).pack(anchor=tk.W)
+        
+        # Stat bonuses
+        stat_bonuses = artifact.get('stat_bonuses', {})
+        if stat_bonuses:
+            bonus_text = "  📊 Stats: " + ", ".join(
+                f"{k}: x{v:.2f}" if isinstance(v, float) and v < 10 else f"{k}: +{v}"
+                for k, v in stat_bonuses.items()
+            )
+            tk.Label(art_frame, text=bonus_text, bg=CypherpunkTheme.BG_DARK,
+                    fg=CypherpunkTheme.NEON_PURPLE, font=("Consolas", 9)).pack(anchor=tk.W)
+        
+        # Capacites
+        abilities = artifact.get('abilities', [])
+        if abilities:
+            tk.Label(art_frame, text="  ✨ Capacites:", bg=CypherpunkTheme.BG_DARK,
+                    fg=CypherpunkTheme.NEON_YELLOW, font=("Consolas", 9)).pack(anchor=tk.W)
+            for ability in abilities[:3]:  # Max 3 affichees
+                tk.Label(art_frame, text=f"      • {ability.get('name', '?')}", 
+                        bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.TEXT_SECONDARY,
+                        font=("Consolas", 8)).pack(anchor=tk.W)
+        
+        # Effets visuels
+        visual_effects = artifact.get('visual_effects', [])
+        if visual_effects:
+            tk.Label(art_frame, text=f"  🎨 Visuels: {', '.join(visual_effects[:4])}", 
+                    bg=CypherpunkTheme.BG_DARK, fg=color,
+                    font=("Consolas", 8)).pack(anchor=tk.W)
+        
+        # Statut de liaison
+        is_bound = artifact.get('is_bound', False)
+        bound_text = "🔗 LIE A L'AVATAR" if is_bound else "○ Non lie"
+        bound_color = CypherpunkTheme.NEON_GREEN if is_bound else CypherpunkTheme.TEXT_SECONDARY
+        tk.Label(art_frame, text=f"  {bound_text}", bg=CypherpunkTheme.BG_DARK,
+                fg=bound_color, font=("Consolas", 9)).pack(anchor=tk.W)
+    
+    def _render_spinor_artifact(self, parent, artifact):
+        """Affiche un artefact spinoriel existant"""
+        art_frame = tk.Frame(parent, bg=CypherpunkTheme.BG_DARK, padx=15, pady=10)
+        art_frame.pack(fill=tk.X, padx=10, pady=5)
+        
+        # Extraire les donnees (format nested)
+        art_data = artifact.get('artifact_data', artifact)
+        art_name = art_data.get('name', 'Unknown Artifact')
+        art_type = art_data.get('artifact_type', 'unknown').replace('_', ' ').title()
+        rarity = art_data.get('rarity', 'common').upper()
+        
+        # Stats
+        stats = art_data.get('stats', {})
+        power = stats.get('effective_power', stats.get('base_power', 0))
+        resonance = stats.get('spinor_resonance', 0)
+        
+        tier_colors = {
+            'PRIMORDIAL': '#ff00ff', 'TRANSCENDENT': '#00ffff', 'MYTHIC': '#ffaa00',
+            'LEGENDARY': '#ff8000', 'EPIC': '#aa00ff', 'RARE': '#0088ff', 
+            'UNCOMMON': '#00ff00', 'COMMON': '#ffffff'
+        }
+        color = tier_colors.get(rarity, '#ffffff')
+        
+        # Header
+        main_line = tk.Frame(art_frame, bg=CypherpunkTheme.BG_DARK)
+        main_line.pack(fill=tk.X)
+        tk.Label(main_line, text=f"🏛 [{rarity}]", bg=CypherpunkTheme.BG_DARK,
+                fg=color, font=("Consolas", 10, "bold")).pack(side=tk.LEFT)
+        tk.Label(main_line, text=f" {art_name}", bg=CypherpunkTheme.BG_DARK,
+                fg=CypherpunkTheme.TEXT_PRIMARY, font=("Consolas", 11, "bold")).pack(side=tk.LEFT)
+        
+        # Type et stats
+        tk.Label(art_frame, text=f"  Type: {art_type}  ⚡ Power: {power:,.0f}  🔄 Resonance: {resonance:.1f}%",
+                bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.NEON_CYAN,
+                font=("Consolas", 9)).pack(anchor=tk.W)
+        
+        # Element
+        element = art_data.get('element', 'void')
+        element_symbols = {'void': '◯', 'quantum': '⚛', 'temporal': '⧖', 'spatial': '◈',
+                          'entropic': '☢', 'harmonic': '♒', 'celestial': '✧', 'primordial': '⬡'}
+        symbol = element_symbols.get(element, '?')
+        tk.Label(art_frame, text=f"  {symbol} Element: {element.upper()}",
+                bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.NEON_PURPLE,
+                font=("Consolas", 9)).pack(anchor=tk.W)
+        
+        # Capacites
+        abilities = art_data.get('abilities', [])
+        if abilities:
+            abilities_text = "  ✨ " + ", ".join(a.get('name', '?') for a in abilities[:3])
+            tk.Label(art_frame, text=abilities_text, bg=CypherpunkTheme.BG_DARK,
+                    fg=CypherpunkTheme.NEON_YELLOW, font=("Consolas", 9)).pack(anchor=tk.W)
+        
+        # Glyphs count
+        glyph_array = art_data.get('glyph_array', {})
+        if glyph_array:
+            glyphs = glyph_array.get('glyphs', [])
+            total_gems = glyph_array.get('total_gems', 0)
+            glyph_power = glyph_array.get('total_power', 0)
+            tk.Label(art_frame, text=f"  💎 {len(glyphs)} Glyphes, {total_gems} Gemmes, Power: {glyph_power:,.0f}",
+                    bg=CypherpunkTheme.BG_DARK, fg=CypherpunkTheme.TEXT_SECONDARY,
                     font=("Consolas", 9)).pack(anchor=tk.W)
+    
+    def _load_evolution_artifacts(self) -> list:
+        """Charge les artefacts d'evolution du vault"""
+        if not EVOLUTION_ARTIFACTS_AVAILABLE:
+            return []
+        
+        try:
+            evo_system = get_evolution_artifact_system()
+            vault_num = self.current_vault_number if hasattr(self, 'current_vault_number') else None
+            if vault_num is None:
+                return []
+            
+            vault_id = f"vault_{vault_num:05d}"
+            artifacts = evo_system.get_vault_artifacts(vault_id)
+            return [a.to_dict() for a in artifacts]
+        except Exception as e:
+            print(f"[WARN] Erreur chargement artefacts evolution: {e}")
+            return []
     
     def _load_vault_fragments(self, vault_num: int) -> list:
         """Charge les fragments d'un vault"""
