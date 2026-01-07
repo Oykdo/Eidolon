@@ -20,18 +20,18 @@
             top: 20px;
             left: 20px;
             background: rgba(10, 10, 30, 0.9);
-            border: 1px solid #00ffff;
+            border: 1px solid #ffd700;
             border-radius: 12px;
             padding: 20px;
             min-width: 300px;
             backdrop-filter: blur(10px);
-            box-shadow: 0 0 40px #00ffff44;
+            box-shadow: 0 0 40px #ffd70044;
         }
         #info-panel h1 {
-            color: #00ffff;
+            color: #ffd700;
             font-size: 1.3em;
             margin-bottom: 15px;
-            text-shadow: 0 0 15px #00ffff;
+            text-shadow: 0 0 15px #ffd700;
         }
         .info-row {
             display: flex;
@@ -41,21 +41,21 @@
             border-bottom: 1px solid rgba(255,255,255,0.08);
         }
         .info-label { color: #777; font-size: 0.9em; }
-        .info-value { color: #3efd23; font-weight: bold; }
+        .info-value { color: #be7db0; font-weight: bold; }
         .rarity-badge {
             display: inline-block;
             padding: 4px 12px;
             border-radius: 20px;
-            background: #00ffff33;
-            border: 1px solid #00ffff;
-            color: #00ffff;
+            background: #ffd70033;
+            border: 1px solid #ffd700;
+            color: #ffd700;
             font-size: 0.85em;
-            text-shadow: 0 0 8px #00ffff;
+            text-shadow: 0 0 8px #ffd700;
         }
         .dna-code {
             font-family: monospace;
             font-size: 0.7em;
-            color: #69dda7;
+            color: #8668a4;
             word-break: break-all;
             padding: 8px;
             background: rgba(0,0,0,0.3);
@@ -70,18 +70,18 @@
             width: 90px;
             height: 90px;
             border-radius: 50%;
-            background: radial-gradient(circle, #00ffff55 0%, transparent 70%);
-            border: 3px solid #00ffff;
+            background: radial-gradient(circle, #ffd70055 0%, transparent 70%);
+            border: 3px solid #ffd700;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 35px #00ffff66;
+            box-shadow: 0 0 35px #ffd70066;
         }
         #power-indicator .power-value {
             font-size: 1.4em;
             font-weight: bold;
-            color: #00ffff;
+            color: #ffd700;
         }
         #power-indicator .power-label {
             font-size: 0.7em;
@@ -98,8 +98,8 @@
         }
         .control-btn {
             background: rgba(10, 10, 30, 0.85);
-            border: 1px solid #00ffff;
-            color: #00ffff;
+            border: 1px solid #ffd700;
+            color: #ffd700;
             padding: 12px 22px;
             border-radius: 6px;
             cursor: pointer;
@@ -108,11 +108,11 @@
             transition: all 0.3s;
         }
         .control-btn:hover {
-            background: #00ffff33;
-            box-shadow: 0 0 20px #00ffff55;
+            background: #ffd70033;
+            box-shadow: 0 0 20px #ffd70055;
         }
         .control-btn.active {
-            background: #00ffff;
+            background: #ffd700;
             color: #000;
         }
         
@@ -121,13 +121,13 @@
             bottom: 80px;
             right: 20px;
             background: rgba(10, 10, 30, 0.85);
-            border: 1px solid #69dda7;
+            border: 1px solid #8668a4;
             border-radius: 8px;
             padding: 12px;
             font-size: 0.75em;
         }
         #unique-params h3 {
-            color: #69dda7;
+            color: #8668a4;
             margin-bottom: 8px;
             font-size: 0.9em;
         }
@@ -137,20 +137,20 @@
             margin: 3px 0;
         }
         .param-name { color: #666; }
-        .param-val { color: #1a27df; font-family: monospace; }
+        .param-val { color: #41bd5a; font-family: monospace; }
         
         #loading {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            color: #00ffff;
+            color: #ffd700;
             font-size: 1.5em;
         }
         
         @keyframes glow {
-            from { text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff; }
-            to { text-shadow: 0 0 15px #00ffff, 0 0 25px #00ffff; }
+            from { text-shadow: 0 0 5px #ffd700, 0 0 10px #ffd700; }
+            to { text-shadow: 0 0 15px #ffd700, 0 0 25px #ffd700; }
         }
         .glow { animation: glow 2s ease-in-out infinite alternate; }
     </style>
@@ -167,17 +167,17 @@
             </div>
             <div class="info-row">
                 <span class="info-label">Rarete</span>
-                <span class="rarity-badge">PRIMORDIAL</span>
+                <span class="rarity-badge">LEGENDARY</span>
             </div>
             <div class="info-row">
                 <span class="info-label">Score</span>
-                <span class="info-value">100.0/100</span>
+                <span class="info-value">85.0/100</span>
             </div>
             <div class="info-row">
                 <span class="info-label">Puissance</span>
                 <span class="info-value">15,000</span>
             </div>
-            <div class="dna-code">DNA: 9e6c9d2508fc37b4...</div>
+            <div class="dna-code">DNA: test_es6_module_avatar...</div>
         </div>
         
         <div id="power-indicator">
@@ -187,11 +187,11 @@
         
         <div id="unique-params">
             <h3>⚙️ PARAMETRES UNIQUES</h3>
-            <div class="param-row"><span class="param-name">Scale</span><span class="param-val">1.21x1.20x1.05</span></div>
-            <div class="param-row"><span class="param-name">Metalness</span><span class="param-val">0.26</span></div>
-            <div class="param-row"><span class="param-name">IOR</span><span class="param-val">2.42</span></div>
-            <div class="param-row"><span class="param-name">Particles</span><span class="param-val">64</span></div>
-            <div class="param-row"><span class="param-name">Complexity</span><span class="param-val">2.5x</span></div>
+            <div class="param-row"><span class="param-name">Scale</span><span class="param-val">0.77x1.03x0.74</span></div>
+            <div class="param-row"><span class="param-name">Metalness</span><span class="param-val">0.85</span></div>
+            <div class="param-row"><span class="param-name">IOR</span><span class="param-val">1.38</span></div>
+            <div class="param-row"><span class="param-name">Particles</span><span class="param-val">164</span></div>
+            <div class="param-row"><span class="param-name">Complexity</span><span class="param-val">1.8x</span></div>
         </div>
         
         <div id="controls">
@@ -204,10 +204,19 @@
         <div id="loading">Chargement de l'avatar unique...</div>
     </div>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }
+    }
+    </script>
     
-    <script>
+    <script type="module">
+        import * as THREE from 'three';
+        import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+        
         let scene, camera, renderer, controls;
         let autoRotate = true;
         let wireframeMode = false;
@@ -228,10 +237,9 @@
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
             renderer.toneMappingExposure = 1.3;
-            renderer.outputEncoding = THREE.sRGBEncoding;
             document.getElementById('canvas-container').appendChild(renderer.domElement);
             
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
             controls.autoRotate = autoRotate;
@@ -248,20 +256,20 @@
             mainLight.castShadow = true;
             scene.add(mainLight);
             
-            const fillLight = new THREE.DirectionalLight('#00ffff', 0.6);
+            const fillLight = new THREE.DirectionalLight('#ffd700', 0.6);
             fillLight.position.set(-5, 2, -5);
             scene.add(fillLight);
             
-            const backLight = new THREE.DirectionalLight('#3efd23', 0.4);
+            const backLight = new THREE.DirectionalLight('#be7db0', 0.4);
             backLight.position.set(0, -5, -3);
             scene.add(backLight);
             
-            const rimLight = new THREE.DirectionalLight('#69dda7', 0.3);
+            const rimLight = new THREE.DirectionalLight('#8668a4', 0.3);
             rimLight.position.set(3, 0, -5);
             scene.add(rimLight);
             
             // Grille de sol
-            const gridHelper = new THREE.GridHelper(12, 24, '#00ffff', 0x222244);
+            const gridHelper = new THREE.GridHelper(12, 24, '#ffd700', 0x222244);
             gridHelper.position.y = -2;
             gridHelper.material.opacity = 0.3;
             gridHelper.material.transparent = true;
@@ -271,7 +279,7 @@
             
             // === NEXUS CRYSTAL UNIQUE ===
             const mainGroup = new THREE.Group();
-            mainGroup.scale.set(1.213, 1.806, 1.054);
+            mainGroup.scale.set(0.765, 1.539, 0.743);
             scene.add(mainGroup);
             
             // Cristal principal (octaedre deforme)
@@ -279,56 +287,56 @@
             const crystalPos = crystalGeom.attributes.position;
             for (let i = 0; i < crystalPos.count; i++) {
                 const y = crystalPos.getY(i);
-                const stretch = 1 + -0.129 * Math.abs(y);
+                const stretch = 1 + -0.243 * Math.abs(y);
                 crystalPos.setY(i, y * (1.5 + stretch));
             }
             crystalGeom.computeVertexNormals();
             
             const crystalMat = new THREE.MeshPhysicalMaterial({
-                color: '#00ffff',
+                color: '#ffd700',
                 metalness: 0.05,
                 roughness: 0.02,
                 transparent: true,
                 opacity: 0.8,
-                emissive: '#66ffff',
-                emissiveIntensity: 0.462,
+                emissive: '#ffe766',
+                emissiveIntensity: 0.299,
                 clearcoat: 1.0,
                 clearcoatRoughness: 0.0,
                 reflectivity: 1.0,
-                ior: 2.420,
+                ior: 1.376,
                 transmission: 0.3
             });
             const crystal = new THREE.Mesh(crystalGeom, crystalMat);
             mainGroup.add(crystal);
             
             // Cristaux satellites uniques
-            for (let i = 0; i < 10; i++) {
-                const angle = (i / 10) * Math.PI * 2;
+            for (let i = 0; i < 18; i++) {
+                const angle = (i / 18) * Math.PI * 2;
                 const smallGeom = new THREE.OctahedronGeometry(0.2 + Math.random() * 0.15, 0);
-                smallGeom.scale(1, 1.3 + -0.030, 1);
+                smallGeom.scale(1, 1.3 + -0.139, 1);
                 
                 const smallMat = new THREE.MeshPhysicalMaterial({
-                    color: i % 2 === 0 ? '#3efd23' : '#69dda7',
+                    color: i % 2 === 0 ? '#be7db0' : '#8668a4',
                     metalness: 0.1,
                     roughness: 0.1,
                     transparent: true,
                     opacity: 0.75,
-                    emissive: i % 2 === 0 ? '#3efd23' : '#69dda7',
+                    emissive: i % 2 === 0 ? '#be7db0' : '#8668a4',
                     emissiveIntensity: 0.3
                 });
                 const small = new THREE.Mesh(smallGeom, smallMat);
                 small.position.set(
                     Math.cos(angle) * 1.4,
-                    Math.sin(angle * 2 + 2.637) * 0.3,
+                    Math.sin(angle * 2 + 5.058) * 0.3,
                     Math.sin(angle) * 1.4
                 );
                 small.rotation.set(angle, angle * 0.5, 0);
                 mainGroup.add(small);
                 
                 animationCallbacks.push((time) => {
-                    small.position.y = Math.sin(time * 1.01 + i) * 0.25;
-                    small.rotation.y = time * 1.433 * 0.5;
-                    small.rotation.z = time * 1.433 * 0.3;
+                    small.position.y = Math.sin(time * 0.89 + i) * 0.25;
+                    small.rotation.y = time * 0.768 * 0.5;
+                    small.rotation.z = time * 0.768 * 0.3;
                 });
             }
             
@@ -336,7 +344,7 @@
             for (let i = 0; i < 6; i++) {
                 const rayGeom = new THREE.CylinderGeometry(0.008, 0.008, 2.5, 8);
                 const rayMat = new THREE.MeshBasicMaterial({
-                    color: '#dfda84',
+                    color: '#a5c025',
                     transparent: true,
                     opacity: 0.4
                 });
@@ -347,81 +355,17 @@
             }
             
             // Lumiere centrale
-            const crystalLight = new THREE.PointLight('#00ffff', 3, 8);
+            const crystalLight = new THREE.PointLight('#ffd700', 3, 8);
             mainGroup.add(crystalLight);
             
             animationCallbacks.push((time) => {
-                crystal.rotation.y = time * 1.433 * 0.3;
-                crystal.position.y = Math.sin(time * 1.01) * 0.08;
-                crystalLight.intensity = 2.5 + Math.sin(time * 1.01) * 0.5;
+                crystal.rotation.y = time * 0.768 * 0.3;
+                crystal.position.y = Math.sin(time * 0.89) * 0.08;
+                crystalLight.intensity = 2.5 + Math.sin(time * 0.89) * 0.5;
             });
             
             
             
-            // Particules orbitales uniques
-            const particleCount = 64;
-            const particleGeom = new THREE.BufferGeometry();
-            const positions = new Float32Array(particleCount * 3);
-            const colors = new Float32Array(particleCount * 3);
-            const sizes = new Float32Array(particleCount);
-            const orbits = new Float32Array(particleCount * 3);
-            
-            for (let i = 0; i < particleCount; i++) {
-                const theta = Math.random() * Math.PI * 2;
-                const phi = Math.acos(2 * Math.random() - 1);
-                const r = 1.5 + Math.random() * 1.0;
-                
-                positions[i * 3] = r * Math.sin(phi) * Math.cos(theta);
-                positions[i * 3 + 1] = r * Math.sin(phi) * Math.sin(theta);
-                positions[i * 3 + 2] = r * Math.cos(phi);
-                
-                const colorChoice = Math.random();
-                let color;
-                if (colorChoice < 0.33) color = new THREE.Color('#3efd23');
-                else if (colorChoice < 0.66) color = new THREE.Color('#69dda7');
-                else color = new THREE.Color('#1a27df');
-                
-                colors[i * 3] = color.r;
-                colors[i * 3 + 1] = color.g;
-                colors[i * 3 + 2] = color.b;
-                
-                sizes[i] = 0.02 + Math.random() * 0.06;
-                orbits[i * 3] = r;
-                orbits[i * 3 + 1] = 0.2 + Math.random() * 0.67;
-                orbits[i * 3 + 2] = Math.random() * Math.PI * 2;
-            }
-            
-            particleGeom.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            particleGeom.setAttribute('color', new THREE.BufferAttribute(colors, 3));
-            particleGeom.setAttribute('size', new THREE.BufferAttribute(sizes, 1));
-            
-            const particleMat = new THREE.PointsMaterial({
-                size: 0.08,
-                vertexColors: true,
-                transparent: true,
-                opacity: 0.9,
-                blending: THREE.AdditiveBlending,
-                depthWrite: false
-            });
-            const particles = new THREE.Points(particleGeom, particleMat);
-            scene.add(particles);
-            
-            animationCallbacks.push((time) => {
-                const pos = particles.geometry.attributes.position.array;
-                for (let i = 0; i < particleCount; i++) {
-                    const r = orbits[i * 3];
-                    const speed = orbits[i * 3 + 1];
-                    const phase = orbits[i * 3 + 2];
-                    const angle = time * speed + phase;
-                    
-                    pos[i * 3] = r * Math.cos(angle) * Math.cos(phase);
-                    pos[i * 3 + 1] = r * Math.sin(angle * 0.7) * 0.5;
-                    pos[i * 3 + 2] = r * Math.sin(angle) * Math.sin(phase);
-                }
-                particles.geometry.attributes.position.needsUpdate = true;
-                particles.rotation.y = time * 0.1;
-            });
-        
         
             
             document.getElementById('loading').style.display = 'none';
@@ -443,19 +387,13 @@
             renderer.setSize(window.innerWidth, window.innerHeight);
         }
         
-        function toggleRotation() {
-            autoRotate = !autoRotate;
-            controls.autoRotate = autoRotate;
-            event.target.classList.toggle('active', autoRotate);
-        }
-        
-        function resetCamera() {
+        window.resetCamera = function() {
             camera.position.set(3.5, 2.5, 3.5);
             controls.target.set(0, 0, 0);
             controls.update();
-        }
+        };
         
-        function toggleWireframe() {
+        window.toggleWireframe = function() {
             wireframeMode = !wireframeMode;
             scene.traverse((child) => {
                 if (child.isMesh && child.material && !child.material.isShaderMaterial) {
@@ -467,15 +405,21 @@
                 }
             });
             event.target.classList.toggle('active', wireframeMode);
-        }
+        };
         
-        function screenshot() {
+        window.screenshot = function() {
             renderer.render(scene, camera);
             const link = document.createElement('a');
-            link.download = 'avatar_3d_9e6c9d25.png';
+            link.download = 'avatar_3d_test_es6.png';
             link.href = renderer.domElement.toDataURL('image/png');
             link.click();
-        }
+        };
+        
+        window.toggleRotation = function() {
+            autoRotate = !autoRotate;
+            controls.autoRotate = autoRotate;
+            event.target.classList.toggle('active', autoRotate);
+        };
         
         init();
     </script>

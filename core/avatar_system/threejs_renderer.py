@@ -1242,10 +1242,19 @@ class ThreeJSAvatarRenderer:
         <div id="loading">Chargement de l'avatar unique...</div>
     </div>
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+    <script type="importmap">
+    {{
+        "imports": {{
+            "three": "https://unpkg.com/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://unpkg.com/three@0.160.0/examples/jsm/"
+        }}
+    }}
+    </script>
     
-    <script>
+    <script type="module">
+        import * as THREE from 'three';
+        import {{ OrbitControls }} from 'three/addons/controls/OrbitControls.js';
+        
         let scene, camera, renderer, controls;
         let autoRotate = true;
         let wireframeMode = false;
@@ -1266,10 +1275,9 @@ class ThreeJSAvatarRenderer:
             renderer.shadowMap.type = THREE.PCFSoftShadowMap;
             renderer.toneMapping = THREE.ACESFilmicToneMapping;
             renderer.toneMappingExposure = 1.3;
-            renderer.outputEncoding = THREE.sRGBEncoding;
             document.getElementById('canvas-container').appendChild(renderer.domElement);
             
-            controls = new THREE.OrbitControls(camera, renderer.domElement);
+            controls = new OrbitControls(camera, renderer.domElement);
             controls.enableDamping = true;
             controls.dampingFactor = 0.05;
             controls.autoRotate = autoRotate;
@@ -1327,19 +1335,13 @@ class ThreeJSAvatarRenderer:
             renderer.setSize(window.innerWidth, window.innerHeight);
         }}
         
-        function toggleRotation() {{
-            autoRotate = !autoRotate;
-            controls.autoRotate = autoRotate;
-            event.target.classList.toggle('active', autoRotate);
-        }}
-        
-        function resetCamera() {{
+        window.resetCamera = function() {{
             camera.position.set(3.5, 2.5, 3.5);
             controls.target.set(0, 0, 0);
             controls.update();
-        }}
+        }};
         
-        function toggleWireframe() {{
+        window.toggleWireframe = function() {{
             wireframeMode = !wireframeMode;
             scene.traverse((child) => {{
                 if (child.isMesh && child.material && !child.material.isShaderMaterial) {{
@@ -1351,15 +1353,21 @@ class ThreeJSAvatarRenderer:
                 }}
             }});
             event.target.classList.toggle('active', wireframeMode);
-        }}
+        }};
         
-        function screenshot() {{
+        window.screenshot = function() {{
             renderer.render(scene, camera);
             const link = document.createElement('a');
             link.download = 'avatar_3d_{self.avatar_id[:8]}.png';
             link.href = renderer.domElement.toDataURL('image/png');
             link.click();
-        }}
+        }};
+        
+        window.toggleRotation = function() {{
+            autoRotate = !autoRotate;
+            controls.autoRotate = autoRotate;
+            event.target.classList.toggle('active', autoRotate);
+        }};
         
         init();
     </script>
