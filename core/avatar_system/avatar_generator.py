@@ -101,10 +101,436 @@ PIONEER_MIN_RARITY = {
     "pioneer": "rare",        # Au minimum rare
 }
 
+# ============================================================================
+# STATS DE PERSONNAGE
+# ============================================================================
+
+# Stats primaires (base 1-100, affectees par rarete et tier)
+PRIMARY_STATS = [
+    "strength",      # Force - degats physiques
+    "agility",       # Agilite - esquive, vitesse
+    "intelligence", # Intelligence - degats magiques, mana
+    "vitality",      # Vitalite - points de vie
+    "luck",          # Chance - critiques, drops
+    "charisma",      # Charisme - commerce, diplomatie
+]
+
+# Stats secondaires (derivees des primaires)
+SECONDARY_STATS = [
+    "hp",            # Points de vie (vitality * 10 + base)
+    "mp",            # Points de mana (intelligence * 5 + base)
+    "attack",        # Attaque physique (strength * 2)
+    "magic_attack",  # Attaque magique (intelligence * 2)
+    "defense",       # Defense physique (vitality + strength/2)
+    "magic_defense", # Defense magique (intelligence + vitality/2)
+    "speed",         # Vitesse (agility * 1.5)
+    "crit_rate",     # Taux critique % (luck / 2)
+    "crit_damage",   # Degats critiques % (150 + luck)
+    "evasion",       # Esquive % (agility / 3)
+    "accuracy",      # Precision % (agility / 2 + luck / 4)
+]
+
+# Stats speciales (uniques aux avatars quantiques)
+QUANTUM_STATS = [
+    "quantum_power",      # Puissance quantique (pour abilities speciales)
+    "dimensional_sync",   # Synchronisation dimensionnelle
+    "entropy_resistance", # Resistance a l'entropie
+    "temporal_flux",      # Flux temporel (cooldown reduction)
+    "nexus_affinity",     # Affinite avec le Nexus
+]
+
+# Bonus de stats par rarete
+RARITY_STAT_MULTIPLIER = {
+    "common": 1.0,
+    "uncommon": 1.15,
+    "rare": 1.3,
+    "epic": 1.5,
+    "legendary": 1.75,
+    "mythical": 2.0,
+    "primordial": 2.5,
+}
+
+# Bonus de stats par tier pionnier
+PIONEER_STAT_BONUS = {
+    "supreme": {"base": 20, "multiplier": 1.5},     # +20 base, x1.5
+    "legendary": {"base": 15, "multiplier": 1.35},  # +15 base, x1.35
+    "elite": {"base": 10, "multiplier": 1.2},       # +10 base, x1.2
+    "pioneer": {"base": 5, "multiplier": 1.1},      # +5 base, x1.1
+}
+
+# Niveau max et XP
+MAX_LEVEL = 100
+XP_PER_LEVEL = [100 * (level ** 1.5) for level in range(1, MAX_LEVEL + 1)]
+
+
+# ============================================================================
+# CLASSES DE PERSONNAGE
+# ============================================================================
+
+# Categories d'items (doivent correspondre a AlchemicalCategory)
+ITEM_CATEGORIES = [
+    "potion", "elixir", "rune", "scroll", "essence",
+    "talisman", "orb", "seal", "sigil", "crystal"
+]
+
+# Classes disponibles
+AVATAR_CLASSES = {
+    "alchemist": {
+        "name": "Alchimiste",
+        "description": "Maitre des transmutations et des potions",
+        "icon": "⚗️",
+        "color": "#00ff88",
+        "primary_stat": "intelligence",
+        "secondary_stat": "luck",
+        "item_affinities": {
+            "potion": 2.0,      # +100% efficacite potions
+            "elixir": 1.8,      # +80% elixirs
+            "essence": 1.5,     # +50% essences
+            "crystal": 1.3,     # +30% cristaux
+            "scroll": 1.0,
+            "rune": 0.9,
+            "talisman": 0.8,
+            "orb": 1.0,
+            "seal": 0.7,
+            "sigil": 0.8,
+        },
+        "abilities": ["transmutation_mastery", "potion_enhancement", "essence_extraction"],
+        "stat_bonuses": {"intelligence": 10, "luck": 5, "charisma": 3},
+    },
+    "runemaster": {
+        "name": "Maitre des Runes",
+        "description": "Inscripteur de symboles de pouvoir ancestraux",
+        "icon": "ᚱ",
+        "color": "#ff6600",
+        "primary_stat": "intelligence",
+        "secondary_stat": "vitality",
+        "item_affinities": {
+            "rune": 2.0,        # +100% runes
+            "sigil": 1.8,       # +80% sigils
+            "scroll": 1.5,      # +50% parchemins
+            "seal": 1.4,        # +40% sceaux
+            "crystal": 1.2,
+            "potion": 0.8,
+            "elixir": 0.9,
+            "essence": 1.0,
+            "talisman": 1.1,
+            "orb": 1.0,
+        },
+        "abilities": ["rune_inscription", "sigil_activation", "ancient_knowledge"],
+        "stat_bonuses": {"intelligence": 8, "vitality": 5, "strength": 2},
+    },
+    "crystalmancer": {
+        "name": "Cristallomancien",
+        "description": "Canalise l'energie a travers les cristaux",
+        "icon": "💎",
+        "color": "#00ffff",
+        "primary_stat": "intelligence",
+        "secondary_stat": "charisma",
+        "item_affinities": {
+            "crystal": 2.0,     # +100% cristaux
+            "orb": 1.8,         # +80% orbes
+            "essence": 1.5,     # +50% essences
+            "talisman": 1.3,
+            "potion": 1.0,
+            "elixir": 1.1,
+            "rune": 1.0,
+            "scroll": 0.9,
+            "seal": 0.8,
+            "sigil": 1.0,
+        },
+        "abilities": ["crystal_resonance", "energy_amplification", "gem_fusion"],
+        "stat_bonuses": {"intelligence": 7, "charisma": 6, "luck": 4},
+    },
+    "guardian": {
+        "name": "Gardien",
+        "description": "Protecteur utilisant talismans et sceaux",
+        "icon": "🛡️",
+        "color": "#4488ff",
+        "primary_stat": "vitality",
+        "secondary_stat": "strength",
+        "item_affinities": {
+            "talisman": 2.0,    # +100% talismans
+            "seal": 1.8,        # +80% sceaux
+            "orb": 1.4,         # +40% orbes
+            "rune": 1.3,
+            "crystal": 1.1,
+            "potion": 1.2,
+            "elixir": 1.0,
+            "essence": 0.9,
+            "scroll": 0.8,
+            "sigil": 1.0,
+        },
+        "abilities": ["protective_ward", "seal_mastery", "damage_absorption"],
+        "stat_bonuses": {"vitality": 10, "strength": 5, "defense": 10},
+    },
+    "shadow_weaver": {
+        "name": "Tisseur d'Ombre",
+        "description": "Manipule les sigils et les energies sombres",
+        "icon": "🌑",
+        "color": "#8800aa",
+        "primary_stat": "agility",
+        "secondary_stat": "luck",
+        "item_affinities": {
+            "sigil": 2.0,       # +100% sigils
+            "seal": 1.6,        # +60% sceaux
+            "scroll": 1.5,      # +50% parchemins
+            "essence": 1.4,
+            "potion": 1.2,
+            "rune": 1.0,
+            "crystal": 0.9,
+            "talisman": 0.8,
+            "orb": 1.0,
+            "elixir": 1.1,
+        },
+        "abilities": ["shadow_step", "mark_of_doom", "essence_drain"],
+        "stat_bonuses": {"agility": 10, "luck": 6, "crit_rate": 5},
+    },
+    "elementalist": {
+        "name": "Elementaliste",
+        "description": "Controle les essences elementaires",
+        "icon": "🔥",
+        "color": "#ff4400",
+        "primary_stat": "intelligence",
+        "secondary_stat": "agility",
+        "item_affinities": {
+            "essence": 2.0,     # +100% essences
+            "orb": 1.7,         # +70% orbes
+            "crystal": 1.5,     # +50% cristaux
+            "scroll": 1.3,
+            "potion": 1.2,
+            "rune": 1.1,
+            "elixir": 1.0,
+            "talisman": 0.9,
+            "seal": 0.8,
+            "sigil": 1.0,
+        },
+        "abilities": ["elemental_mastery", "essence_infusion", "elemental_burst"],
+        "stat_bonuses": {"intelligence": 8, "agility": 5, "magic_attack": 10},
+    },
+    "oracle": {
+        "name": "Oracle",
+        "description": "Lit l'avenir dans les parchemins anciens",
+        "icon": "📜",
+        "color": "#ffdd00",
+        "primary_stat": "luck",
+        "secondary_stat": "intelligence",
+        "item_affinities": {
+            "scroll": 2.0,      # +100% parchemins
+            "sigil": 1.6,       # +60% sigils
+            "crystal": 1.4,     # +40% cristaux
+            "rune": 1.3,
+            "elixir": 1.2,
+            "potion": 1.1,
+            "essence": 1.0,
+            "talisman": 1.0,
+            "orb": 0.9,
+            "seal": 0.8,
+        },
+        "abilities": ["prophecy", "fate_manipulation", "ancient_wisdom"],
+        "stat_bonuses": {"luck": 12, "intelligence": 5, "crit_damage": 20},
+    },
+    "quantum_sage": {
+        "name": "Sage Quantique",
+        "description": "Maitre des dimensions et du Nexus (Supreme uniquement)",
+        "icon": "🌀",
+        "color": "#ff00ff",
+        "primary_stat": "intelligence",
+        "secondary_stat": "vitality",
+        "item_affinities": {
+            # Affinite equilibree mais elevee partout
+            "potion": 1.5,
+            "elixir": 1.5,
+            "rune": 1.5,
+            "scroll": 1.5,
+            "essence": 1.5,
+            "talisman": 1.5,
+            "orb": 1.8,         # Specialite: orbes
+            "seal": 1.5,
+            "sigil": 1.5,
+            "crystal": 1.8,     # Specialite: cristaux
+        },
+        "abilities": ["dimensional_rift", "quantum_manipulation", "nexus_communion", "reality_warp"],
+        "abilities_supreme_only": True,
+        "stat_bonuses": {"intelligence": 15, "vitality": 10, "quantum_power": 50},
+        "supreme_only": True,  # Reservee aux vaults 1-33
+    },
+}
+
+# Classes par type geometrique (affinite naturelle)
+GEOMETRIC_CLASS_AFFINITY = {
+    "quantum_sphere": ["crystalmancer", "elementalist"],
+    "spinor_torus": ["runemaster", "oracle"],
+    "bell_polyhedron": ["guardian", "alchemist"],
+    "clifford_lattice": ["runemaster", "guardian"],
+    "entropy_fractal": ["shadow_weaver", "elementalist"],
+    "7d_projection": ["quantum_sage", "oracle"],
+    "hybrid_form": ["alchemist", "crystalmancer"],
+    "nexus_crystal": ["quantum_sage", "crystalmancer"],
+}
+
 
 # ============================================================================
 # STRUCTURES DE DONNEES
 # ============================================================================
+
+@dataclass
+class AvatarClass:
+    """Classe du personnage avec affinites d'items"""
+    class_id: str
+    name: str
+    description: str
+    icon: str
+    color: str
+    primary_stat: str
+    secondary_stat: str
+    item_affinities: Dict[str, float] = field(default_factory=dict)
+    abilities: List[str] = field(default_factory=list)
+    stat_bonuses: Dict[str, int] = field(default_factory=dict)
+    is_supreme_only: bool = False
+    
+    def to_dict(self) -> Dict:
+        return asdict(self)
+    
+    @classmethod
+    def from_dict(cls, data: Dict) -> 'AvatarClass':
+        return cls(**{k: v for k, v in data.items() if k in cls.__dataclass_fields__})
+    
+    @classmethod
+    def from_class_id(cls, class_id: str) -> Optional['AvatarClass']:
+        """Cree une instance depuis l'ID de classe"""
+        if class_id not in AVATAR_CLASSES:
+            return None
+        
+        class_data = AVATAR_CLASSES[class_id]
+        return cls(
+            class_id=class_id,
+            name=class_data["name"],
+            description=class_data["description"],
+            icon=class_data["icon"],
+            color=class_data["color"],
+            primary_stat=class_data["primary_stat"],
+            secondary_stat=class_data["secondary_stat"],
+            item_affinities=class_data.get("item_affinities", {}),
+            abilities=class_data.get("abilities", []),
+            stat_bonuses=class_data.get("stat_bonuses", {}),
+            is_supreme_only=class_data.get("supreme_only", False)
+        )
+    
+    def get_item_affinity(self, item_category: str) -> float:
+        """Retourne le multiplicateur d'affinite pour une categorie d'item"""
+        return self.item_affinities.get(item_category.lower(), 1.0)
+    
+    def get_affinity_bonus_text(self, item_category: str) -> str:
+        """Retourne le texte du bonus pour une categorie"""
+        affinity = self.get_item_affinity(item_category)
+        if affinity > 1.0:
+            return f"+{int((affinity - 1) * 100)}%"
+        elif affinity < 1.0:
+            return f"-{int((1 - affinity) * 100)}%"
+        return "0%"
+
+
+@dataclass
+class AvatarStats:
+    """Stats de combat/RPG du personnage"""
+    # Niveau et XP
+    level: int = 1
+    xp: int = 0
+    xp_to_next: int = 100
+    
+    # Stats primaires (base)
+    strength: int = 10
+    agility: int = 10
+    intelligence: int = 10
+    vitality: int = 10
+    luck: int = 10
+    charisma: int = 10
+    
+    # Stats secondaires (calculees)
+    hp: int = 100
+    hp_max: int = 100
+    mp: int = 50
+    mp_max: int = 50
+    attack: int = 20
+    magic_attack: int = 20
+    defense: int = 15
+    magic_defense: int = 15
+    speed: int = 15
+    crit_rate: float = 5.0
+    crit_damage: float = 150.0
+    evasion: float = 3.0
+    accuracy: float = 90.0
+    
+    # Stats quantiques (speciales)
+    quantum_power: int = 0
+    dimensional_sync: float = 0.0
+    entropy_resistance: float = 0.0
+    temporal_flux: float = 0.0
+    nexus_affinity: float = 0.0
+    
+    # Points de stats disponibles
+    stat_points: int = 0
+    
+    def to_dict(self) -> Dict:
+        return asdict(self)
+    
+    @classmethod
+    def from_dict(cls, data: Dict) -> 'AvatarStats':
+        return cls(**{k: v for k, v in data.items() if k in cls.__dataclass_fields__})
+    
+    def recalculate_secondary(self):
+        """Recalcule les stats secondaires a partir des primaires"""
+        self.hp_max = self.vitality * 10 + 100
+        self.mp_max = self.intelligence * 5 + 50
+        self.attack = self.strength * 2
+        self.magic_attack = self.intelligence * 2
+        self.defense = self.vitality + self.strength // 2
+        self.magic_defense = self.intelligence + self.vitality // 2
+        self.speed = int(self.agility * 1.5)
+        self.crit_rate = round(self.luck / 2, 1)
+        self.crit_damage = round(150 + self.luck, 1)
+        self.evasion = round(self.agility / 3, 1)
+        self.accuracy = round(90 + self.agility / 2 + self.luck / 4, 1)
+    
+    def add_xp(self, amount: int) -> List[str]:
+        """Ajoute de l'XP et gere le level up. Retourne les messages."""
+        messages = []
+        self.xp += amount
+        
+        while self.xp >= self.xp_to_next and self.level < MAX_LEVEL:
+            self.xp -= self.xp_to_next
+            self.level += 1
+            self.stat_points += 5  # 5 points par niveau
+            self.xp_to_next = int(100 * (self.level ** 1.5))
+            
+            # Bonus de stats auto
+            self.vitality += 2
+            self.strength += 1
+            self.agility += 1
+            self.intelligence += 1
+            
+            self.recalculate_secondary()
+            self.hp = self.hp_max  # Full heal on level up
+            self.mp = self.mp_max
+            
+            messages.append(f"Level Up! Niveau {self.level}")
+        
+        return messages
+    
+    def allocate_stat(self, stat_name: str, points: int = 1) -> bool:
+        """Alloue des points de stats. Retourne True si succes."""
+        if self.stat_points < points:
+            return False
+        
+        if stat_name not in PRIMARY_STATS:
+            return False
+        
+        current = getattr(self, stat_name)
+        setattr(self, stat_name, current + points)
+        self.stat_points -= points
+        self.recalculate_secondary()
+        return True
+
 
 @dataclass
 class AvatarDNA:
@@ -230,7 +656,8 @@ class QuantumAvatarGenerator:
     def _extract_dna(self) -> AvatarDNA:
         """Extrait l'ADN cryptographique des donnees du vault avec bonus pionnier"""
         # Hash principal
-        vault_hash = hashlib.sha256(self.raw_data).hexdigest()
+        data = self.raw_data if isinstance(self.raw_data, bytes) else self.raw_data.encode('utf-8')
+        vault_hash = hashlib.sha256(data).hexdigest()
         
         # Generer des valeurs de seed
         seed_bytes = bytes.fromhex(vault_hash[:32])
@@ -387,6 +814,154 @@ class QuantumAvatarGenerator:
             'min_rarity': PIONEER_MIN_RARITY.get(self.pioneer_tier, 'common'),
             'exclusive_types': EXCLUSIVE_GEOMETRIC_TYPES.get(self.pioneer_tier, [])
         }
+    
+    def generate_stats(self) -> AvatarStats:
+        """
+        Genere les stats de combat du personnage basees sur:
+        - L'ADN du vault (seed_values)
+        - La rarete de l'avatar
+        - Le tier pionnier
+        """
+        dna = self.dna
+        seed = dna.seed_values
+        
+        # Multiplicateur de rarete
+        rarity_mult = RARITY_STAT_MULTIPLIER.get(dna.rarity_tier, 1.0)
+        
+        # Bonus pionnier
+        pioneer_bonus = PIONEER_STAT_BONUS.get(self.pioneer_tier, {"base": 0, "multiplier": 1.0})
+        base_bonus = pioneer_bonus["base"]
+        pioneer_mult = pioneer_bonus["multiplier"]
+        
+        # Multiplicateur total
+        total_mult = rarity_mult * pioneer_mult
+        
+        # Generer les stats primaires a partir du seed
+        # Chaque stat utilise differents bytes du seed pour la variete
+        def calc_stat(seed_idx: int, base: int = 10) -> int:
+            raw = seed[seed_idx % len(seed)]
+            # Normalise entre 5 et 25, puis applique les bonus
+            normalized = 5 + (raw / 255) * 20
+            boosted = (normalized + base_bonus) * total_mult
+            return int(min(100, max(1, boosted)))
+        
+        strength = calc_stat(0)
+        agility = calc_stat(1)
+        intelligence = calc_stat(2)
+        vitality = calc_stat(3)
+        luck = calc_stat(4)
+        charisma = calc_stat(5)
+        
+        # Stats quantiques basees sur les attributs DNA
+        attrs = dna.attributes
+        quantum_power = int(attrs.get('quantum_entropy', 50) * total_mult)
+        dimensional_sync = round(attrs.get('dimensional_depth', 3.5) / 7 * 100 * total_mult, 1)
+        entropy_resistance = round(attrs.get('cryptographic_strength', 50) * total_mult / 2, 1)
+        temporal_flux = round(attrs.get('temporal_stability', 50) * total_mult / 3, 1)
+        nexus_affinity = round(attrs.get('energy_resonance', 50) * total_mult / 2, 1)
+        
+        # Creer l'objet stats
+        stats = AvatarStats(
+            level=1,
+            xp=0,
+            xp_to_next=100,
+            strength=strength,
+            agility=agility,
+            intelligence=intelligence,
+            vitality=vitality,
+            luck=luck,
+            charisma=charisma,
+            quantum_power=quantum_power,
+            dimensional_sync=min(100, dimensional_sync),
+            entropy_resistance=min(100, entropy_resistance),
+            temporal_flux=min(100, temporal_flux),
+            nexus_affinity=min(100, nexus_affinity),
+            stat_points=0
+        )
+        
+        # Calculer les stats secondaires
+        stats.recalculate_secondary()
+        
+        # Bonus special Supreme: stats quantiques maximales
+        if self.pioneer_tier == "supreme":
+            stats.quantum_power = int(stats.quantum_power * 1.5)
+            stats.dimensional_sync = 100.0
+            stats.nexus_affinity = 100.0
+        
+        return stats
+    
+    def get_available_classes(self) -> List[str]:
+        """
+        Retourne la liste des classes disponibles pour cet avatar.
+        Basee sur le type geometrique et le tier pionnier.
+        """
+        available = []
+        geometric_name = self.dna.geometric_name
+        
+        # Classes avec affinite naturelle pour ce type geometrique
+        affine_classes = GEOMETRIC_CLASS_AFFINITY.get(geometric_name, [])
+        
+        for class_id, class_data in AVATAR_CLASSES.items():
+            # Verifier si c'est une classe Supreme-only
+            if class_data.get("supreme_only", False):
+                if self.pioneer_tier == "supreme":
+                    available.append(class_id)
+            else:
+                available.append(class_id)
+        
+        # Trier: classes avec affinite en premier
+        def sort_key(c):
+            if c in affine_classes:
+                return (0, affine_classes.index(c))
+            return (1, c)
+        
+        available.sort(key=sort_key)
+        return available
+    
+    def select_class(self, class_id: str = None) -> Optional[AvatarClass]:
+        """
+        Selectionne une classe pour l'avatar.
+        Si aucune classe n'est specifiee, choisit automatiquement basee sur:
+        - L'affinite geometrique
+        - Les stats dominantes
+        """
+        available = self.get_available_classes()
+        
+        if not available:
+            return None
+        
+        # Si une classe est specifiee et valide
+        if class_id:
+            if class_id in available:
+                return AvatarClass.from_class_id(class_id)
+            return None
+        
+        # Selection automatique basee sur le type geometrique
+        geometric_name = self.dna.geometric_name
+        affine_classes = GEOMETRIC_CLASS_AFFINITY.get(geometric_name, [])
+        
+        if affine_classes:
+            # Prendre la premiere classe affine disponible
+            for class_id in affine_classes:
+                if class_id in available:
+                    return AvatarClass.from_class_id(class_id)
+        
+        # Fallback: premiere classe disponible
+        return AvatarClass.from_class_id(available[0])
+    
+    def apply_class_bonuses(self, stats: AvatarStats, avatar_class: AvatarClass) -> AvatarStats:
+        """Applique les bonus de classe aux stats"""
+        bonuses = avatar_class.stat_bonuses
+        
+        for stat_name, bonus in bonuses.items():
+            if hasattr(stats, stat_name):
+                current = getattr(stats, stat_name)
+                if isinstance(current, (int, float)):
+                    setattr(stats, stat_name, current + bonus)
+        
+        # Recalculer les stats secondaires apres application des bonus
+        stats.recalculate_secondary()
+        return stats
     
     def generate_geometry(self) -> Dict:
         """Genere la geometrie 3D de l'avatar"""
