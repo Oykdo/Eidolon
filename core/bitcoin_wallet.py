@@ -374,12 +374,21 @@ class BitcoinKeyDerivation:
         self._public_key: Optional[bytes] = None
     
     def _derive_private_key(self) -> bytes:
-        """Derive une cle privee Bitcoin depuis la cle vault"""
+        """
+        Derive une cle privee Bitcoin depuis la cle vault.
+        
+        IMPORTANT: The salt is derived from vault_key itself to ensure
+        the same vault_key ALWAYS generates the same address, regardless
+        of vault_id changes. This makes the address PERPETUAL.
+        """
         if self._private_key is None:
+            # Salt derived from vault_key for perpetual address
+            perpetual_salt = hashlib.sha256(b"eidolon-btc-perpetual-salt:" + self.vault_key).digest()[:16]
+            
             hkdf = HKDF(
                 algorithm=hashes.SHA256(),
                 length=32,
-                salt=self.vault_id.encode('utf-8'),
+                salt=perpetual_salt,
                 info=b'poly-spinor-bitcoin-wallet-v1'
             )
             self._private_key = hkdf.derive(self.vault_key)

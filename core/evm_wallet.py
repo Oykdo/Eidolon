@@ -184,12 +184,20 @@ class VaultHDWallet:
         self._web3_connections: Dict[str, Web3] = {}
     
     def _derive_eth_private_key(self, vault_key: bytes, key_id: str) -> bytes:
-        """Derive la cle privee Ethereum depuis la cle vault via HKDF"""
-        # Utiliser HKDF pour deriver une cle 32 bytes
+        """
+        Derive la cle privee Ethereum depuis la cle vault via HKDF.
+        
+        IMPORTANT: The salt is derived from vault_key itself to ensure
+        the same vault_key ALWAYS generates the same address, regardless
+        of key_id changes. This makes the address PERPETUAL.
+        """
+        # Salt derived from vault_key for perpetual address
+        perpetual_salt = hashlib.sha256(b"eidolon-evm-perpetual-salt:" + vault_key).digest()[:16]
+        
         hkdf = HKDF(
             algorithm=hashes.SHA256(),
             length=32,
-            salt=key_id.encode('utf-8'),
+            salt=perpetual_salt,
             info=b"poly-spinor-evm-wallet-v1"
         )
         return hkdf.derive(vault_key)
