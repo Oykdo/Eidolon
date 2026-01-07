@@ -392,6 +392,13 @@ except ImportError as e:
     ALCHEMY_AVAILABLE = False
     print(f"[INFO] Module Alchemy non disponible: {e}")
 
+try:
+    from core.item_runes_exchange import ItemRunesExchange, RuneItemInscription, ItemListing
+    EXCHANGE_AVAILABLE = True
+except ImportError as e:
+    EXCHANGE_AVAILABLE = False
+    print(f"[INFO] Module Exchange non disponible: {e}")
+
 
 # ============================================================================
 # GESTIONNAIRE DE VAULT SECURISE
@@ -687,6 +694,11 @@ class VaultMonitorGUI:
         # Onglet Blockchain (Alchemy)
         self.blockchain_tab = self._create_blockchain_tab()
         self.notebook.add(self.blockchain_tab, text="  ⛓ BLOCKCHAIN  ")
+        
+        # Onglet Bitcoin Exchange (si disponible)
+        if EXCHANGE_AVAILABLE:
+            self.exchange_tab = self._create_exchange_tab()
+            self.notebook.add(self.exchange_tab, text="  ₿ EXCHANGE  ")
         
         # === BARRE DE STATUT CYPHERPUNK ===
         status_bar_frame = tk.Frame(self.root, bg=CypherpunkTheme.BG_TERTIARY, height=32)
@@ -2227,6 +2239,518 @@ class VaultMonitorGUI:
             
         except Exception as e:
             messagebox.showerror("Erreur", f"Erreur d'export: {e}")
+    
+    # ========================================================================
+    # ONGLET BITCOIN EXCHANGE
+    # ========================================================================
+    
+    def _create_exchange_tab(self) -> tk.Frame:
+        """Cree l'onglet d'echange d'items via Bitcoin Runes"""
+        frame = tk.Frame(self.notebook, bg=CypherpunkTheme.BG_DARK)
+        
+        # Initialiser le gestionnaire d'echange
+        self.exchange_manager = ItemRunesExchange()
+        self.current_vault_num = 1  # TODO: Obtenir du contexte
+        
+        # === HEADER ===
+        header_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)
+        header_frame.pack(fill=tk.X, pady=(10, 15), padx=10)
+        
+        tk.Label(
+            header_frame,
+            text="BTC ITEM EXCHANGE",
+            bg=CypherpunkTheme.BG_DARK,
+            fg="#f7931a",  # Bitcoin orange
+            font=("Consolas", 16, "bold")
+        ).pack(side=tk.LEFT)
+        
+        # Bouton refresh
+        tk.Button(
+            header_frame,
+            text="REFRESH",
+            bg="#333333",
+            fg="white",
+            font=("Consolas", 9),
+            command=self._refresh_exchange
+        ).pack(side=tk.RIGHT, padx=5)
+        
+        # === STATS DU MARCHE ===
+        stats_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_PANEL)
+        stats_frame.pack(fill=tk.X, padx=10, pady=(0, 10))
+        
+        self.exchange_stats = {}
+        stat_labels = [
+            ("active_listings", "ACTIVE", "#00ff00"),
+            ("total_volume_btc", "VOLUME BTC", "#f7931a"),
+            ("my_inscriptions", "MY ITEMS", "#00ffff"),
+            ("my_listings", "MY LISTINGS", "#aa00ff"),
+        ]
+        
+        for stat_id, label, color in stat_labels:
+            card = tk.Frame(stats_frame, bg=CypherpunkTheme.BG_SECONDARY, padx=15, pady=8)
+            card.pack(side=tk.LEFT, padx=5, pady=5, fill=tk.X, expand=True)
+            tk.Label(card, text=label, bg=CypherpunkTheme.BG_SECONDARY,
+                    fg=CypherpunkTheme.TEXT_SECONDARY, font=("Consolas", 8)).pack()
+            var = tk.StringVar(value="0")
+            tk.Label(card, textvariable=var, bg=CypherpunkTheme.BG_SECONDARY,
+                    fg=color, font=("Consolas", 14, "bold")).pack()
+            self.exchange_stats[stat_id] = var
+        
+        # === NOTEBOOK INTERNE ===
+        exchange_notebook = ttk.Notebook(frame)
+        exchange_notebook.pack(fill=tk.BOTH, expand=True, padx=10, pady=(0, 10))
+        
+        # Tab: Marketplace
+        market_tab = self._create_marketplace_tab(exchange_notebook)
+        exchange_notebook.add(market_tab, text=" MARKETPLACE ")
+        
+        # Tab: Mes Items
+        my_items_tab = self._create_my_items_tab(exchange_notebook)
+        exchange_notebook.add(my_items_tab, text=" MY ITEMS ")
+        
+        # Tab: Mes Ventes
+        my_listings_tab = self._create_my_listings_tab(exchange_notebook)
+        exchange_notebook.add(my_listings_tab, text=" MY LISTINGS ")
+        
+        # Tab: Trades
+        trades_tab = self._create_trades_tab(exchange_notebook)
+        exchange_notebook.add(trades_tab, text=" TRADES ")
+        
+        # Charger les donnees
+        self._refresh_exchange()
+        
+        return frame
+    
+    def _create_marketplace_tab(self, parent) -> tk.Frame:
+        """Tab du marketplace avec les items en vente"""
+        frame = tk.Frame(parent, bg=CypherpunkTheme.BG_SECONDARY)
+        
+        # Filtres
+        filter_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_PANEL)
+        filter_frame.pack(fill=tk.X, padx=5, pady=5)
+        
+        tk.Label(filter_frame, text="Rarete:", bg=CypherpunkTheme.BG_PANEL,
+                fg=CypherpunkTheme.TEXT_SECONDARY).pack(side=tk.LEFT, padx=5)
+        
+        self.market_rarity_filter = tk.StringVar(value="ALL")
+        rarities = ["ALL", "primordial", "mythical", "legendary", "masterwork", "exquisite"]
+        ttk.Combobox(filter_frame, textvariable=self.market_rarity_filter,
+                    values=rarities, width=12).pack(side=tk.LEFT, padx=5)
+        
+        tk.Label(filter_frame, text="Max BTC:", bg=CypherpunkTheme.BG_PANEL,
+                fg=CypherpunkTheme.TEXT_SECONDARY).pack(side=tk.LEFT, padx=5)
+        
+        self.market_max_price = tk.StringVar(value="")
+        tk.Entry(filter_frame, textvariable=self.market_max_price, width=10,
+                bg=CypherpunkTheme.BG_SECONDARY, fg="white").pack(side=tk.LEFT, padx=5)
+        
+        tk.Button(filter_frame, text="FILTER", bg="#444444", fg="white",
+                 command=self._filter_marketplace).pack(side=tk.LEFT, padx=10)
+        
+        # Liste des items en vente
+        list_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_SECONDARY)
+        list_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        
+        # Treeview
+        columns = ('Rune ID', 'Type', 'Rarity', 'Power', 'Price BTC', 'Seller')
+        self.market_tree = ttk.Treeview(list_frame, columns=columns, show='headings', height=12)
+        
+        for col in columns:
+            self.market_tree.heading(col, text=col)
+            self.market_tree.column(col, width=100)
+        
+        scrollbar = ttk.Scrollbar(list_frame, orient=tk.VERTICAL, command=self.market_tree.yview)
+        self.market_tree.configure(yscrollcommand=scrollbar.set)
+        
+        self.market_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        # Boutons d'action
+        actions_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_PANEL, height=45)
+        actions_frame.pack(fill=tk.X, padx=5, pady=5)
+        actions_frame.pack_propagate(False)
+        
+        tk.Button(actions_frame, text="BUY SELECTED", bg="#f7931a", fg="black",
+                 font=("Consolas", 10, "bold"), command=self._buy_selected_item
+        ).pack(side=tk.LEFT, padx=10, pady=8)
+        
+        tk.Button(actions_frame, text="VIEW DETAILS", bg="#444444", fg="white",
+                 command=self._view_listing_details
+        ).pack(side=tk.LEFT, padx=5, pady=8)
+        
+        return frame
+    
+    def _create_my_items_tab(self, parent) -> tk.Frame:
+        """Tab des items du vault pouvant etre vendus"""
+        frame = tk.Frame(parent, bg=CypherpunkTheme.BG_SECONDARY)
+        
+        # Liste des items inscripts
+        list_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_SECONDARY)
+        list_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        
+        columns = ('Item ID', 'Rune ID', 'Type', 'Rarity', 'Power', 'Status')
+        self.my_items_tree = ttk.Treeview(list_frame, columns=columns, show='headings', height=12)
+        
+        for col in columns:
+            self.my_items_tree.heading(col, text=col)
+            self.my_items_tree.column(col, width=100)
+        
+        scrollbar = ttk.Scrollbar(list_frame, orient=tk.VERTICAL, command=self.my_items_tree.yview)
+        self.my_items_tree.configure(yscrollcommand=scrollbar.set)
+        
+        self.my_items_tree.pack(side=tk.LEFT, fill=tk.BOTH, expand=True)
+        scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        
+        # Actions
+        actions_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_PANEL, height=45)
+        actions_frame.pack(fill=tk.X, padx=5, pady=5)
+        actions_frame.pack_propagate(False)
+        
+        tk.Button(actions_frame, text="INSCRIBE ITEM", bg="#00ff00", fg="black",
+                 font=("Consolas", 10, "bold"), command=self._inscribe_item_dialog
+        ).pack(side=tk.LEFT, padx=10, pady=8)
+        
+        tk.Button(actions_frame, text="SELL SELECTED", bg="#f7931a", fg="black",
+                 font=("Consolas", 10, "bold"), command=self._sell_item_dialog
+        ).pack(side=tk.LEFT, padx=5, pady=8)
+        
+        tk.Button(actions_frame, text="TRANSFER", bg="#00ffff", fg="black",
+                 command=self._transfer_item_dialog
+        ).pack(side=tk.LEFT, padx=5, pady=8)
+        
+        return frame
+    
+    def _create_my_listings_tab(self, parent) -> tk.Frame:
+        """Tab des annonces actives du vault"""
+        frame = tk.Frame(parent, bg=CypherpunkTheme.BG_SECONDARY)
+        
+        list_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_SECONDARY)
+        list_frame.pack(fill=tk.BOTH, expand=True, padx=5, pady=5)
+        
+        columns = ('Listing ID', 'Rune ID', 'Type', 'Price BTC', 'Status', 'Created')
+        self.my_listings_tree = ttk.Treeview(list_frame, columns=columns, show='headings', height=10)
+        
+        for col in columns:
+            self.my_listings_tree.heading(col, text=col)
+            self.my_listings_tree.column(col, width=100)
+        
+        self.my_listings_tree.pack(fill=tk.BOTH, expand=True)
+        
+        # Actions
+        actions_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_PANEL, height=45)
+        actions_frame.pack(fill=tk.X, padx=5, pady=5)
+        actions_frame.pack_propagate(False)
+        
+        tk.Button(actions_frame, text="CANCEL LISTING", bg="#ff4444", fg="white",
+                 command=self._cancel_listing
+        ).pack(side=tk.LEFT, padx=10, pady=8)
+        
+        tk.Button(actions_frame, text="EDIT PRICE", bg="#444444", fg="white",
+                 command=self._edit_listing_price
+        ).pack(side=tk.LEFT, padx=5, pady=8)
+        
+        return frame
+    
+    def _create_trades_tab(self, parent) -> tk.Frame:
+        """Tab des offres d'echange"""
+        frame = tk.Frame(parent, bg=CypherpunkTheme.BG_SECONDARY)
+        
+        # Offres recues
+        tk.Label(frame, text="OFFRES RECUES", bg=CypherpunkTheme.BG_SECONDARY,
+                fg="#ffd700", font=("Consolas", 11, "bold")).pack(anchor=tk.W, padx=10, pady=5)
+        
+        received_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_SECONDARY)
+        received_frame.pack(fill=tk.X, padx=5, pady=5)
+        
+        columns = ('From Vault', 'Offered Items', 'Requested Items', 'Sats', 'Status')
+        self.received_trades_tree = ttk.Treeview(received_frame, columns=columns, show='headings', height=5)
+        
+        for col in columns:
+            self.received_trades_tree.heading(col, text=col)
+        
+        self.received_trades_tree.pack(fill=tk.X)
+        
+        # Boutons offres recues
+        tk.Button(frame, text="ACCEPT", bg="#00ff00", fg="black",
+                 command=self._accept_trade).pack(side=tk.LEFT, padx=10, pady=5)
+        tk.Button(frame, text="REJECT", bg="#ff4444", fg="white",
+                 command=self._reject_trade).pack(side=tk.LEFT, padx=5, pady=5)
+        
+        # Nouvelle offre
+        tk.Label(frame, text="CREER UNE OFFRE", bg=CypherpunkTheme.BG_SECONDARY,
+                fg="#00ffff", font=("Consolas", 11, "bold")).pack(anchor=tk.W, padx=10, pady=(20, 5))
+        
+        tk.Button(frame, text="NEW TRADE OFFER", bg="#aa00ff", fg="white",
+                 font=("Consolas", 10, "bold"), command=self._create_trade_dialog
+        ).pack(padx=10, pady=5)
+        
+        return frame
+    
+    def _refresh_exchange(self):
+        """Rafraichit les donnees de l'exchange"""
+        if not EXCHANGE_AVAILABLE:
+            return
+        
+        # Stats du marche
+        stats = self.exchange_manager.get_market_stats()
+        self.exchange_stats["active_listings"].set(str(stats.get("active_listings", 0)))
+        self.exchange_stats["total_volume_btc"].set(f"{stats.get('total_volume_btc', 0):.4f}")
+        
+        # Mes inscriptions
+        my_inscriptions = self.exchange_manager.get_vault_inscriptions(self.current_vault_num)
+        self.exchange_stats["my_inscriptions"].set(str(len(my_inscriptions)))
+        
+        # Mes listings actifs
+        my_listings = [l for l in self.exchange_manager.get_active_listings() 
+                      if l.seller_vault == self.current_vault_num]
+        self.exchange_stats["my_listings"].set(str(len(my_listings)))
+        
+        # Rafraichir les listes
+        self._refresh_marketplace()
+        self._refresh_my_items()
+        self._refresh_my_listings()
+        self._refresh_trades()
+    
+    def _refresh_marketplace(self):
+        """Rafraichit la liste du marketplace"""
+        for item in self.market_tree.get_children():
+            self.market_tree.delete(item)
+        
+        listings = self.exchange_manager.get_active_listings()
+        for listing in listings:
+            self.market_tree.insert('', tk.END, values=(
+                listing.rune_id,
+                listing.item_type,
+                listing.rarity.upper(),
+                f"{listing.stat_power:.0f}",
+                f"{listing.price_btc:.6f}",
+                f"V#{listing.seller_vault}"
+            ))
+    
+    def _refresh_my_items(self):
+        """Rafraichit la liste de mes items"""
+        for item in self.my_items_tree.get_children():
+            self.my_items_tree.delete(item)
+        
+        inscriptions = self.exchange_manager.get_vault_inscriptions(self.current_vault_num)
+        for insc in inscriptions:
+            self.my_items_tree.insert('', tk.END, values=(
+                insc.item_id[:12] + "...",
+                insc.rune_id,
+                insc.item_type,
+                insc.rarity.upper(),
+                f"{insc.stat_power:.0f}",
+                insc.status.upper()
+            ))
+    
+    def _refresh_my_listings(self):
+        """Rafraichit mes annonces"""
+        for item in self.my_listings_tree.get_children():
+            self.my_listings_tree.delete(item)
+        
+        listings = self.exchange_manager.get_active_listings()
+        for listing in listings:
+            if listing.seller_vault == self.current_vault_num:
+                self.my_listings_tree.insert('', tk.END, values=(
+                    listing.listing_id[:12] + "...",
+                    listing.rune_id,
+                    listing.item_type,
+                    f"{listing.price_btc:.6f}",
+                    listing.status.upper(),
+                    listing.created_at[:10]
+                ))
+    
+    def _refresh_trades(self):
+        """Rafraichit les offres de trade"""
+        for item in self.received_trades_tree.get_children():
+            self.received_trades_tree.delete(item)
+        
+        offers = self.exchange_manager.get_pending_offers_for_vault(self.current_vault_num)
+        for offer in offers:
+            self.received_trades_tree.insert('', tk.END, values=(
+                f"V#{offer.offerer_vault}",
+                f"{len(offer.offered_items)} items",
+                f"{len(offer.requested_items)} items",
+                f"+{offer.sats_offered}" if offer.sats_offered else "-",
+                offer.status.upper()
+            ))
+    
+    def _filter_marketplace(self):
+        """Filtre le marketplace"""
+        self._refresh_marketplace()
+    
+    def _buy_selected_item(self):
+        """Achete l'item selectionne"""
+        selection = self.market_tree.selection()
+        if not selection:
+            messagebox.showwarning("Attention", "Selectionnez un item")
+            return
+        
+        item = self.market_tree.item(selection[0])
+        rune_id = item['values'][0]
+        price_btc = item['values'][4]
+        
+        if messagebox.askyesno("Confirmer achat", 
+                               f"Acheter {rune_id} pour {price_btc} BTC?"):
+            messagebox.showinfo("Info", 
+                "Transaction Bitcoin requise.\n"
+                "Envoyez le paiement a l'adresse du vendeur\n"
+                "puis confirmez la transaction.")
+    
+    def _view_listing_details(self):
+        """Affiche les details d'une annonce"""
+        selection = self.market_tree.selection()
+        if not selection:
+            return
+        
+        item = self.market_tree.item(selection[0])
+        details = f"""
+RUNE ID: {item['values'][0]}
+TYPE: {item['values'][1]}
+RARITY: {item['values'][2]}
+POWER: {item['values'][3]}
+PRICE: {item['values'][4]} BTC
+SELLER: {item['values'][5]}
+        """
+        messagebox.showinfo("Details", details)
+    
+    def _inscribe_item_dialog(self):
+        """Dialog pour inscrire un nouvel item"""
+        # Charger les items non-inscrits
+        vault_items = self._load_vault_items(self.current_vault_num)
+        inscribed_ids = [i.item_id for i in 
+                        self.exchange_manager.get_vault_inscriptions(self.current_vault_num)]
+        
+        available = [i for i in vault_items if i.get('item_id') not in inscribed_ids]
+        
+        if not available:
+            messagebox.showinfo("Info", "Tous vos items sont deja inscrits")
+            return
+        
+        # Dialog simple
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Inscrire un Item")
+        dialog.geometry("500x400")
+        dialog.configure(bg=CypherpunkTheme.BG_DARK)
+        
+        tk.Label(dialog, text="Selectionnez un item a inscrire:",
+                bg=CypherpunkTheme.BG_DARK, fg="white").pack(pady=10)
+        
+        # Liste des items
+        listbox = tk.Listbox(dialog, bg=CypherpunkTheme.BG_SECONDARY, fg="white",
+                            height=10, width=60)
+        listbox.pack(padx=20, pady=10)
+        
+        for item in available[:20]:
+            listbox.insert(tk.END, 
+                f"[{item.get('rarity', 'common').upper()}] {item.get('item_type', '?')} - PWR:{item.get('stat_power', 0):.0f}")
+        
+        def do_inscribe():
+            sel = listbox.curselection()
+            if not sel:
+                return
+            
+            item_data = available[sel[0]]
+            inscription = self.exchange_manager.inscribe_item(
+                item_data, self.current_vault_num
+            )
+            messagebox.showinfo("Succes", 
+                f"Item inscrit!\nRune ID: {inscription.rune_id}")
+            dialog.destroy()
+            self._refresh_exchange()
+        
+        tk.Button(dialog, text="INSCRIRE", bg="#00ff00", fg="black",
+                 command=do_inscribe).pack(pady=20)
+    
+    def _sell_item_dialog(self):
+        """Dialog pour mettre en vente un item"""
+        selection = self.my_items_tree.selection()
+        if not selection:
+            messagebox.showwarning("Attention", "Selectionnez un item inscrit")
+            return
+        
+        item = self.my_items_tree.item(selection[0])
+        rune_id = item['values'][1]
+        
+        # Trouver l'inscription
+        inscriptions = self.exchange_manager.get_vault_inscriptions(self.current_vault_num)
+        inscription = next((i for i in inscriptions if i.rune_id == rune_id), None)
+        
+        if not inscription or inscription.status != "inscribed":
+            messagebox.showerror("Erreur", "Item non disponible pour la vente")
+            return
+        
+        # Dialog de prix
+        dialog = tk.Toplevel(self.root)
+        dialog.title("Mettre en Vente")
+        dialog.geometry("400x200")
+        dialog.configure(bg=CypherpunkTheme.BG_DARK)
+        
+        tk.Label(dialog, text=f"Vendre: {rune_id}",
+                bg=CypherpunkTheme.BG_DARK, fg="#f7931a",
+                font=("Consolas", 12, "bold")).pack(pady=10)
+        
+        tk.Label(dialog, text="Prix en satoshis:",
+                bg=CypherpunkTheme.BG_DARK, fg="white").pack()
+        
+        price_var = tk.StringVar(value="100000")
+        tk.Entry(dialog, textvariable=price_var, width=20,
+                bg=CypherpunkTheme.BG_SECONDARY, fg="white").pack(pady=5)
+        
+        def do_sell():
+            try:
+                price_sats = int(price_var.get())
+                listing = self.exchange_manager.create_listing(
+                    inscription.inscription_id, price_sats, self.current_vault_num
+                )
+                messagebox.showinfo("Succes", 
+                    f"Item en vente!\nPrix: {listing.price_btc:.6f} BTC")
+                dialog.destroy()
+                self._refresh_exchange()
+            except Exception as e:
+                messagebox.showerror("Erreur", str(e))
+        
+        tk.Button(dialog, text="METTRE EN VENTE", bg="#f7931a", fg="black",
+                 font=("Consolas", 10, "bold"), command=do_sell).pack(pady=20)
+    
+    def _transfer_item_dialog(self):
+        """Dialog pour transferer un item"""
+        messagebox.showinfo("Transfer", 
+            "Fonctionnalite en cours de developpement.\n"
+            "Les transferts necessitent une transaction Bitcoin.")
+    
+    def _cancel_listing(self):
+        """Annule une annonce"""
+        selection = self.my_listings_tree.selection()
+        if not selection:
+            return
+        
+        if messagebox.askyesno("Confirmer", "Annuler cette annonce?"):
+            # TODO: Implementer annulation
+            messagebox.showinfo("Info", "Annonce annulee")
+            self._refresh_exchange()
+    
+    def _edit_listing_price(self):
+        """Modifie le prix d'une annonce"""
+        messagebox.showinfo("Info", "Fonctionnalite en developpement")
+    
+    def _accept_trade(self):
+        """Accepte une offre de trade"""
+        messagebox.showinfo("Trade", 
+            "Accepter le trade necessite une transaction Bitcoin atomique.")
+    
+    def _reject_trade(self):
+        """Rejette une offre de trade"""
+        selection = self.received_trades_tree.selection()
+        if selection and messagebox.askyesno("Confirmer", "Rejeter cette offre?"):
+            messagebox.showinfo("Info", "Offre rejetee")
+            self._refresh_trades()
+    
+    def _create_trade_dialog(self):
+        """Dialog pour creer une offre de trade"""
+        messagebox.showinfo("Trade", 
+            "Creation d'offre de trade en developpement.\n"
+            "Permet d'echanger des items entre vaults.")
     
     def _create_blockchain_tab(self) -> tk.Frame:
         """Créer l'onglet Blockchain avec monitoring temps réel via Alchemy"""
