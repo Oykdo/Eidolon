@@ -46,6 +46,13 @@ from .avatar_generator import (
 from .avatar_tokenizer import AvatarTokenizer, AvatarToken
 from .avatar_manager import AvatarManager
 from .threejs_renderer import ThreeJSAvatarRenderer, render_avatar_threejs
+from .avatar_evolution import (
+    AvatarEvolutionSystem,
+    AvatarEvolutionState,
+    EvolutionStage,
+    EvolutionPath,
+    get_evolution_system,
+)
 
 __all__ = [
     # Classes principales
@@ -80,4 +87,10 @@ __all__ = [
     # Three.js Renderer
     'ThreeJSAvatarRenderer',
     'render_avatar_threejs',
+    # Evolution System
+    'AvatarEvolutionSystem',
+    'AvatarEvolutionState',
+    'EvolutionStage',
+    'EvolutionPath',
+    'get_evolution_system',
 ]
