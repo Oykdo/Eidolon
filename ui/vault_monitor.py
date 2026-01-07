@@ -459,10 +459,25 @@ class SecureVaultManager:
 class VaultMonitorGUI:
     """Interface graphique complète de monitoring du vault"""
     
-    def __init__(self, vault_key: bytes, vault_name: str):
+    def __init__(self, vault_key: bytes, vault_name: str, vault_number: int = None):
         self.vault_key = vault_key
         self.vault_name = vault_name
         self.vault_manager = SecureVaultManager(vault_key)
+        
+        # Get vault number from identity manager if not provided
+        if vault_number is None:
+            try:
+                from core.vault_identity import VaultIdentityManager
+                identity_mgr = VaultIdentityManager()
+                vault_identity = identity_mgr.get_vault_by_key(vault_key)
+                if vault_identity:
+                    vault_number = vault_identity.vault_number
+            except Exception:
+                pass
+        
+        # Store vault number (default to 1 if unknown)
+        self.current_vault_num = vault_number if vault_number else 1
+        self.current_vault_number = self.current_vault_num  # Alias
         
         # Initialiser le wallet si disponible
         if EVM_AVAILABLE:
@@ -2839,7 +2854,7 @@ class VaultMonitorGUI:
         
         # Initialiser le gestionnaire d'echange
         self.exchange_manager = ItemRunesExchange()
-        self.current_vault_num = 1  # TODO: Obtenir du contexte
+        # current_vault_num is now set in __init__
         
         # === HEADER ===
         header_frame = tk.Frame(frame, bg=CypherpunkTheme.BG_DARK)

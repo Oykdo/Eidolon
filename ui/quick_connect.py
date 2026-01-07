@@ -149,21 +149,34 @@ def get_input(prompt: str, hidden: bool = False) -> str:
 # =============================================================================
 # Main Functions
 # =============================================================================
-def launch_vault(vault_key: bytes, vault_name: str):
+def launch_vault(vault_key: bytes, vault_name: str, vault_number: int = None):
     """Launch the vault monitor"""
     try:
         from ui.vault_monitor import VaultMonitorGUI
+        
+        # Get vault number from identity manager if not provided
+        if vault_number is None:
+            try:
+                from core.vault_identity import VaultIdentityManager
+                identity_mgr = VaultIdentityManager()
+                vault_identity = identity_mgr.get_vault_by_key(vault_key)
+                if vault_identity:
+                    vault_number = vault_identity.vault_number
+            except Exception:
+                pass
         
         print()
         print_status("Initializing vault interface...", "wait")
         time.sleep(0.3)
         print_status(f"Vault: {Colors.GREEN}{vault_name}{Colors.RESET}", "ok")
+        if vault_number:
+            print_status(f"Number: {Colors.CYAN}#{vault_number}{Colors.RESET}", "ok")
         print_status(f"Key: {Colors.DIM}{vault_key.hex()[:16]}...{Colors.RESET}", "ok")
         print()
         print(f"    {Colors.DIM}Starting GUI...{Colors.RESET}")
         print()
         
-        monitor = VaultMonitorGUI(vault_key, vault_name)
+        monitor = VaultMonitorGUI(vault_key, vault_name, vault_number)
         monitor.run()
         
     except ImportError as e:
