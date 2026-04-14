@@ -1,14 +1,16 @@
 """Test du stockage sécurisé des clés - VULN-CRYPTO-06 FIX"""
 
-import sys
 import os
+import sys
 import secrets
 import tempfile
 import time
+from pathlib import Path
 
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
 
-from poly_spinor_nexus_7d.core.secure_key_storage import (
+from src.identity.secure_key_storage import (
     SecureKeyStorage,
     VaultKeyStorage,
     MemoryProtectedKey,

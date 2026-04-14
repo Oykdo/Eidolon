@@ -14,18 +14,17 @@ if _parent_dir not in sys.path:
 
 # Imports pour le type checking (pyright) - ignorés car sys.path est modifié dynamiquement
 if TYPE_CHECKING:
-    from core.material_database import PolyhedronMaterialDatabase, SurfaceMaterialDatabase, MaterialProperties  # type: ignore[import-not-found]
-    from core.physics_engine import PolyhedronPhysicsEngine, PolyhedronType  # type: ignore[import-not-found]
-    from core.material_fingerprint import MaterialFingerprintExtractor, CryptoVertexCalculator  # type: ignore[import-not-found]
-    from protocols.material_vault import MaterialBasedVaultSystem, AccessLevel, VaultAccessDenied  # type: ignore[import-not-found]
-    from core.material_simulation_pipeline import CompleteMaterialSimulationPipeline  # type: ignore[import-not-found]
+    from src.core.material_database import PolyhedronMaterialDatabase, SurfaceMaterialDatabase, MaterialProperties  # type: ignore[import-not-found]
+    from src.core.physics_engine import PolyhedronPhysicsEngine, PolyhedronType  # type: ignore[import-not-found]
+    from src.core.material_fingerprint import MaterialFingerprintExtractor, CryptoVertexCalculator  # type: ignore[import-not-found]
+    from src.core.material_simulation_pipeline import CompleteMaterialSimulationPipeline  # type: ignore[import-not-found]
 
 def test_material_database():
     print("\n" + "=" * 60)
     print("TEST 1: Base de données matériaux")
     print("=" * 60)
     
-    from core.material_database import (
+    from src.core.material_database import (
         PolyhedronMaterialDatabase, 
         SurfaceMaterialDatabase,
         MATERIAL_DB
@@ -49,11 +48,11 @@ def test_physics_engine():
     print("TEST 2: Moteur physique")
     print("=" * 60)
     
-    from core.physics_engine import (
+    from src.core.physics_engine import (
         PolyhedronPhysicsEngine,
         PolyhedronType
     )
-    from core.material_database import MATERIAL_DB
+    from src.core.material_database import MATERIAL_DB
     
     # Obtenir le tungsten
     tungsten = MATERIAL_DB.get_material('tungsten')
@@ -100,12 +99,12 @@ def test_fingerprint_extraction():
     print("TEST 3: Extraction empreinte matérielle")
     print("=" * 60)
     
-    from core.material_fingerprint import (
+    from src.core.material_fingerprint import (
         MaterialFingerprintExtractor,
         CryptoVertexCalculator
     )
-    from core.physics_engine import PolyhedronPhysicsEngine, PolyhedronType
-    from core.material_database import MATERIAL_DB
+    from src.core.physics_engine import PolyhedronPhysicsEngine, PolyhedronType
+    from src.core.material_database import MATERIAL_DB
     
     # Faire quelques simulations
     materials = ['tungsten', 'ebony', 'acrylic']
@@ -146,13 +145,13 @@ def test_vault_system():
     print("TEST 4: Système de vault matériel")
     print("=" * 60)
     
-    from protocols.material_vault import (
+    from src.protocols.material_vault import (
         MaterialBasedVaultSystem,
         AccessLevel,
         VaultAccessDenied
     )
-    from core.physics_engine import PolyhedronPhysicsEngine, PolyhedronType
-    from core.material_database import MATERIAL_DB
+    from src.core.physics_engine import PolyhedronPhysicsEngine, PolyhedronType
+    from src.core.material_database import MATERIAL_DB
     
     # Simuler les lancers pour l'enregistrement
     def run_simulations():
@@ -201,7 +200,7 @@ def test_complete_pipeline():
     print("TEST 5: Pipeline complet")
     print("=" * 60)
     
-    from core.material_simulation_pipeline import (
+    from src.core.material_simulation_pipeline import (
         CompleteMaterialSimulationPipeline,
         create_sample_user_config
     )

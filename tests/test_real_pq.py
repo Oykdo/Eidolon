@@ -1,10 +1,12 @@
 """Test des implémentations post-quantiques réelles"""
 
 import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+from pathlib import Path
 
-from poly_spinor_nexus_7d.core.real_post_quantum import (
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+
+from src.crypto.real_post_quantum import (
     HybridPQCryptoSystem, 
     RealMcElieceKEM,
     RealHQCKEM,

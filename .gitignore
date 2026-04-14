@@ -171,8 +171,31 @@ site/
 scratch/
 tmp/
 
+# Diagnostic and test outputs
+diag_*.txt
+test_*.txt
+error_out.txt
+vault1_redist.txt
+*.err.log
+*.out.log
+
+# Runtime data directories
+holotest/
+hsm_data/
+backups/
+
 node_modules/
 vault_storage/
+
+# New data directory structure (replaces vault_storage)
+data/vaults/
+data/items/
+data/avatars/
+data/genesis/
+data/blockchain/
+data/lairs/
+!data/.gitkeep
+!data/vaults/.gitkeep
 
 
 # -----------------------------------------------------------------------------

@@ -4,11 +4,11 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "poly-spinor-nexus-7d"
-version = "1.0.0"
 description = "Système de vault sécurisé avec cryptographie post-quantique et monitoring blockchain"
 readme = "README.md"
 license = {text = "MIT"}
 requires-python = ">=3.9"
+dynamic = ["version"]
 authors = [
     {name = "Poly-Spinor Team", email = "contact@polyspinor.io"}
 ]
@@ -88,6 +88,9 @@ Issues = "https://github.com/polyspinor/nexus-7d/issues"
 packages = ["core", "protocols", "ui", "utils", "vault_storage", "config", "scripts"]
 package-dir = {"" = "."}
 
+[tool.setuptools.dynamic]
+version = {attr = "src.__version__"}
+
 [tool.setuptools.package-data]
 config = ["*.json"]
 vault_storage = ["*.py"]
@@ -134,7 +137,7 @@ exclude = [
 
 [tool.pytest.ini_options]
 minversion = "7.0"
-addopts = "-ra -q --cov=core --cov=protocols --cov=ui --cov-report=term-missing"
+addopts = "-ra -q"
 testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
@@ -142,7 +145,7 @@ python_functions = ["test_*"]
 asyncio_mode = "auto"
 
 [tool.coverage.run]
-source = ["core", "protocols", "ui", "utils"]
+source = ["src/core", "src/ui", "src/utils"]
 omit = ["*/tests/*", "*/__pycache__/*"]
 branch = true
 

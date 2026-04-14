@@ -1,15 +1,17 @@
 """Test du générateur aléatoire sécurisé - VULN-CRYPTO-03 FIX"""
 
 import sys
-import os
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))))
+from pathlib import Path
 
-from poly_spinor_nexus_7d.core.material_simulation_pipeline import (
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+
+from src.game.material_simulation_pipeline import (
     SecureRandomGenerator,
     MaterialBasedInitialConditions
 )
-from poly_spinor_nexus_7d.core.material_database import MATERIAL_DB
-from poly_spinor_nexus_7d.core.physics_engine import PolyhedronType
+from src.game.material_database import MATERIAL_DB
+from src.game.physics_engine import PolyhedronType
 
 
 def test_secure_rng_determinism():
