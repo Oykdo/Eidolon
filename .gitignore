@@ -199,6 +199,21 @@ data/lairs/
 
 
 # -----------------------------------------------------------------------------
+# CORE SOURCE CODE - PROPRIETARY & SECURITY CRITICAL
+# Pipeline cryptographique holographique, identite vault, economie de jeu
+# NE JAMAIS EXPOSER - contient les algorithmes de generation de cles
+# -----------------------------------------------------------------------------
+src/crypto/
+src/identity/
+src/game/
+src/blockchain/
+src/core/
+src/api/
+src/ui/
+src/utils/
+src/_dormant/
+
+# -----------------------------------------------------------------------------
 # ADMIN SCRIPTS - SECURITY CRITICAL
 # Contient les algorithmes RNG, seeds et mecaniques de distribution
 # Ne pas exposer pour eviter la triche sur la generation des items/avatars
