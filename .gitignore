@@ -162,6 +162,7 @@ site/
 *.md
 !README.md
 !LICENSE.md
+!CLAUDE.md
 
 # -----------------------------------------------------------------------------
 # Local development
