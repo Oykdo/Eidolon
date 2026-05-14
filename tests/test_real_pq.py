@@ -30,7 +30,6 @@ def test_mceliece():
     decap_secret = mc.decapsulate(encap.ciphertext, keypair.secret_key)
     assert decap_secret == encap.shared_secret, 'McEliece KEM FAILED!'
     print('[OK] McEliece KEM')
-    return True
 
 def test_hqc():
     print('\n--- Test HQC KEM ---')
@@ -43,7 +42,6 @@ def test_hqc():
     
     assert decap == encap.shared_secret, 'HQC KEM FAILED!'
     print('[OK] HQC KEM')
-    return True
 
 def test_mldsa():
     print('\n--- Test ML-DSA (Dilithium) ---')
@@ -68,7 +66,6 @@ def test_mldsa():
         print('Modified message rejected (exception)')
     
     print('[OK] ML-DSA Signature')
-    return True
 
 def test_falcon():
     print('\n--- Test Falcon ---')
@@ -83,7 +80,6 @@ def test_falcon():
     valid = falcon.verify(message, sig.signature)
     assert valid, 'Falcon verification FAILED!'
     print('[OK] Falcon Signature')
-    return True
 
 def test_sphincs():
     print('\n--- Test SPHINCS+ ---')
@@ -98,7 +94,6 @@ def test_sphincs():
     valid = sphincs.verify(message, sig.signature)
     assert valid, 'SPHINCS+ verification FAILED!'
     print('[OK] SPHINCS+ Signature')
-    return True
 
 def test_hybrid():
     print('\n--- Test Hybrid System ---')
@@ -137,7 +132,6 @@ def test_hybrid():
     assert all_valid, 'Dual signature FAILED!'
     print(f'[OK] Dual Signature: {results}')
     
-    return True
 
 def main():
     print('=== TEST REAL POST-QUANTUM CRYPTO ===')

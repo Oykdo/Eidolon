@@ -16,7 +16,7 @@ def test_secure_memory():
     """Test du module secure_memory"""
     print("\n[TEST] Secure Memory...")
     
-    from core.secure_memory import SecureBuffer, SecureZeroMethod
+    from src.identity.secure_memory import SecureBuffer, SecureZeroMethod
     
     # Test creation
     with SecureBuffer(32) as buf:
@@ -33,14 +33,13 @@ def test_secure_memory():
         assert read_after_rotate == secret, "Rotation a corrompu les donnees"
     
     print("  [OK] SecureBuffer fonctionne")
-    return True
 
 
 def test_authenticated_files():
     """Test du module authenticated_files"""
     print("\n[TEST] Authenticated Files...")
     
-    from core.authenticated_files import AuthenticatedFileFormat, AuthenticationError
+    from src.crypto.authenticated_files import AuthenticatedFileFormat, AuthenticationError
     
     auth_key = secrets.token_bytes(32)
     aff = AuthenticatedFileFormat(auth_key)
@@ -66,14 +65,13 @@ def test_authenticated_files():
         pass  # Attendu
     
     print("  [OK] Authentification HMAC fonctionne")
-    return True
 
 
 def test_quantum_entropy():
     """Test du module quantum_entropy"""
     print("\n[TEST] Quantum Entropy...")
     
-    from core.quantum_entropy import HybridEntropyPool, EntropyQuality
+    from src.crypto.quantum_entropy import HybridEntropyPool, EntropyQuality
     
     pool = HybridEntropyPool(
         use_quantum=False,  # Skip API calls for test
@@ -89,14 +87,13 @@ def test_quantum_entropy():
     assert report['sources_used'] >= 1
     
     print(f"  [OK] Entropie collectee: {report['total_bits']} bits")
-    return True
 
 
 def test_secret_sharing():
     """Test du module secret_sharing (Shamir)"""
     print("\n[TEST] Secret Sharing (Shamir)...")
     
-    from core.secret_sharing import ShamirSecretSharing
+    from src.crypto.secret_sharing import ShamirSecretSharing
     
     secret = secrets.token_bytes(32)
     
@@ -115,14 +112,13 @@ def test_secret_sharing():
     assert recovered2 == secret, "Reconstruction echouee avec parts differentes"
     
     print("  [OK] Shamir 3/5 fonctionne")
-    return True
 
 
 def test_constant_time():
     """Test du module constant_time"""
     print("\n[TEST] Constant Time Operations...")
     
-    from core.constant_time import constant_time_compare, constant_time_select
+    from src.crypto.constant_time import constant_time_compare, constant_time_select
     
     a = b"test_value_1234567890"
     b_same = b"test_value_1234567890"
@@ -140,14 +136,13 @@ def test_constant_time():
     assert result == b_diff
     
     print("  [OK] Operations constant-time fonctionnent")
-    return True
 
 
 def test_zkp_auth():
     """Test du module zkp_auth"""
     print("\n[TEST] Zero-Knowledge Proofs...")
     
-    from core.zkp_auth import VaultZKPAuth
+    from src.crypto.zkp_auth import VaultZKPAuth
     
     vault_key = secrets.token_bytes(32)
     
@@ -168,14 +163,13 @@ def test_zkp_auth():
     assert not valid2, "Devrait echouer avec mauvais challenge"
     
     print("  [OK] ZKP fonctionne")
-    return True
 
 
 def test_security_suite_integration():
     """Test de la suite integree"""
     print("\n[TEST] Security Suite Integration...")
     
-    from core.security_suite import SecureVaultManager, SecurityConfig
+    from src.crypto.security_suite import SecureVaultManager, SecurityConfig
     
     config = SecurityConfig(
         use_quantum_entropy=False,  # Skip API for test
@@ -228,7 +222,6 @@ def test_security_suite_integration():
     manager.secure_wipe_key()
     print("  [OK] Secure wipe")
     
-    return True
 
 
 def run_all_tests():

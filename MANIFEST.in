@@ -1,79 +1,45 @@
-# =============================================================================
-# Eidolon - MANIFEST.in
-# =============================================================================
+# MANIFEST.in - Control what goes into distribution
+# IMPORTANT: Excludes proprietary/protected code
 
-# Documentation
-include LICENSE
+# Include essential files
 include README.md
-include CHANGELOG.md
-include CONTRIBUTING.md
-
-# Configuration files
+include LICENSE
 include pyproject.toml
-include setup.cfg
-include requirements.txt
-include requirements-dev.txt
 
-# Config directory
-recursive-include config *.json
-recursive-include config *.yaml
-recursive-include config *.yml
+# Include config
+recursive-include config *.json *.yaml *.yml
 
-# Docker files
-include Dockerfile
-include Dockerfile.backup
-include docker-compose.yml
-include .dockerignore
-recursive-include docker *.yml
-recursive-include docker *.yaml
-recursive-include docker *.sh
+# Include only PUBLIC source modules
+recursive-include src/daemon *.py
+recursive-include src/identity *.py
+recursive-include src/api *.py
+recursive-include src/ui *.py
+recursive-include src/utils *.py
 
-# Package data
-recursive-include core *.py
-recursive-include protocols *.py
-recursive-include ui *.py
-recursive-include utils *.py
-recursive-include scripts *.py
-recursive-include vault_storage *.py
+# EXCLUDE PROTECTED MODULES - These require Rust eidolon_crypto module
+prune src/crypto
+prune src/core
+prune src/holo
+prune src/game
+prune src/blockchain
+prune src/_dormant
 
-# Tests
-recursive-include tests *.py
-recursive-include tests *.json
-
-# Static files
-recursive-include static *.css
-recursive-include static *.js
-recursive-include static *.html
-recursive-include static *.png
-recursive-include static *.ico
-
-# Templates
-recursive-include templates *.html
-recursive-include templates *.jinja2
-
-# Exclude unwanted files
-global-exclude __pycache__
-global-exclude *.py[cod]
-global-exclude *.so
-global-exclude *.dylib
-global-exclude .DS_Store
-global-exclude Thumbs.db
-global-exclude *.log
-global-exclude *.tmp
-global-exclude *.bak
-global-exclude .git*
-global-exclude .env
-global-exclude .env.*
-global-exclude *.psnx
-global-exclude *.blend_data
-global-exclude *.enc
-
-# Exclude build artifacts
+# Exclude build/test artifacts
+prune tests
+prune docs
+prune rust
+prune contracts
+prune backups
+prune data
+prune deployments
 prune build
 prune dist
 prune *.egg-info
-prune .pytest_cache
-prune .mypy_cache
-prune .tox
-prune htmlcov
-prune __pycache__
+
+# Exclude sensitive files
+global-exclude *.psnx
+global-exclude *.blend_data
+global-exclude *.pyc
+global-exclude __pycache__
+global-exclude .git*
+global-exclude .env*

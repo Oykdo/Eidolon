@@ -7,7 +7,7 @@ name = "psnx-sdk"
 version = "1.0.0"
 description = "Eidolon SDK for Python"
 readme = "README.md"
-license = {text = "MIT"}
+license = {text = "Proprietary"}
 authors = [
     {name = "Poly-Spinor Team"}
 ]
@@ -15,7 +15,7 @@ keywords = ["cryptography", "vault", "zkp", "zero-knowledge", "security", "encry
 classifiers = [
     "Development Status :: 4 - Beta",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: MIT License",
+    "License :: Other/Proprietary License",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",

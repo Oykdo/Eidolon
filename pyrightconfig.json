@@ -1,25 +1,29 @@
 {
-    "include": [
-        "."
-    ],
-    "exclude": [
-        "**/__pycache__",
-        "**/node_modules",
-        "**/.venv",
-        "**/venv"
-    ],
-    "extraPaths": [
-        "."
-    ],
-    "pythonVersion": "3.10",
-    "typeCheckingMode": "basic",
-    "reportMissingImports": "warning",
-    "reportMissingModuleSource": "warning",
-    "reportOptionalMemberAccess": "warning",
-    "reportOptionalSubscript": "warning",
-    "reportOptionalCall": "warning",
-    "reportOptionalIterable": "warning",
-    "reportOptionalContextManager": "warning",
-    "reportOptionalOperand": "warning",
-    "reportPossiblyUnboundVariable": "warning"
+  "include": [
+    "core",
+    "ui",
+    "config",
+    "scripts",
+    "tools",
+    "api"
+  ],
+  "exclude": [
+    "**/__pycache__",
+    "**/node_modules",
+    "**/.git",
+    "venv",
+    ".venv"
+  ],
+  "extraPaths": [
+    "."
+  ],
+  "pythonVersion": "3.10",
+  "pythonPlatform": "Windows",
+  "typeCheckingMode": "basic",
+  "reportMissingImports": "warning",
+  "reportMissingModuleSource": "none",
+  "reportOptionalMemberAccess": "warning",
+  "reportPossiblyUnboundVariable": "warning",
+  "reportAttributeAccessIssue": "none",
+  "useLibraryCodeForTypes": true
 }

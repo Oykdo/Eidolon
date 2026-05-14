@@ -57,7 +57,7 @@ async function runTests() {
     const kp = await keyGen.generateKeyPair();
     return (
       kp.vaultKey.length === 32 &&
-      kp.fingerprint.length === 16 &&
+      kp.fingerprint.length === 64 &&
       kp.entropyBits === 256 &&
       kp.publicKey > 0n
     );

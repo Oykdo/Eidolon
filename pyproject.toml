@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "poly-spinor-nexus-7d"
 description = "Système de vault sécurisé avec cryptographie post-quantique et monitoring blockchain"
 readme = "README.md"
-license = {text = "MIT"}
+license = {text = "Proprietary"}
 requires-python = ">=3.9"
 dynamic = ["version"]
 authors = [
@@ -22,7 +22,7 @@ classifiers = [
     "Environment :: X11 Applications :: Qt",
     "Intended Audience :: Developers",
     "Intended Audience :: Financial and Insurance Industry",
-    "License :: OSI Approved :: MIT License",
+    "License :: Other/Proprietary License",
     "Operating System :: OS Independent",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.9",
@@ -40,6 +40,8 @@ dependencies = [
     "eth-account>=0.10.0",
     "requests>=2.31.0",
     "pillow>=10.0.0",
+    "customtkinter>=5.2.0",
+    "pydantic>=2.0.0",
 ]
 
 [project.optional-dependencies]
@@ -71,12 +73,13 @@ docs = [
 ]
 
 [project.scripts]
-vault-monitor = "ui.vault_monitor:main"
-vault-launcher = "scripts.vault_launcher:main"
-vault-cli = "scripts.vault_launcher:cli_interactive"
+eidolon = "src.ui.launcher:main"
+eidolon-api = "src.api.server:run_server"
+eidolon-launcher = "src.ui.launcher:main"
+eidolond = "src.daemon.cli:main"
 
 [project.gui-scripts]
-vault-gui = "ui.vault_monitor:main"
+eidolon-gui = "src.ui.launcher:main"
 
 [project.urls]
 Homepage = "https://github.com/polyspinor/nexus-7d"
@@ -85,15 +88,31 @@ Repository = "https://github.com/polyspinor/nexus-7d.git"
 Issues = "https://github.com/polyspinor/nexus-7d/issues"
 
 [tool.setuptools]
-packages = ["core", "protocols", "ui", "utils", "vault_storage", "config", "scripts"]
-package-dir = {"" = "."}
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = [
+    "src",
+    "src.daemon",
+    "src.daemon.*",
+    "src.identity", 
+    "src.identity.*",
+    "src.api",
+    "src.api.*",
+    "src.ui",
+    "src.ui.*",
+    "src.utils",
+    "src.utils.*",
+    "config",
+    "config.*",
+]
 
 [tool.setuptools.dynamic]
 version = {attr = "src.__version__"}
 
 [tool.setuptools.package-data]
-config = ["*.json"]
-vault_storage = ["*.py"]
+config = ["*.json", "*.yaml", "*.yml"]
 
 [tool.black]
 line-length = 100
@@ -137,15 +156,17 @@ exclude = [
 
 [tool.pytest.ini_options]
 minversion = "7.0"
-addopts = "-ra -q"
+addopts = "-ra -q --ignore=tests/_dormant"
 testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
 python_functions = ["test_*"]
-asyncio_mode = "auto"
+filterwarnings = [
+    "ignore::DeprecationWarning:websockets.legacy",
+]
 
 [tool.coverage.run]
-source = ["src/core", "src/ui", "src/utils"]
+source = ["src"]
 omit = ["*/tests/*", "*/__pycache__/*"]
 branch = true
 

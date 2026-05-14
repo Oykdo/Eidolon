@@ -6,5 +6,6 @@
     "python.analysis.diagnosticSeverityOverrides": {
         "reportMissingImports": "warning",
         "reportMissingModuleSource": "warning"
-    }
+    },
+    "kiroAgent.configureMCP": "Disabled"
 }

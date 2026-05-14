@@ -46,6 +46,7 @@ export class KeyGenerator {
   private extraEntropy: Uint8Array;
   
   static readonly KEY_SIZE = 32;
+  static readonly FINGERPRINT_HEX_LEN = 64;
   
   constructor(extraEntropy?: Uint8Array) {
     this.extraEntropy = extraEntropy ?? new Uint8Array(0);
@@ -143,7 +144,7 @@ export class KeyGenerator {
     
     // Fingerprint
     const hash = await sha256(vaultKey);
-    const fingerprint = bytesToHex(hash).slice(0, 16);
+    const fingerprint = bytesToHex(hash).slice(0, KeyGenerator.FINGERPRINT_HEX_LEN);
     
     return {
       vaultKey,

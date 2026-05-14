@@ -42,10 +42,20 @@ ENV/
 # Vault cryptographic keys (NEVER COMMIT)
 *.psnx
 *.blend_data
+*.blend
+*.blend1
+*.eidolon_keybundle
+*.keybundle
 *.vault_key
 *.master_key
 *.private_key
 *.secret_key
+*.private-key
+*.secret-key
+*.seed
+*.mnemonic
+*seed_phrase*
+*mnemonic*
 
 # Encrypted vault data
 vault_storage/data/
@@ -76,6 +86,7 @@ vault_storage/avatars/*.jpg
 
 # Wallet and blockchain keys
 **/wallet_*.json
+*wallet*.json
 **/keystore/
 *.keystore
 
@@ -157,12 +168,8 @@ docs/_build/
 site/
 
 # -----------------------------------------------------------------------------
-# Documentation files (private - security docs)
-# -----------------------------------------------------------------------------
-*.md
-!README.md
-!LICENSE.md
-!CLAUDE.md
+# Documentation source is tracked by default. Put private notes under scratch/
+# or another ignored local directory instead of relying on broad Markdown rules.
 
 # -----------------------------------------------------------------------------
 # Local development
@@ -184,39 +191,119 @@ vault1_redist.txt
 holotest/
 hsm_data/
 backups/
+alchemical_vault/
+genesis_spheres/
+runes_vesting/
+vault_incubation/
+_recovery_from_prod/
 
 node_modules/
 vault_storage/
 
 # New data directory structure (replaces vault_storage)
+data/api/
+data/connect/
+data/registrations/
 data/vaults/
 data/items/
 data/avatars/
+data/cipher_activity/
+data/daemon/
+data/realms/
 data/genesis/
 data/blockchain/
 data/lairs/
 !data/.gitkeep
 !data/vaults/.gitkeep
 
+# -----------------------------------------------------------------------------
+# Contract / frontend build artifacts
+# -----------------------------------------------------------------------------
+contracts/artifacts/
+contracts/artifacts_*/
+contracts/cache/
+contracts/cache_*/
+contracts/typechain/
+contracts/coverage/
+contracts/.env
+contracts/.env.*
+!contracts/.env.example
 
 # -----------------------------------------------------------------------------
-# CORE SOURCE CODE - PROPRIETARY & SECURITY CRITICAL
-# Pipeline cryptographique holographique, identite vault, economie de jeu
-# NE JAMAIS EXPOSER - contient les algorithmes de generation de cles
+# Proprietary / security-critical source code
 # -----------------------------------------------------------------------------
+# Cryptographic key-generation pipeline and vault internals.
 src/crypto/
 src/identity/
+src/core/
+
+# Proprietary holographic/economy/blockchain subsystems.
+src/holo/
 src/game/
 src/blockchain/
-src/core/
+
+# Internal application layers and dormant experiments.
 src/api/
 src/ui/
 src/utils/
 src/_dormant/
 
-# -----------------------------------------------------------------------------
-# ADMIN SCRIPTS - SECURITY CRITICAL
-# Contient les algorithmes RNG, seeds et mecaniques de distribution
-# Ne pas exposer pour eviter la triche sur la generation des items/avatars
-# -----------------------------------------------------------------------------
+# Native cryptographic implementation.
+/rust/
+
+# Sensitive scripts: key generation, migration, admin, and test-vector tooling.
 scripts/
+
+# SDK key-generation / crypto mirrors.
+sdk/**/keygen.*
+sdk/**/crypto.*
+sdk/**/vault.*
+
+# -----------------------------------------------------------------------------
+# Local IDE / agent configuration
+# -----------------------------------------------------------------------------
+.claude/
+
+# -----------------------------------------------------------------------------
+# Internal documents (NEVER PUBLISH)
+# Entire docs/ tree is kept private — business plans, security audits,
+# deployment notes, whitepapers, and internal references all live here.
+# -----------------------------------------------------------------------------
+PHASE2_ROADMAP.md
+docs/
+
+# -----------------------------------------------------------------------------
+# Deployment scripts and infrastructure configs
+# Contains VPS IPs, internal ports, HMAC secrets, nginx/systemd configs.
+# NEVER PUBLISH.
+# -----------------------------------------------------------------------------
+deploy/
+__pycache__/
+*.pyc
+
+# -----------------------------------------------------------------------------
+# Incubator (legacy subsystem from earlier prototype, not shipped publicly)
+# -----------------------------------------------------------------------------
+config/incubator_config.py
+*incubator*
+*incubation*
+
+# -----------------------------------------------------------------------------
+# Local user override config (may contain real API keys, RPC tokens, etc.)
+# -----------------------------------------------------------------------------
+config/user_config.json
+
+# -----------------------------------------------------------------------------
+# Windows entry-point batch scripts that depend on protected src/ui/ code
+# -----------------------------------------------------------------------------
+realms.bat
+realms_shell.bat
+launcher.bat
+
+# -----------------------------------------------------------------------------
+# Smart contracts and deployment artifacts.
+# Kept private until mainnet deploy + audit; will be unlocked alongside the
+# verified Etherscan source + audit report at v1.0 contract release.
+# -----------------------------------------------------------------------------
+contracts/
+deployments/

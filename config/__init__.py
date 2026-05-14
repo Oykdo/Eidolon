@@ -61,7 +61,13 @@ class ConfigLoader:
                 "transfers": {"default_delay_days": 30}
             },
             "chains": {},
-            "storage": {"vault_directory": "vault_storage/persistent"},
+            "storage": {
+                "vault_directory": "data/vaults/persistent",
+                "documents_directory": "data/vaults/documents",
+                "keys_directory": "data/vaults/keys",
+                "backups_directory": "data/vaults/backups",
+                "logs_directory": "data/vaults/logs"
+            },
             "ui": {"theme": "dark", "language": "fr"}
         }
     
@@ -157,7 +163,14 @@ def get_chain_rpc(chain_name: str) -> Optional[str]:
 def get_storage_path(path_type: str = 'vault_directory') -> Path:
     """Obtenir un chemin de stockage"""
     base = Path(__file__).parent.parent
-    relative_path = config.get('storage', path_type, default='vault_storage')
+    default_paths = {
+        'vault_directory': 'data/vaults/persistent',
+        'documents_directory': 'data/vaults/documents',
+        'keys_directory': 'data/vaults/keys',
+        'backups_directory': 'data/vaults/backups',
+        'logs_directory': 'data/vaults/logs',
+    }
+    relative_path = config.get('storage', path_type, default=default_paths.get(path_type, 'data/vaults'))
     return base / relative_path
 
 

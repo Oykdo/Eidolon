@@ -52,6 +52,7 @@ class KeyGenerator:
     """
     
     KEY_SIZE = 32
+    FINGERPRINT_HEX_LEN = 64
     SCRYPT_N = 2**17
     SCRYPT_R = 8
     SCRYPT_P = 1
@@ -182,7 +183,7 @@ class KeyGenerator:
         return KeyPair(
             vault_key=vault_key,
             public_key=public_key,
-            fingerprint=hashlib.sha256(vault_key).hexdigest()[:16],
+            fingerprint=hashlib.sha256(vault_key).hexdigest()[:self.FINGERPRINT_HEX_LEN],
             entropy_bits=256
         )
     

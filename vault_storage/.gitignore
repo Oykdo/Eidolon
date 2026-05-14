@@ -1,8 +1,0 @@
-# Ignorer toutes les clés chiffrées et sels
-*.enc
-*.salt
-*.key
-
-# Garder le fichier __init__.py
-!__init__.py
-!.gitignore

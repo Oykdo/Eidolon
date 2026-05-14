@@ -37,7 +37,6 @@ def test_calculate_real_entropy():
     print("  [OK] With PQ: 768 bits")
 
     print("  Resultat: PASS")
-    return True
 
 
 def test_complete_key_data_fields():
@@ -54,7 +53,6 @@ def test_complete_key_data_fields():
     print("  [OK] All three entropy fields present in dataclass")
 
     print("  Resultat: PASS")
-    return True
 
 
 def test_to_dict_from_bytes_roundtrip():
@@ -145,7 +143,6 @@ def test_to_dict_from_bytes_roundtrip():
     print("  [OK] Backward compat: old format correctly defaults")
 
     print("  Resultat: PASS")
-    return True
 
 
 def test_backward_compat_alias():
@@ -160,13 +157,12 @@ def test_backward_compat_alias():
     print("  [OK] total_entropy_bits = computational_complexity_bits (by design)")
 
     print("  Resultat: PASS")
-    return True
 
 
 def test_threejs_renderer_dual_metrics():
     """Test that ThreeJSAvatarRenderer has dual entropy attributes."""
     print("\n=== TEST 5: ThreeJS renderer dual metrics ===")
-    from src.game.avatar_system.threejs_renderer import ThreeJSAvatarRenderer
+    from src.holo.avatar_system.threejs_renderer import ThreeJSAvatarRenderer
 
     avatar_data = {
         'avatar_id': 'test_' + secrets.token_hex(16),
@@ -197,7 +193,6 @@ def test_threejs_renderer_dual_metrics():
     print(f"  [OK] total_entropy_bits = computational_complexity_bits")
 
     print("  Resultat: PASS")
-    return True
 
 
 def test_protected_core_entry():
@@ -212,7 +207,6 @@ def test_protected_core_entry():
     print("  [OK] key_strength updated with dual metrics")
 
     print("  Resultat: PASS")
-    return True
 
 
 def test_fingerprint_256bit_in_codebase():
@@ -233,7 +227,6 @@ def test_fingerprint_256bit_in_codebase():
     print(f"  [OK] Sample fingerprint: {fp[:32]}... (64 hex = 256 bits)")
 
     print("  Resultat: PASS")
-    return True
 
 
 def test_merkle_includes_entropy():
@@ -248,7 +241,6 @@ def test_merkle_includes_entropy():
     print("  [OK] min_entropy_bits included in Merkle root calculation")
 
     print("  Resultat: PASS")
-    return True
 
 
 def main():

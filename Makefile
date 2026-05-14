@@ -2,7 +2,7 @@
 # Eidolon - Makefile
 # =============================================================================
 
-.PHONY: help install install-dev test lint format clean docker-build docker-up docker-down
+.PHONY: help install install-dev test lint format clean docker-build docker-up docker-down test-rust-bridge test-rust-native test-rust-hardening build-rust-wheel install-rust-wheel verify-rust-native check-release-consistency
 
 # Default target
 help:
@@ -11,6 +11,13 @@ help:
 	@echo "  install        Install production dependencies"
 	@echo "  install-dev    Install development dependencies"
 	@echo "  test           Run tests"
+	@echo "  test-rust-bridge  Run Python contract checks for the Rust migration"
+	@echo "  test-rust-native  Run Rust crate tests"
+	@echo "  test-rust-hardening  Run the Rust migration hardening checks"
+	@echo "  build-rust-wheel  Build the native eidolon_crypto wheel"
+	@echo "  install-rust-wheel  Install the freshly built native wheel"
+	@echo "  verify-rust-native  Verify Python sees the native bridge"
+	@echo "  check-release-consistency  Verify Python/Rust release metadata policy"
 	@echo "  lint           Run linters"
 	@echo "  format         Format code"
 	@echo "  clean          Clean build artifacts"
@@ -43,17 +50,52 @@ test-fast:
 test-unit:
 	pytest tests/test_*.py -v --ignore=tests/integration/
 
+test-rust-bridge:
+	python -m unittest \
+		tests.test_rust_crypto_bridge \
+		tests.test_registration_server_contract \
+		tests.test_server_security_contract \
+		tests.test_api_server_contract \
+		tests.test_avatar_transfer_contract \
+		tests.test_key_revocation_contract \
+		tests.test_avatar_visualization_contract \
+		tests.test_avatar_merkle_tree_contract \
+		tests.test_evm_wallet_contract \
+		tests.test_bitcoin_wallet_contract \
+		tests.test_real_post_quantum_contract \
+		tests.test_persistent_vault_contract \
+		tests.test_alchemy_integration_contract \
+		tests.test_universal_physical_fingerprint_contract \
+		tests.test_post_quantum_keys_contract
+
+test-rust-native:
+	cd rust && cargo test -p eidolon_crypto
+
+test-rust-hardening: test-rust-bridge test-rust-native
+
+build-rust-wheel:
+	maturin build --manifest-path rust/crates/eidolon_crypto/Cargo.toml --release --interpreter python
+
+install-rust-wheel:
+	pip install --force-reinstall rust/target/wheels/eidolon_crypto-*.whl
+
+verify-rust-native:
+	python -c "from src.crypto.rust_crypto import is_rust_crypto_available; assert is_rust_crypto_available(), 'native bridge unavailable'; print('native bridge ok')"
+
+check-release-consistency:
+	python scripts/check_release_consistency.py
+
 # -----------------------------------------------------------------------------
 # Code Quality
 # -----------------------------------------------------------------------------
 lint:
-	flake8 core/ protocols/ ui/ utils/
-	mypy core/ protocols/ ui/ utils/
-	bandit -r core/ protocols/ -ll
+	flake8 src/ config/ scripts/
+	mypy src/ config/
+	bandit -r src/ -ll
 
 format:
-	black core/ protocols/ ui/ utils/ scripts/
-	isort core/ protocols/ ui/ utils/ scripts/
+	black src/ config/ scripts/
+	isort src/ config/ scripts/
 
 check: lint test
 
@@ -93,16 +135,16 @@ docker-dev:
 # Application
 # -----------------------------------------------------------------------------
 gui:
-	python launch_vault_monitor.py --gui
+	python src/ui/launcher.py
 
 cli:
-	python scripts/vault_launcher.py cli --vault main_vault --password
+	python src/ui/launcher.py
 
 daemon:
-	python scripts/vault_launcher.py daemon --vault main_vault --interval 60
+	python -m src.api.server
 
 setup:
-	python scripts/vault_launcher.py setup
+	python src/ui/launcher.py
 
 # -----------------------------------------------------------------------------
 # Build & Release

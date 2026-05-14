@@ -286,4 +286,4 @@ cd sdk/go && go test ./...
 
 ## License
 
-MIT License - voir [LICENSE](../LICENSE)
+Proprietary commercial license - see [LICENSE](../LICENSE)

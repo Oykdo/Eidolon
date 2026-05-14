@@ -8,6 +8,8 @@ use sha2::{Digest, Sha256};
 use crate::{Error, Result};
 use crate::zkp::ZKP_PARAMS;
 
+const FINGERPRINT_HEX_LEN: usize = 64;
+
 /// Key pair with vault key and ZKP public key
 #[derive(Debug, Clone)]
 pub struct KeyPair {
@@ -117,12 +119,12 @@ impl KeyGenerator {
         let public_key = ZKP_PARAMS.g.modpow(&x, &ZKP_PARAMS.p);
         
         // Fingerprint
-        let fingerprint = hex::encode(&Sha256::digest(&vault_key)[..8]);
-        
+        let fingerprint = hex::encode(Sha256::digest(&vault_key));
+
         KeyPair {
             vault_key,
             public_key,
-            fingerprint,
+            fingerprint: fingerprint[..FINGERPRINT_HEX_LEN].to_string(),
             entropy_bits: 256,
         }
     }

@@ -6,12 +6,12 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
-from src.game.material_simulation_pipeline import (
+from src.holo.material_simulation_pipeline import (
     SecureRandomGenerator,
     MaterialBasedInitialConditions
 )
-from src.game.material_database import MATERIAL_DB
-from src.game.physics_engine import PolyhedronType
+from src.holo.material_database import MATERIAL_DB
+from src.holo.physics_engine import PolyhedronType
 
 
 def test_secure_rng_determinism():
@@ -31,7 +31,6 @@ def test_secure_rng_determinism():
     print(f"RNG2 value: {val2}")
     assert val1 == val2, "Déterminisme échoué!"
     print("[OK] Déterminisme vérifié")
-    return True
 
 
 def test_secure_rng_uniqueness():
@@ -48,7 +47,6 @@ def test_secure_rng_uniqueness():
     print(f"Seed2 value: {val2}")
     assert val1 != val2, "Seeds différentes devraient produire valeurs différentes!"
     print("[OK] Unicité vérifiée")
-    return True
 
 
 def test_secure_rng_context_isolation():
@@ -65,7 +63,6 @@ def test_secure_rng_context_isolation():
     print(f"Context B: {val2}")
     assert val1 != val2, "Contextes différents devraient produire valeurs différentes!"
     print("[OK] Isolation de contexte vérifiée")
-    return True
 
 
 def test_material_initial_conditions_reproducibility():
@@ -92,7 +89,6 @@ def test_material_initial_conditions_reproducibility():
     assert all(params1.orientation == params2.orientation), "Orientation non reproductible!"
     
     print("[OK] MaterialBasedInitialConditions reproductible")
-    return True
 
 
 def test_from_user_secret():
@@ -118,7 +114,6 @@ def test_from_user_secret():
     assert val1 != val3, "Sels différents devraient produire valeurs différentes!"
     
     print("[OK] from_user_secret fonctionne")
-    return True
 
 
 def test_crypto_quality():
@@ -142,7 +137,6 @@ def test_crypto_quality():
     assert len(seed_hex) == 64, "Master seed devrait être 32 bytes (64 hex chars)"
     
     print("[OK] Qualité crypto basique vérifiée")
-    return True
 
 
 def main():

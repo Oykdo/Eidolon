@@ -45,7 +45,6 @@ def test_memory_protected_key():
     print("[OK] Effacement sécurisé exécuté")
     
     print("[OK] MemoryProtectedKey fonctionne")
-    return True
 
 
 def test_key_derivation():
@@ -77,7 +76,6 @@ def test_key_derivation():
     assert len(subkey) == 32, "Sous-clé devrait être 32 bytes!"
     
     print("[OK] SecureKeyDerivation fonctionne")
-    return True
 
 
 def test_secure_key_storage_memory():
@@ -122,7 +120,6 @@ def test_secure_key_storage_memory():
     storage.secure_clear_all()
     
     print("[OK] SecureKeyStorage (mémoire) fonctionne")
-    return True
 
 
 def test_key_expiration():
@@ -158,7 +155,6 @@ def test_key_expiration():
     storage.secure_clear_all()
     
     print("[OK] Expiration fonctionne")
-    return True
 
 
 def test_persistent_storage():
@@ -208,7 +204,6 @@ def test_persistent_storage():
         storage2.secure_clear_all()
     
     print("[OK] Stockage persistant fonctionne")
-    return True
 
 
 def test_vault_key_storage():
@@ -250,7 +245,6 @@ def test_vault_key_storage():
         storage.secure_clear_all()
     
     print("[OK] VaultKeyStorage fonctionne")
-    return True
 
 
 def test_key_not_found():
@@ -266,7 +260,6 @@ def test_key_not_found():
         print("[OK] KeyNotFoundError levée correctement")
     
     storage.secure_clear_all()
-    return True
 
 
 def main():

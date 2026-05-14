@@ -86,11 +86,11 @@
     }
   },
   "storage": {
-    "vault_directory": "vault_storage/persistent",
-    "documents_directory": "vault_storage/documents",
-    "keys_directory": "vault_storage/keys",
-    "backups_directory": "vault_storage/backups",
-    "logs_directory": "vault_storage/logs",
+    "vault_directory": "data/vaults/persistent",
+    "documents_directory": "data/vaults/documents",
+    "keys_directory": "data/vaults/keys",
+    "backups_directory": "data/vaults/backups",
+    "logs_directory": "data/vaults/logs",
     "max_document_size_mb": 100,
     "max_vault_size_gb": 10,
     "encryption_algorithm": "AES-256-GCM",

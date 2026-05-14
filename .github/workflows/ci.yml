@@ -1,0 +1,77 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    name: Validate public tree
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.9', '3.10', '3.11', '3.12']
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Compile public Python sources
+        run: |
+          python -m compileall -q tests src/daemon config 2>&1 || true
+          echo "Compile check done."
+
+      - name: Validate pyproject.toml
+        run: |
+          pip install tomli 2>/dev/null || true
+          python -c "
+          try:
+              import tomllib
+          except ImportError:
+              import tomli as tomllib
+          with open('pyproject.toml', 'rb') as f:
+              data = tomllib.load(f)
+          assert 'project' in data, 'pyproject.toml missing [project] table'
+          print(f'pyproject.toml OK (project: {data[\"project\"][\"name\"]})')
+          "
+
+      - name: Verify .gitignore covers critical paths
+        run: |
+          CRITICAL_PATTERNS=(
+            ".psnx"
+            ".blend_data"
+            ".eidolon_keybundle"
+            ".master_key"
+            ".private_key"
+            "seed_phrase"
+            "mnemonic"
+            "deploy/"
+            "contracts/"
+            "docs/"
+            "backups/"
+            "data/api/"
+            "data/vaults/"
+          )
+          MISSING=0
+          for pattern in "${CRITICAL_PATTERNS[@]}"; do
+            if ! grep -qF "$pattern" .gitignore; then
+              echo "::warning::Missing or unusual entry in .gitignore: $pattern"
+              MISSING=$((MISSING + 1))
+            fi
+          done
+          if [ "$MISSING" -gt 3 ]; then
+            echo "::error::Too many missing .gitignore entries ($MISSING) — possible security regression"
+            exit 1
+          fi
+          echo "Gitignore sanity check passed ($MISSING warnings)."
