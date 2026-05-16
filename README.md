@@ -6,10 +6,19 @@
 ![Rust](https://img.shields.io/badge/rust-native-orange?style=flat-square)
 ![Python](https://img.shields.io/badge/python-3.9+-yellow?style=flat-square)
 ![License](https://img.shields.io/badge/license-Proprietary-red?style=flat-square)
+![Release](https://img.shields.io/badge/release-v1.0.0-blue?style=flat-square)
 
 **Post-quantum cryptographic vault with holographic key derivation**
 
 Powers identity and resonance for [Cipher](https://github.com/Oykdo/cipher) — the secure post-quantum messaging client.
+
+---
+
+### ⬇️ Download Eidolon
+
+[![Download Windows x64](https://img.shields.io/badge/⬇_Download-Eidolon_v1.0.0_Windows_x64-2ea44f?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Oykdo/Eidolon/releases/download/v1.0.0/eidolon.exe)
+
+---
 
 [Distribution Model](#distribution-model) • [Quick Start](#quick-start) • [Features](#features) • [Cipher Integration](#cipher-integration-sustainable-ecosystem)
 
