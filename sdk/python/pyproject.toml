@@ -4,12 +4,12 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "psnx-sdk"
-version = "1.0.0"
+version = "1.1.0"
 description = "Eidolon SDK for Python"
 readme = "README.md"
 license = {text = "Proprietary"}
 authors = [
-    {name = "Poly-Spinor Team"}
+    {name = "Logos Project"}
 ]
 keywords = ["cryptography", "vault", "zkp", "zero-knowledge", "security", "encryption", "web3", "blockchain"]
 classifiers = [

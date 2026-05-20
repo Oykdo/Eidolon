@@ -196,7 +196,10 @@ Spheres are distributed to the first 10,000 vaults with guaranteed minimum rarit
 | Founder | #101–1000 | 3 | 1 Epic |
 | Pioneer | #1001–10000 | 2 | RNG-weighted |
 
-**Total ≈ 21,186 spheres** with Fibonacci-weighted rarity distribution.
+**14,237 unique sphere templates** on disk (9 Primordial, 64 Genesis, 192 Mythic,
+1,152 Legendary, 1,440 Epic, 2,160 Rare, 3,600 Uncommon, 5,620 Common), distributed
+as **≈ 21,186 instances** across the first 10,000 vaults with Fibonacci-weighted
+rarity assignment (templates can be reused across vaults via instance IDs).
 
 ---
 
@@ -342,7 +345,7 @@ deployment credentials.
 
 **Eidolon Proprietary Commercial License**
 
-Copyright (c) 2024–2026 Poly-Spinor Team. All rights reserved.
+Copyright (c) 2024–2026 Logos Project. All rights reserved.
 
 This software is proprietary. No permission is granted to use, copy, modify, distribute, sublicense, or sell the Software without prior written commercial license.
 

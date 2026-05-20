@@ -2,7 +2,7 @@
 name = "psnx-sdk"
 version = "1.0.0"
 edition = "2021"
-authors = ["Poly-Spinor Team"]
+authors = ["Logos Project"]
 description = "Eidolon SDK for Rust"
 publish = false
 license-file = "../../LICENSE"

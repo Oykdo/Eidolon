@@ -25,7 +25,7 @@ Usage:
 """
 
 __version__ = "1.0.0"
-__author__ = "Poly-Spinor Team"
+__author__ = "Logos Project"
 
 from .client import PSNXClient
 from .vault import Vault, EncryptedData

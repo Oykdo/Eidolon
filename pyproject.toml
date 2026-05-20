@@ -10,7 +10,7 @@ license = {text = "Proprietary"}
 requires-python = ">=3.9"
 dynamic = ["version"]
 authors = [
-    {name = "Poly-Spinor Team", email = "contact@polyspinor.io"}
+    {name = "Logos Project", email = "contact@polyspinor.io"}
 ]
 keywords = [
     "vault", "cryptocurrency", "nft", "blockchain", "security",

@@ -430,7 +430,7 @@ def main():
         prog='eidolond',
         description='Eidolon Daemon - Post-Quantum Vault System',
     )
-    parser.add_argument('--version', action='version', version='eidolond 1.0.0')
+    parser.add_argument('--version', action='version', version='eidolond 1.1.0')
     
     subparsers = parser.add_subparsers(dest='command', help='Commands')
     
