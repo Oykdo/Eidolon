@@ -30,7 +30,7 @@
   "license": "UNLICENSED",
   "repository": {
     "type": "git",
-    "url": "https://github.com/poly-spinor/nexus-7d"
+    "url": "https://github.com/Oykdo/Eidolon"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",

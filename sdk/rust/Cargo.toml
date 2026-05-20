@@ -6,7 +6,7 @@ authors = ["Logos Project"]
 description = "Eidolon SDK for Rust"
 publish = false
 license-file = "../../LICENSE"
-repository = "https://github.com/poly-spinor/nexus-7d"
+repository = "https://github.com/Oykdo/Eidolon"
 keywords = ["cryptography", "vault", "zkp", "security", "encryption"]
 categories = ["cryptography", "authentication"]
 

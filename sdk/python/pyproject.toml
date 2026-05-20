@@ -46,9 +46,9 @@ all = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/poly-spinor/nexus-7d"
-Documentation = "https://docs.poly-spinor.io"
-Repository = "https://github.com/poly-spinor/nexus-7d"
+Homepage = "https://github.com/Oykdo/Eidolon"
+Documentation = "https://github.com/Oykdo/Eidolon#readme"
+Repository = "https://github.com/Oykdo/Eidolon"
 
 [tool.setuptools.packages.find]
 where = ["."]

@@ -29,7 +29,7 @@ jobs:
 
       - name: Compile public Python sources
         run: |
-          python -m compileall -q tests src/daemon config 2>&1 || true
+          python -m compileall -q tests src/daemon config 2>&1
           echo "Compile check done."
 
       - name: Validate pyproject.toml
@@ -70,8 +70,8 @@ jobs:
               MISSING=$((MISSING + 1))
             fi
           done
-          if [ "$MISSING" -gt 3 ]; then
-            echo "::error::Too many missing .gitignore entries ($MISSING) — possible security regression"
+          if [ "$MISSING" -gt 0 ]; then
+            echo "::error::Missing .gitignore entries ($MISSING) — possible security regression"
             exit 1
           fi
           echo "Gitignore sanity check passed ($MISSING warnings)."
