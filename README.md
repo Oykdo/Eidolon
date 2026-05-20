@@ -6,7 +6,7 @@
 ![Rust](https://img.shields.io/badge/rust-native-orange?style=flat-square)
 ![Python](https://img.shields.io/badge/python-3.9+-yellow?style=flat-square)
 ![License](https://img.shields.io/badge/license-Proprietary-red?style=flat-square)
-![Release](https://img.shields.io/badge/release-v1.0.0-blue?style=flat-square)
+![Release](https://img.shields.io/badge/release-v1.1.0-blue?style=flat-square)
 
 **Post-quantum cryptographic vault with holographic key derivation**
 
@@ -14,9 +14,12 @@ Powers identity and resonance for [Cipher](https://github.com/Oykdo/cipher) — 
 
 ---
 
-### ⬇️ Download Eidolon
+### ⬇️ Download Eidolon v1.1.0
 
-[![Download Windows x64](https://img.shields.io/badge/⬇_Download-Eidolon_v1.0.0_Windows_x64-2ea44f?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Oykdo/Eidolon/releases/download/v1.0.0/eidolon.exe)
+[![Download Windows x64](https://img.shields.io/badge/⬇_Download-Windows_x64-2ea44f?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Oykdo/Eidolon/releases/download/v1.1.0/Eidolon.exe)
+[![Download Linux x64](https://img.shields.io/badge/⬇_Download-Linux_x64-2ea44f?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/Oykdo/Eidolon/releases/download/v1.1.0/Eidolon-1.1.0-linux-x64.tar.gz)
+
+<sub>Or grab the [full release page](https://github.com/Oykdo/Eidolon/releases/tag/v1.1.0) with archives + `SHA256SUMS`.</sub>
 
 ---
 
