@@ -79,7 +79,9 @@ The `.blend_data` file is masked by a temporal seed. A copy made at `t_0` cannot
 
 Vaults are bound to a specific machine via a hash of hardware identifiers. This prevents trivial file-copy attacks between machines, but legitimate migration is supported via the vault migration protocol (`src/protocols/vault_migration/`): the user exports an encrypted archive (`.eidolon_keybundle_full`) from the source machine using the vault key, then imports it on the target machine. The import re-binds the vault to the new hardware. A user who simply copies both files to a new machine **without** using the migration protocol will fail authentication.
 
-**If the original machine is lost** but the user has both vault files (.psnx + .blend_data) accessible from a backup and knows the vault key or master seed, they can still import the vault on a new machine. The machine lock is not a recovery obstacle — it is an anti-copy safeguard that the migration protocol explicitly bypasses. The actual risk is losing the files or the seed, not losing the hardware.
+**If the original machine is lost** but the user has both vault files (.psnx + .blend_data) accessible from a backup, they can still import the vault on a new machine via the migration protocol. The machine lock is not a recovery obstacle — it is an anti-copy safeguard that the migration protocol explicitly bypasses. The actual risk is losing the files, not losing the hardware.
+
+**Critical note:** possession of both `.psnx` and `.blend_data` files is sufficient to reconstruct the vault key. There is no additional passphrase or user-memorized secret required in the current design. Anyone who obtains both files has full access to the vault. The machine lock prevents cross-machine use of copied files, but does not prevent a determined attacker who also has access to the migration protocol. This makes secure storage of both files the single most important user responsibility.
 
 ### 5.4 Entropy source quality
 
