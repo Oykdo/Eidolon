@@ -263,6 +263,7 @@ sdk/**/vault.*
 # Local IDE / agent configuration
 # -----------------------------------------------------------------------------
 .claude/
+CLAUDE.md
 
 # -----------------------------------------------------------------------------
 # Internal documents (NEVER PUBLISH)
@@ -270,7 +271,11 @@ sdk/**/vault.*
 # deployment notes, whitepapers, and internal references all live here.
 # -----------------------------------------------------------------------------
 PHASE2_ROADMAP.md
-docs/
+docs/*
+!docs/FORMAL_SPEC.md
+!docs/THREAT_MODEL.md
+!docs/TEST_VECTORS.json
+!docs/REPRODUCIBLE_BUILDS.md
 
 # -----------------------------------------------------------------------------
 # Deployment scripts and infrastructure configs

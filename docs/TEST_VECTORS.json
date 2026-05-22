@@ -1,0 +1,43 @@
+[
+  {
+    "operation": "aes_gcm_roundtrip",
+    "key_sha256": "66687aadf862bd776c8fc18b8e9f8e20089714856ee233b3902a591d0d5f2925",
+    "nonce_sha256": "15ec7bf0b50732b49f8228e07d24365338f9e3ab994b00af08e5a3bffe55fd8b",
+    "plaintext_hex": "4569646f6c6f6e207465737420766563746f72",
+    "ciphertext_len": 47,
+    "roundtrip_ok": true
+  },
+  {
+    "operation": "shamir_split_reconstruct",
+    "secret_sha256": "ae216c2ef5247a3782c135efa279a3e4cdc61094270f5d2be58c6204b7a612c9",
+    "threshold": 3,
+    "total_shares": 5,
+    "shares_used_indices": [
+      1,
+      3,
+      5
+    ],
+    "reconstructed_sha256": "ae216c2ef5247a3782c135efa279a3e4cdc61094270f5d2be58c6204b7a612c9",
+    "roundtrip_ok": true
+  },
+  {
+    "operation": "zkp_scalar_from_secret",
+    "input_sha256": "a0150efa5280ccd948a76ead71cfe8d653442d7281a7092eff38c23085dd5cc9",
+    "scalar_hex_prefix": "0xfb0efaaf0a60b2a321446de90a5edb17",
+    "public_key_hex_prefix": "0xe5560cddbc52a14719c45230ecb65189"
+  },
+  {
+    "operation": "pipeline_generate",
+    "seed_material": "TestVector",
+    "pq_enabled": true,
+    "material": "granite",
+    "key_id": "616f30df2d99fa73",
+    "merkle_root": "fe9244729f28e1b298b6ea99c207bba928278058867b9cb1171bce46ca40758d",
+    "min_entropy_bits": 512,
+    "computational_complexity_bits": 9436,
+    "psnx_bytes_len": 5375,
+    "vault_key_sha256": "cd89aa9a5bd34a09fb40f3d4914aa20bb52253cd9b70efea402f2a0b8ef9a201",
+    "pq_kem_pubkey_sha256": "d02410ff8afd57cf836f0feb618d3d6cf07d613e622ffc4ef70629db5db7a802",
+    "pq_sig_pubkey_sha256": "490b1c0975ec825f37d7a638c5356c75aeeaaef91e1e54c62b2887c7374adc9b"
+  }
+]
