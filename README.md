@@ -16,8 +16,8 @@ Powers identity and resonance for [Cipher](https://github.com/Oykdo/cipher) — 
 
 ### ⬇️ Download Eidolon v1.1.1
 
-[![Download Windows x64](https://img.shields.io/badge/⬇_Download-Windows_x64-2ea44f?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Oykdo/Eidolon/releases/download/v1.1.1/Eidolon.exe)
-[![Download Linux x64](https://img.shields.io/badge/⬇_Download-Linux_x64-2ea44f?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/Oykdo/Eidolon/releases/download/v1.1.1/Eidolon-1.1.1-linux-x64.tar.gz)
+[![Download Windows x64](https://img.shields.io/badge/⬇_Download-Windows_x64-2ea44f?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Oykdo/Eidolon/releases/download/v1.1.1/E[...]
+[![Download Linux x64](https://img.shields.io/badge/⬇_Download-Linux_x64-2ea44f?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/Oykdo/Eidolon/releases/download/v1.1.1/Eidolon[...]
 
 <sub>Or grab the [full release page](https://github.com/Oykdo/Eidolon/releases/tag/v1.1.1) with archives + `SHA256SUMS`.</sub>
 
@@ -36,9 +36,9 @@ Eidolon ships as **two layers**:
 | Layer | What | Where |
 |---|---|---|
 | **Public** (this repo) | Integration tests, Python examples, daemon CLI source, build tooling, public API contracts, whitepapers (research). | `github.com/Oykdo/Eidolon` |
-| **Proprietary** (compiled wheel) | Holographic key-generation pipeline, post-quantum primitives, Merkle / ecosystem registry, ZKP modules. | Distributed as the `eidolon-crypto` native wheel; source kept private. |
+| **Proprietary** (compiled wheel) | Holographic key-generation pipeline, post-quantum primitives, Merkle / ecosystem registry, ZKP modules. | Distributed as the `eidolon-crypto` native wheel; sou[...]
 
-This dual-layer model lets integrators audit the public API surface and validate it against the shipped test suite, while protecting the cryptographic IP that makes Eidolon's pipeline distinct. The native wheel exposes a stable Python API (`import eidolon_crypto`) — no proprietary Python source is required.
+This dual-layer model lets integrators audit the public API surface and validate it against the shipped test suite, while protecting the cryptographic IP that makes Eidolon's pipeline distinct. Th[...]
 
 ---
 
@@ -199,10 +199,10 @@ Spheres are distributed to the first 10,000 vaults with guaranteed minimum rarit
 | Founder | #101–1000 | 3 | 1 Epic |
 | Pioneer | #1001–10000 | 2 | RNG-weighted |
 
-**14,237 unique sphere templates** on disk (9 Primordial, 64 Genesis, 192 Mythic,
-1,152 Legendary, 1,440 Epic, 2,160 Rare, 3,600 Uncommon, 5,620 Common), distributed
-as **≈ 21,186 instances** across the first 10,000 vaults with Fibonacci-weighted
-rarity assignment (templates can be reused across vaults via instance IDs).
+**21,186 unique sphere templates** across the first 10,000 vaults — one per instance, with
+Fibonacci-weighted rarity assignment distributed as: 9 Primordial, 64 Genesis, 192 Mythic,
+1,152 Legendary, 1,440 Epic, 2,160 Rare, 3,600 Uncommon, 5,620 Common (templates reusable
+across vaults via instance IDs).
 
 ---
 
