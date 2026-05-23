@@ -16,8 +16,10 @@ Powers identity and resonance for [Cipher](https://github.com/Oykdo/cipher) — 
 
 ### ⬇️ Download Eidolon v1.1.1
 
-[![Download Windows x64](https://img.shields.io/badge/⬇_Download-Windows_x64-2ea44f?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Oykdo/Eidolon/releases/download/v1.1.1/E[...]
-[![Download Linux x64](https://img.shields.io/badge/⬇_Download-Linux_x64-2ea44f?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/Oykdo/Eidolon/releases/download/v1.1.1/Eidolon[...]
+| Platform | Download |
+|----------|----------|
+| **Windows x64** | [![Windows](https://img.shields.io/badge/⬇_Download-Windows_x64-2ea44f?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Oykdo/Eidolon/releases/download/v1.1.1/Eidolon-v1.1.1-windows-x64.exe) |
+| **Linux x64** | [![Linux](https://img.shields.io/badge/⬇_Download-Linux_x64-2ea44f?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/Oykdo/Eidolon/releases/download/v1.1.1/Eidolon-v1.1.1-linux-x64) |
 
 <sub>Or grab the [full release page](https://github.com/Oykdo/Eidolon/releases/tag/v1.1.1) with archives + `SHA256SUMS`.</sub>
 
