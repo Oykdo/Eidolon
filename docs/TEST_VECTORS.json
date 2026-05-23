@@ -31,13 +31,30 @@
     "seed_material": "TestVector",
     "pq_enabled": true,
     "material": "granite",
-    "key_id": "616f30df2d99fa73",
-    "merkle_root": "fe9244729f28e1b298b6ea99c207bba928278058867b9cb1171bce46ca40758d",
+    "key_id": "66800e1969405e45",
+    "merkle_root": "f3b2215e132d878f611acc9512ca68fd91146c841622665f3b62d473c3d263ee",
     "min_entropy_bits": 512,
     "computational_complexity_bits": 9436,
-    "psnx_bytes_len": 5375,
-    "vault_key_sha256": "cd89aa9a5bd34a09fb40f3d4914aa20bb52253cd9b70efea402f2a0b8ef9a201",
-    "pq_kem_pubkey_sha256": "d02410ff8afd57cf836f0feb618d3d6cf07d613e622ffc4ef70629db5db7a802",
-    "pq_sig_pubkey_sha256": "490b1c0975ec825f37d7a638c5356c75aeeaaef91e1e54c62b2887c7374adc9b"
+    "psnx_bytes_len": 23980,
+    "vault_key_sha256": "ab4586180b8608758fa72b94d748abf2441df5da2921ab36ab3662166949889d",
+    "pq_kem_pubkey_sha256": "fdb0f4809ec5b0bfeafa99d5ff1db5fddf2d560993e5b551f5b76f04f61d4b6a",
+    "pq_sig_pubkey_sha256": "7319c6380c514a915b4f3a16a37df91f649a8b5a8c311536768e394e7d790959"
+  },
+  {
+    "operation": "pipeline_phase_hashes",
+    "seed_material": "TestVector",
+    "pq_enabled": true,
+    "material": "granite",
+    "phase_hashes": {
+      "phase1_master_seed": "99d1c0f43e2148c1350db543766a5f673d2139c87bfefe7ff1e4cafcd0bf0116",
+      "phase2_spatial": "b063539d0b19a365d840ae224fc42c393ee9ff58a1782fb93028e9024c91c2e3",
+      "phase3_physics": "4f61fb9edf353e91ab185596ea8201733b80a8641fa878324d10be77d8519e7e",
+      "phase4_spinor": "15cb3150339973812d8192796bec7889a538b957dafadfd26eba7b85cfeae51d",
+      "phase5_bell": "8b1193f407d14cd847d17faf0fa45e8d12408827e0a48c41f341b9743ea02634",
+      "phase6_composite_hash": "abade4f7c070ee390de22dcc1e99ddab084d9553601aff97013534f244eb03699dedddd024db01015aff516f8e9f6972601d2cc3009bc79584552bb0b52c441b",
+      "phase8_vault_key": "05908be98d0aa44b2cf02ceef4975e9933b30df5a1c4006b8db8b41a8b0ac093",
+      "phase7_pq_hash": "f16aa059c3e3212ecd4c8caf618aca8bd2f15ec38188cde196c8b12cbc068372",
+      "phase9_merkle_root": "18285b1bc68da33fddac6dfaf97e900be1f9b6bc24c6f87cb3395bb45e42a7ec"
+    }
   }
 ]

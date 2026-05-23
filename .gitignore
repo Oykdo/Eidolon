@@ -264,6 +264,9 @@ sdk/**/vault.*
 # -----------------------------------------------------------------------------
 .claude/
 CLAUDE.md
+# GPG signing keys (private key MUST stay local)
+gpg-batch.cfg
+EIDOLON_SIGNING.asc
 
 # -----------------------------------------------------------------------------
 # Internal documents (NEVER PUBLISH)

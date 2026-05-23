@@ -1,0 +1,20 @@
+# Eidolon - Locked Dependencies (reproducible builds)
+# Generated: 2026-05-22
+# DO NOT EDIT MANUALLY - regenerate with: pip freeze > requirements-lock.txt
+
+aiohttp==3.13.3
+cryptography==46.0.3
+customtkinter==5.2.2
+eidolon-crypto==0.1.0
+eth-account==0.13.7
+eth-typing==5.2.1
+eth-utils==5.3.1
+maturin==1.12.6
+numpy==1.26.4
+pillow==12.1.1
+pyinstaller==6.20.0
+pyinstaller-hooks-contrib==2026.5
+python-dateutil==2.9.0.post0
+requests==2.33.0
+urllib3==2.6.3
+web3==7.14.0

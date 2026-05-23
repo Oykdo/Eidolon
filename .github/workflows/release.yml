@@ -1,0 +1,134 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-linux:
+    name: Build & Sign Linux
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install build dependencies
+        run: |
+          pip install -r requirements-lock.txt 2>/dev/null || pip install pyinstaller maturin
+          pip install dist-linux/eidolon_crypto-*-manylinux*.whl 2>/dev/null || true
+
+      - name: Build with PyInstaller (deterministic)
+        env:
+          PYTHONHASHSEED: 0
+          SOURCE_DATE_EPOCH: 0
+        run: |
+          pyinstaller --noconfirm --noupx \
+            --exclude-module pytest \
+            --exclude-module pytest_cov \
+            eidolon.spec || echo "PyInstaller spec not found - skip"
+
+      - name: Package release artifacts
+        run: |
+          mkdir -p release-out
+          # Include the wheel if present
+          cp dist-linux/*.whl release-out/ 2>/dev/null || true
+          # Include the binary if built
+          cp -r build-linux/* release-out/ 2>/dev/null || true
+          # Generate SHA256SUMS
+          cd release-out
+          sha256sum * > SHA256SUMS
+
+      - name: Import GPG signing key
+        run: |
+          echo "${{ secrets.GPG_SIGNING_KEY }}" | gpg --import --batch
+
+      - name: GPG sign artifacts
+        run: |
+          cd release-out
+          for f in *; do
+            [ "$f" = "SHA256SUMS" ] && continue
+            gpg --armor --detach-sign --batch --yes \
+              --default-key "${{ secrets.GPG_SIGNING_FINGERPRINT }}" \
+              "$f"
+          done
+          # Sign the checksums file too
+          gpg --armor --detach-sign --batch --yes \
+            --default-key "${{ secrets.GPG_SIGNING_FINGERPRINT }}" \
+            SHA256SUMS
+
+      - name: Upload release artifacts
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-out/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-windows:
+    name: Build & Sign Windows
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install build dependencies
+        run: |
+          pip install -r requirements-lock.txt 2>$null
+          pip install pyinstaller maturin
+          $whl = Get-ChildItem -Path dist -Filter "eidolon_crypto-*-win_amd64.whl" -ErrorAction SilentlyContinue
+          if ($whl) { pip install $whl.FullName }
+
+      - name: Build with PyInstaller (deterministic)
+        env:
+          PYTHONHASHSEED: 0
+        run: |
+          pyinstaller --noconfirm --noupx --exclude-module pytest --exclude-module pytest_cov eidolon.spec
+          if (-not $?) { Write-Host "PyInstaller spec not found - skip" }
+
+      - name: Azure Trusted Signing
+        if: ${{ env.AZURE_TENANT_ID != '' }}
+        uses: azure/trusted-signing-action@v1
+        with:
+          azure-tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          azure-client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          azure-client-secret: ${{ secrets.AZURE_CLIENT_SECRET }}
+          endpoint: https://weu.codesigning.azure.net/
+          trusted-signing-account-name: ${{ secrets.AZURE_ACCOUNT_ID }}
+          certificate-profile-name: ${{ secrets.AZURE_CERTIFICATE_PROFILE }}
+          files-folder: dist/
+          files-folder-filter: exe
+        env:
+          AZURE_TENANT_ID: ${{ secrets.AZURE_TENANT_ID }}
+
+      - name: Package release artifacts
+        run: |
+          New-Item -ItemType Directory -Force -Path release-out
+          Copy-Item -Path dist/*.exe -Destination release-out/ -ErrorAction SilentlyContinue
+          Copy-Item -Path dist/*.whl -Destination release-out/ -ErrorAction SilentlyContinue
+          $hashes = Get-ChildItem -Path release-out -File | ForEach-Object {
+            $hash = (Get-FileHash -Path $_.FullName -Algorithm SHA256).Hash
+            "$hash  $($_.Name)"
+          }
+          $hashes | Set-Content -Path release-out/SHA256SUMS
+
+      - name: Upload release artifacts
+        uses: softprops/action-gh-release@v2
+        with:
+          files: release-out/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

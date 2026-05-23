@@ -70,6 +70,17 @@ vectors.append({
     "pq_sig_pubkey_sha256": hashlib.sha256(bytes(result["pq_sig_public_key"])).hexdigest(),
 })
 
+# 5. Per-phase hashes
+r_phases = eidolon_crypto.pipeline_generate_with_phase_hashes("TestVector", True, "granite")
+phase_hashes = dict(r_phases["phase_hashes"])
+vectors.append({
+    "operation": "pipeline_phase_hashes",
+    "seed_material": "TestVector",
+    "pq_enabled": True,
+    "material": "granite",
+    "phase_hashes": phase_hashes,
+})
+
 with open("docs/TEST_VECTORS.json", "w") as f:
     json.dump(vectors, f, indent=2)
 
