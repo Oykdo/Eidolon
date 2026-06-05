@@ -6,7 +6,7 @@
 ![Rust](https://img.shields.io/badge/rust-native-orange?style=flat-square)
 ![Python](https://img.shields.io/badge/python-3.9+-yellow?style=flat-square)
 ![License](https://img.shields.io/badge/license-Proprietary-red?style=flat-square)
-![Release](https://img.shields.io/badge/release-v1.1.1-blue?style=flat-square)
+![Release](https://img.shields.io/badge/release-v1.2.0-blue?style=flat-square)
 
 **Post-quantum cryptographic vault with holographic key derivation**
 
@@ -14,14 +14,14 @@ Powers identity and resonance for [Cipher](https://github.com/Oykdo/cipher) — 
 
 ---
 
-### ⬇️ Download Eidolon v1.1.1
+### ⬇️ Download Eidolon v1.2.0
 
 | Platform | Download |
 |----------|----------|
-| **Windows x64** | [![Windows](https://img.shields.io/badge/⬇_Download-Windows_x64-2ea44f?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Oykdo/Eidolon/releases/download/v1.1.1/Eidolon-v1.1.1-windows-x64.exe) |
-| **Linux x64** | [![Linux](https://img.shields.io/badge/⬇_Download-Linux_x64-2ea44f?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/Oykdo/Eidolon/releases/download/v1.1.1/Eidolon-v1.1.1-linux-x64) |
+| **Windows x64** | [![Windows](https://img.shields.io/badge/⬇_Download-Windows_x64-2ea44f?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Oykdo/Eidolon/releases/download/v1.2.0/Eidolon-v1.2.0-windows-x64.exe) |
+| **Linux x64** | [![Linux](https://img.shields.io/badge/⬇_Download-Linux_x64-2ea44f?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/Oykdo/Eidolon/releases/download/v1.2.0/Eidolon-v1.2.0-linux-x64) |
 
-<sub>Or grab the [full release page](https://github.com/Oykdo/Eidolon/releases/tag/v1.1.1) with archives + `SHA256SUMS`.</sub>
+<sub>Or grab the [full release page](https://github.com/Oykdo/Eidolon/releases/tag/v1.2.0) with archives + `SHA256SUMS`.</sub>
 
 ---
 
@@ -201,10 +201,88 @@ Spheres are distributed to the first 10,000 vaults with guaranteed minimum rarit
 | Founder | #101–1000 | 3 | 1 Epic |
 | Pioneer | #1001–10000 | 2 | RNG-weighted |
 
-**21,186 unique sphere templates** across the first 10,000 vaults — one per instance, with
-Fibonacci-weighted rarity assignment distributed as: 9 Primordial, 64 Genesis, 192 Mythic,
-1,152 Legendary, 1,440 Epic, 2,160 Rare, 3,600 Uncommon, 5,620 Common (templates reusable
-across vaults via instance IDs).
+**21,186 unique sphere templates** — one per instance, never reused:
+
+| Rarity | Templates | Instances |
+|--------|-----------|-----------|
+| Primordial | 11 (9 Core + 2 Echo) | 11 |
+| Genesis | 58 | 58 |
+| Mythical | 360 | 360 |
+| Legendary | 720 | 720 |
+| Epic | 1,440 | 1,440 |
+| Rare | 2,160 | 2,160 |
+| Uncommon | 3,600 | 3,600 |
+| Common | 12,837 | 12,837 |
+
+Every template is **unique and immutable** — no two vaults share the same
+sphere. Templates are assigned via Fibonacci-weighted RNG across the first
+10,000 vaults, and each sphere_id equals its asset_id (no instance overlay).
+
+#### Cosmic Cycle Hierarchy
+
+The upper-tier templates follow a derived hierarchy rooted in 8 Cosmic Cycles:
+
+```
+11 Primordial (1 Exotic + 8 Thematic + 2 Echo)
+ └─ 58 Genesis
+     └─ 360 Mythical
+         └─ 720 Legendary
+```
+
+Each Cosmic Cycle is a thematic era (e.g., *The Void Cycle*, *The Quantum
+Cycle*). The 9th Core Primordial — *"L'Inconnu"* — is an Exotic type that
+transcends all themes, reserved for Vault #1. The 2 Echo Primordials
+(*The Primordial Echo*, *The Primordial Reflection*) are unique variants
+derived from cycle intersections.
+
+#### Runtime Lifecycle
+
+Genesis-era spheres follow a four-state lifecycle after distribution:
+
+```
+DORMANT → EVOLVING → AWAKENED → ASCENDED
+```
+
+- **Dormant**: Assigned but inactive (no yield).
+- **Evolving**: Activation costs 2× base yield in EIDOLON. Caps at 5
+  concurrent evolution slots per vault. Higher rarities require minimum
+  vault maturity (EEP-001 epoch gates: Rare = 48 eons, Epic = 168,
+  Legendary = 504, Mythical = 840, Genesis = 1,080, Primordial = 1,320).
+- **Awakened**: Produces daily EIDOLON yield after a 7-day evolution cycle.
+  Yield = `base × cycle_quality_mult × state_mult`. Cycle quality ranges
+  from Failed (0.5×) to Perfect (1.6×).
+- **Ascended**: 1.2× state multiplier. Requires 3 successful cycles or 1
+  perfect cycle, plus an ascension cost in EIDOLON.
+
+Daily base yields (EIDOLON/day): Common 4.0, Uncommon 5.5, Rare 7.0,
+Epic 8.0, Legendary 12.0, Mythical 18.0, Genesis 28.0, Primordial 42.0.
+
+#### Quest Spheres (Second Era)
+
+Beyond the 21,186 Genesis instances, a second era of spheres is minted
+on-demand as quest rewards. Quest spheres use a separate rarity system:
+
+| Tier | Drop rate | Yield multiplier |
+|------|-----------|------------------|
+| Cosmic | 0.1% | 5.0× |
+| Stellar | 0.5% | 3.0× |
+| Lunar | 3.0% | 1.8× |
+| Crystal | 15.0% | 1.3× |
+| Stone | 81.4% | 1.0× |
+
+Quest spheres support **fusion** (3 same-tier → 1 next-tier up the chain
+Stone → Crystal → Lunar → Stellar → Cosmic), **trade** with a 10% burn tax,
+and **decay** after 30 days of vault inactivity. **Twin spheres** are
+non-tradeable artifacts generated from CHSH Bell-test correlation scores
+between paired vaults.
+
+#### Sphere ↔ Resonance Bridge
+
+Evolving spheres generate passive Resonance gain per epoch, even without
+Cipher activity. Hatched/Awakened spheres award a one-shot Resonance bonus.
+Mythical-or-higher unique sphere counts feed the Rosetta Stone yield bonus
+eligibility check, coupling the sphere economy directly to the Cipher
+activity pipeline.
 
 ---
 

@@ -21,6 +21,8 @@ from src.crypto.rust_crypto import (
     hkdf_sha512_derive,
     hmac_sha256,
     is_rust_crypto_available,
+    psnx_legacy_prism_bool,
+    psnx_normalize_legacy_prism_payload_json,
     secret_share_checksum,
     shamir_reconstruct_large_v2,
     shamir_reconstruct_v1,
@@ -277,6 +279,24 @@ class RustCryptoBridgeTests(unittest.TestCase):
             threshold=3,
         )
         self.assertEqual(recovered, secret)
+
+    def test_legacy_prism_payload_normalization_is_scoped(self):
+        payload = json.dumps(
+            {
+                "crypto_properties": {
+                    "psnx_is_quantum": "True",
+                    "label": "True",
+                }
+            }
+        )
+
+        normalized = json.loads(psnx_normalize_legacy_prism_payload_json(payload))
+
+        self.assertIs(normalized["crypto_properties"]["psnx_is_quantum"], True)
+        self.assertEqual(normalized["crypto_properties"]["label"], "True")
+        self.assertIs(psnx_legacy_prism_bool("True"), True)
+        self.assertIs(psnx_legacy_prism_bool("False"), False)
+        self.assertIsNone(psnx_legacy_prism_bool("true"))
 
 
 if __name__ == "__main__":
