@@ -6,6 +6,14 @@ This software, including all source code, SDKs, smart contracts, documentation,
 cryptographic algorithms, generated assets, and related materials (the "Software"),
 is proprietary to its rights holders.
 
+The Software's core cryptographic construction — including, without limitation,
+the holographic key-derivation pipeline, the EEP-001 temporal prism, and the
+poly-spinor transformation and hash (collectively, the "Reserved Components") —
+is held as a trade secret, is distributed only in compiled form, and is never
+published in source. Nothing in this license grants any right to the Reserved
+Components beyond executing the compiled artifact as supplied by the rights
+holders.
+
 No permission is granted to use, copy, modify, merge, publish, distribute,
 sublicense, sell, host, provide as a service, reverse engineer, create derivative
 works from, or otherwise exploit the Software, in whole or in part, without a
@@ -24,10 +32,44 @@ Third-party dependencies remain governed by their own licenses. This license doe
 not override any rights or obligations attached to third-party software included
 with, linked from, or required by the Software.
 
+Named-Project Integration Exception
+
+Notwithstanding the restrictions above, the Logos Project grants the Cipher
+project and the Esoptron protocol — the foundational protocol underlying
+Eidolon — (together, the "Authorized Projects") a limited, worldwide,
+royalty-free, non-exclusive, non-transferable license to use, link against,
+integrate, and redistribute the Eidolon Public Interface — defined as (a) the
+publicly published API surface and integration contracts of the Software, and
+(b) the compiled `eidolon_crypto` native distribution (binary wheel) — solely as
+a dependency of those projects, including within distributions released under
+those projects' MIT license, provided that:
+
+  1. Attribution. Each Authorized Project, and any redistribution of it, must
+     retain a visible credit to "Eidolon — Logos Project" with a link to the
+     canonical Eidolon repository in its documentation or credits surface.
+
+  2. No source reuse or reproduction. This exception conveys no right to the
+     proprietary source code, the Reserved Components, or any cryptographic
+     internals, and no right to reverse engineer, decompile, reconstruct, or
+     create a derivative of them. It covers integration of the published
+     interface and the compiled artifact only; the compiled artifact may not be
+     disassembled or otherwise used to recover the underlying source.
+
+  3. Scope. The exception extends only to the Authorized Projects named above.
+     It does not transfer to forks, third parties, or other works, and does not
+     permit removing or relicensing the proprietary components themselves.
+
+  4. MIT compatibility. Within the Authorized Projects, the MIT-licensed portions
+     remain MIT; this exception governs only the Eidolon-originated material they
+     incorporate, which remains the property of the Logos Project.
+
+All other rights remain reserved under the Eidolon Proprietary Commercial
+License above.
+
 THE SOFTWARE IS PROVIDED "AS IS" AND WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
 PARTICULAR PURPOSE, NON-INFRINGEMENT, SECURITY, OR AVAILABILITY. IN NO EVENT
 SHALL THE RIGHTS HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER LIABILITY
 ARISING FROM OR RELATED TO THE SOFTWARE OR ITS USE.
 
-For licensing inquiries, contact: contact@polyspinor.io
+For licensing inquiries, contact: jrzg7f2k@proton.me
