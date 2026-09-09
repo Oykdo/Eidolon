@@ -1,0 +1,54 @@
+#!/bin/sh
+# Eidolon - garde-fou de publication du coeur ferme.
+#
+# .gitignore est consultatif : "git add -f", un stash ou un chemin imprevu
+# passent a cote. Ce hook inspecte ce qui est REELLEMENT indexe.
+#
+# Contournement, delibere et a taper en entier :
+#   EIDOLON_ALLOW_CLOSED_CORE=i-have-read-IP-BOUNDARY git commit ...
+set -u
+
+if [ "${EIDOLON_ALLOW_CLOSED_CORE:-}" = "i-have-read-IP-BOUNDARY" ]; then
+    printf '\033[33mpre-commit: garde-fou CONTOURNE explicitement.\033[0m\n' >&2
+    exit 0
+fi
+
+if git rev-parse -q --verify HEAD >/dev/null 2>&1; then against=HEAD
+else against=$(git hash-object -t tree /dev/null); fi
+
+staged=$(git diff --cached --name-only --diff-filter=ACMR "$against")
+[ -n "$staged" ] || exit 0
+
+# Chemins fermes. -i car core.ignorecase masque SRC/CRYPTO ici mais pas sur un
+# runner Linux. Le second motif attrape une copie deplacee du coeur.
+DENY_PATH='^(src/(crypto|identity|core|holo|game|blockchain|api|ui|utils|_dormant)/|_recovery_from_prod/|backups/|holotest/|genesis_spheres/|vault_storage/|vault_evolution/|hsm_data/|build(-[a-z0-9-]+)?/|dist(-[a-z0-9-]+)?/)'
+DENY_ANY='(^|/)(crypto|identity|holo|_dormant)/[^/]+\.(py|rs|pyi)$'
+DENY_EXT='\.(tar|tar\.gz|tar\.bz2|tar\.xz|tgz|zip|7z|rar|pem|key|asc|gpg|enc|p12|pfx|jks|psnx|blend_data|pyz|pkg|toc|so|pyd)$'
+
+blocked=$(printf '%s\n' "$staged" | grep -Ei "$DENY_PATH|$DENY_ANY|$DENY_EXT" || true)
+
+# Contenu : IP-BOUNDARY section 3 interdit aux fichiers publics d'importer les
+# modules internes. Attrape un utilitaire qu'aucune regle de chemin n'anticipe.
+IMPORT_RE='(from|import)[[:space:]]+src\.(crypto|identity|core|holo|game|blockchain|_dormant)'
+leaky=''
+for f in $staged; do
+    case "$f" in tests/*|*.md) continue ;; esac
+    if [ -f "$f" ] && git show ":$f" 2>/dev/null | grep -qE "$IMPORT_RE"; then
+        leaky="$leaky $f"
+    fi
+done
+
+if [ -n "$blocked" ] || [ -n "$leaky" ]; then
+    printf '\033[31m\n  COMMIT REFUSE - materiel du coeur ferme dans l index\033[0m\n\n' >&2
+    [ -n "$blocked" ] && printf '%s\n' "$blocked" | sed 's/^/    chemin interdit : /' >&2
+    for f in $leaky; do printf '    importe un module ferme : %s\n' "$f" >&2; done
+    printf '\n  Ce depot suit le sous-ensemble publiable ; le coeur ferme en est\n' >&2
+    printf '  exclu par IP-BOUNDARY. Le depot GitHub est passe en prive le\n' >&2
+    printf '  2026-09-09, mais la separation reste voulue et un push reste\n' >&2
+    printf '  irreversible.\n' >&2
+    printf '  Retire-les avec : git restore --staged <fichier>\n' >&2
+    printf '  Leur place est le depot prive : C:/Logos/eidolon-core.git\n' >&2
+    printf '  (sauvegarde : branche core de Oykdo/Eidolon, prive)\n\n' >&2
+    exit 1
+fi
+exit 0
