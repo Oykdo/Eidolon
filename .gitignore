@@ -333,3 +333,94 @@ launcher.bat
 # -----------------------------------------------------------------------------
 contracts/
 deployments/
+
+# =============================================================================
+# GARDE-FOU DE PUBLICATION DU COEUR FERME  (audit du 2026-09-09)
+#
+# Les regles au-dessus visent des chemins exacts. C'est ainsi que 16 fichiers
+# se sont retrouves ni suivis ni ignores, dont une archive complete du coeur
+# ferme, a un "git add ." de la publication. Les regles ci-dessous visent des
+# FORMES, pour attraper la prochaine archive et le prochain repertoire de build
+# sans avoir a connaitre leur nom.
+#
+# Volontairement absent : toute enumeration de noms de modules du coeur.
+# Les lister ici publierait la carte des modules dans un fichier suivi et
+# public. Les regles **/src/<pkg>/ couvrent les copies deplacees sans nommer
+# un seul module.
+# =============================================================================
+
+# --- Archives de l'arbre source. Aucune regle ne couvrait un .tar.gz a la
+# racine : c'est exactement par la qu'est passee eidolon-src-backup-*.tar.gz,
+# 331 entrees dont 85 fichiers du coeur ferme.
+*.tar
+*.tar.gz
+*.tar.bz2
+*.tar.xz
+*.tgz
+*.zip
+*.7z
+*.rar
+*-backup-*
+*-src-backup*
+*_backup_*
+
+# --- Repertoires de travail et de sortie PyInstaller. Les regles existantes
+# build/ et dist/ ne couvrent PAS les variantes suffixees. Le repertoire de
+# travail est le pire : ses .toc cartographient les modules du coeur et son
+# .pyz en contient le bytecode.
+build-*/
+dist-*/
+*.toc
+*.pyz
+*.pkg
+
+# --- Binaires geles. Ils se publient en assets de release, jamais en blobs
+# git : environ 230 Mo, incompressibles, permanents, et repayes a chaque
+# clone, fork et checkout de CI.
+cipher-runtime
+cipher-runtime.exe
+cipher-runtime.built-on-*
+SHA256SUMS
+
+# --- Materiel de cle et secrets, par forme plutot que par nom exact.
+# *.pem existe deja plus haut ; aucune des autres regles n'existait.
+*.asc
+*.gpg
+*.enc
+*.p12
+*.pfx
+*.jks
+*.keystore
+id_rsa*
+id_ed25519*
+*.privkey
+
+# --- Copies deplacees du coeur ferme. src/crypto/ ne couvre pas
+# vendor/src/crypto/ ni core-copy/src/crypto/ ; un ** prefixe le fait.
+**/src/crypto/
+**/src/identity/
+**/src/core/
+**/src/holo/
+**/src/game/
+**/src/blockchain/
+**/src/api/
+**/src/ui/
+**/src/utils/
+**/src/_dormant/
+
+# --- Scripts locaux de build et d'execution qui importent ou recopient en
+# masse les paquets fermes. Leur place est le depot prive du coeur, pas ici.
+build-cipher-runtime*.sh
+run_local_*.ps1
+*.sh.bak
+
+# --- DECISION EN ATTENTE : les roues eidolon_crypto vendorisees.
+# Elles ne sont PAS sur origin/main. Le commit local d634d38 les ajoute.
+# Mesure faite sur l'artefact manylinux : il n'est PAS strippe (1 section
+# .symtab, 3822 symboles locaux) et expose en clair PSNX_PQ_SEED_,
+# EIDOLON_LEAF_V1, EIDOLON_MACHINE_LOCK_KEY_V2 et spinor_transform, alors
+# que IP-BOUNDARY.md section 5.1, ajoute par le meme commit, affirme
+# "stripped symbols. This is the real protection".
+# Decommente la ligne suivante si tu decides de ne pas les publier tant
+# qu'elles ne sont pas reconstruites strippees.
+# prebuilt_wheels/
