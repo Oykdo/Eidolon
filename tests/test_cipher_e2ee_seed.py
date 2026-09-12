@@ -35,6 +35,17 @@ from src.crypto.psnx_native_format import PSNX_COMPLETE_KEY_MARKER  # noqa: E402
 FIXTURES = ROOT / "tests" / "fixtures" / "cipher_e2ee_seed"
 
 
+def _read_vector(label: str) -> bytes:
+    """Les coffres synthetiques sont versionnes en base64 : la regle *.psnx du
+    .gitignore protege les vrais coffres et exclurait les fixtures binaires."""
+    b64 = FIXTURES / f"vector_{label}.psnx.b64"
+    if b64.exists():
+        import base64
+
+        return base64.b64decode(b64.read_text(encoding="ascii").strip())
+    return (FIXTURES / f"vector_{label}.psnx").read_bytes()
+
+
 def _stdlib_parse(raw: bytes) -> dict:
     marker = PSNX_COMPLETE_KEY_MARKER
     if not raw.startswith(marker):
@@ -93,7 +104,7 @@ class CipherE2EESeedVectorTests(unittest.TestCase):
     """Chaine complete sur les deux coffres synthetiques."""
 
     def _run_vector(self, label: str):
-        raw = (FIXTURES / f"vector_{label}.psnx").read_bytes()
+        raw = _read_vector(label)
         expected = json.loads((FIXTURES / f"vector_{label}.expected.json").read_text(encoding="utf-8"))
         with patch.object(mod, "parse_native_psnx_bytes", _stdlib_parse):
             result = mod.derive_cipher_e2ee_seed_from_psnx_bytes(raw)
@@ -113,7 +124,7 @@ class CipherE2EESeedVectorTests(unittest.TestCase):
         self.assertTrue(expected["pq_enabled"])
 
     def test_vault_key_step_matches_generator_output(self):
-        raw = (FIXTURES / "vector_pq.psnx").read_bytes()
+        raw = _read_vector("pq")
         expected = json.loads((FIXTURES / "vector_pq.expected.json").read_text(encoding="utf-8"))
         key_id, vault_key = mod.derive_vault_key_from_psnx_payload(_stdlib_parse(raw))
         self.assertEqual(key_id, expected["key_id"])
