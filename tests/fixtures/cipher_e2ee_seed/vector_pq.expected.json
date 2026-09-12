@@ -1,0 +1,9 @@
+{
+  "label": "pq",
+  "pq_enabled": true,
+  "key_id": "040b7414dac4ce55",
+  "vault_key_hex": "b47a23ed62eadf25a788752bb8b71d28c79abf69aa036582f1df53cd96e14d91",
+  "vault_id": "9396e755539a04af4f601e38ae61d9f5c36f9ad43a3378662a7dd906e7ce9b76",
+  "psnx_size": 17620,
+  "e2ee_seed_hex": "3e525a55ace6131d22d08da19047acef25a0debebcf0136df8e998529928c537"
+}
