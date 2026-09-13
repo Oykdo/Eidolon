@@ -302,6 +302,8 @@ docs/*
 img_private/
 # Tests du coeur ferme (voir tests/private/README.md) : suivis par le depot prive seulement.
 tests/private/
+# Horodatages d'anteriorite (timestamps/README.md) : declarations et copies du coeur ferme. Jamais publies.
+timestamps/
 
 # -----------------------------------------------------------------------------
 # Deployment scripts and infrastructure configs
