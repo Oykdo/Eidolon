@@ -10,6 +10,7 @@ sys.path.insert(0, str(ROOT))
 
 from src.crypto.psnx_signing import (
     PSNXSecurityManager,
+    SignatureVerificationResult,
     verify_psnx_blend_pair,
 )
 from src.ui.vault_gui_complete import DualKeyAuthenticator
@@ -97,10 +98,23 @@ class PsnxNativeIntegrationTests(unittest.TestCase):
                 encoding="utf-8",
             )
 
+            # verify_key_match now requires a valid .psnx/.blend_data signature
+            # pair (no unsigned fallback). The pair verification has its own
+            # dedicated tests; here we only assert that the native parser is
+            # the single source of truth for both validation and matching.
+            signed_pair = SignatureVerificationResult(
+                valid=True,
+                fingerprint_match=True,
+                signature_valid=True,
+                schema_compatible=True,
+            )
             with patch(
                 "src.ui.vault_gui_complete.parse_native_psnx_file",
                 return_value={"key_data": {"key_id": "vault-001"}},
-            ) as mocked_parse:
+            ) as mocked_parse, patch(
+                "src.crypto.psnx_signing.verify_psnx_blend_pair",
+                return_value=signed_pair,
+            ):
                 valid_psnx, psnx_msg = auth.validate_psnx_file(str(psnx_path))
                 valid_match, match_msg = auth.verify_key_match(
                     str(psnx_path), str(blend_path)
@@ -108,8 +122,8 @@ class PsnxNativeIntegrationTests(unittest.TestCase):
 
         self.assertTrue(valid_psnx)
         self.assertEqual(psnx_msg, "Valid PSNX file")
-        self.assertTrue(valid_match)
-        self.assertIn("Match verified", match_msg)
+        self.assertTrue(valid_match, match_msg)
+        self.assertIn("match verified", match_msg.lower())
         self.assertEqual(mocked_parse.call_count, 2)
 
 

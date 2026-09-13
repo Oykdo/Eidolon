@@ -43,10 +43,10 @@ class PsnxNativeFormatTests(unittest.TestCase):
         rust_blob = PSNX_COMPLETE_KEY_MARKER + struct.pack(">I", 4) + b"rust"
 
         with patch(
-            "src.core.psnx_native_format.is_rust_crypto_available",
-            return_value=True,
+            "src.crypto.psnx_native_format.require_rust_crypto",
+            return_value=None,
         ), patch(
-            "src.core.psnx_native_format.rust_complete_psnx_build",
+            "src.crypto.psnx_native_format.rust_complete_psnx_build",
             return_value=rust_blob,
         ) as mocked_build:
             built = build_native_psnx_bytes(payload)
@@ -70,10 +70,10 @@ class PsnxNativeFormatTests(unittest.TestCase):
 
     def test_parse_native_psnx_bytes_normalizes_rust_errors(self):
         with patch(
-            "src.core.psnx_native_format.is_rust_crypto_available",
-            return_value=True,
+            "src.crypto.psnx_native_format.require_rust_crypto",
+            return_value=None,
         ), patch(
-            "src.core.psnx_native_format.rust_complete_psnx_parse",
+            "src.crypto.psnx_native_format.rust_complete_psnx_parse",
             side_effect=RuntimeError("native parse failed"),
         ):
             with self.assertRaisesRegex(ValueError, INVALID_PSNX_ERROR):
