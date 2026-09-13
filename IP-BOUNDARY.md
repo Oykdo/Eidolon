@@ -138,3 +138,16 @@ Opening is **irreversible** — once material is public, it cannot be un-publish
   removal from the current tree **and** a history-rewrite + force-push decision,
   acknowledging that prior public copies may persist.
 - When in doubt, treat material as **Tier 2** until a sign-off says otherwise.
+
+### Sign-offs (closed → open)
+
+- **2026-09-13 — Sphere custody ledger verifier.** `src/protocols/sphere_ledger/`
+  (WOTS+ per RFC 8391, SLH-DSA per FIPS 205, Merkle sum-tree proofs, custody
+  chain verification, flux invariant), its public tests (`tests/test_ledger_*.py`)
+  and the format specification `docs/SPHERE_LEDGER_FORMAT.md` are **Tier 1**.
+  Rationale: the ledger is a protocol and a message format built only on public
+  standards; it deliberately contains no element of EEP-001 (the spinor hash is
+  not an address); its domain separators belong to the ledger protocol and are
+  required by any verifier; a vault's key material only enters as opaque bytes.
+  Minting, the genesis treasury, treasury key windows and the ceremony remain
+  Tier 2. Decision of the owner, Jérémy Zgonec, recorded on his instruction.

@@ -33,7 +33,7 @@ python-dateutil>=2.8.0
 # -----------------------------------------------------------------------------
 # Optional: Post-Quantum Cryptography
 # -----------------------------------------------------------------------------
-# pqcrypto>=0.1.0  # Uncomment if available
+pqcrypto==0.4.0  # SLH-DSA (FIPS 205) for the sphere ledger verifier; 1.x renames modules
 
 # -----------------------------------------------------------------------------
 # Optional: Monitoring & Metrics

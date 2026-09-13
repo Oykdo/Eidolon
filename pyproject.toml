@@ -60,7 +60,7 @@ blender = [
     "mathutils>=3.3.0",
 ]
 full = [
-    "pqcrypto>=0.1.0",
+    "pqcrypto==0.4.0",
     "aiohttp>=3.8.0",
     "prometheus-client>=0.17.0",
     "redis>=4.6.0",
