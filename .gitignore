@@ -298,6 +298,11 @@ docs/*
 !docs/TEST_VECTORS.json
 !docs/REPRODUCIBLE_BUILDS.md
 
+# Images de travail privees (references, captures) : jamais publiees.
+img_private/
+# Tests du coeur ferme (voir tests/private/README.md) : suivis par le depot prive seulement.
+tests/private/
+
 # -----------------------------------------------------------------------------
 # Deployment scripts and infrastructure configs
 # Contains VPS IPs, internal ports, HMAC secrets, nginx/systemd configs.
