@@ -76,13 +76,30 @@ def get_identities_dir() -> Path:
 
 
 def get_vault_registry_path() -> Path:
-    """Path to the vault registry JSON file."""
+    """Path to the AUTHORITATIVE vault registry JSON file.
+
+    Written by src.identity.vault_identity.VaultIdentityManager, read by the
+    machine lock, the hosted economy and the yield tick. This is the file that
+    decides whether a vault exists.
+
+    Not to be confused with src/identity/vault_registry.py, which writes a
+    DIFFERENT file of the same name under %APPDATA%/Eidolon for the desktop
+    launcher's quick-login. The two share a filename and nothing else, and
+    nothing synchronises them.
+    """
     return get_identities_dir() / "vault_registry.json"
 
 
 def get_persistent_vaults_dir() -> Path:
     """Directory for persistent vault state."""
     path = get_vaults_root() / "persistent"
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
+
+def get_runes_vesting_dir() -> Path:
+    """Directory for the PSNX Runes vesting ledger."""
+    path = get_data_root() / "runes_vesting"
     path.mkdir(parents=True, exist_ok=True)
     return path
 
