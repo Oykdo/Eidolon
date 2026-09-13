@@ -104,6 +104,13 @@ def get_runes_vesting_dir() -> Path:
     return path
 
 
+def get_sphere_anchor_dir() -> Path:
+    """Directory for the sphere custody anchor (ordered heads, receipts, checkpoints)."""
+    path = get_data_root() / "sphere_anchor"
+    path.mkdir(parents=True, exist_ok=True)
+    return path
+
+
 def get_security_dir() -> Path:
     """Directory for security-related data."""
     path = get_vaults_root() / "security"
