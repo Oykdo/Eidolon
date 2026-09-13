@@ -227,6 +227,10 @@ def _resolve_install_path(archive_path: str, vaults_root: Path) -> Optional[Path
     if archive_path.startswith("vault_state/distribution/"):
         rel = archive_path[len("vault_state/distribution/"):]
         return safe_join(vaults_root / "distribution", rel)
+    if archive_path.startswith("vault_state/vault_data/"):
+        # identities/vault_data/<prefix>/... (Eidos coffre; sealed to the vault key)
+        rel = archive_path[len("vault_state/vault_data/"):]
+        return safe_join(vaults_root / "identities" / "vault_data", rel)
     if archive_path == "vault_state/registry_slice.json":
         # Registry slice is NOT auto-installed in the registry (manual review).
         # It's written next to vaults_root for inspection.

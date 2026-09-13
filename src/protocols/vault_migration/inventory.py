@@ -85,6 +85,11 @@ def _make_entry(source: Path, archive_path: str) -> Optional[InventoryEntry]:
     )
 
 
+def _vault_data_prefix(vault_id: str) -> str:
+    """The per-vault directory under identities/vault_data (same rule as runtime_spheres)."""
+    return vault_id[:16] if len(vault_id) >= 16 else vault_id
+
+
 def _walk_dir(base: Path, archive_prefix: str) -> List[InventoryEntry]:
     out: List[InventoryEntry] = []
     if not base.is_dir():
@@ -184,7 +189,18 @@ def collect_vault_inventory(
                     entries.append(entry)
                     seen_archive_paths.add(archive_path)
 
-    # 6. Registry slice (just this vault's entry, not the whole multi-vault file)
+    # 6. Eidos coffre (sealed state + judged assets), per vault_id prefix.
+    #    The seal is bound to the vault key: the file travels as-is.
+    eidos_dir = get_identities_dir() / "vault_data" / _vault_data_prefix(vault_id) / "eidos"
+    if vault_id and eidos_dir.is_dir():
+        for entry in _walk_dir(
+            eidos_dir, f"vault_state/vault_data/{_vault_data_prefix(vault_id)}/eidos"
+        ):
+            if entry.archive_path not in seen_archive_paths:
+                entries.append(entry)
+                seen_archive_paths.add(entry.archive_path)
+
+    # 7. Registry slice (just this vault's entry, not the whole multi-vault file)
     registry_path = get_vault_registry_path()
     if registry_path.is_file():
         try:

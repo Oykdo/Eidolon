@@ -5,6 +5,29 @@ All notable changes to the Eidolon project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **Eidos witness (`src/protocols/eidos_witness`, Tier 1).** A byte-exact port of
+  what the Eidos atelier's Witness page needs to judge without replaying:
+  Eidos's WOTS+ derivation (`wots`), XMSS validator signatures (`xmss`), the
+  signed head against `federation.json` (`tete`), UTXO root and inclusion
+  proofs (`preuve`), `etat.json` reading (`etat`), transaction core / witnesses /
+  base64 encapsulation and coin selection (`envoi`, `coinselect`), the
+  `eidos.carnet` exchange format written and re-read byte-identical to the
+  atelier (`carnet`), and the `EIDOLON_EIDOS_ACTIF` dossier — signed head +
+  output + proof — judged offline (`actif`). Format in
+  `docs/EIDOS_WITNESS_FORMAT.md`; vectors are Eidos's own `vecteurs.json` plus
+  cross-implementation WOTS+ vectors against `sphere_ledger.hash_sig`.
+- **Eidos coffre in the vault (Tier 2 client).** A vault holds Eidos assets:
+  it keeps its coffre state in a sealed sidecar under
+  `identities/vault_data/<prefix>/eidos/` (no seed is ever written), syncs with
+  the published state, signs spends with write-before-return of burnt keys,
+  exports/imports `eidos.carnet`, and files judged Eidos assets.
+- **Vault migration** now carries `identities/vault_data/<prefix>/eidos/`
+  (`vault_state/vault_data/…` in the archive).
+
 ## [1.2.0] - 2026-06-05
 
 ### Added

@@ -298,6 +298,7 @@ docs/*
 !docs/TEST_VECTORS.json
 !docs/REPRODUCIBLE_BUILDS.md
 !docs/SPHERE_LEDGER_FORMAT.md
+!docs/EIDOS_WITNESS_FORMAT.md
 
 # Images de travail privees (references, captures) : jamais publiees.
 img_private/

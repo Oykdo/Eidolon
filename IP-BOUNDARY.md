@@ -151,3 +151,16 @@ Opening is **irreversible** — once material is public, it cannot be un-publish
   required by any verifier; a vault's key material only enters as opaque bytes.
   Minting, the genesis treasury, treasury key windows and the ceremony remain
   Tier 2. Decision of the owner, Jérémy Zgonec, recorded on his instruction.
+- **2026-09-13 — Eidos witness.** `src/protocols/eidos_witness/` (a byte-exact
+  port of Oykdo/Eidos's public, Apache-2.0 verifier surface: WOTS+ derivation,
+  XMSS verification, signed head, UTXO proofs, transaction encoding,
+  `eidos.carnet`, and the `EIDOLON_EIDOS_ACTIF` dossier), its public tests
+  (`tests/test_eidos_witness_*.py`), the vectors `tests/vectors/eidos_*.json`,
+  the fixtures `tests/fixtures/eidos/` and the format specification
+  `docs/EIDOS_WITNESS_FORMAT.md` are **Tier 1**. Rationale: everything ported
+  is already public upstream under the same author; the dossier and sidecar
+  envelope are message formats any verifier or migration tool needs; a vault's
+  key material only enters as opaque bytes. The vault-side client (how a vault
+  obtains its Eidos keys, how it seals its coffre) remains Tier 2. Decision of
+  the owner, Jérémy Zgonec, recorded on his instruction (« un vérifieur Témoin
+  public »).

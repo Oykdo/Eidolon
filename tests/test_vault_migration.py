@@ -31,6 +31,7 @@ from src.protocols.vault_migration import (
 from src.protocols.vault_migration.archive import (
     HEADER_SIZE,
     read_archive,
+    read_zip_to_files,
     write_archive,
     build_zip_from_files,
     compute_integrity_mac,
@@ -209,6 +210,48 @@ class RoundTripTests(unittest.TestCase):
                 f.write(bytes([b[0] ^ 0x01]))
             with self.assertRaises(MigrationImportError):
                 inspect_archive(out_path, VAULT_KEY)
+
+
+class EidosSidecarTests(unittest.TestCase):
+    """The Eidos coffre (identities/vault_data/<prefix>/eidos/) travels with the vault."""
+
+    def test_eidos_sidecar_is_exported_and_reinstalled(self):
+        import hashlib
+        depositor = hashlib.sha256(VAULT_KEY).hexdigest()[:16]
+        prefix = VAULT_ID[:16]
+        with _IsolatedDataRoot() as data_root:
+            psnx, blend = _make_fake_vault_tree(
+                data_root / "data", VAULT_ID, VAULT_NUMBER, VAULT_NAME, depositor
+            )
+            eidos_dir = data_root / "data" / "vaults" / "identities" / "vault_data" / prefix / "eidos"
+            (eidos_dir / "actifs").mkdir(parents=True)
+            (eidos_dir / "coffre.eidolon").write_bytes(b'{"format": "EIDOLON_EIDOS_COFFRE"}')
+            (eidos_dir / "actifs" / "aa-0.json").write_text('{"format": "EIDOLON_EIDOS_ACTIF"}', encoding="utf-8")
+            # another vault's coffre must not be swept up
+            other = data_root / "data" / "vaults" / "identities" / "vault_data" / "0000000000000000" / "eidos"
+            other.mkdir(parents=True)
+            (other / "coffre.eidolon").write_bytes(b"{}")
+
+            out_path = data_root / "eidos.eidolon_keybundle_full"
+            summary = export_vault(
+                vault_key=VAULT_KEY, vault_id=VAULT_ID,
+                vault_number=VAULT_NUMBER, vault_name=VAULT_NAME,
+                output_path=out_path, psnx_path=psnx, blend_path=blend,
+            )
+            self.assertTrue(inspect_archive(out_path, VAULT_KEY)["verified"])
+            _, zip_bytes = read_archive(out_path, VAULT_KEY)
+            manifest_bytes, _files = read_zip_to_files(zip_bytes)
+            manifest = Manifest.from_json(manifest_bytes.decode("utf-8"))
+            paths = sorted(e.archive_path for e in manifest.file_inventory)
+            self.assertIn(f"vault_state/vault_data/{prefix}/eidos/coffre.eidolon", paths)
+            self.assertIn(f"vault_state/vault_data/{prefix}/eidos/actifs/aa-0.json", paths)
+            self.assertFalse(any("0000000000000000" in p for p in paths))
+
+            shutil.rmtree(data_root / "data" / "vaults", ignore_errors=True)
+            result = import_vault(out_path, VAULT_KEY)
+            self.assertGreaterEqual(result["installed_count"], summary["file_count"] - 1)
+            self.assertEqual((eidos_dir / "coffre.eidolon").read_bytes(), b'{"format": "EIDOLON_EIDOS_COFFRE"}')
+            self.assertTrue((eidos_dir / "actifs" / "aa-0.json").is_file())
 
 
 class FrozenFormatTests(unittest.TestCase):
