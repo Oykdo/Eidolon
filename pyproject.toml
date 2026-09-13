@@ -156,7 +156,7 @@ exclude = [
 
 [tool.pytest.ini_options]
 minversion = "7.0"
-addopts = "-ra -q --ignore=tests/_dormant"
+addopts = "-ra -q --ignore=tests/_dormant --cov=src --cov-report=term:skip-covered"
 testpaths = ["tests"]
 python_files = ["test_*.py", "*_test.py"]
 python_classes = ["Test*"]
@@ -171,6 +171,11 @@ omit = ["*/tests/*", "*/__pycache__/*"]
 branch = true
 
 [tool.coverage.report]
+show_missing = true
+# No `fail_under` yet, deliberately. setup.cfg carried `fail_under = 70` in a
+# section pytest never read, so the floor was decorative: measured coverage on
+# 2026-09-09 was 29%. Setting 70 here would fail every run today. Pick a floor
+# from the real number and raise it, rather than inheriting an aspiration.
 exclude_lines = [
     "pragma: no cover",
     "def __repr__",
