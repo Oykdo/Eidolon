@@ -69,6 +69,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   vault) and `GET /api/v1/sphere/claim/instances` (the caller's genesis slots
   and their state); `GET /{sphere_id}/file` now carries the latest checkpoint
   and proof when they include the head.
+- **Sphere client: `burn`, `reissue-key`, `queue` (runtime 1.2.1).**
+  `sphere burn --confirm` ends a sphere's custody chain (the file stays in
+  the inventory as its own tombstone, state *brûlée*; the anchor refuses any
+  record after it); `sphere reissue-key` retires the key controlling a sphere
+  in favour of the next derived one without moving it (`--force` revokes a
+  signed, unsubmitted transfer by a second signature — the one deliberate
+  exception to « a key signs once », settled by the anchor); `sphere queue`
+  lists the caller's claims the anchor deferred for lack of a released key
+  window, and `sync` now reports them (`queued`) as well as spheres burnt
+  from another device (`burned`). All three follow the transfer rule: read
+  the head at the anchor, write the signed record before submitting it,
+  never sign twice for the same head.
 
 ## [1.2.0] - 2026-06-05
 
