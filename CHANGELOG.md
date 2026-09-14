@@ -27,6 +27,31 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   exports/imports `eidos.carnet`, and files judged Eidos assets.
 - **Vault migration** now carries `identities/vault_data/<prefix>/eidos/`
   (`vault_state/vault_data/…` in the archive).
+- **Sphere file: batched finality (`sphere_ledger`, Tier 1).** The
+  `EIDOLON_SPHERE` container gains two optional fields, `checkpoint` and
+  `checkpoint_proof`: the anchor's signed checkpoint and the sum-tree proof
+  that one of the file's heads is a leaf of it. `verify_sphere` treats them
+  like a receipt (same anchor-in-force rule, unknown anchor counts for
+  nothing, foreign anchor is an error) and reports `final_by`
+  (`"receipt"` / `"checkpoint"`) and `checkpoint_seq`;
+  `verify_checkpoint_inclusion` applies the rule to a checkpoint obtained
+  separately. Spec: `docs/SPHERE_LEDGER_FORMAT.md` §4–§6.
+- **Sphere custody client in the Cipher runtime (`cipher-runtime sphere …`,
+  runtime 1.2.0).** `list`, `claim`, `transfer`, `import`, `export`, `sync`,
+  `mailbox`, `verify`, `trust` — one JSON line per call. A vault's one-time
+  keys are re-derived from its vault key (nothing to back up); a signed
+  transfer is written to disk before it is submitted and is never re-signed
+  for the same head; an imported file is verified offline against a trust
+  root compiled into the runtime (issuer key, anchor keys, pinned genesis
+  roots — `config/genesis/trust.json`) and then confronted with the anchor
+  (« local heads = anchor heads »); every sphere is shown as *finale* or
+  *en attente*. Sphere files live under
+  `identities/vault_data/<prefix>/spheres/` and travel with the vault
+  (`vault_migration`) or by export/import, never by directory copy.
+- **Anchor API**: `GET /api/v1/sphere/owned` (spheres held by the caller's
+  vault) and `GET /api/v1/sphere/claim/instances` (the caller's genesis slots
+  and their state); `GET /{sphere_id}/file` now carries the latest checkpoint
+  and proof when they include the head.
 
 ## [1.2.0] - 2026-06-05
 

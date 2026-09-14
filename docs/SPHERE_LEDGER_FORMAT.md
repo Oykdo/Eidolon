@@ -100,7 +100,8 @@ where `template` is the sphere's template object without the keys
 ```json
 {"format": "EIDOLON_SPHERE", "version": 1,
  "mint": MintRecord, "custody": [CustodyRecord…], "receipts": [AnchorReceipt…],
- "genesis_proof": SumProof | null, "template": object | null}
+ "genesis_proof": SumProof | null, "template": object | null,
+ "checkpoint": Checkpoint | null, "checkpoint_proof": SumProof | null}
 ```
 
 - `head` = last custody record, or the mint. `owner` = head's `to_vault_id`
@@ -111,6 +112,10 @@ where `template` is the sphere's template object without the keys
 - `template`, when present, must recompute `mint.sphere_commit`
   (**reveal at claim**: the catalogue stays committed but hidden until a
   sphere is claimed).
+- `checkpoint` and `checkpoint_proof` travel together: the anchor's signed
+  checkpoint and the sum-tree proof that one of the file's heads is a leaf of
+  it (**batched finality**, §6). A client refreshes them when it
+  synchronises; a receiver re-verifies them offline like a receipt.
 
 ## 5. Verification rules (`verify_sphere`)
 
@@ -134,9 +139,19 @@ where `template` is the sphere's template object without the keys
    the anchor in force for that head; a receipt from another anchor is an
    error. The head is **final** when a receipt of that anchor, known to the
    verifier, cites the current head — or when a signed checkpoint includes
-   it (§6).
-4. **Template.** If present, `sphere_commit(template) == mint.sphere_commit`.
-5. A malformed file yields `ok = false`, never an exception.
+   it (§6). `final_by` reports which (`"receipt"` or `"checkpoint"`).
+4. **Checkpoint.** If `checkpoint` or `checkpoint_proof` is present, both
+   must be. The proof's leaf must name this sphere, its genesis rarity and a
+   head present in the file, with `alive = true` unless that head is the
+   `burn` record itself; the checkpoint must come from the anchor in force
+   for that head (another anchor is an error); when the verifier knows that
+   anchor's key, the checkpoint signature must verify and the proof must
+   lead to `checkpoint.root` with `checkpoint.totals`. A checkpoint of an
+   unknown anchor counts for nothing, without being an error. A checkpoint
+   that includes an *older* head of the file is valid but does not finalise
+   the current one (`checkpoint_seq` is reported only for the current head).
+5. **Template.** If present, `sphere_commit(template) == mint.sphere_commit`.
+6. A malformed file yields `ok = false`, never an exception.
 
 Two files of the same sphere that diverge after a common record are a
 **fork** (`detect_fork`): the double spend seen by a third party, which only
@@ -156,6 +171,9 @@ re-hashes the leaf and recomputes root **and** totals.
 Conservation: for every rarity, `alive + burned ≤ cap`, all counts ≥ 0.
 The anchor's checkpoint proof (`leaf.head == file head`) is the batched
 finality: one SLH-DSA signature per checkpoint instead of one per receipt.
+The sphere file carries it (§4, `checkpoint` + `checkpoint_proof`);
+`verify_checkpoint_inclusion(file, checkpoint, proof, anchor_pk)` applies
+the same rule to a checkpoint obtained separately (`GET …/checkpoint-proof`).
 
 ## 7. Flux invariant (anchor reconciler)
 
@@ -172,3 +190,6 @@ every `claim` leaves the treasury, the treasury never `transfer`s.
 replacement root carries `genesis_seq + 1` and `supersedes` = the replaced
 root's `record_hash`, signed by the same issuer; proofs against a superseded
 root must be re-issued. New reasons or fields require a new format version.
+The optional `checkpoint` / `checkpoint_proof` fields of the sphere file were
+added on 2026-09-14, before any v1 file existed outside disposable trial
+lots; v1 therefore includes them, and a file without them stays valid.

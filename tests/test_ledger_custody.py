@@ -282,3 +282,52 @@ def test_mint_signed_by_another_key_is_rejected(issuer, minted):
     m.issuer_pk = issuer.public_key.hex()      # usurper l'identité ne suffit pas
     v = sl.verify_sphere(sl.SphereFile(mint=m), issuer_pk=issuer.public_key, caps=CAPS)
     assert not v.ok and any("signature d'émetteur invalide" in e for e in v.errors)
+
+
+def test_checkpoint_carried_by_the_file_finalises_the_head(issuer, anchor, chain):
+    """La finalité par lot : le fichier porte le point de contrôle signé et la
+    preuve que sa tête y figure. Une signature d'ancre pour toutes les têtes."""
+    from src.protocols.sphere_ledger.checkpoint import Checkpoint, SphereLeaf, SumTree
+
+    sphere, _ = _chain_three(chain)
+    known = {"eidolon-vps": anchor.public_key}
+    leaves = [SphereLeaf(sphere.mint.sphere_id, "rare", sphere.head_hash, True),
+              SphereLeaf("COMMON_001", "common", "ab" * 32, True)]
+    tree = SumTree(leaves)
+    cp = Checkpoint.issue(anchor, "eidolon-vps", 7, tree, {}, "2026-09-14T08:00:00Z")
+    sphere.checkpoint, sphere.checkpoint_proof = cp, tree.prove(sphere.mint.sphere_id)
+    v = sl.verify_sphere(sphere, issuer_pk=issuer.public_key, known_anchors=known, caps=CAPS)
+    assert v.ok and v.final and v.final_by == "checkpoint" and v.checkpoint_seq == 7, v.errors
+    # Aller-retour JSON.
+    again = sl.SphereFile.from_json(sphere.to_json())
+    assert again.checkpoint.record_hash == cp.record_hash and again.checkpoint_proof == sphere.checkpoint_proof
+    assert sl.verify_sphere(again, issuer_pk=issuer.public_key, known_anchors=known, caps=CAPS).final
+    # Ancre inconnue du vérifieur : ni final, ni erreur. Le point sans sa preuve : erreur.
+    v = sl.verify_sphere(sphere, issuer_pk=issuer.public_key, known_anchors={}, caps=CAPS)
+    assert v.ok and not v.final
+    half = copy.deepcopy(sphere)
+    half.checkpoint_proof = None
+    assert not sl.verify_sphere(half, issuer_pk=issuer.public_key, known_anchors=known, caps=CAPS).ok
+    # Preuve d'une autre sphère, signature d'ancre altérée, point d'une ancre étrangère : erreurs.
+    other = copy.deepcopy(sphere)
+    other.checkpoint_proof = tree.prove("COMMON_001")
+    assert any("pas dans ce fichier" in e for e in sl.verify_sphere(other, issuer_pk=issuer.public_key,
+                                                                    known_anchors=known, caps=CAPS).errors)
+    forged = copy.deepcopy(sphere)
+    forged.checkpoint.signature = "00" * 32
+    assert any("signature d'ancre" in e for e in sl.verify_sphere(forged, issuer_pk=issuer.public_key,
+                                                                  known_anchors=known, caps=CAPS).errors)
+    foreign = copy.deepcopy(sphere)
+    foreign.checkpoint = Checkpoint.issue(slh_dsa.SlhDsaKeyPair.generate(), "esoptron", 1, tree, {}, "2026-09-14T08:00:00Z")
+    v = sl.verify_sphere(foreign, issuer_pk=issuer.public_key, known_anchors=known, caps=CAPS)
+    assert not v.ok and any("rattachement" in e for e in v.errors)
+    # Un point de contrôle qui inclut une tête antérieure du fichier : valide, mais ne finalise pas la courante.
+    older = copy.deepcopy(sphere)
+    old_tree = SumTree([SphereLeaf(sphere.mint.sphere_id, "rare", sphere.custody[0].record_hash.hex(), True)])
+    older.checkpoint = Checkpoint.issue(anchor, "eidolon-vps", 3, old_tree, {}, "2026-09-14T07:00:00Z")
+    older.checkpoint_proof = old_tree.prove(sphere.mint.sphere_id)
+    v = sl.verify_sphere(older, issuer_pk=issuer.public_key, known_anchors=known, caps=CAPS)
+    assert v.ok and not v.final and v.checkpoint_seq is None, v.errors
+    # La même règle, isolée.
+    assert sl.verify_checkpoint_inclusion(sphere, cp, sphere.checkpoint_proof, anchor.public_key) == (True, [])
+    assert not sl.verify_checkpoint_inclusion(sphere, cp, tree.prove("COMMON_001"), anchor.public_key)[0]

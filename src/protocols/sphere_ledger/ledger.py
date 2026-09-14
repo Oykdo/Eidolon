@@ -32,7 +32,7 @@ from typing import Dict, List, Optional, Set, Tuple
 
 from . import hash_sig as wots
 from . import slh_dsa
-from .checkpoint import SphereLeaf, SumProof, verify_proof
+from .checkpoint import Checkpoint, SphereLeaf, SumProof, verify_proof
 
 RECORD_DOMAIN = b"EIDOLON_CUSTODY_V1:"
 COMMIT_DOMAIN = b"EIDOLON_SPHERE_COMMIT_V1:"
@@ -473,6 +473,8 @@ class SphereFile:
     receipts: List[AnchorReceipt] = field(default_factory=list)
     genesis_proof: Optional[SumProof] = None    # inclusion de la frappe dans la racine de genèse
     template: Optional[dict] = None             # le gabarit révélé à la réclamation ; doit redonner sphere_commit
+    checkpoint: Optional[Checkpoint] = None     # la finalité par lot : un point de contrôle signé par l'ancre…
+    checkpoint_proof: Optional[SumProof] = None  # …et la preuve que la tête y figure (I4)
 
     @property
     def head(self):
@@ -518,7 +520,9 @@ class SphereFile:
         return {"format": "EIDOLON_SPHERE", "version": VERSION, "mint": self.mint.to_dict(),
                 "custody": [c.to_dict() for c in self.custody], "receipts": [r.to_dict() for r in self.receipts],
                 "genesis_proof": self.genesis_proof.to_dict() if self.genesis_proof is not None else None,
-                "template": self.template}
+                "template": self.template,
+                "checkpoint": self.checkpoint.to_dict() if self.checkpoint is not None else None,
+                "checkpoint_proof": self.checkpoint_proof.to_dict() if self.checkpoint_proof is not None else None}
 
     def to_json(self) -> str:
         return json.dumps(self.to_dict(), indent=2, ensure_ascii=False)
@@ -539,10 +543,16 @@ class SphereFile:
         template = d.get("template")
         if template is not None and not isinstance(template, dict):
             raise LedgerError("gabarit : objet attendu")
+        checkpoint, cp_proof = d.get("checkpoint"), d.get("checkpoint_proof")
+        try:
+            checkpoint = Checkpoint.from_dict(checkpoint) if checkpoint is not None else None
+            cp_proof = SumProof.from_dict(cp_proof) if cp_proof is not None else None
+        except (ValueError, TypeError) as exc:
+            raise LedgerError(f"point de contrôle illisible : {exc}") from None
         return cls(mint=MintRecord.from_dict(d.get("mint")),
                    custody=[CustodyRecord.from_dict(c) for c in custody],
                    receipts=[AnchorReceipt.from_dict(r) for r in receipts],
-                   genesis_proof=proof, template=template)
+                   genesis_proof=proof, template=template, checkpoint=checkpoint, checkpoint_proof=cp_proof)
 
     @classmethod
     def from_json(cls, s: str) -> "SphereFile":
@@ -561,6 +571,8 @@ class Verification:
     head_hash: str
     owner: Optional[str]
     revealed: bool = False      # le gabarit est présent et redonne l'engagement de la frappe
+    final_by: Optional[str] = None      # "receipt" | "checkpoint" : ce qui a rendu la tête finale
+    checkpoint_seq: Optional[int] = None  # le point de contrôle qui inclut la tête, s'il est dans le fichier
 
 
 def verify_sphere(sphere: SphereFile, *, issuer_pk: Optional[bytes] = None,
@@ -581,10 +593,12 @@ def verify_sphere(sphere: SphereFile, *, issuer_pk: Optional[bytes] = None,
     (``revealed`` le dit). ``known_anchors`` : ``anchor_id ->
     clé publique`` ; la tête est **finale** si un reçu de l'ancre de
     rattachement de cette tête (celle de la frappe, ou celle désignée par le
-    dernier ``reanchor``), connue du vérifieur, la cite. Un reçu d'une autre
-    ancre est une erreur : c'est la trace d'une finalisation hors ancre
-    (§1.5). Un fichier illisible donne un verdict ``ok=False``, jamais une
-    exception.
+    dernier ``reanchor``), connue du vérifieur, la cite — ou si un point de
+    contrôle signé par cette ancre, porté par le fichier avec sa preuve
+    d'inclusion (``checkpoint``, ``checkpoint_proof``), l'inclut : la
+    finalité par lot. Un reçu ou un point de contrôle d'une autre ancre est
+    une erreur : c'est la trace d'une finalisation hors ancre (§1.5). Un
+    fichier illisible donne un verdict ``ok=False``, jamais une exception.
     """
     try:
         return _verify_sphere(sphere, issuer_pk=issuer_pk, known_anchors=known_anchors, caps=caps,
@@ -705,9 +719,61 @@ def _verify_sphere(sphere: SphereFile, *, issuer_pk: Optional[bytes], known_anch
             continue
         if r.custody_head == sphere.head_hash:
             final = True
+    final_by = "receipt" if final else None
 
-    return Verification(ok=not errors, final=final and not errors, errors=errors,
-                        head_hash=sphere.head_hash, owner=sphere.owner, revealed=revealed and not errors)
+    # 4. La finalité par lot : un point de contrôle de l'ancre de rattachement inclut une tête du fichier.
+    checkpoint_seq: Optional[int] = None
+    cp, proof = sphere.checkpoint, sphere.checkpoint_proof
+    if cp is not None or proof is not None:
+        if cp is None or proof is None:
+            errors.append("point de contrôle : le point et sa preuve d'inclusion vont ensemble")
+        else:
+            leaf = proof.leaf
+            expected_anchor = anchor_for.get(leaf.head) if leaf.sphere_id == m.sphere_id else None
+            if expected_anchor is None:
+                errors.append("point de contrôle : la preuve porte sur une tête qui n'est pas dans ce fichier")
+            elif cp.anchor_id != expected_anchor:
+                errors.append(f"point de contrôle : ancre {cp.anchor_id!r} n'est pas l'ancre de rattachement "
+                              f"{expected_anchor!r} de cette tête")
+            else:
+                pk = known_anchors.get(cp.anchor_id)
+                # Une tête n'est morte que si elle est le burn lui-même ; toute tête antérieure était vivante.
+                is_head = leaf.head == sphere.head_hash
+                alive = not sphere.burned if is_head else True
+                if pk is None:
+                    pass    # ancre inconnue du vérifieur : ne compte pas, sans être une erreur
+                elif not cp.verify(pk):
+                    errors.append("point de contrôle : signature d'ancre invalide")
+                elif leaf != SphereLeaf(m.sphere_id, m.rarity, leaf.head, alive):
+                    errors.append("point de contrôle : la feuille ne décrit pas cette sphère")
+                elif not verify_proof(proof, bytes.fromhex(cp.root), cp.totals):
+                    errors.append("point de contrôle : la preuve ne mène pas à la racine publiée")
+                elif is_head:
+                    checkpoint_seq = cp.checkpoint_seq
+                    if not final:
+                        final, final_by = True, "checkpoint"
+
+    ok = not errors
+    return Verification(ok=ok, final=final and ok, errors=errors, head_hash=sphere.head_hash, owner=sphere.owner,
+                        revealed=revealed and ok, final_by=final_by if ok else None,
+                        checkpoint_seq=checkpoint_seq if ok else None)
+
+
+def verify_checkpoint_inclusion(sphere: SphereFile, checkpoint: Checkpoint, proof: SumProof,
+                                anchor_pk: bytes) -> Tuple[bool, List[str]]:
+    """La finalité par lot, isolée : la tête courante de ``sphere`` figure dans
+    ``checkpoint``, signé par ``anchor_pk``. Même vérificateur qu'un reçu, une
+    signature pour toutes les têtes. ``verify_sphere`` applique la même règle
+    quand le fichier porte le point de contrôle et sa preuve."""
+    errors: List[str] = []
+    if not checkpoint.verify(anchor_pk):
+        errors.append("point de contrôle : signature d'ancre invalide")
+    expected = SphereLeaf(sphere.mint.sphere_id, sphere.mint.rarity, sphere.head_hash, not sphere.burned)
+    if proof.leaf != expected:
+        errors.append("preuve : ne porte pas sur la tête courante de cette sphère")
+    elif not verify_proof(proof, bytes.fromhex(checkpoint.root), checkpoint.totals):
+        errors.append("preuve : ne mène pas à la racine du point de contrôle")
+    return (not errors, errors)
 
 
 def detect_fork(a: SphereFile, b: SphereFile) -> Optional[Tuple[int, str, str]]:
@@ -728,5 +794,5 @@ def detect_fork(a: SphereFile, b: SphereFile) -> Optional[Tuple[int, str, str]]:
 
 
 __all__ = ["MintRecord", "CustodyRecord", "AnchorReceipt", "GenesisRoot", "SphereFile", "Verification",
-           "ReceiverKey", "mint", "sign_custody", "issue_receipt", "verify_sphere", "detect_fork", "sphere_commit",
-           "canonical", "LedgerError", "REASONS", "GENESIS_CAPS"]
+           "ReceiverKey", "mint", "sign_custody", "issue_receipt", "verify_sphere", "verify_checkpoint_inclusion",
+           "detect_fork", "sphere_commit", "canonical", "LedgerError", "REASONS", "GENESIS_CAPS"]
