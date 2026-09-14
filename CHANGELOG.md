@@ -9,6 +9,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Connect escrow primitives** (`src/api/server.py`, `src/identity/vault_identity.py`).
+  What an application running a postal escrow on top of Eidolon (CardSwap)
+  was missing, app-authenticated (Connect secret + approved app) rather
+  than bound to a user JWT: `POST /connect/vault/seal` / `open` seal small
+  records (≤ 16 KiB) under a key derived per (app, subject) from a new
+  `EIDOLON_SEAL_SECRET` (generated and persisted like the JWT secret, never
+  the same value) — the app keeps the blob, Eidolon keeps the key; and
+  `POST /connect/vault/economy/holds` (+ `/{id}/release`, `/{id}/forfeit`,
+  `GET /{id}`) lock EIDOLON on a vault as a behavioural bond: the amount
+  leaves the balance at hold time, comes back on release, and on forfeit is
+  credited to a counterparty vault (or burnt) and counted as spent.
+  Holds live in `identities/economic_holds.json`, every move is in the
+  vault's operations trail (`hold`, `hold_release`, `hold_forfeit`,
+  `hold_forfeit_credit`), and `GET /connect/vault/economy/{vault_id}` now
+  reports `eidolon_held`. The legacy demo `/vault/encrypt` stays
+  demo-gated.
+
 - **Eidos witness (`src/protocols/eidos_witness`, Tier 1).** A byte-exact port of
   what the Eidos atelier's Witness page needs to judge without replaying:
   Eidos's WOTS+ derivation (`wots`), XMSS validator signatures (`xmss`), the
