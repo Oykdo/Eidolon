@@ -2,455 +2,369 @@
 
 <h1>Eidolon</h1>
 
-![Security](https://img.shields.io/badge/security-post--quantum-brightgreen?style=flat-square)
-![Rust](https://img.shields.io/badge/rust-native-orange?style=flat-square)
-![Python](https://img.shields.io/badge/python-3.9+-yellow?style=flat-square)
+**Post-quantum cryptographic vault, holographic key derivation, and a hash-based custody ledger for the artifacts a vault holds.**
+
+Powers identity, custody and resonance for [Cipher](https://github.com/Oykdo/cipher) — the post-quantum messaging client.
+
+[![CI](https://github.com/Oykdo/Eidolon/actions/workflows/ci.yml/badge.svg)](https://github.com/Oykdo/Eidolon/actions/workflows/ci.yml)
+[![Release](https://img.shields.io/github/v/release/Oykdo/Eidolon?style=flat-square&color=blue)](https://github.com/Oykdo/Eidolon/releases/latest)
+![Post-quantum](https://img.shields.io/badge/security-post--quantum-brightgreen?style=flat-square)
+![Rust](https://img.shields.io/badge/engine-Rust%20%2B%20PyO3-orange?style=flat-square)
+![Python](https://img.shields.io/badge/python-3.9%2B%20(3.12%20recommended)-yellow?style=flat-square)
 ![License](https://img.shields.io/badge/license-Proprietary-red?style=flat-square)
-![Release](https://img.shields.io/badge/release-v1.2.0-blue?style=flat-square)
 
-**Post-quantum cryptographic vault with holographic key derivation**
-
-Powers identity and resonance for [Cipher](https://github.com/Oykdo/cipher) — the secure post-quantum messaging client.
-
----
-
-### ⬇️ Download Eidolon v1.2.0
-
-| Platform | Download |
-|----------|----------|
-| **Windows x64** | [![Windows](https://img.shields.io/badge/⬇_Download-Windows_x64-2ea44f?style=for-the-badge&logo=windows&logoColor=white)](https://github.com/Oykdo/Eidolon/releases/download/v1.2.0/Eidolon-v1.2.0-windows-x64.exe) |
-| **Linux x64** | [![Linux](https://img.shields.io/badge/⬇_Download-Linux_x64-2ea44f?style=for-the-badge&logo=linux&logoColor=white)](https://github.com/Oykdo/Eidolon/releases/download/v1.2.0/Eidolon-v1.2.0-linux-x64) |
-
-<sub>Or grab the [full release page](https://github.com/Oykdo/Eidolon/releases/tag/v1.2.0) with archives + `SHA256SUMS`.</sub>
-
----
-
-[Distribution Model](#distribution-model) • [Quick Start](#quick-start) • [Features](#features) • [Cipher Integration](#cipher-integration-sustainable-ecosystem)
+[Downloads](#downloads) · [At a glance](#at-a-glance) · [Quick start](#quick-start) · [Public protocols](#public-protocols) · [Sphere custody ledger](#sphere-custody-ledger) · [Cipher integration](#cipher-integration) · [Security](#security-model) · [Development](#development)
 
 </div>
 
 ---
 
-## Distribution Model
+## Downloads
 
-Eidolon ships as **two layers**:
+Desktop builds (Windows x64, Linux x64) and `SHA256SUMS` are published on the
+**[latest release page](https://github.com/Oykdo/Eidolon/releases/latest)**.
+Cipher ships the same engine as a frozen runtime (`cipher-runtime`), so a
+Cipher user never installs Eidolon separately.
+
+---
+
+## At a glance
+
+| | |
+|---|---|
+| **Vault** | Two files, both required to unlock: `.psnx` (~17 KB, key material) + `.blend_data` (~156 KB, holographic entropy + signatures). Local-first: keys never leave the machine. |
+| **Post-quantum engine** | Kyber1024 + Dilithium5 inside the compiled pipeline; ML-DSA-65, Falcon-512, SPHINCS+ (SHA2-256f), McEliece-6960119 and HQC-256 in the Python layer; AES-256-GCM, HKDF, scrypt, SHA-3. |
+| **Custody ledger** | Hash-based, no curves, no lattices: SHA3-256, WOTS+ (RFC 8391) one-time signatures, SLH-DSA-SHA2-128s (FIPS 205) for issuers and anchors, Merkle **sum** trees. Fully verifiable offline with the public verifier. |
+| **Genesis** | 21,186 spheres committed by **one** signed root; every sphere file carries its own inclusion proof (15 levels, ≈1.9 KB, verified in 0.2 ms). |
+| **Tests** | 526 public tests (101 of them pure-protocol: Python + `pqcrypto` only); 622 with the private suites — all green on 2026-09-14. |
+| **Public surface** | Four protocol packages (`escrow_7d`, `vault_migration`, `sphere_ledger`, `eidos_witness`), the `eidolond` daemon, SDK stubs (Python, TypeScript, Go, Rust), format specs, threat model, reproducible-build notes. |
+
+<details>
+<summary><b>Measured on the public verifier (pure Python, laptop, 2026-09-14)</b></summary>
+
+| Operation | Figure |
+|---|---|
+| WOTS+ (n = 32, w = 16) key generation + one signature | ≈34 ms |
+| WOTS+ signature / public root | 2,144 B / 32 B |
+| WOTS+ verification | ≈37 ms |
+| SLH-DSA-SHA2-128s key generation / signature / verification | 0.19 s / 1.4 s / 1.6 ms |
+| SLH-DSA public key / signature | 32 B / 7,856 B |
+| Sum tree over 21,186 leaves (build) | 0.72 s |
+| Inclusion proof at that scale (levels / size / verification) | 15 / 1,936 B / 0.23 ms |
+| Whole sphere file, three custody hops + receipt, `verify_sphere` | ≈23 ms |
+| Signed genesis root (`root.json`) / full mint list (`mints.jsonl`) | 16.6 KB / 9.8 MB |
+
+</details>
+
+---
+
+## Distribution model
+
+Eidolon ships as **two layers**. Publicness is a design decision, recorded in
+[`IP-BOUNDARY.md`](IP-BOUNDARY.md) and enforced by a pre-commit guard
+([`tools/hooks/pre-commit`](tools/hooks/pre-commit)).
 
 | Layer | What | Where |
 |---|---|---|
-| **Public** (this repo) | Integration tests, Python examples, daemon CLI source, build tooling, public API contracts, whitepapers (research). | `github.com/Oykdo/Eidolon` |
-| **Proprietary** (compiled wheel) | Holographic key-generation pipeline, post-quantum primitives, Merkle / ecosystem registry, ZKP modules. | Distributed as the `eidolon-crypto` native wheel; sou[...]
+| **Public** (this repository) | Protocol packages and their format specifications, the daemon CLI, integration and contract tests, reference vectors, SDK stubs, whitepapers. | `github.com/Oykdo/Eidolon` |
+| **Compiled** (native wheel) | The holographic key-generation pipeline, post-quantum wrapping, Merkle / ecosystem registry, ZKP and secret-sharing primitives. | `eidolon-crypto` wheel (Rust, PyO3, abi3); source not distributed |
+| **Private** (never shipped) | Minting, the genesis treasury and its ceremony, the vault-side clients, the API server. | — |
 
-This dual-layer model lets integrators audit the public API surface and validate it against the shipped test suite, while protecting the cryptographic IP that makes Eidolon's pipeline distinct. Th[...]
-
----
-
-## Why Eidolon?
-
-| Problem | Eidolon Solution |
-|---------|------------------|
-| Quantum computers will break RSA/ECC | **Kyber1024 + Dilithium5** (NIST PQC standards) |
-| Cloud vaults = trust third parties | **Local-first**, your keys never leave your machine |
-| Simple hashing is vulnerable | **Multi-layer holographic key derivation** |
-| Hard to verify without revealing data | **Merkle proofs** for selective disclosure |
+Integrators audit the public API surface and the shipped test suite; the
+construction that makes the pipeline distinct stays in the compiled layer.
+Everything a **verifier** needs — formats, domain separators, signature
+schemes, proof shapes — is public, because a ledger nobody can check is not a
+ledger.
 
 ---
 
-## Quick Start
+## Quick start
 
-### 1. Install the native wheel
+### 1. Install
 
 ```bash
-pip install eidolon-crypto
+git clone https://github.com/Oykdo/Eidolon.git
+cd Eidolon
+python -m venv .venv && . .venv/bin/activate      # Windows: .venv\Scripts\activate
+pip install -r requirements.txt                    # pins pqcrypto==0.4.0 (1.x renames its modules)
+pip install eidolon-crypto                         # the native engine, needed for vault generation
 ```
 
-> The `eidolon-crypto` wheel ships the protected pipeline as a native
-> Rust binary with PyO3 bindings. It is the **only required dependency**
-> for vault generation and verification.
-
-### 2. Generate your first vault
+### 2. Generate a vault
 
 ```python
 import eidolon_crypto as ec
 
-vault = ec.pipeline_generate(
-    user_name="MyVault",
-    enable_pq=True,
-    surface_material="granite",
-)
+vault = ec.pipeline_generate(user_name="MyVault", enable_pq=True, surface_material="granite")
+print(vault["key_id"], vault["pq_enabled"])
 
-print(f"Vault ID:    {vault['key_id']}")
-print(f"Post-Quantum: {vault['pq_enabled']}")
-
-# Persist the dual-key files
 with open("MyVault.psnx", "wb") as f:
     f.write(bytes(vault["psnx_bytes"]))
 with open("MyVault.blend_data", "w") as f:
     f.write(vault["blend_json"])
 ```
 
-The pipeline produces a **`.psnx`** file (compressed key material) and a
-**`.blend_data`** file (holographic entropy + signatures). **Both files are
-required** to unlock the vault.
+Neither file alone unlocks the vault; compromise of one reveals nothing.
 
-### 3. Run the public test suite
+### 3. Verify a sphere — offline, with the public verifier
 
-```bash
-git clone https://github.com/Oykdo/Eidolon.git
-cd Eidolon
-pip install -r requirements.txt
-python -m pytest tests/ --ignore=tests/_dormant -v
+```python
+import json
+from src.protocols.sphere_ledger.ledger import SphereFile, GenesisRoot, verify_sphere
+
+sphere  = SphereFile.from_json(open("RARE_0003__I00002.sphere.json").read())
+genesis = GenesisRoot.from_dict(json.load(open("root.json")))      # served by the anchor, pinned by you
+
+v = verify_sphere(
+    sphere,
+    issuer_pk=bytes.fromhex(ISSUER_PUBLIC_KEY),                    # from a channel independent of the server
+    genesis=genesis,
+    known_anchors={"eidolon-anchor-1": bytes.fromhex(ANCHOR_PUBLIC_KEY)},
+    treasury_ids={genesis.treasury_id},
+)
+print(v.ok, v.owner, "final" if v.final else "waiting", v.final_by, v.errors)
 ```
 
-The public test suite validates the wheel's API against the documented
-contracts (post-quantum keys, Merkle proofs, secret sharing, ZKP).
+`ok` means the mint is in the signed genesis root, every custody hop is
+signed by the key committed in the previous hop, and every receipt or
+checkpoint comes from the sphere's anchor of record. `final` means that anchor
+has ordered the current head. A malformed file yields a verdict, never an
+exception.
+
+### 4. Run the tests
+
+```bash
+export EIDOLON_API_SECRET=0123456789abcdef0123456789abcdef   # >= 32 chars, read at import by one API test
+python -m pytest tests/ --ignore=tests/_dormant -q
+
+# Protocol suites only — no native wheel required:
+python -m pytest tests/test_ledger_*.py tests/test_eidos_witness_*.py tests/test_vault_migration.py -q
+```
 
 ---
 
-## Features
+## Public protocols
 
-### Holographic Key Derivation
+All four live under [`src/protocols/`](src/protocols) and import nothing
+from the compiled layer: vault key material only ever enters as opaque bytes.
 
-Vault keys are produced by a proprietary multi-stage transformation that
-expands a CSPRNG master seed into post-quantum cryptographic material.
-The pipeline combines a holographic entropy capture step, a domain-separated
-hardening chain and a NIST post-quantum wrap (Kyber + Dilithium), and finishes
-by anchoring the result inside a Merkle tree for selective disclosure.
+| Package | What it does | Spec |
+|---|---|---|
+| **`sphere_ledger`** | The custody ledger verifier: WOTS+ one-time signatures, SLH-DSA with per-purpose domain separation, Merkle sum trees with inclusion proofs and conservation checks, `verify_sphere`, `detect_fork`, the flux invariant an anchor must satisfy between two checkpoints. | [`docs/SPHERE_LEDGER_FORMAT.md`](docs/SPHERE_LEDGER_FORMAT.md) |
+| **`eidos_witness`** | A byte-exact port of the public verifier surface of [Eidos](https://github.com/Oykdo/Eidos): WOTS+ derivation, XMSS validator signatures, signed head, UTXO inclusion proofs, transaction encoding, the `eidos.carnet` exchange format, and a self-contained asset dossier judged offline. | [`docs/EIDOS_WITNESS_FORMAT.md`](docs/EIDOS_WITNESS_FORMAT.md) |
+| **`vault_migration`** | Export / import / archive of a vault with a versioned, MAC-bound manifest; carries the vault's sidecars (Eidos coffre, sphere files) without ever copying a directory. | in-package docstrings |
+| **`escrow_7d`** | Time-locked sealed envelopes (AES-256-GCM, HKDF-wrapped session key, HMAC tag) with composable release conditions (`TimeLock`, `OwnerSignature`, `CombinedAll/Any`) and a provenance keyprint. | in-package docstrings |
 
-*Pipeline internals are proprietary and reserved.*
+Also public: [`src/daemon/`](src/daemon) (`eidolond` — start/stop/status, vault
+create/list/info, background service on port 8420), [`docs/FORMAL_SPEC.md`](docs/FORMAL_SPEC.md),
+[`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md), [`docs/REPRODUCIBLE_BUILDS.md`](docs/REPRODUCIBLE_BUILDS.md),
+[`docs/TEST_VECTORS.json`](docs/TEST_VECTORS.json), and the vectors under [`tests/vectors/`](tests/vectors).
 
-### Merkle Tree Verification
+---
+
+## Sphere custody ledger
+
+A sphere is a **self-verifying file**, not a row in someone's database.
+
+```
+MintRecord ──▶ CustodyRecord #1 ──▶ CustodyRecord #2 ──▶ … ──▶ head
+ (in the         (signed WOTS+ by       (signed by the key
+  signed          the key committed      committed in #1)
+  genesis root)   in the mint)
+                                     AnchorReceipt / Checkpoint proof ──▶ final
+```
+
+- **One key, one signature.** Each custody hop is signed with a WOTS+ key whose
+  root was committed in the previous record; the receiver supplies the next
+  root. A client re-derives its keys from its vault key — nothing to back up —
+  and writes a signed transfer to disk *before* submitting it, never signing
+  twice for one head.
+- **First head wins.** An *anchor* orders heads: for a given predecessor, the
+  first record received becomes the head, the second is a fork and is refused.
+  It signs receipts (per head) and **checkpoints** (one SLH-DSA signature over a
+  sum tree of *all* heads — batched finality); a file carries the checkpoint
+  and its inclusion proof.
+- **Conservation is provable.** Leaves count 1 per live sphere per rarity, so a
+  checkpoint root commits both the heads and the totals; `minted = held +
+  burned` holds rarity by rarity, and the anchor's own reconciler halts the
+  anchor if a checkpoint would violate the flux invariant.
+- **Commit-and-reveal catalogue.** The genesis root commits every template by
+  hash; a sphere reveals its template only when claimed, and any receiver
+  recomputes the commitment.
+- **Trust travels out of band.** The issuer key, anchor keys and pinned genesis
+  roots are compiled into the client (`config/genesis/trust.json`), not fetched
+  from the server they would otherwise vouch for.
+
+The desktop client (`cipher-runtime sphere list|claim|transfer|import|export|sync|mailbox|verify|trust`)
+shows every sphere as **finale** or **en attente**; a received file is verified
+offline first, then confronted with the anchor ("local heads = anchor heads").
+
+---
+
+## Cipher integration
+
+Eidolon is the cryptographic backbone of [**Cipher**](https://github.com/Oykdo/cipher):
+a vault is the account, the E2EE root derives from it, and activity feeds a
+symbiotic economy.
+
+| Concept | Description |
+|---|---|
+| **Resonance** | Activity score (0–100); active vaults gain resonance and better yield factors |
+| **Entropy** | Inactivity penalty (0–100) accumulating over time |
+| **Realms** | Temporal collectives of pioneers; shared governance and epoch distribution |
+| **Ticks / Epochs** | Periodic processing distributes tier-weighted epochs (~1 hour units), which vest (20 % per week) before EIDOLON conversion |
+| **Spheres** | The custody-ledger artifacts above, with yield, evolution and quests |
+
+```
+Cipher activity → resonance → realm tick → epochs (tier-weighted) → vesting → EIDOLON claim → treasury → realm growth
+```
+
+### Tier multipliers
+
+| Tier | Epoch multiplier | Vaults |
+|---|---|---|
+| Supreme | 2.5× | #1–33 |
+| Elite | 1.5× | #34–100 |
+| Founder | 0.5× | #101–1,000 |
+| Pioneer | 0.3× | #1,001–10,000 |
+| Standard | 0.1× | all others |
+
+### Genesis distribution
+
+The first 10,000 vaults receive spheres with guaranteed minimum rarities, from
+a distribution frozen once and committed by hash in the signed genesis root:
+
+| Cohort | Vaults | Spheres / vault | Guaranteed minimum |
+|---|---|---|---|
+| Apex | #1–10 | 8 | 1 Primordial + 1 Genesis |
+| Supreme | #11–33 | 6 | 1 Genesis |
+| Founder Elite | #34–100 | 4 | 1 Legendary |
+| Founder | #101–1,000 | 3 | 1 Epic |
+| Pioneer | #1,001–10,000 | 2 | weighted draw |
+
+**21,186 unique templates, one instance each, never reused** — 11 Primordial
+(9 Core + 2 Echo), 58 Genesis, 360 Mythical, 720 Legendary, 1,440 Epic, 2,160
+Rare, 3,600 Uncommon, 12,837 Common. The upper tiers descend from 8 Cosmic
+Cycles (11 Primordial → 58 Genesis → 360 Mythical → 720 Legendary); the 9th
+Core Primordial, *L'Inconnu*, is reserved for Vault #1.
+
+<details>
+<summary><b>Runtime lifecycle, quest spheres, resonance bridge</b></summary>
+
+**Lifecycle** — `DORMANT → EVOLVING → AWAKENED → ASCENDED`. Activation costs 2×
+base yield, at most 5 concurrent evolution slots per vault, with vault-maturity
+gates by rarity (Rare 48 eons … Primordial 1,320). An awakened sphere yields
+daily (`base × cycle_quality × state`, cycle quality 0.5× to 1.6×); ascension
+(1.2×) needs three successful cycles or one perfect cycle. Daily base yields:
+Common 4.0, Uncommon 5.5, Rare 7.0, Epic 8.0, Legendary 12.0, Mythical 18.0,
+Genesis 28.0, Primordial 42.0 EIDOLON.
+
+**Quest spheres (second era)** — minted on demand as quest rewards with their
+own rarity ladder (Stone 81.4 % · Crystal 15 % · Lunar 3 % · Stellar 0.5 % ·
+Cosmic 0.1 %; yield 1.0× to 5.0×), **fusion** (3 same-tier → 1 next tier),
+**trade** with a 10 % burn, **decay** after 30 days of inactivity. Twin spheres
+are non-tradeable artifacts derived from CHSH Bell-test correlations between
+paired vaults.
+
+**Sphere ↔ resonance bridge** — evolving spheres add passive resonance per
+epoch; awakening grants a one-shot bonus; Mythical-or-higher holdings feed the
+Rosetta Stone yield-bonus eligibility.
+
+</details>
+
+---
+
+## Security model
+
+| Layer | Primitives |
+|---|---|
+| Vault engine (compiled) | Kyber1024 (KEM) + Dilithium5 (signatures), AES-256-GCM, HKDF-SHA256/512, scrypt, PBKDF2, SHA-3; Schnorr ZKP for authentication; Shamir secret sharing (v1 and large-secret v2); Merkle proofs for selective disclosure |
+| Python PQ layer | McEliece-6960119 and HQC-256 (code-based KEMs — no lattice dependency), ML-DSA-65 (FIPS 204), Falcon-512, SPHINCS+-SHA2-256f (FIPS 205) |
+| Custody ledger | SHA3-256 everywhere, WOTS+ (RFC 8391, n = 32, w = 16), SLH-DSA-SHA2-128s with per-purpose domain separation (`mint`, `receipt`, `checkpoint`, `genesis`), canonical JSON |
+| Escrow | AES-256-GCM, HKDF-wrapped session keys, HMAC-bound envelopes, composable release conditions |
+
+Design documents: [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md),
+[`docs/FORMAL_SPEC.md`](docs/FORMAL_SPEC.md),
+[`docs/REPRODUCIBLE_BUILDS.md`](docs/REPRODUCIBLE_BUILDS.md).
+The key-generation pipeline itself is proprietary; its *properties* (inputs,
+outputs, sizes, test vectors) are documented, its construction is not.
+
+---
+
+## Native engine API
+
+Everything below runs against the published wheel.
 
 ```python
 import eidolon_crypto as ec
 
-tree = ec.MerkleTree([b"doc1", b"doc2", b"doc3"])
-proof = tree.prove(1)
-assert proof.verify()  # True
+result = ec.pipeline_generate(user_name="Alice", enable_pq=True, surface_material="granite")
+vault_key, key_id, merkle_root = bytes(result["vault_key"]), result["key_id"], result["merkle_root"]
 
-# Detect tampering
-tree.update_leaf(1, b"tampered")
-# Root hash changes — tampering detected
-```
+tree = ec.MerkleTree([b"data1", b"data2", b"data3"])
+assert tree.prove(0).verify()
 
-### Ecosystem Registry
-
-```python
 registry = ec.EcosystemRegistry()
-proof = registry.register_vault(entry)
-anchor = registry.export_anchor()
-# {"root": "abc...", "vault_count": 42, "version": 7}
+proof = registry.register_vault(ec.VaultEntry(
+    vault_id="vault_001", key_id=key_id, owner_hash="…", merkle_root=merkle_root,
+    pq_enabled=True, tier="supreme", eidolon_score=8500.0,
+))
+anchor = registry.export_anchor()          # {"root": …, "vault_count": …, "version": …}
 ```
 
----
-
-## Cipher Integration: Sustainable Ecosystem
-
-Eidolon provides the cryptographic backbone for
-[**Cipher**](https://github.com/Oykdo/cipher) (post-quantum messaging) through
-a symbiotic economic model. The live integration is shipping in Cipher v1.3.0.
-
-### Key Concepts
-
-| Concept | Description | Role |
-|---------|-------------|------|
-| **Resonance** | Activity score (0–100) measuring vault engagement | Active users gain resonance, improving yield factors |
-| **Entropy** | Inactivity penalty (0–100) accumulating over time | Encourages regular participation to avoid decay |
-| **Realms** | Temporal collectives for post-quantum pioneers | Shared governance and epoch distribution |
-| **Ticks** | Periodic processing events (1 per epoch) | Distributes rewards and applies decay |
-| **Epochs** | Time-based reward units (~1 hour intervals) | Accumulated through activity, convertible to EIDOLON |
-| **Spheres** | Rarity-based digital artifacts | Pioneer rewards with Fibonacci-weighted distribution |
-
-### How It Works
-
-```
-Cipher activity  →  Resonance gain  →  Better yield factors
-       ↓
-   Realm tick   →  Epoch distribution (tier-weighted)
-       ↓
-   Vesting     →  EIDOLON claim
-       ↓
-   Treasury    →  Realm growth
-```
-
-1. Users authenticate with Eidolon vault (`.psnx` + `.blend_data`).
-2. Cipher activity (logins, message sends) generates **Resonance** deltas.
-3. Realms process **ticks** distributing **Epochs** based on tier multipliers.
-4. Epochs vest over time (20% per week) before EIDOLON conversion.
-5. Inactive realms decay, redistributing value to active participants.
-6. Governance voting weight is based on vested epochs.
-
-### Tier Multipliers
-
-| Tier | Epoch Multiplier | Description |
-|------|------------------|-------------|
-| Supreme | 2.5× | Vaults #1–33 |
-| Elite | 1.5× | Vaults #34–100 |
-| Founder | 0.5× | Vaults #101–1000 |
-| Pioneer | 0.3× | Vaults #1001–10000 |
-| Standard | 0.1× | All others |
-
-### Sphere Distribution
-
-Spheres are distributed to the first 10,000 vaults with guaranteed minimum rarities:
-
-| Cohort | Vaults | Spheres / vault | Guaranteed minimum |
-|--------|--------|-----------------|---------------------|
-| Apex | #1–10 | 8 | 1 Primordial + 1 Genesis |
-| Supreme | #11–33 | 6 | 1 Genesis |
-| Founder Elite | #34–100 | 4 | 1 Legendary |
-| Founder | #101–1000 | 3 | 1 Epic |
-| Pioneer | #1001–10000 | 2 | RNG-weighted |
-
-**21,186 unique sphere templates** — one per instance, never reused:
-
-| Rarity | Templates | Instances |
-|--------|-----------|-----------|
-| Primordial | 11 (9 Core + 2 Echo) | 11 |
-| Genesis | 58 | 58 |
-| Mythical | 360 | 360 |
-| Legendary | 720 | 720 |
-| Epic | 1,440 | 1,440 |
-| Rare | 2,160 | 2,160 |
-| Uncommon | 3,600 | 3,600 |
-| Common | 12,837 | 12,837 |
-
-Every template is **unique and immutable** — no two vaults share the same
-sphere. Templates are assigned via Fibonacci-weighted RNG across the first
-10,000 vaults, and each sphere_id equals its asset_id (no instance overlay).
-
-#### Cosmic Cycle Hierarchy
-
-The upper-tier templates follow a derived hierarchy rooted in 8 Cosmic Cycles:
-
-```
-11 Primordial (1 Exotic + 8 Thematic + 2 Echo)
- └─ 58 Genesis
-     └─ 360 Mythical
-         └─ 720 Legendary
-```
-
-Each Cosmic Cycle is a thematic era (e.g., *The Void Cycle*, *The Quantum
-Cycle*). The 9th Core Primordial — *"L'Inconnu"* — is an Exotic type that
-transcends all themes, reserved for Vault #1. The 2 Echo Primordials
-(*The Primordial Echo*, *The Primordial Reflection*) are unique variants
-derived from cycle intersections.
-
-#### Runtime Lifecycle
-
-Genesis-era spheres follow a four-state lifecycle after distribution:
-
-```
-DORMANT → EVOLVING → AWAKENED → ASCENDED
-```
-
-- **Dormant**: Assigned but inactive (no yield).
-- **Evolving**: Activation costs 2× base yield in EIDOLON. Caps at 5
-  concurrent evolution slots per vault. Higher rarities require minimum
-  vault maturity (EEP-001 epoch gates: Rare = 48 eons, Epic = 168,
-  Legendary = 504, Mythical = 840, Genesis = 1,080, Primordial = 1,320).
-- **Awakened**: Produces daily EIDOLON yield after a 7-day evolution cycle.
-  Yield = `base × cycle_quality_mult × state_mult`. Cycle quality ranges
-  from Failed (0.5×) to Perfect (1.6×).
-- **Ascended**: 1.2× state multiplier. Requires 3 successful cycles or 1
-  perfect cycle, plus an ascension cost in EIDOLON.
-
-Daily base yields (EIDOLON/day): Common 4.0, Uncommon 5.5, Rare 7.0,
-Epic 8.0, Legendary 12.0, Mythical 18.0, Genesis 28.0, Primordial 42.0.
-
-#### Quest Spheres (Second Era)
-
-Beyond the 21,186 Genesis instances, a second era of spheres is minted
-on-demand as quest rewards. Quest spheres use a separate rarity system:
-
-| Tier | Drop rate | Yield multiplier |
-|------|-----------|------------------|
-| Cosmic | 0.1% | 5.0× |
-| Stellar | 0.5% | 3.0× |
-| Lunar | 3.0% | 1.8× |
-| Crystal | 15.0% | 1.3× |
-| Stone | 81.4% | 1.0× |
-
-Quest spheres support **fusion** (3 same-tier → 1 next-tier up the chain
-Stone → Crystal → Lunar → Stellar → Cosmic), **trade** with a 10% burn tax,
-and **decay** after 30 days of vault inactivity. **Twin spheres** are
-non-tradeable artifacts generated from CHSH Bell-test correlation scores
-between paired vaults.
-
-#### Sphere ↔ Resonance Bridge
-
-Evolving spheres generate passive Resonance gain per epoch, even without
-Cipher activity. Hatched/Awakened spheres award a one-shot Resonance bonus.
-Mythical-or-higher unique sphere counts feed the Rosetta Stone yield bonus
-eligibility check, coupling the sphere economy directly to the Cipher
-activity pipeline.
-
----
-
-## Repository Structure
-
-What ships publicly in this repository:
-
-```
-src/daemon/         Public daemon CLI (eidolond service)
-tests/              Integration & contract tests against the public wheel API
-tests/vectors/      Reference vectors (rust_crypto, secret_sharing)
-assets/             Renders and reference visuals
-config/             Public configuration templates
-.github/workflows/  CI (Python + Rust pipelines)
-```
-
-What is **not** in the public tree (shipped only via the proprietary wheel):
-
-```
-eidolon_crypto.pipeline_generate(...)   # Holographic key generation
-eidolon_crypto.MerkleTree(...)           # Merkle primitives
-eidolon_crypto.EcosystemRegistry(...)    # Vault registry + anchoring
-eidolon_crypto.schnorr_zkp.*             # ZKP authentication
-eidolon_crypto.secret_sharing.*          # Shamir splitting
-```
-
----
-
-## Security Model
-
-### Dual-Key Authentication
-
-| File | Approx. size | Purpose |
-|------|--------------|---------|
-| `.psnx` | ~17 KB | Primary encrypted key material |
-| `.blend_data` | ~156 KB | Holographic entropy + signatures |
-
-Neither file alone can unlock the vault. Compromise of one reveals nothing.
-
-### Post-Quantum Stack
-
-```
-Key Encapsulation:    Kyber1024, McEliece-4096, HQC-256, NTRU
-Digital Signatures:   Dilithium5 (ML-DSA-65), SPHINCS+, Falcon
-Symmetric:            AES-256-GCM, ChaCha20-Poly1305
-Hashing:              SHA-3-512 (Keccak)
-Zero-Knowledge:       Schnorr ZKP, Merkle proofs
-```
-
-### Key Generation Pipeline
-
-Proprietary multi-stage transformation that hardens a CSPRNG master seed
-into post-quantum cryptographic material.
-
-*Pipeline details reserved.*
-
----
-
-## Rust Crypto API
-
-The protected cryptographic pipeline is available via the `eidolon_crypto`
-native module. All examples below run against the published wheel — no
-proprietary Python source required.
-
-```python
-import eidolon_crypto
-
-# Generate a vault via the holographic pipeline
-result = eidolon_crypto.pipeline_generate(
-    user_name="Alice",
-    enable_pq=True,             # Post-quantum (Kyber1024 + Dilithium5)
-    surface_material="granite",
-)
-
-vault_key  = bytes(result["vault_key"])
-key_id     = result["key_id"]
-merkle_root = result["merkle_root"]
-psnx_bytes = bytes(result["psnx_bytes"])
-blend_json = result["blend_json"]
-
-# Merkle tree for verification
-tree = eidolon_crypto.MerkleTree([b"data1", b"data2", b"data3"])
-proof = tree.prove(0)
-assert proof.verify()
-
-# Ecosystem registry
-registry = eidolon_crypto.EcosystemRegistry()
-entry = eidolon_crypto.VaultEntry(
-    vault_id="vault_001",
-    key_id=key_id,
-    owner_hash="...",
-    merkle_root=merkle_root,
-    pq_enabled=True,
-    tier="supreme",
-    eidolon_score=8500.0,
-)
-proof  = registry.register_vault(entry)
-anchor = registry.export_anchor()   # For blockchain anchoring
-```
+Also exported: `aes_gcm_encrypt/decrypt`, `hkdf_sha256_derive`, `hkdf_sha512_derive`,
+`scrypt_derive`, `pbkdf2_sha256_derive`, `hmac_sha256`, `shamir_split_v1/reconstruct_v1`,
+`shamir_split_large_v2/reconstruct_large_v2`, `zkp_*`, `machine_lock_*`,
+`secure_key_storage_*`, `complete_psnx_build/parse`, `verify_merkle_proof`,
+`constant_time_compare`.
 
 ---
 
 ## Development
 
-### Public test suite
-
 ```bash
-make test                # Python contract tests against the wheel
-make test-rust-bridge    # Python <-> Rust bridge tests
-make lint                # Ruff + Black formatting
-make check               # Type checking (mypy)
+python -m pytest tests/ --ignore=tests/_dormant     # public suite (needs the wheel + EIDOLON_API_SECRET)
+make lint                                             # flake8 + mypy + bandit
+make format                                           # black + isort (line length 100)
+make build-rust-wheel && make install-rust-wheel      # engine wheel, when you have the crate
 ```
 
-The rust-native tests live in the proprietary crate and are not part of the
-public repository.
+Conventions: conventional-commit prefixes (`feat:`, `fix:`, `docs:`, `test:`),
+`CHANGELOG.md` for user-visible changes, version in `src/__init__.py` only.
+Never commit `.psnx`, `.blend_data`, keybundles, seeds or `.env` files — the
+pre-commit guard refuses them, and `.gitignore` keeps every private path out.
 
----
-
-## What NOT to Commit
-
-The following are protected by `.gitignore`:
+### Repository structure
 
 ```
-*.psnx
-*.blend_data
-*.eidolon_keybundle
-*.private_key
-*.master_key
-*seed_phrase*
-*mnemonic*
-.env
-data/vaults/
-data/api/
-backups/
+src/protocols/        sphere_ledger · eidos_witness · vault_migration · escrow_7d   (public, Tier 1)
+src/daemon/           eidolond CLI and background service
+tests/                contract and protocol tests · tests/vectors · tests/fixtures
+docs/                 format specs, formal spec, threat model, reproducible builds, test vectors
+sdk/                  SDK stubs (python · javascript · go · rust)
+tools/hooks/          pre-commit publication guard
+assets/visuals/       renders
+.github/workflows/    ci.yml (compile + manifest checks), release.yml (frozen desktop builds)
+IP-BOUNDARY.md        what is open, what is closed, and the sign-offs that moved things across
 ```
-
-Never commit private keys, mnemonics, seeds, vault artifacts, or
-deployment credentials.
 
 ---
 
 ## License
 
-**Eidolon Proprietary Commercial License**
+**Eidolon Proprietary Commercial License** — Copyright (c) 2024–2026 Logos Project. All rights reserved.
 
-Copyright (c) 2024–2026 Logos Project. All rights reserved.
-
-This software is proprietary. No permission is granted to use, copy, modify, distribute, sublicense, or sell the Software without prior written commercial license.
-
-- Commercial use prohibited without authorization
-- Production deployment prohibited without authorization
-- ML training on this codebase prohibited without authorization
-
-Third-party dependencies retain their respective licenses.
-
-**For licensing inquiries:** jrzg7f2k@proton.me
-
-See `LICENSE` for full terms.
-
----
+No permission is granted to use, copy, modify, distribute, sublicense or sell
+the Software without a prior written commercial license. Commercial use,
+production deployment and ML training on this codebase are prohibited without
+authorization. Third-party dependencies retain their own licenses. See
+[`LICENSE`](LICENSE).
 
 ## Contact
 
-- **Repository:** [github.com/Oykdo/Eidolon](https://github.com/Oykdo/Eidolon)
-- **Companion product:** [Cipher](https://github.com/Oykdo/cipher) (post-quantum messaging)
-- **Licensing & inquiries:** jrzg7f2k@proton.me
-
----
+- Repository: [github.com/Oykdo/Eidolon](https://github.com/Oykdo/Eidolon)
+- Companion product: [Cipher](https://github.com/Oykdo/cipher) · sibling chain: [Eidos](https://github.com/Oykdo/Eidos)
+- Licensing and inquiries: jrzg7f2k@proton.me
 
 <div align="center">
 
