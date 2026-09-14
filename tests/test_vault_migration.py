@@ -253,6 +253,42 @@ class EidosSidecarTests(unittest.TestCase):
             self.assertEqual((eidos_dir / "coffre.eidolon").read_bytes(), b'{"format": "EIDOLON_EIDOS_COFFRE"}')
             self.assertTrue((eidos_dir / "actifs" / "aa-0.json").is_file())
 
+    def test_sphere_files_travel_with_the_vault(self):
+        """identities/vault_data/<prefix>/spheres/ (custody files, receipts, mailbox index)
+        is exported and reinstalled like the Eidos coffre; no secret lives there."""
+        import hashlib
+        depositor = hashlib.sha256(VAULT_KEY).hexdigest()[:16]
+        prefix = VAULT_ID[:16]
+        with _IsolatedDataRoot() as data_root:
+            psnx, blend = _make_fake_vault_tree(
+                data_root / "data", VAULT_ID, VAULT_NUMBER, VAULT_NAME, depositor
+            )
+            spheres_dir = data_root / "data" / "vaults" / "identities" / "vault_data" / prefix / "spheres"
+            (spheres_dir / "pending").mkdir(parents=True)
+            (spheres_dir / "RARE_0003__I00002.sphere.json").write_text('{"format": "EIDOLON_SPHERE"}', encoding="utf-8")
+            (spheres_dir / "mailbox.json").write_text('{"next_index": 2, "roots": {}}', encoding="utf-8")
+            (spheres_dir / "pending" / "RARE_0003__I00002.json").write_text('{"kind": "custody"}', encoding="utf-8")
+
+            out_path = data_root / "spheres.eidolon_keybundle_full"
+            summary = export_vault(
+                vault_key=VAULT_KEY, vault_id=VAULT_ID,
+                vault_number=VAULT_NUMBER, vault_name=VAULT_NAME,
+                output_path=out_path, psnx_path=psnx, blend_path=blend,
+            )
+            _, zip_bytes = read_archive(out_path, VAULT_KEY)
+            manifest_bytes, _files = read_zip_to_files(zip_bytes)
+            manifest = Manifest.from_json(manifest_bytes.decode("utf-8"))
+            paths = sorted(e.archive_path for e in manifest.file_inventory)
+            self.assertIn(f"vault_state/vault_data/{prefix}/spheres/RARE_0003__I00002.sphere.json", paths)
+            self.assertIn(f"vault_state/vault_data/{prefix}/spheres/mailbox.json", paths)
+            self.assertIn(f"vault_state/vault_data/{prefix}/spheres/pending/RARE_0003__I00002.json", paths)
+
+            shutil.rmtree(data_root / "data" / "vaults", ignore_errors=True)
+            result = import_vault(out_path, VAULT_KEY)
+            self.assertGreaterEqual(result["installed_count"], summary["file_count"] - 1)
+            self.assertEqual((spheres_dir / "mailbox.json").read_text(encoding="utf-8"), '{"next_index": 2, "roots": {}}')
+            self.assertTrue((spheres_dir / "pending" / "RARE_0003__I00002.json").is_file())
+
 
 class FrozenFormatTests(unittest.TestCase):
     def test_v1_mac_input_is_stable(self):

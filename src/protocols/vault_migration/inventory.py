@@ -189,16 +189,22 @@ def collect_vault_inventory(
                     entries.append(entry)
                     seen_archive_paths.add(archive_path)
 
-    # 6. Eidos coffre (sealed state + judged assets), per vault_id prefix.
-    #    The seal is bound to the vault key: the file travels as-is.
-    eidos_dir = get_identities_dir() / "vault_data" / _vault_data_prefix(vault_id) / "eidos"
-    if vault_id and eidos_dir.is_dir():
-        for entry in _walk_dir(
-            eidos_dir, f"vault_state/vault_data/{_vault_data_prefix(vault_id)}/eidos"
-        ):
-            if entry.archive_path not in seen_archive_paths:
-                entries.append(entry)
-                seen_archive_paths.add(entry.archive_path)
+    # 6. Per-vault sidecars under identities/vault_data/<prefix>/:
+    #    - eidos/   the Eidos coffre (sealed state + judged assets); the seal is
+    #               bound to the vault key, the file travels as-is;
+    #    - spheres/ the sphere custody files (EIDOLON_SPHERE containers, receipts,
+    #               checkpoint proofs, mailbox index) — no secret inside, the
+    #               WOTS+ keys re-derive from the vault key. A sphere file only
+    #               travels by export/import or with its vault, never by copy.
+    for sidecar in ("eidos", "spheres"):
+        sidecar_dir = get_identities_dir() / "vault_data" / _vault_data_prefix(vault_id) / sidecar
+        if vault_id and sidecar_dir.is_dir():
+            for entry in _walk_dir(
+                sidecar_dir, f"vault_state/vault_data/{_vault_data_prefix(vault_id)}/{sidecar}"
+            ):
+                if entry.archive_path not in seen_archive_paths:
+                    entries.append(entry)
+                    seen_archive_paths.add(entry.archive_path)
 
     # 7. Registry slice (just this vault's entry, not the whole multi-vault file)
     registry_path = get_vault_registry_path()
