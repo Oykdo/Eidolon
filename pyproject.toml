@@ -3,14 +3,14 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "poly-spinor-nexus-7d"
+name = "eidolon"
 description = "Système de vault sécurisé avec cryptographie post-quantique et monitoring blockchain"
 readme = "README.md"
 license = {text = "Proprietary"}
 requires-python = ">=3.9"
 dynamic = ["version"]
 authors = [
-    {name = "Logos Project", email = "contact@polyspinor.io"}
+    {name = "Logos Project", email = "jrzg7f2k@proton.me"}
 ]
 keywords = [
     "vault", "cryptocurrency", "nft", "blockchain", "security",

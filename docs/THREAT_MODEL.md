@@ -95,7 +95,7 @@ What the escrow does **not** provide, by design of Phase 1:
 - **Single trust root.** `OwnerSignature` is derived from the key that opens the envelope, so in Phase 1 the depositor always satisfies it and nobody else reaches the check (the MAC fails first). It documents intent and cannot lock the depositor out; it is not a signature.
 - **Locality.** Envelopes live on the local disk under the vault's data directory; loss of the vault key, or of the files, is loss of the documents.
 
-The wire format is frozen per schema version and pinned by a golden envelope in `tests/vectors/escrow_7d_v1.json` (canonical MAC bytes, derived keys, expected plaintext).
+The wire format is specified in `docs/ESCROW_7D_FORMAT.md`, frozen per schema version, and pinned by a golden envelope in `tests/vectors/escrow_7d_v1.json` (canonical MAC bytes, derived keys, expected plaintext).
 
 ### 5.5 Entropy source quality
 

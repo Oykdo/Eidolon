@@ -11,9 +11,10 @@ Scope, stated plainly: symmetric 256-bit primitives only (no post-quantum KEM
 or signature in this phase); a TimeLock is enforced by the clock of the
 machine that holds the key, not by a third party; the label, the conditions,
 the deposit time, the payload size and the depositor's vault-id prefix are
-stored in cleartext — only the payload is encrypted. The v1 wire format is
-frozen by the golden envelope in tests/vectors/escrow_7d_v1.json and the
-canonical-bytes tests in tests/test_escrow_7d_*.py.
+stored in cleartext — only the payload is encrypted. Wire format:
+docs/ESCROW_7D_FORMAT.md; the v1 format is frozen by the golden envelope in
+tests/vectors/escrow_7d_v1.json and the canonical-bytes tests in
+tests/test_escrow_7d_*.py.
 
 Phase 2+ (not started): threshold sharding, post-quantum signatures for
 inter-vault release, optional anchoring.

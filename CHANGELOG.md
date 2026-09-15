@@ -56,7 +56,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   256-bit primitives (no post-quantum KEM or signature), a session key *derived*
   by HKDF (not wrapped), time locks enforced by the key holder's own clock, and
   cleartext metadata (label, conditions, deposit time, size, depositor prefix).
-  The v1 wire format is pinned by `tests/vectors/escrow_7d_v1.json`. The escrow CLI
+  The wire format has a specification, `docs/ESCROW_7D_FORMAT.md`, and the v1
+  format is pinned by `tests/vectors/escrow_7d_v1.json`. The escrow CLI
   no longer imports the launcher (a public package importing private code): it
   carries its own console helpers, coloured only on a terminal and unless
   `NO_COLOR` is set. The store fsyncs before renaming, reports an envelope copied
@@ -64,6 +65,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   column reads `none` (not `owner`) when an escrow has no condition. Packaging:
   `src.protocols` is now part of the wheel (`pyproject.toml`) and the sdist
   (`MANIFEST.in`).
+
+### Removed
+
+- **`docs/CHANGELOG.md`** (pre-rename, January 2026) is no longer in the public
+  tree: it described modules and an escrow design that do not exist here and
+  contradicted this file. `CHANGELOG.md` at the repository root is the only
+  changelog. Package metadata (`pyproject.toml`, `setup.cfg`, `CONTRIBUTING.md`)
+  now carries the project's name and public contact address.
 
 ### Added
 

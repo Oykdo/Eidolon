@@ -212,7 +212,7 @@ refactor: simplify pipeline orchestration
 
 **DO NOT** open public issues for security vulnerabilities.
 
-Email security issues to: contact@polyspinor.io
+Email security issues to: jrzg7f2k@proton.me
 
 Include:
 - Description of the vulnerability
