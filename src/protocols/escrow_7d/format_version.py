@@ -19,6 +19,8 @@ from __future__ import annotations
 from dataclasses import dataclass
 from typing import Dict, List, Mapping
 
+from .errors import EscrowError
+
 # ---------------------------------------------------------------------------
 # Schema versioning
 # ---------------------------------------------------------------------------
@@ -31,6 +33,11 @@ MINIMUM_READER_VERSION: int = 1
 
 SUPPORTED_SCHEMA_VERSIONS: frozenset = frozenset({1})
 """Schema versions this build knows how to read directly (no migration)."""
+
+READER_VERSION: int = max(SUPPORTED_SCHEMA_VERSIONS)
+"""What this build can read. An envelope whose ``min_reader_version`` exceeds
+it is refused. Distinct from CURRENT_SCHEMA_VERSION (what the producer writes):
+the two axes are orthogonal and must not be aliased."""
 
 
 # ---------------------------------------------------------------------------
@@ -90,8 +97,8 @@ def all_suite_names() -> List[str]:
 # Errors
 # ---------------------------------------------------------------------------
 
-class FormatError(Exception):
-    """Raised on schema/crypto-suite incompatibility or migration failure."""
+class FormatError(EscrowError):
+    """Raised on schema/crypto-suite incompatibility or a malformed envelope."""
 
 
 # ---------------------------------------------------------------------------
@@ -104,10 +111,10 @@ def check_compatibility(schema_version: int, min_reader_version: int,
 
     Raises FormatError with a precise reason on incompatibility.
     """
-    if min_reader_version > CURRENT_SCHEMA_VERSION:
+    if min_reader_version > READER_VERSION:
         raise FormatError(
             f"envelope requires reader >= v{min_reader_version} "
-            f"but this build is v{CURRENT_SCHEMA_VERSION}. "
+            f"but this build reads up to v{READER_VERSION}. "
             "Update Eidolon to read this escrow."
         )
     if schema_version not in SUPPORTED_SCHEMA_VERSIONS:

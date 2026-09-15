@@ -27,10 +27,11 @@ import hmac
 import os
 import secrets
 from datetime import datetime, timezone
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List, Mapping, Optional, Tuple
 
-from .conditions import Condition
+from .conditions import Condition, ConditionError, OwnerSignature, vault_id_from_key
 from .envelope import EscrowEnvelope
+from .errors import EscrowError
 from .format_version import (
     CURRENT_CRYPTO_SUITE,
     CURRENT_SCHEMA_VERSION,
@@ -45,12 +46,12 @@ from .format_version import (
 _CURRENT_FORMAT = (CURRENT_SCHEMA_VERSION, CURRENT_CRYPTO_SUITE)
 
 
-class SealError(Exception):
-    pass
+class SealError(EscrowError):
+    """Sealing refused: bad payload, key, label or unknown suite."""
 
 
-class UnsealError(Exception):
-    pass
+class UnsealError(EscrowError):
+    """Integrity, release-condition or decryption failure."""
 
 
 # ----------------------------------------------------------------------------
@@ -132,6 +133,39 @@ def _new_escrow_id() -> str:
     return "esc_" + secrets.token_hex(16)
 
 
+def _prepare_conditions(conditions: List[Condition], vault_key: bytes) -> List[Dict]:
+    """Serialise the release conditions and check what will actually be stored.
+
+    The check runs on the serialised dicts (the bytes the MAC will bind and
+    ``unseal`` will read back), not on the Python objects, so a custom
+    Condition subclass cannot store something ``unseal`` would refuse. It also
+    enforces MAX_CONDITION_DEPTH, and replaces a 16-hex OwnerSignature prefix
+    with the depositor's full vault id so the stored form is unambiguous.
+    """
+    depositor_id = vault_id_from_key(vault_key)
+    stored: List[Dict] = []
+    for cond in conditions:
+        try:
+            tree = Condition.deserialize(cond.to_dict())
+        except ConditionError as exc:
+            raise SealError(f"invalid release condition: {exc}") from exc
+        except RecursionError:
+            raise SealError("invalid release condition: tree too deep")
+        for leaf in tree.walk():
+            if not isinstance(leaf, OwnerSignature):
+                continue
+            if not leaf.matches(depositor_id):
+                # Only the depositing vault can ever unseal (the MAC is bound to
+                # its key), so this envelope could never be opened by anyone.
+                raise SealError(
+                    "owner_signature names another vault than the depositor; "
+                    "the escrow could never be opened"
+                )
+            leaf.expected_vault_id = depositor_id
+        stored.append(tree.to_dict())
+    return stored
+
+
 def seal(
     payload: bytes,
     vault_key: bytes,
@@ -143,9 +177,16 @@ def seal(
         raise SealError("payload must be bytes")
     if not vault_key or len(vault_key) < 32:
         raise SealError("vault_key must be at least 32 bytes")
+    if label is None:
+        label = ""
+    if not isinstance(label, str):
+        # The MAC is computed over the label as given but the envelope is
+        # reloaded as str(): any other type would seal an envelope that can
+        # never be verified again.
+        raise SealError("label must be a string")
 
     suite = get_suite(suite_name)
-    conditions = conditions or []
+    stored_conditions = _prepare_conditions(conditions or [], vault_key)
 
     salt = os.urandom(suite.salt_len)
     nonce = os.urandom(suite.nonce_len)
@@ -157,8 +198,8 @@ def seal(
         escrow_id=_new_escrow_id(),
         deposited_at=datetime.now(timezone.utc).isoformat(),
         depositor_vault_id_prefix=_depositor_vault_id_prefix(vault_key),
-        label=label or "",
-        conditions=[c.to_dict() for c in conditions],
+        label=label,
+        conditions=stored_conditions,
         kdf_salt=salt,
         aes_nonce=nonce,
         ciphertext=ciphertext,
@@ -208,12 +249,21 @@ def unseal(
     if not ok:
         raise UnsealError(f"integrity verification failed: {reason}")
 
+    # The requester identity is derived from the key that opens the envelope;
+    # a caller-supplied value would let any condition on identity be bypassed.
+    if context is not None and not isinstance(context, Mapping):
+        raise UnsealError("context must be a mapping")
     ctx = dict(context or {})
-    ctx.setdefault("requester_vault_id", hashlib.sha256(vault_key).hexdigest())
+    ctx["requester_vault_id"] = vault_id_from_key(vault_key)
 
     for raw in envelope.conditions:
-        cond = Condition.deserialize(raw)
-        passed, why = cond.is_satisfied(ctx)
+        try:
+            cond = Condition.deserialize(raw)
+            passed, why = cond.is_satisfied(ctx)
+        except ConditionError as exc:
+            raise UnsealError(f"invalid release condition: {exc}") from exc
+        except RecursionError:
+            raise UnsealError("invalid release condition: tree too deep for this reader")
         if not passed:
             raise UnsealError(
                 f"release condition '{cond.type_id}' not satisfied: {why}"

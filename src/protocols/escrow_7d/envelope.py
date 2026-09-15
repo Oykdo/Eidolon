@@ -1,7 +1,10 @@
 """On-disk envelope format for 7D Escrow documents.
 
 The envelope is a JSON document where binary fields are base64-encoded for
-readability. Three independent version identifiers are baked in and bound
+readability. Only ``ciphertext`` is confidential: ``label``, ``conditions``,
+``deposited_at``, ``payload_size`` and ``depositor_vault_id_prefix`` are stored
+in cleartext (and bound by the MAC). Do not put secrets in the label.
+Three independent version identifiers are baked in and bound
 into the integrity MAC so they cannot be tampered with:
 
     schema_version       structure of the JSON envelope itself
@@ -147,10 +150,29 @@ class EscrowEnvelope:
         The envelope is instantiated with its own schema_version, so MAC
         verification later uses the matching frozen mac_input function.
         """
+        if not isinstance(data, dict):
+            raise FormatError("envelope must be a JSON object")
         for required in _REQUIRED_FIELDS:
             if required not in data:
                 raise FormatError(f"envelope missing required field: {required!r}")
+        conditions = data.get("conditions", [])
+        if not isinstance(conditions, list) or not all(isinstance(c, dict) for c in conditions):
+            raise FormatError("envelope field 'conditions' must be a list of objects")
+        if not isinstance(data["escrow_id"], str) or not data["escrow_id"]:
+            raise FormatError("envelope field 'escrow_id' must be a non-empty string")
 
+        # Every conversion below runs on untrusted JSON values: a wrong type
+        # (null, number, non-ASCII base64...) must surface as FormatError, not
+        # as a raw ValueError / TypeError / AttributeError.
+        try:
+            return cls._from_checked_dict(data, conditions)
+        except FormatError:
+            raise
+        except (ValueError, TypeError, AttributeError, OverflowError) as exc:
+            raise FormatError(f"malformed envelope field: {exc}") from exc
+
+    @classmethod
+    def _from_checked_dict(cls, data: Dict[str, Any], conditions: List[Dict]) -> "EscrowEnvelope":
         check_compatibility(
             schema_version=int(data["schema_version"]),
             min_reader_version=int(data.get("min_reader_version", 1)),
@@ -166,7 +188,7 @@ class EscrowEnvelope:
             deposited_at=str(data["deposited_at"]),
             depositor_vault_id_prefix=str(data["depositor_vault_id_prefix"]),
             label=str(data.get("label", "")),
-            conditions=list(data.get("conditions", [])),
+            conditions=list(conditions),
             kdf_salt=_b64d(data["kdf_salt"]),
             aes_nonce=_b64d(data["aes_nonce"]),
             ciphertext=_b64d(data["ciphertext"]),
@@ -181,6 +203,8 @@ class EscrowEnvelope:
             data = json.loads(text)
         except json.JSONDecodeError as exc:
             raise FormatError(f"invalid JSON: {exc}")
+        except RecursionError:
+            raise FormatError("invalid JSON: nesting too deep")
         return cls.from_dict(data)
 
     # ---------------------------------------------------------- summary
@@ -191,7 +215,7 @@ class EscrowEnvelope:
             "label": self.label,
             "deposited_at": self.deposited_at,
             "payload_size": self.payload_size,
-            "conditions": [c.get("type") for c in self.conditions],
+            "conditions": [c.get("type") if isinstance(c, dict) else "?" for c in self.conditions],
             "depositor_vault_id_prefix": self.depositor_vault_id_prefix,
             "schema_version": self.schema_version,
             "crypto_suite": self.crypto_suite,

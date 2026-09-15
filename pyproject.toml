@@ -96,6 +96,8 @@ include = [
     "src",
     "src.daemon",
     "src.daemon.*",
+    "src.protocols",
+    "src.protocols.*",
     "src.identity", 
     "src.identity.*",
     "src.api",

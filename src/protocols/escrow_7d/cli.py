@@ -7,6 +7,8 @@ high-level api functions.
 
 from __future__ import annotations
 
+import os
+import sys
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import List, Optional
@@ -14,43 +16,89 @@ from typing import List, Optional
 from . import api
 from .conditions import Condition, TimeLock
 from .sealer import SealError, UnsealError
+from .store import EscrowStoreError
 
 
 # ---------------------------------------------------------------------------
-# Soft import of launcher's colored helpers; fall back to no-color if absent.
+# Console helpers. Self-contained on purpose: this package is public and must
+# not import the (private) launcher. Same palette and status glyphs as the
+# launcher, colours only on a terminal and unless NO_COLOR is set.
 # ---------------------------------------------------------------------------
 
-try:
-    from src.ui.launcher import Colors, print_section, print_status  # type: ignore
-except Exception:  # pragma: no cover
-    class _PlainColors:
-        RESET = BOLD = DIM = ""
-        RED = GREEN = YELLOW = BLUE = MAGENTA = CYAN = WHITE = ""
-    Colors = _PlainColors()  # type: ignore
 
-    def print_section(title: str) -> None:
-        print(f"\n=== {title} ===\n")
-
-    def print_status(message: str, status: str = "info") -> None:
-        prefix = {"ok": "[OK]", "error": "[X]", "warn": "[!]"}.get(status, "[i]")
-        print(f"    {prefix} {message}")
+def _colour_enabled() -> bool:
+    if os.environ.get("NO_COLOR"):
+        return False
+    try:
+        return bool(sys.stdout.isatty())
+    except Exception:
+        return False
 
 
-def _prompt(message: str, default: str = "") -> str:
+class _Colors:
+    def __init__(self, enabled: bool):
+        self.RESET = "\033[0m" if enabled else ""
+        self.BOLD = "\033[1m" if enabled else ""
+        self.DIM = "\033[2m" if enabled else ""
+        self.RED = "\033[31m" if enabled else ""
+        self.GREEN = "\033[32m" if enabled else ""
+        self.YELLOW = "\033[33m" if enabled else ""
+        self.BLUE = "\033[34m" if enabled else ""
+        self.MAGENTA = "\033[35m" if enabled else ""
+        self.CYAN = "\033[36m" if enabled else ""
+        self.WHITE = "\033[37m" if enabled else ""
+
+
+Colors = _Colors(_colour_enabled())
+
+
+def print_section(title: str) -> None:
+    print(f"\n{Colors.WHITE}{Colors.BOLD}    {title}{Colors.RESET}")
+    print(f"{Colors.DIM}    -------------------------------------{Colors.RESET}\n")
+
+
+def print_status(message: str, status: str = "info") -> None:
+    icons = {
+        "info": f"{Colors.BLUE}[i]{Colors.RESET}",
+        "ok": f"{Colors.GREEN}[OK]{Colors.RESET}",
+        "warn": f"{Colors.YELLOW}[!]{Colors.RESET}",
+        "error": f"{Colors.RED}[X]{Colors.RESET}",
+    }
+    print(f"    {icons.get(status, icons['info'])} {message}")
+
+
+def _prompt(message: str, default: str = "") -> Optional[str]:
+    """Ask one line. Returns None when the user interrupts (Ctrl-C / EOF).
+
+    None is distinct from an empty answer on purpose: an interruption must
+    never be read as "accept the default" (that once wrote a decrypted
+    payload to disk on Ctrl-C).
+    """
     suffix = f" [{default}]" if default else ""
     try:
         raw = input(f"    {message}{suffix}: ").strip()
     except (EOFError, KeyboardInterrupt):
-        return ""
+        print()
+        print_status("cancelled", "info")
+        return None
     return raw or default
 
 
-def _prompt_int(message: str, default: int) -> int:
-    raw = _prompt(message, str(default))
-    try:
-        return int(raw)
-    except ValueError:
-        return default
+def _prompt_int(message: str, default: int, minimum: int = 0) -> Optional[int]:
+    """Ask for an integer >= ``minimum``; re-ask on invalid input, None on cancel."""
+    while True:
+        raw = _prompt(message, str(default))
+        if raw is None:
+            return None
+        try:
+            value = int(raw)
+        except ValueError:
+            print_status(f"not a whole number: {raw!r}", "warn")
+            continue
+        if value < minimum:
+            print_status(f"must be >= {minimum}", "warn")
+            continue
+        return value
 
 
 def _truncate(text: str, width: int) -> str:
@@ -64,6 +112,8 @@ def _truncate(text: str, width: int) -> str:
 def _action_deposit(vault_key: bytes, vault_label: str) -> None:
     print_section("7D ESCROW - DEPOSIT")
     src = _prompt("Path of the file to escrow (leave empty for inline text)")
+    if src is None:
+        return
     payload: bytes
     if src:
         path = Path(src).expanduser()
@@ -74,6 +124,8 @@ def _action_deposit(vault_key: bytes, vault_label: str) -> None:
         default_label = path.name
     else:
         text = _prompt("Inline secret text")
+        if text is None:
+            return
         if not text:
             print_status("empty payload, aborting", "warn")
             return
@@ -81,16 +133,22 @@ def _action_deposit(vault_key: bytes, vault_label: str) -> None:
         default_label = "inline"
 
     label = _prompt("Label (free text)", default_label)
+    if label is None:
+        return
 
     # Ownership is enforced cryptographically: the AES key, the HMAC,
     # and the on-disk partitioning are all derived from the vault key.
     # No explicit "owner match" condition is needed in Phase 1.
     conditions: List[Condition] = []
     days = _prompt_int("Time lock in days (0 = no lock)", 0)
+    if days is None:
+        return
     if days > 0:
         release_after = datetime.now(timezone.utc) + timedelta(days=days)
         conditions.append(TimeLock(release_after=release_after))
         print_status(f"time lock set until {release_after.isoformat()}", "info")
+    else:
+        print_status("no time lock: retrievable immediately with the vault key", "info")
 
     combined_conditions: List[Condition] = conditions
 
@@ -114,13 +172,14 @@ def _action_list(vault_key: bytes, vault_label: str) -> None:
     summaries = api.list_escrows(vault_key)
     if not summaries:
         print_status("no escrows in this vault", "info")
+        _print_unreadable(vault_key)
         return
 
     header = f"    {'ID':<24} {'LABEL':<24} {'SIZE':>10}  CONDITIONS  DEPOSITED"
     print(f"{Colors.BOLD}{header}{Colors.RESET}")
     print("    " + "-" * (len(header) - 4))
     for s in summaries:
-        cond_repr = ",".join(s["conditions"]) if s["conditions"] else "owner"
+        cond_repr = ",".join(s["conditions"]) if s["conditions"] else "none"
         print(
             f"    {_truncate(s['escrow_id'], 24):<24} "
             f"{_truncate(s['label'] or '-', 24):<24} "
@@ -129,6 +188,13 @@ def _action_list(vault_key: bytes, vault_label: str) -> None:
             f"{s['deposited_at']}"
         )
     print(f"\n    {Colors.DIM}Total: {len(summaries)} escrow(s){Colors.RESET}")
+    _print_unreadable(vault_key)
+
+
+def _print_unreadable(vault_key: bytes) -> None:
+    """Files the store could not parse: shown, never hidden."""
+    for bad in api.list_unreadable_escrows(vault_key):
+        print_status(f"unreadable: {bad['escrow_id']} - {bad['error']}", "warn")
 
 
 def _resolve_escrow_id(vault_key: bytes, raw: str) -> Optional[str]:
@@ -138,8 +204,14 @@ def _resolve_escrow_id(vault_key: bytes, raw: str) -> Optional[str]:
     from list_escrows), or any unique id prefix. The picker loops until the
     user supplies something valid or explicitly cancels with 'Q'.
     Returns the full id, or None if cancelled / no escrows.
+
+    Unreadable files are offered as well, marked as such: they can be verified
+    (reported as failed) and deleted; retrieving one explains why it fails.
     """
-    summaries = api.list_escrows(vault_key)
+    summaries = api.list_escrows(vault_key) + [
+        {"escrow_id": bad["escrow_id"], "label": "(unreadable)", "payload_size": 0}
+        for bad in api.list_unreadable_escrows(vault_key)
+    ]
     if not summaries:
         print_status("no escrows in this vault", "info")
         return None
@@ -179,7 +251,10 @@ def _resolve_escrow_id(vault_key: bytes, raw: str) -> Optional[str]:
     print()
 
     while True:
-        choice = _prompt("Pick a number, paste the full id, or 'Q' to cancel").strip()
+        choice = _prompt("Pick a number, paste the full id, or 'Q' to cancel")
+        if choice is None:
+            return None
+        choice = choice.strip()
         if not choice:
             print_status("empty input - type a number, an id, or 'Q' to cancel", "warn")
             continue
@@ -239,6 +314,8 @@ def _sanitize_stem(label: str) -> str:
 def _action_retrieve(vault_key: bytes, vault_label: str) -> None:
     print_section("7D ESCROW - RETRIEVE")
     raw = _prompt("Escrow ID (number, prefix, or leave empty to list)")
+    if raw is None:
+        return
     escrow_id = _resolve_escrow_id(vault_key, raw)
     if not escrow_id:
         return
@@ -255,18 +332,27 @@ def _action_retrieve(vault_key: bytes, vault_label: str) -> None:
     except UnsealError as exc:
         print_status(f"unable to retrieve: {exc}", "error")
         return
+    except EscrowStoreError as exc:
+        print_status(f"unreadable escrow: {exc}", "error")
+        return
 
     ext = _guess_extension(payload, label)
     stem = _sanitize_stem(label)
     default_dir = Path.home() / "Downloads"
     if not default_dir.is_dir():
-        default_dir = Path.cwd()
+        default_dir = Path.home()
     default_path = default_dir / f"{stem}{ext}"
 
     print()
     print(f"    {Colors.DIM}Detected format: {ext} ({len(payload):,} bytes){Colors.RESET}")
     print(f"    {Colors.DIM}Default save path: {default_path}{Colors.RESET}")
-    out_path_str = _prompt("Save path (Enter = default, or type 'preview' to see content)").strip()
+    out_path_str = _prompt("Save path (Enter = default, 'preview' to see content, 'Q' to cancel)")
+    if out_path_str is None:
+        return
+    if out_path_str.strip().lower() in ("q", "quit", "cancel", "back"):
+        print_status("nothing written", "info")
+        return
+    out_path_str = out_path_str.strip()
 
     if out_path_str.lower() == "preview":
         preview = payload[:512]
@@ -288,6 +374,15 @@ def _action_retrieve(vault_key: bytes, vault_label: str) -> None:
     if out_path.is_dir() or out_path_str.endswith(("/", "\\")):
         out_path = out_path / default_path.name
 
+    out_path = out_path.resolve()
+    if out_path.exists():
+        confirm = _prompt(f"{out_path} exists - type OVERWRITE to replace it")
+        if confirm is None:
+            return
+        if confirm.strip() != "OVERWRITE":
+            print_status("nothing written", "info")
+            return
+
     try:
         out_path.parent.mkdir(parents=True, exist_ok=True)
         out_path.write_bytes(payload)
@@ -299,7 +394,10 @@ def _action_retrieve(vault_key: bytes, vault_label: str) -> None:
 
 def _action_verify(vault_key: bytes, vault_label: str) -> None:
     print_section("7D ESCROW - VERIFY")
-    raw = _prompt("Escrow ID (number, prefix, or 'all' for full sweep)").strip()
+    raw = _prompt("Escrow ID (number, prefix, or 'all' for full sweep)")
+    if raw is None:
+        return
+    raw = raw.strip()
     if raw.lower() in ("all", "*"):
         summaries = api.list_escrows(vault_key)
         ok_count = bad_count = 0
@@ -310,6 +408,10 @@ def _action_verify(vault_key: bytes, vault_label: str) -> None:
             else:
                 bad_count += 1
                 print_status(f"{s['escrow_id']}: {reason}", "warn")
+        # A file the store cannot parse is a failed verification, not a no-op.
+        for bad in api.list_unreadable_escrows(vault_key):
+            bad_count += 1
+            print_status(f"{bad['escrow_id']}: unreadable - {bad['error']}", "warn")
         print_status(f"verified {ok_count} ok / {bad_count} failed", "ok" if bad_count == 0 else "warn")
         return
 
@@ -326,14 +428,23 @@ def _action_verify(vault_key: bytes, vault_label: str) -> None:
 def _action_delete(vault_key: bytes, vault_label: str) -> None:
     print_section("7D ESCROW - DELETE")
     raw = _prompt("Escrow ID (number, prefix, or leave empty to list)")
+    if raw is None:
+        return
     escrow_id = _resolve_escrow_id(vault_key, raw)
     if not escrow_id:
         return
-    confirm = _prompt(f"Type DELETE to confirm removal of {escrow_id}").upper()
-    if confirm != "DELETE":
+    confirm = _prompt(f"Type DELETE to confirm removal of {escrow_id}")
+    if confirm is None:
+        return
+    if confirm.strip() != "DELETE":
         print_status("aborted", "info")
         return
-    if api.delete_escrow(escrow_id, vault_key):
+    try:
+        removed = api.delete_escrow(escrow_id, vault_key)
+    except EscrowStoreError as exc:
+        print_status(f"cannot delete: {exc}", "error")
+        return
+    if removed:
         print_status(f"{escrow_id} removed", "ok")
     else:
         print_status(f"{escrow_id} not found", "warn")
@@ -368,7 +479,10 @@ def escrow_menu(vault_key: bytes, vault_label: str = "") -> None:
         print(f"    {Colors.YELLOW}[Q]{Colors.RESET}  Back to main menu")
         print()
 
-        choice = _prompt("Choice", "Q").upper()
+        choice = _prompt("Choice", "Q")
+        if choice is None:
+            return
+        choice = choice.upper()
         if choice in ("Q", "QUIT", "EXIT", "B", "BACK", ""):
             return
 
@@ -376,9 +490,16 @@ def escrow_menu(vault_key: bytes, vault_label: str = "") -> None:
             if choice == key:
                 try:
                     handler(vault_key, vault_label)
+                except KeyboardInterrupt:
+                    print()
+                    print_status("cancelled", "info")
                 except Exception as exc:  # pragma: no cover - last-chance UI safety
                     print_status(f"unexpected error: {exc}", "error")
-                input(f"\n    {Colors.DIM}Press Enter to continue...{Colors.RESET}")
+                try:
+                    input(f"\n    {Colors.DIM}Press Enter to continue...{Colors.RESET}")
+                except (EOFError, KeyboardInterrupt):
+                    print()
+                    return
                 break
         else:
             print_status("invalid choice", "warn")

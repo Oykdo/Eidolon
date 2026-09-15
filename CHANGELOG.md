@@ -7,6 +7,64 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+
+- **7D Escrow hardening (`src/protocols/escrow_7d`, audit of 2026-09-15).** No change
+  to the v1 wire format — a frozen golden envelope (`tests/vectors/escrow_7d_v1.json`)
+  now pins it. Every escrow-level error derives from `EscrowError`
+  (`EscrowStoreError`, `FormatError`, `ConditionError`, `SealError`, `UnsealError`;
+  bad argument types still raise `TypeError`); `retrieve_document` only lets
+  `KeyError` / `EscrowStoreError` / `UnsealError` escape, and `verify_integrity`
+  reports an unreadable file or a malformed id as `(False, reason)` instead of
+  raising. A non-`str` label is refused at deposit (it used to seal an envelope
+  whose MAC could never verify again; `None` still means no label). A corrupt,
+  truncated or newer-format `.escrow7d` — or a file whose inner `escrow_id` does not
+  match its file name — no longer crashes `list_escrows` and is no longer hidden
+  either: `list_unreadable_escrows()` reports it, the CLI list shows it, "Verify →
+  all" counts it as failed and Delete can remove it. Read-only calls no longer
+  create the vault's escrow directory (`EscrowStore` now requires the 16-hex
+  depositor prefix the API always passed). The reader version is a constant of its
+  own (`READER_VERSION`) instead of being aliased to the schema version. CLI: an
+  interrupted prompt (Ctrl-C / EOF) now cancels — it used to be read as "accept the
+  default", which wrote the decrypted document to `~/Downloads`; Ctrl-C during an
+  action returns to the escrow menu instead of quitting the launcher; an invalid or
+  negative time-lock input is asked again instead of silently depositing without a
+  lock; retrieve asks before overwriting an existing file (exact `OVERWRITE`, as
+  Delete requires exact `DELETE`), accepts `Q`, and defaults to the home directory
+  rather than the working directory when `~/Downloads` is absent. New public
+  tests: `tests/test_escrow_7d_api_store.py` (lifecycle on disk, isolation, corrupt
+  files, error contract, golden vector, RFC 5869 HKDF vectors, CLI safety).
+
+### Changed
+
+- **`OwnerSignature` is now a real release condition** (`src/protocols/escrow_7d`).
+  It accepts the vault's 64-hex id (`vault_id_from_key(vault_key)`, or
+  `OwnerSignature.for_vault_key(vault_key)`) or the 16-hex
+  `depositor_vault_id_prefix` shown in listings — an envelope sealed with the
+  prefix used to be locked forever. The requester identity is derived from the
+  key that opens the envelope and can no longer be supplied through `context`.
+  `seal()` refuses an `OwnerSignature` naming another vault (such an escrow could
+  never be opened, since only the depositing key verifies the MAC), and an
+  identifier that is neither form raises `ConditionError`. The check runs on the
+  serialised conditions — the bytes the MAC binds — and a prefix is stored as the
+  full id, so every envelope this version writes also opens with the previous
+  reader. Composite nesting is bounded (`MAX_CONDITION_DEPTH` = 32) at seal and at
+  unseal, so the verdict never depends on the reader's stack. Stored envelopes with
+  a full-id `OwnerSignature` open exactly as before.
+- **7D Escrow said plainly.** The package, `src/protocols/__init__.py` and the
+  threat model (`docs/THREAT_MODEL.md` §5.4) now state what Phase 1 is: symmetric
+  256-bit primitives (no post-quantum KEM or signature), a session key *derived*
+  by HKDF (not wrapped), time locks enforced by the key holder's own clock, and
+  cleartext metadata (label, conditions, deposit time, size, depositor prefix).
+  The v1 wire format is pinned by `tests/vectors/escrow_7d_v1.json`. The escrow CLI
+  no longer imports the launcher (a public package importing private code): it
+  carries its own console helpers, coloured only on a terminal and unless
+  `NO_COLOR` is set. The store fsyncs before renaming, reports an envelope copied
+  from another vault's directory as unreadable instead of listing it, and the list
+  column reads `none` (not `owner`) when an escrow has no condition. Packaging:
+  `src.protocols` is now part of the wheel (`pyproject.toml`) and the sdist
+  (`MANIFEST.in`).
+
 ### Added
 
 - **Connect escrow primitives** (`src/api/server.py`, `src/identity/vault_identity.py`).
@@ -81,6 +139,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   from another device (`burned`). All three follow the transfer rule: read
   the head at the anchor, write the signed record before submitting it,
   never sign twice for the same head.
+- **Sphere client: anchor error codes (runtime 1.2.1).** `error_code` now
+  says where a failure comes from, so Cipher decides without parsing the
+  message: `anchor_unreachable` (no answer, 408, 429, 5xx — retry with
+  back-off), `not_enrolled` (the anchor does not know this vault: enrolment
+  is the lock server's, retry much later), `anchor_refused` (any other anchor
+  error — fork, unknown sphere, empty mailbox…); `wallet_refused` is kept for
+  the client's own refusals (stale head, key already signed, foreign file).
+  `WalletError.code` carries it in-process. The HTTP status stays in the
+  message, in parentheses, for older clients; a submission the anchor did
+  not answer on the merits (a halted anchor's 503, not only a cut) is now
+  reported as unreachable, the signed record waiting in `pending/` as before.
 
 ## [1.2.0] - 2026-06-05
 

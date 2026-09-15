@@ -60,6 +60,7 @@ Eidolon is a local-first cryptographic vault system. All key material is generat
 | ML-DSA (Dilithium5) is EUF-CMA at Level 5 | Standard (NIST FIPS 204) | Vault attestation signatures forgeable |
 | Scrypt (N=2^17, r=8, p=1) provides ~128-bit resistance | Standard (RFC 7914) | `K_final` derivable from pipeline state without brute force |
 | Schnorr NIZK is zero-knowledge under random oracle | Standard (Fiat-Shamir transform) | Proof leaks information about private scalar |
+| AES-256-GCM, HKDF-SHA256 and HMAC-SHA256 are secure (escrow_7d envelopes) | Standard (NIST SP 800-38D, RFC 5869, RFC 2104) | Escrowed documents readable or envelopes forgeable by whoever holds the vault key's derived keys; no effect on the vault key itself |
 
 A break in the hash chain or Scrypt assumption compromises the custom pipeline but **does not** compromise the PQ layer. A break in the PQ layer **does not** compromise the hash chain. The two pillars are independent.
 
@@ -83,7 +84,20 @@ Vaults are bound to a specific machine via a hash of hardware identifiers. This 
 
 **Critical note:** possession of both `.psnx` and `.blend_data` files is sufficient to reconstruct the vault key. There is no additional passphrase or user-memorized secret required in the current design. Anyone who obtains both files has full access to the vault. The machine lock prevents cross-machine use of copied files, but does not prevent a determined attacker who also has access to the migration protocol. This makes secure storage of both files the single most important user responsibility.
 
-### 5.4 Entropy source quality
+### 5.4 Document escrow (`src/protocols/escrow_7d`)
+
+An escrow envelope is encrypted with AES-256-GCM under a session key derived by HKDF-SHA256 from the vault key and a per-envelope salt, and bound as a whole by an HMAC-SHA256 tag under a second derived key. Its security therefore reduces to the vault key: whoever holds it can open every escrow of that vault, and nobody else can open any. Phase 1 uses symmetric primitives only (256-bit keys: quantum adversaries face Grover's bound, no post-quantum KEM or signature is involved).
+
+What the escrow does **not** provide, by design of Phase 1:
+
+- **Time locks are self-imposed.** A `TimeLock` is evaluated by the clock of the machine that already holds the key. It protects against opening early by habit or by accident, not against an owner who moves the clock, and there is no third party that could refuse an early release.
+- **Metadata is cleartext.** The label, the release conditions (including the release date), the deposit time, the payload size and the 16-hex prefix of the depositor's vault id are readable by anyone who reads the file; only the payload is encrypted. Do not put secrets in labels.
+- **Single trust root.** `OwnerSignature` is derived from the key that opens the envelope, so in Phase 1 the depositor always satisfies it and nobody else reaches the check (the MAC fails first). It documents intent and cannot lock the depositor out; it is not a signature.
+- **Locality.** Envelopes live on the local disk under the vault's data directory; loss of the vault key, or of the files, is loss of the documents.
+
+The wire format is frozen per schema version and pinned by a golden envelope in `tests/vectors/escrow_7d_v1.json` (canonical MAC bytes, derived keys, expected plaintext).
+
+### 5.5 Entropy source quality
 
 The entire pipeline is seeded by a single 512-bit CSPRNG output. If the system's entropy source is compromised or predictable, all derived keys are compromised. The pipeline does not add entropy — it structures and transforms it. On systems with poor entropy (embedded devices, early-boot scenarios), additional entropy injection should be used.
 
