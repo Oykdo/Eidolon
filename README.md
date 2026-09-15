@@ -7,24 +7,53 @@
 Powers identity, custody and resonance for [Cipher](https://github.com/Oykdo/cipher) — the post-quantum messaging client.
 
 [![CI](https://github.com/Oykdo/Eidolon/actions/workflows/ci.yml/badge.svg)](https://github.com/Oykdo/Eidolon/actions/workflows/ci.yml)
-[![Release](https://img.shields.io/github/v/release/Oykdo/Eidolon?style=flat-square&color=blue)](https://github.com/Oykdo/Eidolon/releases/latest)
+[![Tag](https://img.shields.io/github/v/tag/Oykdo/Eidolon?style=flat-square&label=tag&color=blue)](https://github.com/Oykdo/Eidolon/tags)
+[![Release](https://img.shields.io/github/v/release/Oykdo/Eidolon?style=flat-square&label=desktop%20build&color=green)](https://github.com/Oykdo/Eidolon/releases/latest)
 ![Post-quantum](https://img.shields.io/badge/security-post--quantum-brightgreen?style=flat-square)
 ![Rust](https://img.shields.io/badge/engine-Rust%20%2B%20PyO3-orange?style=flat-square)
 ![Python](https://img.shields.io/badge/python-3.9%2B%20(3.12%20recommended)-yellow?style=flat-square)
 ![License](https://img.shields.io/badge/license-Proprietary-red?style=flat-square)
 
-[Downloads](#downloads) · [At a glance](#at-a-glance) · [Quick start](#quick-start) · [Public protocols](#public-protocols) · [Sphere custody ledger](#sphere-custody-ledger) · [Cipher integration](#cipher-integration) · [Security](#security-model) · [Development](#development)
+[Releases](#releases) · [At a glance](#at-a-glance) · [Quick start](#quick-start) · [Public protocols](#public-protocols) · [Sphere custody ledger](#sphere-custody-ledger) · [Cipher integration](#cipher-integration) · [Security](#security-model) · [Development](#development)
 
 </div>
 
 ---
 
-## Downloads
+## Releases
 
-Desktop builds (Windows x64, Linux x64) and `SHA256SUMS` are published on the
-**[latest release page](https://github.com/Oykdo/Eidolon/releases/latest)**.
-Cipher ships the same engine as a frozen runtime (`cipher-runtime`), so a
-Cipher user never installs Eidolon separately.
+Two badges because they answer two different questions. The **tag** is where
+the source is (`v1.2.0`, `src/__init__.py`); the **desktop build** is the last
+release that shipped binaries (`v1.1.1`). Cipher users never install Eidolon:
+the engine reaches them as a frozen runtime inside the Cipher installer.
+
+| Tag | Date | What it is | Published on the release page |
+|---|---|---|---|
+| **`v1.2.0`** | 2026-06-05 | `escrow_7d` + `vault_migration` protocols, scoped legacy-PSNX normalisation | *Tag only — no release, no binaries.* Build from source or use the `v1.1.1` desktop build. |
+| **`v1.1.1`** | 2026-05-20 | Sphere Visualizer polish; no protocol change, `v1.1.0` vaults compatible | **Latest desktop build**: `Eidolon-1.1.1-windows-x64.zip` + `Eidolon.exe`, `Eidolon-1.1.1-linux-x64.tar.gz` + `Eidolon`, `SHA256SUMS` |
+| `v1.1.0` | 2026-05-20 | Logos Project rebrand | Same asset set as `v1.1.1` |
+| `v1.0.0` | 2026-05-14 (released 05-16) | First public release — post-quantum vault, 9-phase pipeline, `eidolond` | `eidolon.exe` (Windows only) |
+
+Everything under **[Unreleased]** in [`CHANGELOG.md`](CHANGELOG.md) — the
+sphere custody ledger and its client, the Eidos witness, batched finality,
+the Connect escrow primitives — is on `main` and in the Cipher runtime, but
+not yet tagged.
+
+### The Cipher runtime
+
+The Genesis ceremony, keybundle import/export, the E2EE seed and the sphere
+client ship to Cipher users as one frozen binary, `cipher-runtime`. This
+public tree holds no crypto core to build it from, so the binary is published
+as a release asset on **[Oykdo/cipher](https://github.com/Oykdo/cipher/releases)**,
+where Cipher's build pins it by name and SHA-256.
+
+| Runtime release | `--version` | Built from | Status |
+|---|---|---|---|
+| [`cipher-runtime-20260912`](https://github.com/Oykdo/cipher/releases/tag/cipher-runtime-20260912) | `1.0.0` | private core `8a51d13`, after the machine-lock fix (fail-closed offline, key generated after the check, server-chosen vault number) | **Shipped** in Cipher `v1.4.2` and `v1.4.3`. Linux x86_64 (glibc ≥ 2.35) and Windows x64, `SHA256SUMS` alongside. |
+| `cipher-runtime-20260909` | `1.0.0` | private core before that fix | Superseded; do not use. |
+| *(next)* | `1.2.0` built, `1.2.1` in source | sphere custody client (`sphere list … trust`), then `burn` / `reissue-key` / `queue` | Built locally, verified, **not yet published** — Cipher's next release depends on it. |
+
+Verify any download with `sha256sum -c SHA256SUMS`.
 
 ---
 
@@ -35,24 +64,30 @@ Cipher user never installs Eidolon separately.
 | **Vault** | Two files, both required to unlock: `.psnx` (~17 KB, key material) + `.blend_data` (~156 KB, holographic entropy + signatures). Local-first: keys never leave the machine. |
 | **Post-quantum engine** | Kyber1024 + Dilithium5 inside the compiled pipeline; ML-DSA-65, Falcon-512, SPHINCS+ (SHA2-256f), McEliece-6960119 and HQC-256 in the Python layer; AES-256-GCM, HKDF, scrypt, SHA-3. |
 | **Custody ledger** | Hash-based, no curves, no lattices: SHA3-256, WOTS+ (RFC 8391) one-time signatures, SLH-DSA-SHA2-128s (FIPS 205) for issuers and anchors, Merkle **sum** trees. Fully verifiable offline with the public verifier. |
-| **Genesis** | 21,186 spheres committed by **one** signed root; every sphere file carries its own inclusion proof (15 levels, ≈1.9 KB, verified in 0.2 ms). |
-| **Tests** | 526 public tests (101 of them pure-protocol: Python + `pqcrypto` only); 622 with the private suites — all green on 2026-09-14. |
+| **Genesis** | 21,186 spheres committed by **one** signed root; every sphere file carries its own inclusion proof (15 levels, ≈1.6 KB, verified in under half a millisecond). |
+| **Tests** | 587 public tests in 70 files (164 of them pure-protocol: Python + `pqcrypto`, no native wheel); 723 with the private suites. Counted on 2026-09-15. |
 | **Public surface** | Four protocol packages (`escrow_7d`, `vault_migration`, `sphere_ledger`, `eidos_witness`), the `eidolond` daemon, SDK stubs (Python, TypeScript, Go, Rust), format specs, threat model, reproducible-build notes. |
 
 <details>
-<summary><b>Measured on the public verifier (pure Python, laptop, 2026-09-14)</b></summary>
+<summary><b>Measured on the public verifier (pure Python 3.12, Windows laptop, 2026-09-14 — median of repeated runs)</b></summary>
 
 | Operation | Figure |
 |---|---|
-| WOTS+ (n = 32, w = 16) key generation + one signature | ≈34 ms |
+| WOTS+ (n = 32, w = 16) key generation + one signature | ≈100 ms |
 | WOTS+ signature / public root | 2,144 B / 32 B |
-| WOTS+ verification | ≈37 ms |
-| SLH-DSA-SHA2-128s key generation / signature / verification | 0.19 s / 1.4 s / 1.6 ms |
+| WOTS+ verification | ≈35 ms |
+| SLH-DSA-SHA2-128s key generation / signature / verification | 0.5 s / 4.1 s / 3.5 ms |
 | SLH-DSA public key / signature | 32 B / 7,856 B |
-| Sum tree over 21,186 leaves (build) | 0.72 s |
-| Inclusion proof at that scale (levels / size / verification) | 15 / 1,936 B / 0.23 ms |
-| Whole sphere file, three custody hops + receipt, `verify_sphere` | ≈23 ms |
+| Sum tree over 21,186 leaves (build) | 1.6 s |
+| Inclusion proof at that scale (levels / size / verification) | 15 / 1,587 B / ≈0.4 ms |
+| Sphere file: mint + three custody records + anchor receipt (size / `verify_sphere`) | 47 KB / ≈120 ms |
 | Signed genesis root (`root.json`) / full mint list (`mints.jsonl`) | 16.6 KB / 9.8 MB |
+
+Reading the figures: an SLH-DSA signature is slow and large, which is why it
+is spent only where it counts — one per mint batch (the genesis root), one per
+receipt, one per checkpoint — while every custody hop is a WOTS+ signature. A
+verifier pays ≈35 ms per hop and ≈3.5 ms per anchor signature; the sum-tree
+proof that ties a head to a checkpoint is essentially free.
 
 </details>
 
@@ -66,15 +101,15 @@ Eidolon ships as **two layers**. Publicness is a design decision, recorded in
 
 | Layer | What | Where |
 |---|---|---|
-| **Public** (this repository) | Protocol packages and their format specifications, the daemon CLI, integration and contract tests, reference vectors, SDK stubs, whitepapers. | `github.com/Oykdo/Eidolon` |
-| **Compiled** (native wheel) | The holographic key-generation pipeline, post-quantum wrapping, Merkle / ecosystem registry, ZKP and secret-sharing primitives. | `eidolon-crypto` wheel (Rust, PyO3, abi3); source not distributed |
-| **Private** (never shipped) | Minting, the genesis treasury and its ceremony, the vault-side clients, the API server. | — |
+| **Public** (this repository) | Protocol packages and their format specifications, the daemon CLI, integration and contract tests, reference vectors, SDK stubs, whitepapers, the client trust root. | `github.com/Oykdo/Eidolon` |
+| **Compiled** (native wheel) | The holographic key-generation pipeline, post-quantum wrapping, Merkle / ecosystem registry, ZKP and secret-sharing primitives. | `eidolon_crypto` wheel (Rust, PyO3, abi3) vendored under [`prebuilt_wheels/`](prebuilt_wheels) — Windows x64 and manylinux x86_64; source not distributed |
+| **Private** (never shipped) | Minting, the genesis treasury and its ceremony, the anchor, the vault-side clients, the API server. | — |
 
 Integrators audit the public API surface and the shipped test suite; the
 construction that makes the pipeline distinct stays in the compiled layer.
 Everything a **verifier** needs — formats, domain separators, signature
-schemes, proof shapes — is public, because a ledger nobody can check is not a
-ledger.
+schemes, proof shapes, trusted keys — is public, because a ledger nobody can
+check is not a ledger.
 
 ---
 
@@ -87,8 +122,14 @@ git clone https://github.com/Oykdo/Eidolon.git
 cd Eidolon
 python -m venv .venv && . .venv/bin/activate      # Windows: .venv\Scripts\activate
 pip install -r requirements.txt                    # pins pqcrypto==0.4.0 (1.x renames its modules)
-pip install eidolon-crypto                         # the native engine, needed for vault generation
+
+# The native engine is vendored, not on PyPI. Pick your platform:
+pip install prebuilt_wheels/eidolon_crypto-0.1.0-cp39-abi3-win_amd64.whl              # Windows x64
+pip install prebuilt_wheels/eidolon_crypto-0.1.0-cp39-abi3-manylinux_2_34_x86_64.whl  # Linux x86_64
 ```
+
+The wheel is needed for vault generation, PSNX, ZKP, machine lock and secret
+sharing. The four protocol packages and their tests run without it.
 
 ### 2. Generate a vault
 
@@ -112,14 +153,15 @@ Neither file alone unlocks the vault; compromise of one reveals nothing.
 import json
 from src.protocols.sphere_ledger.ledger import SphereFile, GenesisRoot, verify_sphere
 
+trust   = json.load(open("config/genesis/trust.json"))                # shipped with the client, not fetched
 sphere  = SphereFile.from_json(open("RARE_0003__I00002.sphere.json").read())
-genesis = GenesisRoot.from_dict(json.load(open("root.json")))      # served by the anchor, pinned by you
+genesis = GenesisRoot.from_dict(json.load(open("root.json")))         # served by the anchor, pinned by you
 
 v = verify_sphere(
     sphere,
-    issuer_pk=bytes.fromhex(ISSUER_PUBLIC_KEY),                    # from a channel independent of the server
+    issuer_pk=bytes.fromhex(trust["issuer_pk"]) if trust["issuer_pk"] else None,   # null until the ceremony
     genesis=genesis,
-    known_anchors={"eidolon-anchor-1": bytes.fromhex(ANCHOR_PUBLIC_KEY)},
+    known_anchors={k: bytes.fromhex(pk) for k, pk in trust["anchors"].items()},
     treasury_ids={genesis.treasury_id},
 )
 print(v.ok, v.owner, "final" if v.final else "waiting", v.final_by, v.errors)
@@ -128,8 +170,15 @@ print(v.ok, v.owner, "final" if v.final else "waiting", v.final_by, v.errors)
 `ok` means the mint is in the signed genesis root, every custody hop is
 signed by the key committed in the previous hop, and every receipt or
 checkpoint comes from the sphere's anchor of record. `final` means that anchor
-has ordered the current head. A malformed file yields a verdict, never an
-exception.
+has ordered the current head (`final_by` says whether by receipt or by
+checkpoint). A malformed file yields a verdict, never an exception.
+
+The same verdict from the frozen runtime, no vault involved:
+
+```bash
+cipher-runtime sphere verify --file RARE_0003__I00002.sphere.json --genesis root.json   # [--trust trust.json]
+# → {"ok": true, "valid": true, "final": …, "final_by": …, "state": …, "owner": …, "genesis_checked": true, "trusted_issuer": false}
+```
 
 ### 4. Run the tests
 
@@ -137,8 +186,9 @@ exception.
 export EIDOLON_API_SECRET=0123456789abcdef0123456789abcdef   # >= 32 chars, read at import by one API test
 python -m pytest tests/ --ignore=tests/_dormant -q
 
-# Protocol suites only — no native wheel required:
-python -m pytest tests/test_ledger_*.py tests/test_eidos_witness_*.py tests/test_vault_migration.py -q
+# Protocol suites only — no native wheel required (164 tests):
+python -m pytest tests/test_ledger_*.py tests/test_eidos_witness_*.py \
+                 tests/test_vault_migration.py tests/test_escrow_7d_*.py -q
 ```
 
 ---
@@ -150,14 +200,16 @@ from the compiled layer: vault key material only ever enters as opaque bytes.
 
 | Package | What it does | Spec |
 |---|---|---|
-| **`sphere_ledger`** | The custody ledger verifier: WOTS+ one-time signatures, SLH-DSA with per-purpose domain separation, Merkle sum trees with inclusion proofs and conservation checks, `verify_sphere`, `detect_fork`, the flux invariant an anchor must satisfy between two checkpoints. | [`docs/SPHERE_LEDGER_FORMAT.md`](docs/SPHERE_LEDGER_FORMAT.md) |
+| **`sphere_ledger`** | The custody ledger verifier: WOTS+ one-time signatures, SLH-DSA with per-purpose domain separation, Merkle sum trees with inclusion proofs and conservation checks, `verify_sphere`, `verify_checkpoint_inclusion`, `detect_fork`, the flux invariant an anchor must satisfy between two checkpoints. | [`docs/SPHERE_LEDGER_FORMAT.md`](docs/SPHERE_LEDGER_FORMAT.md) |
 | **`eidos_witness`** | A byte-exact port of the public verifier surface of [Eidos](https://github.com/Oykdo/Eidos): WOTS+ derivation, XMSS validator signatures, signed head, UTXO inclusion proofs, transaction encoding, the `eidos.carnet` exchange format, and a self-contained asset dossier judged offline. | [`docs/EIDOS_WITNESS_FORMAT.md`](docs/EIDOS_WITNESS_FORMAT.md) |
 | **`vault_migration`** | Export / import / archive of a vault with a versioned, MAC-bound manifest; carries the vault's sidecars (Eidos coffre, sphere files) without ever copying a directory. | in-package docstrings |
-| **`escrow_7d`** | Time-locked sealed envelopes (AES-256-GCM, HKDF-wrapped session key, HMAC tag) with composable release conditions (`TimeLock`, `OwnerSignature`, `CombinedAll/Any`) and a provenance keyprint. | in-package docstrings |
+| **`escrow_7d`** | Sealed, time-locked document envelopes bound to a vault key (AES-256-GCM, HKDF-derived session key, HMAC-bound) with composable release conditions (`TimeLock`, `OwnerSignature`, `CombinedAll/Any`); symmetric primitives only, metadata in cleartext, a frozen golden envelope pins the v1 format. The package also carries a static authorship keyprint (`verify_provenance()`). | [`docs/ESCROW_7D_FORMAT.md`](docs/ESCROW_7D_FORMAT.md) |
 
 Also public: [`src/daemon/`](src/daemon) (`eidolond` — start/stop/status, vault
-create/list/info, background service on port 8420), [`docs/FORMAL_SPEC.md`](docs/FORMAL_SPEC.md),
-[`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md), [`docs/REPRODUCIBLE_BUILDS.md`](docs/REPRODUCIBLE_BUILDS.md),
+create/list/info, background service on port 8420),
+[`config/genesis/trust.json`](config/genesis/trust.json) (the client trust root),
+[`docs/FORMAL_SPEC.md`](docs/FORMAL_SPEC.md), [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md),
+[`docs/REPRODUCIBLE_BUILDS.md`](docs/REPRODUCIBLE_BUILDS.md),
 [`docs/TEST_VECTORS.json`](docs/TEST_VECTORS.json), and the vectors under [`tests/vectors/`](tests/vectors).
 
 ---
@@ -178,26 +230,55 @@ MintRecord ──▶ CustodyRecord #1 ──▶ CustodyRecord #2 ──▶ … �
   root was committed in the previous record; the receiver supplies the next
   root. A client re-derives its keys from its vault key — nothing to back up —
   and writes a signed transfer to disk *before* submitting it, never signing
-  twice for one head.
+  twice for one head. The single deliberate exception: `reissue-key --force`
+  revokes a signed, unsubmitted transfer by a second signature, settled by the
+  anchor.
 - **First head wins.** An *anchor* orders heads: for a given predecessor, the
   first record received becomes the head, the second is a fork and is refused.
   It signs receipts (per head) and **checkpoints** (one SLH-DSA signature over a
   sum tree of *all* heads — batched finality); a file carries the checkpoint
-  and its inclusion proof.
+  and its inclusion proof. Anchors federate: a sphere names its anchor of
+  record in its mint, and moving to another one is a custody record of its
+  own (`reanchor`), still ordered by the old anchor.
 - **Conservation is provable.** Leaves count 1 per live sphere per rarity, so a
   checkpoint root commits both the heads and the totals; `minted = held +
   burned` holds rarity by rarity, and the anchor's own reconciler halts the
-  anchor if a checkpoint would violate the flux invariant.
+  anchor if a checkpoint would violate the flux invariant. A burnt sphere stays
+  in its owner's inventory as its own tombstone; the anchor refuses any record
+  after it.
 - **Commit-and-reveal catalogue.** The genesis root commits every template by
   hash; a sphere reveals its template only when claimed, and any receiver
   recomputes the commitment.
 - **Trust travels out of band.** The issuer key, anchor keys and pinned genesis
-  roots are compiled into the client (`config/genesis/trust.json`), not fetched
-  from the server they would otherwise vouch for.
+  roots are compiled into the client ([`config/genesis/trust.json`](config/genesis/trust.json)),
+  not fetched from the server they would otherwise vouch for. The client
+  takes the genesis root once from the anchor, checks it against that trust
+  root and caches it; a replacement root is accepted only if it supersedes
+  the known one (`genesis_seq + 1`, same issuer). Without an anchor key,
+  everything stays *en attente*; without an issuer key, a genesis root is
+  believed only by pinning — `sphere trust` says which is the case.
+  `issuer_pk` is `null` until the genesis ceremony has run; the signed
+  `root.json` and `issuer_public.json` will be published next to it.
 
-The desktop client (`cipher-runtime sphere list|claim|transfer|import|export|sync|mailbox|verify|trust`)
-shows every sphere as **finale** or **en attente**; a received file is verified
-offline first, then confronted with the anchor ("local heads = anchor heads").
+The desktop client — `cipher-runtime sphere list | claim | transfer | import |
+export | sync | mailbox | queue | burn | reissue-key | verify | trust`, one JSON
+line per call, no secret ever on stdout — shows every sphere as **finale**,
+**en attente**, **brûlée** or **invalide**. A received file is verified
+offline first (public verifier + trust root), then confronted with the anchor
+("local heads = anchor heads"): same head → the receipt and checkpoint are
+completed; anchor behind → the client submits what it lacks; fork → refused
+as the losing branch; stale → refused. An export carries a signed, unsubmitted
+transfer so that the *receiver* submits it when the sender was offline.
+`sync` also reports claims the anchor deferred (`queued`) and spheres burnt
+from another device (`burned`); `verify --file` needs no vault at all.
+
+The anchor's client-facing contract, under `/api/v1/sphere/` on the REST API:
+`GET genesis/root`, `genesis/mints`, `checkpoint[/{seq}]`, `{id}/head`,
+`{id}/file` (with the latest checkpoint and proof when they include the
+head), `{id}/checkpoint-proof`, `owned`, `claim/instances`, `claim/queue`,
+`mailbox/{vault_id}`; `POST custody`, `mailbox`, `claim`. Vault-scoped routes
+take the vault's challenge–proof login and require an **enrolled** vault; the
+client never enrols by itself, since enrolment fixes the vault number.
 
 ---
 
@@ -214,10 +295,19 @@ symbiotic economy.
 | **Realms** | Temporal collectives of pioneers; shared governance and epoch distribution |
 | **Ticks / Epochs** | Periodic processing distributes tier-weighted epochs (~1 hour units), which vest (20 % per week) before EIDOLON conversion |
 | **Spheres** | The custody-ledger artifacts above, with yield, evolution and quests |
+| **Holds** | EIDOLON locked on a vault as a behavioural bond by an approved app: leaves the balance at hold time, returns on release, goes to a counterparty (or is burnt) on forfeit. Reported as `eidolon_held`. |
 
 ```
 Cipher activity → resonance → realm tick → epochs (tier-weighted) → vesting → EIDOLON claim → treasury → realm growth
 ```
+
+**Connect escrow primitives.** An application running a postal escrow on top
+of Eidolon authenticates as an app (Connect secret + approval), not as a user,
+and gets two things: `POST /connect/vault/seal` / `open` seal small records
+(≤ 16 KiB) under a key derived per (app, subject) — the app keeps the blob,
+Eidolon keeps the key — and `POST /connect/vault/economy/holds` with
+`/{id}/release`, `/{id}/forfeit`, `GET /{id}` for the holds above. Every move
+lands in the vault's operations trail.
 
 ### Tier multipliers
 
@@ -281,7 +371,7 @@ Rosetta Stone yield-bonus eligibility.
 | Vault engine (compiled) | Kyber1024 (KEM) + Dilithium5 (signatures), AES-256-GCM, HKDF-SHA256/512, scrypt, PBKDF2, SHA-3; Schnorr ZKP for authentication; Shamir secret sharing (v1 and large-secret v2); Merkle proofs for selective disclosure |
 | Python PQ layer | McEliece-6960119 and HQC-256 (code-based KEMs — no lattice dependency), ML-DSA-65 (FIPS 204), Falcon-512, SPHINCS+-SHA2-256f (FIPS 205) |
 | Custody ledger | SHA3-256 everywhere, WOTS+ (RFC 8391, n = 32, w = 16), SLH-DSA-SHA2-128s with per-purpose domain separation (`mint`, `receipt`, `checkpoint`, `genesis`), canonical JSON |
-| Escrow | AES-256-GCM, HKDF-wrapped session keys, HMAC-bound envelopes, composable release conditions |
+| Escrow | `escrow_7d`: AES-256-GCM under an HKDF-derived session key, HMAC-bound envelopes, composable release conditions (symmetric primitives only). Connect seal/open: keys derived per (app, subject) from a secret distinct from the JWT secret |
 
 Design documents: [`docs/THREAT_MODEL.md`](docs/THREAT_MODEL.md),
 [`docs/FORMAL_SPEC.md`](docs/FORMAL_SPEC.md),
@@ -293,7 +383,7 @@ outputs, sizes, test vectors) are documented, its construction is not.
 
 ## Native engine API
 
-Everything below runs against the published wheel.
+Everything below runs against the vendored wheel.
 
 ```python
 import eidolon_crypto as ec
@@ -339,12 +429,14 @@ pre-commit guard refuses them, and `.gitignore` keeps every private path out.
 ```
 src/protocols/        sphere_ledger · eidos_witness · vault_migration · escrow_7d   (public, Tier 1)
 src/daemon/           eidolond CLI and background service
+config/genesis/       trust.json — issuer key, anchor keys, pinned genesis roots (root.json + issuer_public.json after the ceremony)
 tests/                contract and protocol tests · tests/vectors · tests/fixtures
 docs/                 format specs, formal spec, threat model, reproducible builds, test vectors
 sdk/                  SDK stubs (python · javascript · go · rust)
+prebuilt_wheels/      eidolon_crypto abi3 wheels (win_amd64 · manylinux_2_34_x86_64)
 tools/hooks/          pre-commit publication guard
 assets/visuals/       renders
-.github/workflows/    ci.yml (compile + manifest checks), release.yml (frozen desktop builds)
+.github/workflows/    ci.yml (compile + manifest checks), release.yml (frozen desktop builds on v* tags)
 IP-BOUNDARY.md        what is open, what is closed, and the sign-offs that moved things across
 ```
 
@@ -369,5 +461,7 @@ authorization. Third-party dependencies retain their own licenses. See
 <div align="center">
 
 *Eidolon — where cryptographic security meets sustainable economics.*
+
+*This README describes the `main` tree as of 2026-09-14 — tag `v1.2.0` plus the unreleased changes listed in `CHANGELOG.md`.*
 
 </div>
