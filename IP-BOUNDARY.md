@@ -164,3 +164,23 @@ Opening is **irreversible** — once material is public, it cannot be un-publish
   obtains its Eidos keys, how it seals its coffre) remains Tier 2. Decision of
   the owner, Jérémy Zgonec, recorded on his instruction (« un vérifieur Témoin
   public »).
+- **2026-09-16 — 7D Escrow and vault migration (recorded after the fact).**
+  `src/protocols/escrow_7d/` (sealed, time-locked document envelopes:
+  AES-256-GCM under an HKDF-SHA256 session key, HMAC-SHA256 binding, composable
+  release conditions), `src/protocols/vault_migration/` (export / import /
+  archive of a vault with a versioned, MAC-bound manifest and the vault's
+  sidecars), their public tests (`tests/test_escrow_7d_*.py`,
+  `tests/test_vault_migration.py`), the golden vector
+  `tests/vectors/escrow_7d_v1.json` and the format specification
+  `docs/ESCROW_7D_FORMAT.md` are **Tier 1**. Both packages were published with
+  the `v1.2.0` release of 2026-06-05 (commit `829a1de`) before this register
+  existed; this entry records that decision and its rationale. Rationale: both
+  are message formats and container protocols built only on public standards
+  (RFC 5869, AES-GCM, HMAC-SHA256); they import nothing from the compiled
+  layer or the private `src/` packages; a vault's key material only enters as
+  opaque bytes (the escrow derives per-envelope keys from it and stores a
+  `sha256` prefix, never the key); they contain no element of EEP-001 and no
+  pipeline parameter. The audit of 2026-09-15 confirmed the boundary: neither
+  package imports `src.ui` any more, and a wheel built from a clone carries the
+  four protocols and nothing private. Decision of the owner, Jérémy Zgonec,
+  recorded on his instruction.
