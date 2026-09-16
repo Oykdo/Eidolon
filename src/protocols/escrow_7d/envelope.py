@@ -1,4 +1,4 @@
-"""On-disk envelope format for 7D Escrow documents.
+"""On-disk envelope format for Escrow Nexus documents.
 
 The envelope is a JSON document where binary fields are base64-encoded for
 readability. Only ``ciphertext`` is confidential: ``label``, ``conditions``,

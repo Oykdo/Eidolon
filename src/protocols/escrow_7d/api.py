@@ -1,4 +1,4 @@
-"""High-level API for 7D Escrow.
+"""High-level API for Escrow Nexus.
 
 All functions accept ``vault_key`` (raw bytes — 32 bytes minimum) to avoid
 coupling this module to Eidolon's vault identity loader. The launcher

@@ -1,4 +1,4 @@
-"""Crypto core for 7D Escrow.
+"""Crypto core for Escrow Nexus.
 
 All cryptographic parameters live in ``format_version.CryptoSuite`` so the
 choices for AEAD, KDF, MAC, key/nonce/salt lengths, and HKDF info strings

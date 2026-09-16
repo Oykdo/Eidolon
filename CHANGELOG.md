@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 
-- **7D Escrow hardening (`src/protocols/escrow_7d`, audit of 2026-09-15).** No change
+- **Escrow Nexus hardening (`src/protocols/escrow_7d`, audit of 2026-09-15).** No change
   to the v1 wire format — a frozen golden envelope (`tests/vectors/escrow_7d_v1.json`)
   now pins it. Every escrow-level error derives from `EscrowError`
   (`EscrowStoreError`, `FormatError`, `ConditionError`, `SealError`, `UnsealError`;
@@ -44,6 +44,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **The document escrow protocol is called Escrow Nexus.** Display name only: the
+  package path `src/protocols/escrow_7d`, the `.escrow7d` suffix, the producer tag
+  and the v1 golden vector are unchanged, so existing envelopes open as before.
+  The launcher entry `[X]` reads "Escrow Nexus" and describes what the protocol
+  does (sealed, time-locked document envelopes) instead of "post-quantum".
 - **`OwnerSignature` is now a real release condition** (`src/protocols/escrow_7d`).
   It accepts the vault's 64-hex id (`vault_id_from_key(vault_key)`, or
   `OwnerSignature.for_vault_key(vault_key)`) or the 16-hex
@@ -58,7 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   reader. Composite nesting is bounded (`MAX_CONDITION_DEPTH` = 32) at seal and at
   unseal, so the verdict never depends on the reader's stack. Stored envelopes with
   a full-id `OwnerSignature` open exactly as before.
-- **7D Escrow said plainly.** The package, `src/protocols/__init__.py` and the
+- **Escrow Nexus said plainly.** The package, `src/protocols/__init__.py` and the
   threat model (`docs/THREAT_MODEL.md` §5.4) now state what Phase 1 is: symmetric
   256-bit primitives (no post-quantum KEM or signature), a session key *derived*
   by HKDF (not wrapped), time locks enforced by the key holder's own clock, and

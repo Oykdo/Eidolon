@@ -1,4 +1,4 @@
-"""Version management for 7D Escrow.
+"""Version management for Escrow Nexus.
 
 Two orthogonal version axes are tracked:
 

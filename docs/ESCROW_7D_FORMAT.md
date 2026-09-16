@@ -1,10 +1,13 @@
-# 7D Escrow — envelope format (schema v1, crypto suite `alpha-v1`)
+# Escrow Nexus — envelope format (schema v1, crypto suite `alpha-v1`)
 
 Status: frozen. This document describes the bytes that `src/protocols/escrow_7d`
-writes and reads. A change to anything below requires a new `schema_version`
-and/or a new `crypto_suite`; existing envelopes are never rewritten (see
-"Versioning"). A frozen envelope is published in `tests/vectors/escrow_7d_v1.json`
-and checked by `tests/test_escrow_7d_api_store.py::GoldenVectorTests`.
+writes and reads. Escrow Nexus is the protocol's name; the package path, the
+`.escrow7d` file suffix and the producer tag `eidolon-escrow-7d/alpha-v1` (inside
+the MAC) are the frozen v1 identifiers and keep their historical spelling. A change
+to anything below requires a new `schema_version` and/or a new `crypto_suite`;
+existing envelopes are never rewritten (see "Versioning"). A frozen envelope is
+published in `tests/vectors/escrow_7d_v1.json` and checked by
+`tests/test_escrow_7d_api_store.py::GoldenVectorTests`.
 
 ## 1. Purpose and scope
 

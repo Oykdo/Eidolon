@@ -1,4 +1,4 @@
-"""Provenance keyprint for the 7D Escrow proof of concept.
+"""Provenance keyprint for the Escrow Nexus proof of concept.
 
 This is an **authorship / proof-of-concept marker**, not a security control:
 it does not gate any escrow operation and is intentionally *not* part of the

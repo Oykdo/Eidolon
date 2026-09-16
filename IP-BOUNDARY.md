@@ -164,7 +164,7 @@ Opening is **irreversible** — once material is public, it cannot be un-publish
   obtains its Eidos keys, how it seals its coffre) remains Tier 2. Decision of
   the owner, Jérémy Zgonec, recorded on his instruction (« un vérifieur Témoin
   public »).
-- **2026-09-16 — 7D Escrow and vault migration (recorded after the fact).**
+- **2026-09-16 — Escrow Nexus (`escrow_7d`) and vault migration (recorded after the fact).**
   `src/protocols/escrow_7d/` (sealed, time-locked document envelopes:
   AES-256-GCM under an HKDF-SHA256 session key, HMAC-SHA256 binding, composable
   release conditions), `src/protocols/vault_migration/` (export / import /

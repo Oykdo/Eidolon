@@ -1,4 +1,4 @@
-"""Backward-compatibility tests for the 7D Escrow envelope format.
+"""Backward-compatibility tests for the Escrow Nexus envelope format.
 
 These tests freeze the v1 wire format and prove that adding a future v2
 schema/crypto-suite cannot break existing v1 envelopes. They double as

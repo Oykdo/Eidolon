@@ -1,4 +1,4 @@
-"""Exception hierarchy for 7D Escrow.
+"""Exception hierarchy for Escrow Nexus.
 
 Every error the package raises derives from :class:`EscrowError`, so a caller
 can catch one type for "this escrow operation failed" and still discriminate

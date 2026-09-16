@@ -1,4 +1,4 @@
-"""Functional tests for the 7D Escrow public API, store and CLI.
+"""Functional tests for the Escrow Nexus public API, store and CLI.
 
 Complements test_escrow_7d_backward_compat.py (in-memory sealer/envelope) with
 what happens on disk and at the API boundary: lifecycle, isolation between

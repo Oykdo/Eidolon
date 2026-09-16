@@ -1,4 +1,4 @@
-"""7D Escrow — sealed, time-locked document envelopes bound to a vault key.
+"""Escrow Nexus — sealed, time-locked document envelopes bound to a vault key.
 
 Phase 1 (current): local, single-user. A document is encrypted with AES-256-GCM
 under a session key derived by HKDF-SHA256 from the vault key and a fresh salt;

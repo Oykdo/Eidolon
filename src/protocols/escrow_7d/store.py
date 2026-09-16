@@ -1,4 +1,4 @@
-"""Local filesystem persistence for 7D Escrow envelopes.
+"""Local filesystem persistence for Escrow Nexus envelopes.
 
 Layout::
 

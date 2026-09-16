@@ -1,4 +1,4 @@
-"""Interactive CLI for 7D Escrow, wired into the Eidolon launcher.
+"""Interactive CLI for Escrow Nexus, wired into the Eidolon launcher.
 
 Exposes ``escrow_menu(vault_key, vault_label)`` which paints a small sub-menu
 (Deposit / List / Retrieve / Verify / Delete / Back) and dispatches to the
@@ -110,7 +110,7 @@ def _truncate(text: str, width: int) -> str:
 # ---------------------------------------------------------------------------
 
 def _action_deposit(vault_key: bytes, vault_label: str) -> None:
-    print_section("7D ESCROW - DEPOSIT")
+    print_section("ESCROW NEXUS - DEPOSIT")
     src = _prompt("Path of the file to escrow (leave empty for inline text)")
     if src is None:
         return
@@ -168,7 +168,7 @@ def _action_deposit(vault_key: bytes, vault_label: str) -> None:
 
 
 def _action_list(vault_key: bytes, vault_label: str) -> None:
-    print_section("7D ESCROW - LIST")
+    print_section("ESCROW NEXUS - LIST")
     summaries = api.list_escrows(vault_key)
     if not summaries:
         print_status("no escrows in this vault", "info")
@@ -312,7 +312,7 @@ def _sanitize_stem(label: str) -> str:
 
 
 def _action_retrieve(vault_key: bytes, vault_label: str) -> None:
-    print_section("7D ESCROW - RETRIEVE")
+    print_section("ESCROW NEXUS - RETRIEVE")
     raw = _prompt("Escrow ID (number, prefix, or leave empty to list)")
     if raw is None:
         return
@@ -393,7 +393,7 @@ def _action_retrieve(vault_key: bytes, vault_label: str) -> None:
 
 
 def _action_verify(vault_key: bytes, vault_label: str) -> None:
-    print_section("7D ESCROW - VERIFY")
+    print_section("ESCROW NEXUS - VERIFY")
     raw = _prompt("Escrow ID (number, prefix, or 'all' for full sweep)")
     if raw is None:
         return
@@ -426,7 +426,7 @@ def _action_verify(vault_key: bytes, vault_label: str) -> None:
 
 
 def _action_delete(vault_key: bytes, vault_label: str) -> None:
-    print_section("7D ESCROW - DELETE")
+    print_section("ESCROW NEXUS - DELETE")
     raw = _prompt("Escrow ID (number, prefix, or leave empty to list)")
     if raw is None:
         return
@@ -470,7 +470,7 @@ def escrow_menu(vault_key: bytes, vault_label: str = "") -> None:
         return
 
     while True:
-        print_section("7D ESCROW")
+        print_section("ESCROW NEXUS")
         if vault_label:
             print(f"    {Colors.DIM}vault: {vault_label}{Colors.RESET}")
         print()
