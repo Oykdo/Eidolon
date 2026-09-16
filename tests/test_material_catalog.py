@@ -12,7 +12,6 @@ Validates:
 
 import time
 
-import pytest
 
 from src.holo.material_catalog import (
     MATERIAL_CATALOG,

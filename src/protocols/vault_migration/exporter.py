@@ -14,8 +14,8 @@ from .archive import (
     compute_integrity_mac,
     write_archive,
 )
-from .format_version import CURRENT_FORMAT_SUITE, get_suite, MIGRATION_FILE_SUFFIX
-from .inventory import InventoryEntry, collect_vault_inventory
+from .format_version import CURRENT_FORMAT_SUITE, get_suite
+from .inventory import collect_vault_inventory
 from .manifest import FileEntry, Manifest
 
 

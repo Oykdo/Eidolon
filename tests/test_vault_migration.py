@@ -11,7 +11,6 @@ Covers:
 
 from __future__ import annotations
 
-import os
 import shutil
 import sys
 import tempfile
@@ -26,18 +25,13 @@ from src.protocols.vault_migration import (
     import_vault,
     inspect_archive,
     ImportError as MigrationImportError,
-    ImportConflict,
 )
 from src.protocols.vault_migration.archive import (
     HEADER_SIZE,
     read_archive,
     read_zip_to_files,
-    write_archive,
-    build_zip_from_files,
-    compute_integrity_mac,
 )
 from src.protocols.vault_migration.format_version import (
-    CURRENT_FORMAT_SUITE,
     _REGISTRY,
     FormatSuite,
     SUPPORTED_SCHEMA_VERSIONS,

@@ -16,7 +16,7 @@ def test_secure_memory():
     """Test du module secure_memory"""
     print("\n[TEST] Secure Memory...")
     
-    from src.identity.secure_memory import SecureBuffer, SecureZeroMethod
+    from src.identity.secure_memory import SecureBuffer
     
     # Test creation
     with SecureBuffer(32) as buf:
@@ -71,7 +71,7 @@ def test_quantum_entropy():
     """Test du module quantum_entropy"""
     print("\n[TEST] Quantum Entropy...")
     
-    from src.crypto.quantum_entropy import HybridEntropyPool, EntropyQuality
+    from src.crypto.quantum_entropy import HybridEntropyPool
     
     pool = HybridEntropyPool(
         use_quantum=False,  # Skip API calls for test

@@ -1,9 +1,6 @@
 """Integration tests for the full quest flow."""
 
-import os
-import shutil
 import time
-from pathlib import Path
 
 import pytest
 
@@ -11,9 +8,7 @@ from src.holo.realms.quests import (
     QuestEngine,
     QuestRegistry,
     QuestStatus,
-    QuestType,
     PILGRIMAGE_CONFIG,
-    ENTANGLEMENT_CONFIG,
 )
 from src.holo.realms.quest_spheres import QuestSphereRegistry
 

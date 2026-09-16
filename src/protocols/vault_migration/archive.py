@@ -32,9 +32,7 @@ from .format_version import (
     ARCHIVE_MAGIC,
     CURRENT_FORMAT_SUITE,
     CURRENT_SCHEMA_VERSION,
-    FormatError,
     FormatSuite,
-    check_compatibility,
     get_suite,
 )
 

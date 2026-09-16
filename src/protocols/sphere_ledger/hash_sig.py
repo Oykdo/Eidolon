@@ -39,7 +39,7 @@ from __future__ import annotations
 import hashlib
 import secrets
 from dataclasses import dataclass
-from typing import List, Optional, Sequence, Tuple
+from typing import List, Optional, Sequence
 
 N = 32          # octets par valeur de hachage
 W = 16          # base de Winternitz

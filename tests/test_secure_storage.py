@@ -12,12 +12,11 @@ sys.path.insert(0, str(ROOT))
 
 from src.identity.secure_key_storage import (
     SecureKeyStorage,
-    VaultKeyStorage,
     MemoryProtectedKey,
     SecureKeyDerivation,
     KeyNotFoundError,
     KeyExpiredError,
-    create_secure_vault_storage
+    create_secure_vault_storage,
 )
 
 

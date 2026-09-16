@@ -17,7 +17,6 @@ from __future__ import annotations
 
 import hashlib
 from dataclasses import dataclass
-from typing import Optional
 
 from pqcrypto.sign import sphincs_sha2_128s_simple as _slh
 

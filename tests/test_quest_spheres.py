@@ -1,17 +1,12 @@
 """Pytest suite for the quest_spheres module."""
 
 import hashlib
-import os
-import shutil
-import tempfile
-from pathlib import Path
 
 import pytest
 
 from src.holo.realms.quest_spheres import (
     LOOT_TABLE,
     TOTAL_WEIGHT,
-    MAX_MINTS_PER_EON,
     QuestSphereRegistry,
     generate_quest_sphere,
     generate_twin_sphere,
@@ -19,7 +14,6 @@ from src.holo.realms.quest_spheres import (
 )
 from src.holo.realms.quest_spheres.generator import verify_sphere_rng
 from src.holo.realms.quest_spheres.loot_table import (
-    FUSION_REQUIREMENT,
     get_rarity_by_tier,
     get_next_tier,
 )

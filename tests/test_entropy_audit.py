@@ -60,9 +60,12 @@ def test_to_dict_from_bytes_roundtrip():
     print("\n=== TEST 3: to_dict / from_bytes roundtrip ===")
     import numpy as np
     from src.crypto.complete_key_generator import (
-        CompleteKeyData, SpatialCaptureData, PhysicsSimulationData,
-        SpinorTransformData, BellVerificationData, SpinorHashData,
-        PostQuantumData, SigningData
+        CompleteKeyData,
+        SpatialCaptureData,
+        PhysicsSimulationData,
+        SpinorTransformData,
+        BellVerificationData,
+        SpinorHashData,
     )
 
     # Create a minimal CompleteKeyData
