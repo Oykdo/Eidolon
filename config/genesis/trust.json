@@ -1,10 +1,12 @@
 {
   "format": "EIDOLON_SPHERE_TRUST",
   "version": 1,
-  "note": "Racine de confiance du client des spheres (I4). Voyage par un canal independant du VPS : compilee dans cipher-runtime, dans le depot public, dans timestamps/. issuer_pk reste null jusqu'a la ceremonie de genese ; genesis_roots vide = toute racine signee par l'emetteur est acceptee.",
-  "issuer_pk": null,
+  "note": "Racine de confiance du client des spheres (I4). Epinglee le 2026-09-16 : emetteur, racine de genese 1 (89fb26b10ea0...), ancres. Voyage par un canal independant du VPS : compilee dans cipher-runtime, dans le depot public, dans timestamps/.",
+  "issuer_pk": "6dad3cb17253ef1c87b45089e48db1404b5b02ffc2e0b07e21f88db14a3e31f8",
   "anchors": {
     "eidolon-anchor-1": "4d4da9548422dd515e86b2335c8f87312df0400624fda403098b3f45748850e3"
   },
-  "genesis_roots": []
+  "genesis_roots": [
+    "89fb26b10ea0445a57a93b2a8c24571d1e444b752b5e5807f766c21d27f0053e"
+  ]
 }
