@@ -5,7 +5,10 @@ Layout::
     <vaults_root>/escrows/<depositor_prefix>/<escrow_id>.escrow7d
 
 The directory is created by ``save()`` only: listing, loading or verifying
-for a vault that never deposited anything leaves no trace on disk.
+for a vault that never deposited anything leaves no trace on disk. ``save()``
+writes ``<escrow_id>.escrow7d.tmp`` then renames it atomically; an orphan
+``.tmp`` left by a crash is ignored by every read path and removed by the
+next ``save()`` once it is older than a minute.
 
 The depositor prefix is the first 16 hex chars of sha256(vault_key) — same as
 ``EscrowEnvelope.depositor_vault_id_prefix``. This keeps escrows from
@@ -16,6 +19,7 @@ from __future__ import annotations
 
 import os
 import re
+import time
 from pathlib import Path
 from typing import Iterator, List, Optional, Tuple
 
@@ -35,6 +39,11 @@ class EscrowStoreError(EscrowError):
 
 
 _PREFIX_RE = re.compile(r"[0-9a-f]{16}")
+
+# A ``.escrow7d.tmp`` only exists between the write and the atomic ``replace``
+# in ``save()``; one older than this is an orphan left by a crash and can
+# never become an envelope. Writing an 8 MiB envelope takes well under a second.
+_STRAY_TMP_MAX_AGE_S = 60.0
 
 
 class EscrowStore:
@@ -68,6 +77,7 @@ class EscrowStore:
         path = self._path_for(envelope.escrow_id)
         try:
             self.dir.mkdir(parents=True, exist_ok=True)
+            self._sweep_stray_tmp_files()
             tmp = path.with_suffix(path.suffix + ".tmp")
             with open(tmp, "w", encoding="utf-8") as fh:
                 fh.write(envelope.to_json())
@@ -77,6 +87,29 @@ class EscrowStore:
         except OSError as exc:
             raise EscrowStoreError(f"cannot write {path}: {exc}") from exc
         return path
+
+    def _sweep_stray_tmp_files(self, now: Optional[float] = None) -> int:
+        """Remove orphan ``*.escrow7d.tmp`` files; return how many were removed.
+
+        Only ``save()`` calls this (read paths leave the disk alone), and only
+        files older than ``_STRAY_TMP_MAX_AGE_S`` go, so a write in flight from
+        another process is never touched. Best effort: a file that cannot be
+        removed is left for the next save and never fails this one.
+        """
+        if now is None:
+            now = time.time()
+        removed = 0
+        for stray in self.dir.glob(f"*{ESCROW_FILE_SUFFIX}.tmp"):
+            try:
+                if not stray.is_file():
+                    continue
+                if now - stray.stat().st_mtime < _STRAY_TMP_MAX_AGE_S:
+                    continue
+                stray.unlink()
+                removed += 1
+            except OSError:
+                continue
+        return removed
 
     def _read(self, path: Path) -> EscrowEnvelope:
         """Parse one envelope file; every failure becomes EscrowStoreError.

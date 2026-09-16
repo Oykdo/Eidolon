@@ -31,9 +31,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   negative time-lock input is asked again instead of silently depositing without a
   lock; retrieve asks before overwriting an existing file (exact `OVERWRITE`, as
   Delete requires exact `DELETE`), accepts `Q`, and defaults to the home directory
-  rather than the working directory when `~/Downloads` is absent. New public
+  rather than the working directory when `~/Downloads` is absent. Store: an orphan
+  `<id>.escrow7d.tmp` left by a crash between write and rename is ignored by every
+  read path and removed by the next save once it is older than a minute (a write in
+  flight elsewhere is never touched). New public
   tests: `tests/test_escrow_7d_api_store.py` (lifecycle on disk, isolation, corrupt
   files, error contract, golden vector, RFC 5869 HKDF vectors, CLI safety).
+- **`vault_migration` CLI no longer imports the launcher.** Like the escrow CLI,
+  `src/protocols/vault_migration/cli.py` carries its own console helpers (same
+  palette, colours only on a terminal and unless `NO_COLOR` is set): a public
+  protocol package imports nothing private, in a clone or in the full tree.
 
 ### Changed
 

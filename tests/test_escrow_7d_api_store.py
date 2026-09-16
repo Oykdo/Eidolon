@@ -19,6 +19,7 @@ import os
 import secrets
 import sys
 import tempfile
+import time
 import unittest
 from contextlib import redirect_stdout
 from datetime import datetime, timedelta, timezone
@@ -475,6 +476,30 @@ class CorruptFileTests(unittest.TestCase):
         (_escrow_dir(key) / "esc_crash.escrow7d.tmp").write_text("x")
         self.assertEqual(len(list_escrows(key)), 1)
         self.assertEqual(list_unreadable_escrows(key), [])
+
+    def test_orphan_tmp_file_is_swept_by_the_next_save_only_when_stale(self):
+        # A crash between write and rename leaves ``<id>.escrow7d.tmp`` behind.
+        # Read paths never touch it; the next save removes it once it is older
+        # than the sweep age, so a write in flight elsewhere is never deleted.
+        key = _key("tmp-sweep")
+        first = deposit_document(b"x", key)
+        stale = _escrow_dir(key) / "esc_crash.escrow7d.tmp"
+        fresh = _escrow_dir(key) / "esc_inflight.escrow7d.tmp"
+        stale.write_text("x")
+        fresh.write_text("y")
+        old = time.time() - 3600
+        os.utime(stale, (old, old))
+
+        list_escrows(key)
+        self.assertEqual(verify_integrity(first, key)[0], True)
+        self.assertTrue(stale.exists() and fresh.exists())  # reads leave the disk alone
+
+        deposit_document(b"y", key)
+        self.assertFalse(stale.exists())
+        self.assertTrue(fresh.exists())
+        self.assertEqual(len(list_escrows(key)), 2)
+        self.assertEqual(list_unreadable_escrows(key), [])
+        fresh.unlink()
 
     def test_unknown_condition_type_in_mac_valid_envelope_is_unseal_error(self):
         key = _key("unknown-cond")

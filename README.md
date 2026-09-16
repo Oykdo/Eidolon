@@ -65,7 +65,7 @@ Verify any download with `sha256sum -c SHA256SUMS`.
 | **Post-quantum engine** | Kyber1024 + Dilithium5 inside the compiled pipeline; ML-DSA-65, Falcon-512, SPHINCS+ (SHA2-256f), McEliece-6960119 and HQC-256 in the Python layer; AES-256-GCM, HKDF, scrypt, SHA-3. |
 | **Custody ledger** | Hash-based, no curves, no lattices: SHA3-256, WOTS+ (RFC 8391) one-time signatures, SLH-DSA-SHA2-128s (FIPS 205) for issuers and anchors, Merkle **sum** trees. Fully verifiable offline with the public verifier. |
 | **Genesis** | 21,186 spheres committed by **one** signed root; every sphere file carries its own inclusion proof (15 levels, ≈1.6 KB, verified in under half a millisecond). |
-| **Tests** | 587 public tests in 70 files (164 of them pure-protocol: Python + `pqcrypto`, no native wheel); 723 with the private suites. Counted on 2026-09-15. |
+| **Tests** | 588 public tests in 70 files (165 of them pure-protocol: Python + `pqcrypto`, no native wheel); 724 with the private suites. Counted on 2026-09-16. |
 | **Public surface** | Four protocol packages (`escrow_7d`, `vault_migration`, `sphere_ledger`, `eidos_witness`), the `eidolond` daemon, SDK stubs (Python, TypeScript, Go, Rust), format specs, threat model, reproducible-build notes. |
 
 <details>
@@ -186,7 +186,7 @@ cipher-runtime sphere verify --file RARE_0003__I00002.sphere.json --genesis root
 export EIDOLON_API_SECRET=0123456789abcdef0123456789abcdef   # >= 32 chars, read at import by one API test
 python -m pytest tests/ --ignore=tests/_dormant -q
 
-# Protocol suites only — no native wheel required (164 tests):
+# Protocol suites only — no native wheel required (165 tests):
 python -m pytest tests/test_ledger_*.py tests/test_eidos_witness_*.py \
                  tests/test_vault_migration.py tests/test_escrow_7d_*.py -q
 ```
@@ -203,7 +203,7 @@ from the compiled layer: vault key material only ever enters as opaque bytes.
 | **`sphere_ledger`** | The custody ledger verifier: WOTS+ one-time signatures, SLH-DSA with per-purpose domain separation, Merkle sum trees with inclusion proofs and conservation checks, `verify_sphere`, `verify_checkpoint_inclusion`, `detect_fork`, the flux invariant an anchor must satisfy between two checkpoints. | [`docs/SPHERE_LEDGER_FORMAT.md`](docs/SPHERE_LEDGER_FORMAT.md) |
 | **`eidos_witness`** | A byte-exact port of the public verifier surface of [Eidos](https://github.com/Oykdo/Eidos): WOTS+ derivation, XMSS validator signatures, signed head, UTXO inclusion proofs, transaction encoding, the `eidos.carnet` exchange format, and a self-contained asset dossier judged offline. | [`docs/EIDOS_WITNESS_FORMAT.md`](docs/EIDOS_WITNESS_FORMAT.md) |
 | **`vault_migration`** | Export / import / archive of a vault with a versioned, MAC-bound manifest; carries the vault's sidecars (Eidos coffre, sphere files) without ever copying a directory. | in-package docstrings |
-| **`escrow_7d`** | Sealed, time-locked document envelopes bound to a vault key (AES-256-GCM, HKDF-derived session key, HMAC-bound) with composable release conditions (`TimeLock`, `OwnerSignature`, `CombinedAll/Any`); symmetric primitives only, metadata in cleartext, a frozen golden envelope pins the v1 format. The package also carries a static authorship keyprint (`verify_provenance()`). | [`docs/ESCROW_7D_FORMAT.md`](docs/ESCROW_7D_FORMAT.md) |
+| **`escrow_7d`** | Sealed, time-locked document envelopes bound to a vault key (AES-256-GCM, HKDF-derived session key, HMAC-bound) with composable release conditions (`TimeLock`, `OwnerSignature`, `CombinedAll/Any`); phase 1 — local, single-user, the time lock is enforced by the clock of the machine holding the key; symmetric primitives only, metadata in cleartext, a frozen golden envelope pins the v1 format. The package also carries a static authorship keyprint (`verify_provenance()`). | [`docs/ESCROW_7D_FORMAT.md`](docs/ESCROW_7D_FORMAT.md) |
 
 Also public: [`src/daemon/`](src/daemon) (`eidolond` — start/stop/status, vault
 create/list/info, background service on port 8420),

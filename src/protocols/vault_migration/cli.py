@@ -5,6 +5,8 @@ Exposes ``migration_menu(vault_key, identity, psnx_path, blend_path)``.
 
 from __future__ import annotations
 
+import os
+import sys
 from pathlib import Path
 from typing import Optional
 
@@ -13,20 +15,52 @@ from .importer import import_vault, inspect_archive, ImportConflict
 from .importer import ImportError as MigrationImportError
 
 
-try:
-    from src.ui.launcher import Colors, print_section, print_status  # type: ignore
-except Exception:  # pragma: no cover
-    class _PlainColors:
-        RESET = BOLD = DIM = ""
-        RED = GREEN = YELLOW = BLUE = MAGENTA = CYAN = WHITE = ""
-    Colors = _PlainColors()  # type: ignore
+# ---------------------------------------------------------------------------
+# Console helpers. Self-contained on purpose: this package is public and must
+# not import the (private) launcher. Same palette and status glyphs as the
+# launcher, colours only on a terminal and unless NO_COLOR is set.
+# ---------------------------------------------------------------------------
 
-    def print_section(title: str) -> None:
-        print(f"\n=== {title} ===\n")
 
-    def print_status(message: str, status: str = "info") -> None:
-        prefix = {"ok": "[OK]", "error": "[X]", "warn": "[!]"}.get(status, "[i]")
-        print(f"    {prefix} {message}")
+def _colour_enabled() -> bool:
+    if os.environ.get("NO_COLOR"):
+        return False
+    try:
+        return bool(sys.stdout.isatty())
+    except Exception:
+        return False
+
+
+class _Colors:
+    def __init__(self, enabled: bool):
+        self.RESET = "\033[0m" if enabled else ""
+        self.BOLD = "\033[1m" if enabled else ""
+        self.DIM = "\033[2m" if enabled else ""
+        self.RED = "\033[31m" if enabled else ""
+        self.GREEN = "\033[32m" if enabled else ""
+        self.YELLOW = "\033[33m" if enabled else ""
+        self.BLUE = "\033[34m" if enabled else ""
+        self.MAGENTA = "\033[35m" if enabled else ""
+        self.CYAN = "\033[36m" if enabled else ""
+        self.WHITE = "\033[37m" if enabled else ""
+
+
+Colors = _Colors(_colour_enabled())
+
+
+def print_section(title: str) -> None:
+    print(f"\n{Colors.WHITE}{Colors.BOLD}    {title}{Colors.RESET}")
+    print(f"{Colors.DIM}    -------------------------------------{Colors.RESET}\n")
+
+
+def print_status(message: str, status: str = "info") -> None:
+    icons = {
+        "info": f"{Colors.BLUE}[i]{Colors.RESET}",
+        "ok": f"{Colors.GREEN}[OK]{Colors.RESET}",
+        "warn": f"{Colors.YELLOW}[!]{Colors.RESET}",
+        "error": f"{Colors.RED}[X]{Colors.RESET}",
+    }
+    print(f"    {icons.get(status, icons['info'])} {message}")
 
 
 def _prompt(message: str, default: str = "") -> str:
