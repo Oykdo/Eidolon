@@ -90,6 +90,10 @@ Issues = "https://github.com/Oykdo/Eidolon/issues"
 [tool.setuptools]
 include-package-data = true
 
+# Only what a public clone contains (IP-BOUNDARY.md, Tier 1). The private
+# packages (src/crypto, src/identity, src/api, src/ui, src/holo, src/utils)
+# are never listed here: a wheel built from the full working tree must be
+# byte-for-byte the same set of packages as one built from a clone.
 [tool.setuptools.packages.find]
 where = ["."]
 include = [
@@ -98,14 +102,6 @@ include = [
     "src.daemon.*",
     "src.protocols",
     "src.protocols.*",
-    "src.identity", 
-    "src.identity.*",
-    "src.api",
-    "src.api.*",
-    "src.ui",
-    "src.ui.*",
-    "src.utils",
-    "src.utils.*",
     "config",
     "config.*",
 ]
@@ -114,7 +110,11 @@ include = [
 version = {attr = "src.__version__"}
 
 [tool.setuptools.package-data]
-config = ["*.json", "*.yaml", "*.yml"]
+config = ["*.json", "*.yaml", "*.yml", "genesis/*.json"]
+
+# Untracked, machine-local files that live next to the public config.
+[tool.setuptools.exclude-package-data]
+config = ["user_config.json", "*incubator*"]
 
 [tool.black]
 line-length = 100

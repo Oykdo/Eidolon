@@ -9,21 +9,24 @@ include pyproject.toml
 # Include config
 recursive-include config *.json *.yaml *.yml
 
-# Include only PUBLIC source modules
+# Include only the PUBLIC source packages (IP-BOUNDARY.md, Tier 1): the same
+# set a public clone has. Keep in step with [tool.setuptools.packages.find].
 recursive-include src/daemon *.py
 recursive-include src/protocols *.py
-recursive-include src/identity *.py
-recursive-include src/api *.py
-recursive-include src/ui *.py
-recursive-include src/utils *.py
 
-# EXCLUDE PROTECTED MODULES - These require Rust eidolon_crypto module
+# EXCLUDE PRIVATE PACKAGES (Tier 2, git-ignored) - never in an sdist or wheel
 prune src/crypto
 prune src/core
 prune src/holo
 prune src/game
 prune src/blockchain
+prune src/identity
+prune src/api
+prune src/ui
+prune src/utils
 prune src/_dormant
+exclude config/user_config.json
+global-exclude *incubator*
 
 # Exclude build/test artifacts
 prune tests

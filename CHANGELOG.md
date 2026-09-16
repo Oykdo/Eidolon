@@ -48,7 +48,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   package path `src/protocols/escrow_7d`, the `.escrow7d` suffix, the producer tag
   and the v1 golden vector are unchanged, so existing envelopes open as before.
   The launcher entry `[X]` reads "Escrow Nexus" and describes what the protocol
-  does (sealed, time-locked document envelopes) instead of "post-quantum".
+  does (sealed, time-locked document envelopes) instead of "post-quantum". The
+  "7-day" wording of the 1.2.0 entry below was a misnomer: no seven-day semantic
+  exists in the protocol; a time lock is whatever date the depositor chooses.
+- **Packaging: a wheel or sdist built from the full working tree now contains
+  only the public packages** (`src`, `src.daemon`, `src.protocols`, `config`) —
+  the same set a clone yields. `pyproject.toml` and `MANIFEST.in` used to list
+  `src.identity`, `src.api`, `src.ui` and `src.utils` under "public", so
+  `python -m build` from the private tree packaged Tier 2 code (verified: 49
+  private files, plus two untracked config files, in a wheel built before the
+  change; 44 tracked public files after). Nothing installs that distribution today;
+  this closes the path before anything does.
 - **`OwnerSignature` is now a real release condition** (`src/protocols/escrow_7d`).
   It accepts the vault's 64-hex id (`vault_id_from_key(vault_key)`, or
   `OwnerSignature.for_vault_key(vault_key)`) or the 16-hex

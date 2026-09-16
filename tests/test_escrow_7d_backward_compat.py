@@ -238,6 +238,11 @@ class FutureVersionTests(unittest.TestCase):
         self.assertNotEqual(new_env.kdf_salt, env.kdf_salt)
         self.assertNotEqual(new_env.aes_nonce, env.aes_nonce)
         self.assertEqual(new_env.label, "lbl")
+        # The conditions are part of the MAC input: reseal must carry them
+        # over byte for byte, not merely "something that still opens".
+        self.assertEqual(new_env.conditions, env.conditions)
+        self.assertEqual(new_env.conditions[0]["type"], "time_lock")
+        self.assertEqual(new_env.depositor_vault_id_prefix, env.depositor_vault_id_prefix)
         self.assertEqual(unseal(new_env, VAULT_KEY), b"important")
         self.assertTrue(is_current_format(new_env))
 
