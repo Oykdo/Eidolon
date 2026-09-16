@@ -7,12 +7,18 @@
 Powers identity, custody and resonance for [Cipher](https://github.com/Oykdo/cipher) — the post-quantum messaging client.
 
 [![CI](https://github.com/Oykdo/Eidolon/actions/workflows/ci.yml/badge.svg)](https://github.com/Oykdo/Eidolon/actions/workflows/ci.yml)
-[![Tag](https://img.shields.io/github/v/tag/Oykdo/Eidolon?style=flat-square&label=tag&color=blue)](https://github.com/Oykdo/Eidolon/tags)
-[![Release](https://img.shields.io/github/v/release/Oykdo/Eidolon?style=flat-square&label=desktop%20build&color=green)](https://github.com/Oykdo/Eidolon/releases/latest)
+[![Release gate](https://github.com/Oykdo/Eidolon/actions/workflows/release.yml/badge.svg)](https://github.com/Oykdo/Eidolon/actions/workflows/release.yml)
+[![Release](https://img.shields.io/github/v/release/Oykdo/Eidolon?style=flat-square&label=release&color=blue)](https://github.com/Oykdo/Eidolon/releases/latest)
+[![Desktop build](https://img.shields.io/badge/desktop%20build-v1.1.1-green?style=flat-square)](https://github.com/Oykdo/Eidolon/releases/tag/v1.1.1)
+[![Cipher runtime](https://img.shields.io/badge/cipher--runtime-1.3.0%20(20260916)-green?style=flat-square)](https://github.com/Oykdo/cipher/releases/tag/cipher-runtime-20260916)
 ![Post-quantum](https://img.shields.io/badge/security-post--quantum-brightgreen?style=flat-square)
 ![Rust](https://img.shields.io/badge/engine-Rust%20%2B%20PyO3-orange?style=flat-square)
 ![Python](https://img.shields.io/badge/python-3.9%2B%20(3.12%20recommended)-yellow?style=flat-square)
 ![License](https://img.shields.io/badge/license-Proprietary-red?style=flat-square)
+
+**Download** — engine wheels `eidolon_crypto` 0.1.0 (release [`v1.3.0`](https://github.com/Oykdo/Eidolon/releases/tag/v1.3.0)): [Windows x64](https://github.com/Oykdo/Eidolon/releases/download/v1.3.0/eidolon_crypto-0.1.0-cp39-abi3-win_amd64.whl) · [Linux x86_64](https://github.com/Oykdo/Eidolon/releases/download/v1.3.0/eidolon_crypto-0.1.0-cp39-abi3-manylinux_2_34_x86_64.whl) · [SHA256SUMS](https://github.com/Oykdo/Eidolon/releases/download/v1.3.0/SHA256SUMS)
+Desktop build [`v1.1.1`](https://github.com/Oykdo/Eidolon/releases/tag/v1.1.1): [Windows x64 zip](https://github.com/Oykdo/Eidolon/releases/download/v1.1.1/Eidolon-1.1.1-windows-x64.zip) · [Linux x64 tar.gz](https://github.com/Oykdo/Eidolon/releases/download/v1.1.1/Eidolon-1.1.1-linux-x64.tar.gz) · [SHA256SUMS](https://github.com/Oykdo/Eidolon/releases/download/v1.1.1/SHA256SUMS)
+Cipher runtime `1.3.0` ([`cipher-runtime-20260916`](https://github.com/Oykdo/cipher/releases/tag/cipher-runtime-20260916)): [Windows x64](https://github.com/Oykdo/cipher/releases/download/cipher-runtime-20260916/cipher-runtime.exe) · [Linux x86_64](https://github.com/Oykdo/cipher/releases/download/cipher-runtime-20260916/cipher-runtime) · [SHA256SUMS](https://github.com/Oykdo/cipher/releases/download/cipher-runtime-20260916/SHA256SUMS)
 
 [Releases](#releases) · [At a glance](#at-a-glance) · [Quick start](#quick-start) · [Public protocols](#public-protocols) · [Sphere custody ledger](#sphere-custody-ledger) · [Cipher integration](#cipher-integration) · [Security](#security-model) · [Development](#development)
 
@@ -22,10 +28,12 @@ Powers identity, custody and resonance for [Cipher](https://github.com/Oykdo/cip
 
 ## Releases
 
-Two badges because they answer two different questions. The **tag** is where
-the source is (`v1.3.0`, `src/__init__.py`); the **desktop build** is the last
-release that shipped binaries (`v1.1.1`). Cipher users never install Eidolon:
-the engine reaches them as a frozen runtime inside the Cipher installer.
+Three badges because they answer three different questions. The **release**
+is where the source and the engine wheels are (`v1.3.0`, `src/__init__.py`);
+the **desktop build** is the last release that shipped the Eidolon desktop
+binaries (`v1.1.1`); the **Cipher runtime** is the frozen engine Cipher
+embeds (`1.3.0`, published on Oykdo/cipher). Cipher users never install
+Eidolon: the engine reaches them inside the Cipher installer.
 
 | Tag | Date | What it is | Published on the release page |
 |---|---|---|---|
