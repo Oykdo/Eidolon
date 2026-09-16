@@ -22,7 +22,7 @@ inter-vault release, optional anchoring.
 Public API:
     from src.protocols.escrow_7d import (
         deposit_document, retrieve_document, list_escrows,
-        list_unreadable_escrows, verify_integrity, delete_escrow,
+        list_unreadable_escrows, verify_integrity, check_release, delete_escrow,
         TimeLock, OwnerSignature, CombinedAll, CombinedAny, vault_id_from_key,
         EscrowError, EscrowStoreError, FormatError, SealError, UnsealError,
         ESCROW_SCHEMA_VERSION, READER_VERSION,
@@ -35,6 +35,7 @@ from .api import (
     list_escrows,
     list_unreadable_escrows,
     verify_integrity,
+    check_release,
     delete_escrow,
 )
 from .errors import EscrowError
@@ -65,6 +66,7 @@ __all__ = [
     "list_escrows",
     "list_unreadable_escrows",
     "verify_integrity",
+    "check_release",
     "delete_escrow",
     "EscrowError",
     "EscrowStoreError",

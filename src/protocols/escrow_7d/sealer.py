@@ -240,19 +240,26 @@ def verify(envelope: EscrowEnvelope, vault_key: bytes) -> Tuple[bool, str]:
     return True, "integrity ok"
 
 
-def unseal(
+def check_release(
     envelope: EscrowEnvelope,
     vault_key: bytes,
     context: Optional[Dict] = None,
-) -> bytes:
+) -> Tuple[bool, str]:
+    """Everything ``unseal`` checks before decrypting, without decrypting.
+
+    Returns ``(True, "releasable")`` when the integrity MAC verifies under
+    ``vault_key`` and every release condition is satisfied now, else
+    ``(False, reason)`` with the exact reason ``unseal`` would raise. Lets a
+    client show "locked until …" or "tampered" without touching the payload.
+    """
     ok, reason = verify(envelope, vault_key)
     if not ok:
-        raise UnsealError(f"integrity verification failed: {reason}")
+        return False, f"integrity verification failed: {reason}"
 
     # The requester identity is derived from the key that opens the envelope;
     # a caller-supplied value would let any condition on identity be bypassed.
     if context is not None and not isinstance(context, Mapping):
-        raise UnsealError("context must be a mapping")
+        return False, "context must be a mapping"
     ctx = dict(context or {})
     ctx["requester_vault_id"] = vault_id_from_key(vault_key)
 
@@ -261,13 +268,22 @@ def unseal(
             cond = Condition.deserialize(raw)
             passed, why = cond.is_satisfied(ctx)
         except ConditionError as exc:
-            raise UnsealError(f"invalid release condition: {exc}") from exc
+            return False, f"invalid release condition: {exc}"
         except RecursionError:
-            raise UnsealError("invalid release condition: tree too deep for this reader")
+            return False, "invalid release condition: tree too deep for this reader"
         if not passed:
-            raise UnsealError(
-                f"release condition '{cond.type_id}' not satisfied: {why}"
-            )
+            return False, f"release condition '{cond.type_id}' not satisfied: {why}"
+    return True, "releasable"
+
+
+def unseal(
+    envelope: EscrowEnvelope,
+    vault_key: bytes,
+    context: Optional[Dict] = None,
+) -> bytes:
+    ok, reason = check_release(envelope, vault_key, context)
+    if not ok:
+        raise UnsealError(reason)
 
     suite = get_suite(envelope.crypto_suite)
     session_key = _hkdf(vault_key, envelope.kdf_salt, suite.session_key_info,

@@ -10,6 +10,39 @@ permissions:
   contents: read
 
 jobs:
+  protocol-tests:
+    name: Public protocol suites
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12']
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # The four public protocol packages import nothing from the compiled
+      # layer: pytest, cryptography (AES-GCM for escrow_7d / vault_migration)
+      # and pqcrypto (SLH-DSA for sphere_ledger) are all a clean clone needs.
+      - name: Install what the protocol suites need
+        run: |
+          python -m pip install --upgrade pip
+          pip install pytest cryptography "pqcrypto>=0.3.4,<1"
+
+      - name: Run the public protocol suites
+        env:
+          EIDOLON_API_SECRET: "0123456789abcdef0123456789abcdef"
+        run: |
+          python -m pytest tests/test_ledger_*.py tests/test_eidos_witness_*.py \
+                           tests/test_vault_migration.py tests/test_escrow_7d_*.py \
+                           -q -o addopts=""
+
   validate:
     name: Validate public tree
     runs-on: ubuntu-latest

@@ -14,7 +14,7 @@ from .conditions import Condition, ConditionError
 from .envelope import EscrowEnvelope
 from .errors import EscrowError
 from .format_version import FormatError
-from .sealer import seal, unseal, verify, SealError, UnsealError
+from .sealer import check_release as _check_release, seal, unseal, verify, SealError, UnsealError
 from .store import EscrowStore, EscrowStoreError
 
 
@@ -101,6 +101,25 @@ def verify_integrity(escrow_id: str, vault_key: bytes) -> Tuple[bool, str]:
     return verify(envelope, vault_key)
 
 
+def check_release(escrow_id: str, vault_key: bytes) -> Tuple[bool, str]:
+    """Would ``retrieve_document`` succeed right now? Answered without decrypting.
+
+    ``(True, "releasable")`` when the envelope exists, its MAC verifies under
+    ``vault_key`` and every release condition is satisfied; otherwise
+    ``(False, reason)`` — the reason ``retrieve_document`` would raise, or
+    "escrow … not found" / "unreadable: …". Never raises for a bad file or a
+    malformed id.
+    """
+    store = EscrowStore(_depositor_prefix(vault_key))
+    try:
+        envelope = store.load(escrow_id)
+    except EscrowStoreError as exc:
+        return False, f"unreadable: {exc}"
+    if envelope is None:
+        return False, f"escrow {escrow_id} not found"
+    return _check_release(envelope, vault_key)
+
+
 def delete_escrow(escrow_id: str, vault_key: bytes) -> bool:
     """Delete an escrow on disk (readable or not). True if a file was removed.
 
@@ -116,6 +135,7 @@ __all__ = [
     "list_escrows",
     "list_unreadable_escrows",
     "verify_integrity",
+    "check_release",
     "delete_escrow",
     "EscrowError",
     "EscrowStoreError",

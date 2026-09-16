@@ -22,6 +22,7 @@ import tempfile
 import time
 import unittest
 from contextlib import redirect_stdout
+from unittest.mock import patch
 from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
@@ -42,6 +43,7 @@ from src.protocols.escrow_7d import (  # noqa: E402
     OwnerSignature,
     TimeLock,
     UnsealError,
+    check_release,
     delete_escrow,
     deposit_document,
     list_escrows,
@@ -109,6 +111,40 @@ class LifecycleTests(unittest.TestCase):
         with self.assertRaises(KeyError):
             retrieve_document(escrow_id, key)
         self.assertFalse(verify_integrity(escrow_id, key)[0])
+
+    def test_check_release_answers_without_decrypting(self):
+        # check_release is what a client shows as "ready" / "locked until …" /
+        # "tampered": it must agree with retrieve_document without ever
+        # touching the payload, and never raise for a missing or bad file.
+        key = _key("check-release")
+        ready = deposit_document(b"now", key)
+        self.assertEqual(check_release(ready, key), (True, "releasable"))
+        self.assertEqual(retrieve_document(ready, key), b"now")
+
+        future = TimeLock(datetime.now(timezone.utc) + timedelta(days=30))
+        locked = deposit_document(b"later", key, conditions=[future])
+        ok, reason = check_release(locked, key)
+        self.assertFalse(ok)
+        self.assertIn("release condition 'time_lock' not satisfied", reason)
+        with self.assertRaises(UnsealError) as ctx:
+            retrieve_document(locked, key)
+        # Same verdict, same words (up to the countdown, evaluated twice).
+        self.assertEqual(str(ctx.exception).split("locked for")[0], reason.split("locked for")[0])
+
+        other = _key("check-release-other")
+        self.assertEqual(check_release(ready, other), (False, f"escrow {ready} not found"))
+        with patch.object(sealer, "_aead_decrypt", side_effect=AssertionError("decrypted!")):
+            self.assertTrue(check_release(ready, key)[0])
+            self.assertFalse(check_release(locked, key)[0])
+
+        path = _envelope_path(key, ready)
+        path.write_text(path.read_text(encoding="utf-8").replace('"label": ""', '"label": "x"'),
+                        encoding="utf-8")
+        ok, reason = check_release(ready, key)
+        self.assertFalse(ok)
+        self.assertIn("integrity", reason)
+        self.assertFalse(check_release("esc_missing", key)[0])
+        self.assertFalse(check_release("../x", key)[0])
 
     def test_empty_and_bytearray_payloads(self):
         key = _key("payloads")

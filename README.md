@@ -23,21 +23,22 @@ Powers identity, custody and resonance for [Cipher](https://github.com/Oykdo/cip
 ## Releases
 
 Two badges because they answer two different questions. The **tag** is where
-the source is (`v1.2.0`, `src/__init__.py`); the **desktop build** is the last
+the source is (`v1.3.0`, `src/__init__.py`); the **desktop build** is the last
 release that shipped binaries (`v1.1.1`). Cipher users never install Eidolon:
 the engine reaches them as a frozen runtime inside the Cipher installer.
 
 | Tag | Date | What it is | Published on the release page |
 |---|---|---|---|
-| **`v1.2.0`** | 2026-06-05 | `escrow_7d` + `vault_migration` protocols, scoped legacy-PSNX normalisation | *Tag only — no release, no binaries.* Build from source or use the `v1.1.1` desktop build. |
+| **`v1.3.0`** | 2026-09-16 | Escrow Nexus (audit-hardened `escrow_7d`, real `OwnerSignature`, `check_release`, the Cipher bridge), genesis root 1 pinned in `config/genesis/`, the sphere custody ledger and client, the Eidos witness, batched finality, Connect escrow primitives, public-only packaging | **Source release**: the two vendored `eidolon_crypto` 0.1.0 wheels (`win_amd64`, `manylinux_2_34_x86_64`) + `SHA256SUMS`. No desktop build — use `v1.1.1`. The matching Cipher runtime is `cipher-runtime-20260916` below. |
+| `v1.2.0` | 2026-06-05 | `escrow_7d` + `vault_migration` protocols, scoped legacy-PSNX normalisation | *Tag only — no release, no binaries.* Build from source or use the `v1.1.1` desktop build. |
 | **`v1.1.1`** | 2026-05-20 | Sphere Visualizer polish; no protocol change, `v1.1.0` vaults compatible | **Latest desktop build**: `Eidolon-1.1.1-windows-x64.zip` + `Eidolon.exe`, `Eidolon-1.1.1-linux-x64.tar.gz` + `Eidolon`, `SHA256SUMS` |
 | `v1.1.0` | 2026-05-20 | Logos Project rebrand | Same asset set as `v1.1.1` |
 | `v1.0.0` | 2026-05-14 (released 05-16) | First public release — post-quantum vault, 9-phase pipeline, `eidolond` | `eidolon.exe` (Windows only) |
 
-Everything under **[Unreleased]** in [`CHANGELOG.md`](CHANGELOG.md) — the
-sphere custody ledger and its client, the Eidos witness, batched finality,
-the Connect escrow primitives — is on `main` and in the Cipher runtime, but
-not yet tagged.
+`v1.3.0` tags everything that had accumulated under *[Unreleased]* since
+June — see [`CHANGELOG.md`](CHANGELOG.md). Every `v*` tag runs the
+[release gate](.github/workflows/release.yml): the four public protocol
+suites on a clean clone, and tag = `__version__` = a dated changelog section.
 
 ### The Cipher runtime
 
@@ -51,7 +52,7 @@ where Cipher's build pins it by name and SHA-256.
 |---|---|---|---|
 | [`cipher-runtime-20260912`](https://github.com/Oykdo/cipher/releases/tag/cipher-runtime-20260912) | `1.0.0` | private core `8a51d13`, after the machine-lock fix (fail-closed offline, key generated after the check, server-chosen vault number) | **Shipped** in Cipher `v1.4.2` and `v1.4.3`. Linux x86_64 (glibc ≥ 2.35) and Windows x64, `SHA256SUMS` alongside. |
 | `cipher-runtime-20260909` | `1.0.0` | private core before that fix | Superseded; do not use. |
-| *(next)* | `1.2.0` built, `1.2.1` in source | sphere custody client (`sphere list … trust`), then `burn` / `reissue-key` / `queue` | Built locally, verified, **not yet published** — Cipher's next release depends on it. |
+| [`cipher-runtime-20260916`](https://github.com/Oykdo/cipher/releases/tag/cipher-runtime-20260916) | `1.3.0` | private core after the genesis ceremony of 2026-09-16 (public tree `v1.3.0`) | Sphere custody client (`sphere list … trust`, `burn` / `reissue-key` / `queue`), **Escrow Nexus** (`escrow deposit … delete`), the genesis trust root compiled in (issuer `6dad3cb1…`, root `89fb26b1…`). Linux x86_64 (glibc ≥ 2.35) and Windows x64, `SHA256SUMS` alongside. Cipher's next release pins it. |
 
 Verify any download with `sha256sum -c SHA256SUMS`.
 
@@ -65,7 +66,7 @@ Verify any download with `sha256sum -c SHA256SUMS`.
 | **Post-quantum engine** | Kyber1024 + Dilithium5 inside the compiled pipeline; ML-DSA-65, Falcon-512, SPHINCS+ (SHA2-256f), McEliece-6960119 and HQC-256 in the Python layer; AES-256-GCM, HKDF, scrypt, SHA-3. |
 | **Custody ledger** | Hash-based, no curves, no lattices: SHA3-256, WOTS+ (RFC 8391) one-time signatures, SLH-DSA-SHA2-128s (FIPS 205) for issuers and anchors, Merkle **sum** trees. Fully verifiable offline with the public verifier. |
 | **Genesis** | 21,186 spheres committed by **one** signed root; every sphere file carries its own inclusion proof (15 levels, ≈1.6 KB, verified in under half a millisecond). |
-| **Tests** | 587 public tests in 69 files (165 of them pure-protocol: Python + `pqcrypto`, no native wheel); 724 with the private suites. Counted on 2026-09-16. |
+| **Tests** | 588 public tests in 69 files (166 of them pure-protocol: Python + `pqcrypto`, no native wheel — the CI runs exactly these); 729 with the private suites. Counted on 2026-09-16. |
 | **Public surface** | Four protocol packages (`escrow_7d`, `vault_migration`, `sphere_ledger`, `eidos_witness`), the `eidolond` daemon, SDK stubs (Python, TypeScript, Go, Rust), format specs, threat model, reproducible-build notes. |
 
 <details>
@@ -186,7 +187,7 @@ cipher-runtime sphere verify --file RARE_0003__I00002.sphere.json --genesis root
 export EIDOLON_API_SECRET=0123456789abcdef0123456789abcdef   # >= 32 chars, read at import by one API test
 python -m pytest tests/ --ignore=tests/_dormant -q
 
-# Protocol suites only — no native wheel required (165 tests):
+# Protocol suites only — no native wheel required (166 tests):
 python -m pytest tests/test_ledger_*.py tests/test_eidos_witness_*.py \
                  tests/test_vault_migration.py tests/test_escrow_7d_*.py -q
 ```
@@ -462,6 +463,6 @@ authorization. Third-party dependencies retain their own licenses. See
 
 *Eidolon — where cryptographic security meets sustainable economics.*
 
-*This README describes the `main` tree as of 2026-09-14 — tag `v1.2.0` plus the unreleased changes listed in `CHANGELOG.md`.*
+*This README describes the `main` tree at tag `v1.3.0` (2026-09-16).*
 
 </div>

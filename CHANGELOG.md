@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-09-16
+
 ### Fixed
 
 - **Escrow Nexus hardening (`src/protocols/escrow_7d`, audit of 2026-09-15).** No change
@@ -98,6 +100,29 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Escrow Nexus in the Cipher runtime (`cipher-runtime escrow …`, runtime 1.3.0).**
+  `deposit`, `list`, `show`, `retrieve`, `verify`, `delete` — one JSON line per
+  call, on the model of `sphere …`. The vault key is derived from the `.psnx`
+  in-process; the document only ever travels as a file (`--file` in, `--out`
+  out), never inside the JSON; envelopes go to the same store as the launcher's
+  `[X]` menu, so both sides see the same escrows. `deposit` takes an optional
+  `--release-after <ISO 8601>` time lock and `--owner-only`; `retrieve` never
+  overwrites without `--overwrite`; `delete` requires `--confirm`. `error_code`
+  tells the client what happened without parsing the message: `not_found`,
+  `locked` (with `release_after`), `integrity`, `unreadable`, `exists`,
+  `invalid_input`, `confirmation_required`. Public API: `check_release(escrow_id,
+  vault_key)` answers "would `retrieve_document` succeed now?" — MAC and release
+  conditions — without decrypting, with the exact reason `retrieve_document`
+  would raise; `list`/`show` report it as `releasable` / `reason` /
+  `release_after`.
+- **Genesis root 1 (`config/genesis/`).** The genesis ceremony was held offline on
+  2026-09-16: `root.json` is the signed genesis root (21 186 sphere mints,
+  distribution `220f67fd…`, Merkle root `28f7b9e5…`, issued
+  `2026-09-16T03:25:14Z`, SLH-DSA-SHA2-128s signature), `issuer_public.json` the
+  issuer's public key `6dad3cb1…3e31f8`, and `trust.json` now pins the issuer and
+  the root's record hash `89fb26b1…f0053e` next to the anchor key. Verifiable with
+  the public verifier: `GenesisRoot.from_dict(root).verify(issuer_pk)`. The anchor
+  serves this root; the first key window (vaults 1–500) is released.
 - **Connect escrow primitives** (`src/api/server.py`, `src/identity/vault_identity.py`).
   What an application running a postal escrow on top of Eidolon (CardSwap)
   was missing, app-authenticated (Connect secret + approved app) rather
@@ -184,6 +209,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.2.0] - 2026-06-05
 
+*Tag only — no release page, no binaries (see the README's releases table).*
+
 ### Added
 
 - **7-day document escrow protocol (`src/protocols/escrow_7d`).** Post-quantum
@@ -212,7 +239,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   unrelated string values (e.g. a `label` of `"True"`) untouched. Covered by
   `test_legacy_prism_payload_normalization_is_scoped`.
 
-## [1.0.0] - 2025-01-XX
+## [1.1.1] - 2026-05-20
+
+### Changed
+
+- Sphere Visualizer polish. No protocol change; `v1.1.0` vaults are compatible.
+  Latest desktop build: `Eidolon-1.1.1-windows-x64.zip` + `Eidolon.exe`,
+  `Eidolon-1.1.1-linux-x64.tar.gz` + `Eidolon`, `SHA256SUMS`.
+
+## [1.1.0] - 2026-05-20
+
+### Changed
+
+- Logos Project rebrand. Same asset set as `v1.1.1`.
+
+## [1.0.0] - 2026-05-14
 
 ### Added
 
